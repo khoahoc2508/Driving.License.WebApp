@@ -57,7 +57,10 @@ export const authOptions: NextAuthOptions = {
              * user data below. Below return statement will set the user object in the token and the same is set in
              * the session which will be accessible all over the app.
              */
-            return data
+
+            return {
+              access_token: data?.access_token
+            }
           }
 
           return null
@@ -83,7 +86,7 @@ export const authOptions: NextAuthOptions = {
     strategy: 'jwt',
 
     // ** Seconds - How long until an idle session expires and is no longer valid
-    maxAge: 30 * 24 * 60 * 60 // ** 30 days
+    maxAge: 30 * 24 * 60 * 60 // ** 30 days,
   },
 
   // ** Please refer to https://next-auth.js.org/configuration/options#pages for more `pages` options
@@ -98,7 +101,7 @@ export const authOptions: NextAuthOptions = {
      * the `session()` callback. So we have to add custom parameters in `token`
      * via `jwt()` callback to make them accessible in the `session()` callback
      */
-    async jwt({ token, user }) {
+    async jwt({ token, user }: any) {
       if (user) {
         /*
          * For adding custom parameters to user in session, we first need to add those parameters
@@ -107,9 +110,15 @@ export const authOptions: NextAuthOptions = {
         token.name = user.name
       }
 
+      if (user) {
+        token.accessToken = user.access_token
+      }
+
       return token
     },
     async session({ session, token }) {
+      session.accessToken = token.accessToken + ''
+
       if (session.user) {
         // ** Add custom params to user in session which are added in `jwt()` callback via `token` parameter
         session.user.name = token.name

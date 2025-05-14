@@ -21,7 +21,7 @@ import Divider from '@mui/material/Divider'
 import MenuItem from '@mui/material/MenuItem'
 import Button from '@mui/material/Button'
 
-import { signOut } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 
 // Hook Imports
 import { useSettings } from '@core/hooks/useSettings'
@@ -45,6 +45,10 @@ const UserDropdown = () => {
 
   // Hooks
   const router = useRouter()
+
+  const { data } = useSession()
+
+  console.log('data', data)
 
   const { settings } = useSettings()
 
