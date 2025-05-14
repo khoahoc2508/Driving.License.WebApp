@@ -37,7 +37,7 @@ export const authOptions: NextAuthOptions = {
           params.append('scope', process.env.NEXT_PUBLIC_CLIENT_SCOPE!)
 
           // ** Login API Call to match the user credentials and receive user data in response along with his role
-          const res = await fetch(`${process.env.API_URL}/connect/token`, {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/connect/token`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded'
@@ -59,7 +59,8 @@ export const authOptions: NextAuthOptions = {
              */
 
             return {
-              access_token: data?.access_token
+              access_token: data?.access_token,
+              name: ''
             }
           }
 
