@@ -61,7 +61,7 @@ export const authOptions: NextAuthOptions = {
             return {
               access_token: data?.access_token,
               name: ''
-            }
+            } as any
           }
 
           return null
