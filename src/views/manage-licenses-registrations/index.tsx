@@ -1,27 +1,78 @@
 'use client'
 
-import { useState } from 'react'
-import data from '../react-table/data'
+import { useEffect, useState } from 'react'
 import Table from './Table'
-import { Button } from '@mui/material'
+import { Button, Card } from '@mui/material'
 import DebouncedInput from '@/components/common/DebouncedInput'
+import { GetLicensesRegistrationsParams, LicenseRegistrationType } from '@/types/LicensesRegistrations'
+import LicenseRegistrationAPI from '@/libs/api/licenseRegistrationAPI'
+import { toast } from 'react-toastify'
+import axiosInstance from '@/libs/axios'
 
 const ManageLicensesRegistrations = () => {
     const [search, setSearch] = useState('')
     const [filterStatus, setFilterStatus] = useState('')
     const [filterLicense, setFilterLicense] = useState('')
-    const filteredData = data.filter(item =>
-        item.fullName.toLowerCase().includes(search.toLowerCase()) ||
-        item.email.toLowerCase().includes(search.toLowerCase())
-    )
-    const onChangeSearch = (value: string) => {
-        setSearch(value)
+    const [dataTable, setDataTable] = useState<LicenseRegistrationType>([])
+    const [loading, setLoading] = useState<boolean>(false)
+    const [payload, setPayload] = useState<GetLicensesRegistrationsParams>()
+    const [pageNumber, setPageNumber] = useState<number>(1)
+    const [pageSize] = useState<number>(10)
+    const [isPaid, setIsPaid] = useState<boolean>()
+    const [hasCompletedHealthCheck, setHasCompletedHealthCheck] = useState<boolean>()
+    const [examScheduleId, setExamScheduleId] = useState<string>()
+    const [totalPages, setTotalPages] = useState<number>(10)
+    const [reloadDataTable, setReloadDataTable] = useState<boolean>(false)
+    const [examScheduleOptions, setExamScheduleOptions] = useState<{ label: any; value: any }[]>([])
+    const [hasNextPage, setHasNextPage] = useState<boolean>(false)
+
+    useEffect(() => {
+        if (payload) {
+            getLicensesRegistrationsData(payload)
+        }
+    }, [payload])
+
+
+    useEffect(() => {
+        if (pageNumber && pageSize)
+            setPayload((prev: any) => {
+                return {
+                    ...prev,
+                    pageNumber: pageNumber,
+                    pageSize: pageSize,
+                    search,
+                    isPaid,
+                    hasCompletedHealthCheck,
+                    examScheduleId
+                }
+            })
+    }, [pageSize, pageNumber, search, isPaid, hasCompletedHealthCheck, examScheduleId])
+
+    const getLicensesRegistrationsData = async (params: GetLicensesRegistrationsParams): Promise<void> => {
+        try {
+            setLoading(true)
+            const res = await axiosInstance.get('/api/Licenses/registrations')
+            if (res?.data?.data) {
+                debugger
+                const fetchedData = res?.data?.data || []
+                setDataTable(fetchedData)
+            }
+        } catch (error: any) {
+            toast.error(error?.message)
+        } finally {
+            setLoading(false)
+        }
     }
+
+    const onChangeSearch = (value: string | number) => {
+        setSearch(String(value))
+    }
+
     return <>
-        <div className='flex justify-between items-center'>
+        <Card className='flex justify-between items-center mb-1 p-2'>
             <DebouncedInput
                 value={search}
-                onChange={onChangeSearch}
+                onDebounceChange={onChangeSearch}
                 placeholder='Tìm kiếm'
             />
 
@@ -34,8 +85,8 @@ const ManageLicensesRegistrations = () => {
                     Thêm mới
                 </Button>
             </div>
-        </div>
-        <Table data={filteredData} />
+        </Card>
+        <Table data={dataTable} />
     </>
 }
 export default ManageLicensesRegistrations

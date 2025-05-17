@@ -24,19 +24,19 @@ import type { Column, Table, ColumnFiltersState, FilterFn, ColumnDef } from '@ta
 import type { RankingInfo } from '@tanstack/match-sorter-utils'
 
 // Type Imports
-import type { DataType } from '../react-table/data'
 
 // Icon Imports
 import ChevronRight from '@menu/svg/ChevronRight'
 
 // Style Imports
 import styles from '@core/styles/table.module.css'
+import { LicenseRegistrationType } from "@/types/LicensesRegistrations"
+import { Card } from '@mui/material'
 
 // Data Imports
-import defaultData from '../react-table/data'
 
 // Column Definitions
-const columnHelper = createColumnHelper<DataType>()
+const columnHelper = createColumnHelper<LicenseRegistrationType>()
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -60,43 +60,91 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   return itemRank.passed
 }
 
-const Table = ({ data: initialData }: { data: DataType[] }) => {
+
+const Table = ({ data = [] }: { data?: LicenseRegistrationType }) => {
   // States
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [globalFilter, setGlobalFilter] = useState('')
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [data, setData] = useState<DataType[]>(() => initialData)
 
   // Hooks
-  const columns = useMemo<ColumnDef<DataType, any>[]>(
+  const columns = useMemo<ColumnDef<LicenseRegistrationType, any>[]>(
     () => [
-      columnHelper.accessor('fullName', {
+      columnHelper.accessor(row => row.person?.fullName || '', {
+        id: 'fullName',
         cell: info => info.getValue(),
-        header: 'Name'
+        header: 'Họ tên'
       }),
-      columnHelper.accessor('email', {
+      columnHelper.accessor(row => row.person?.phoneNumber || '', {
+        id: 'phoneNumber',
         cell: info => info.getValue(),
-        header: 'Email'
+        header: 'Số điện thoại'
       }),
-      columnHelper.accessor('start_date', {
-        cell: info => info.getValue(),
-        header: 'Date'
+      columnHelper.accessor(row => row.licenseType, {
+        id: 'licenseType',
+        cell: info => {
+          const val = info.getValue();
+          return val === 0 ? 'A1' : val === 1 ? 'A2' : val === 2 ? 'B1' : val === 3 ? 'B2' : '';
+        },
+        header: 'Bằng'
       }),
-      columnHelper.accessor('experience', {
-        cell: info => info.getValue(),
-        header: 'Experience'
+      columnHelper.accessor(row => row.hasCompletedHealthCheck, {
+        id: 'health',
+        cell: info => info.getValue() ? 'Đã khám' : 'Chưa khám',
+        header: 'Sức khỏe'
       }),
-      columnHelper.accessor('age', {
-        cell: info => info.getValue(),
-        header: 'Age'
+      columnHelper.accessor(row => row.amount, {
+        id: 'amount',
+        cell: info => info.getValue() ? info.getValue().toLocaleString('vi-VN') : '',
+        header: 'Tổng thanh toán'
+      }),
+      columnHelper.accessor(row => row.isPaid, {
+        id: 'isPaid',
+        cell: info => info.getValue() ? 'Đã thanh toán' : 'Chưa thanh toán',
+        header: 'Thanh toán'
+      }),
+      columnHelper.accessor(row => row.status, {
+        id: 'status',
+        cell: info => {
+          const val = info.getValue();
+          return val === 0 ? 'Chưa duyệt' : val === 1 ? 'Đã duyệt' : val === 2 ? 'Đã thi' : val === 3 ? 'Đã cấp bằng' : '';
+        },
+        header: 'Trạng thái'
+      }),
+      columnHelper.display({
+        id: 'actions',
+        header: 'Hành động',
+        cell: ({ row }) => (
+          <div className="flex items-center gap-2">
+            <button
+              title="Xem"
+              className="cursor-pointer hover:text-yellow-800 bg-transparent"
+              type="button"
+            >
+              <i className="ri-eye-line text-lg" />
+            </button>
+            <button
+              title="Sửa"
+              className="cursor-pointer hover:text-blue-800 bg-transparent"
+              type="button"
+            >
+              <i className="ri-edit-line text-lg" />
+            </button>
+            <button
+              title="Xóa"
+              className="cursor-pointer hover:text-red-800 bg-transparent"
+              type="button"
+            >
+              <i className="ri-delete-bin-line text-lg" />
+            </button>
+          </div>
+        )
       })
     ],
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   )
 
   const table = useReactTable({
-    data,
+    data: data,
     columns,
     filterFns: {
       fuzzy: fuzzyFilter
@@ -127,13 +175,12 @@ const Table = ({ data: initialData }: { data: DataType[] }) => {
   }, [table.getState().columnFilters[0]?.id])
 
   return (
-    <>
-
+    <Card>
       <div className='overflow-x-auto'>
         <table className={styles.table}>
           <thead>
             {table.getHeaderGroups().map(headerGroup => (
-              <tr key={headerGroup.id}>
+              <tr key={headerGroup.id} className="h-9">
                 {headerGroup.headers.map(header => {
                   return (
                     <th key={header.id}>
@@ -194,7 +241,7 @@ const Table = ({ data: initialData }: { data: DataType[] }) => {
           table.setPageIndex(page)
         }}
         onRowsPerPageChange={e => table.setPageSize(Number(e.target.value))}
-      /></>
+      /></Card>
   )
 }
 

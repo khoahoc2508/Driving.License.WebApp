@@ -6,12 +6,12 @@ import type { TextFieldProps } from '@mui/material/TextField'
 
 const DebouncedInput = ({
     value: initialValue,
-    onChange,
+    onDebounceChange,
     debounce = 500,
     ...props
 }: {
     value: string | number
-    onChange: (value: string | number) => void
+    onDebounceChange: (value: string | number) => void
     debounce?: number
 } & TextFieldProps) => {
     // States
@@ -23,7 +23,7 @@ const DebouncedInput = ({
 
     useEffect(() => {
         const timeout = setTimeout(() => {
-            onChange(value)
+            onDebounceChange(value)
         }, debounce)
 
         return () => clearTimeout(timeout)
