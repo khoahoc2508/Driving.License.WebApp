@@ -89,7 +89,7 @@ const getLicenseTypeString = (licenseType: LicenseType | undefined) => {
   return key || 'N/A';
 };
 
-const getStatusTextAndColor = (status: LicenseRegistrationStatus | undefined) => {
+const getStatusTextAndColor = (status: Boolean | undefined) => {
   let text = 'N/A';
   let color: 'success' | 'error' | 'warning' = 'warning';
 
@@ -98,13 +98,29 @@ const getStatusTextAndColor = (status: LicenseRegistrationStatus | undefined) =>
     color = 'success';
   } else {
     text = 'Chưa duyệt';
-    color = 'warning';
+    color = 'error';
   }
 
   return { text, color };
 };
 
-const Table = ({ data = [], setData }: { data?: LicenseRegistrationType, setData: (data: LicenseRegistrationType) => void }) => {
+const Table = ({
+  data = [],
+  setData,
+  pageNumber,
+  pageSize,
+  totalItems,
+  onPageChange,
+  onPageSizeChange
+}: {
+  data?: LicenseRegistrationType,
+  setData: (data: LicenseRegistrationType) => void,
+  pageNumber: number,
+  pageSize: number,
+  totalItems: number,
+  onPageChange: (page: number) => void,
+  onPageSizeChange: (pageSize: number) => void
+}) => {
   // States
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [globalFilter, setGlobalFilter] = useState('')
@@ -174,10 +190,10 @@ const Table = ({ data = [], setData }: { data?: LicenseRegistrationType, setData
           />
         )
       }),
-      columnHelper.accessor('status', {
+      columnHelper.accessor('hasApproved', {
         header: 'Trạng thái',
         cell: ({ row }) => {
-          const { text, color } = getStatusTextAndColor(row.original?.status);
+          const { text, color } = getStatusTextAndColor(row.original?.hasApproved);
           return (
             <Chip
               label={text}
@@ -191,33 +207,28 @@ const Table = ({ data = [], setData }: { data?: LicenseRegistrationType, setData
       columnHelper.accessor('id', {
         header: 'Hành động',
         cell: ({ row }) => (
-          <div className='flex items-center'>
-            <OptionMenu
-              iconButtonProps={{ size: 'medium' }}
-              iconClassName='text-[22px]'
-              options={[
-                {
-                  text: 'View',
-                  icon: 'ri-eye-line',
-                  href: `/manage-licenses-registrations/${row.original?.id}`,
-                  linkProps: { className: 'flex items-center is-full gap-2 plb-2 pli-4' }
-                },
-                {
-                  text: 'Edit',
-                  icon: 'ri-pencil-line',
-                  href: `/manage-licenses-registrations/edit/${row.original?.id}`,
-                  linkProps: { className: 'flex items-center is-full gap-2 plb-2 pli-4' }
-                },
-                {
-                  text: 'Delete',
-                  icon: 'ri-delete-bin-7-line text-[22px]',
-                  menuItemProps: {
-                    onClick: () => setData(data?.filter(item => item.id !== row.original?.id) || []),
-                    className: 'flex items-center gap-2 text-error'
-                  }
-                }
-              ]}
-            />
+          <div className="flex items-center gap-2">
+            <button
+              title="Xem"
+              className="cursor-pointer hover:text-yellow-800 bg-transparent"
+              type="button"
+            >
+              <i className="ri-eye-line text-lg" />
+            </button>
+            <button
+              title="Sửa"
+              className="cursor-pointer hover:text-blue-800 bg-transparent"
+              type="button"
+            >
+              <i className="ri-edit-line text-lg" />
+            </button>
+            <button
+              title="Xóa"
+              className="cursor-pointer hover:text-red-800 bg-transparent"
+              type="button"
+            >
+              <i className="ri-delete-bin-line text-lg" />
+            </button>
           </div>
         ),
         enableSorting: false
@@ -308,16 +319,16 @@ const Table = ({ data = [], setData }: { data?: LicenseRegistrationType, setData
         </table>
       </div>
       <TablePagination
-        rowsPerPageOptions={[7, 10, 25, { label: 'All', value: data.length }]}
+        rowsPerPageOptions={[7, 10, 25]}
         component='div'
         className='border-bs'
-        count={table.getFilteredRowModel().rows.length}
-        rowsPerPage={table.getState().pagination.pageSize}
-        page={table.getState().pagination.pageIndex}
+        count={totalItems}
+        rowsPerPage={pageSize}
+        page={pageNumber - 1}
         onPageChange={(_, page) => {
-          table.setPageIndex(page)
+          onPageChange(page + 1)
         }}
-        onRowsPerPageChange={e => table.setPageSize(Number(e.target.value))}
+        onRowsPerPageChange={e => onPageSizeChange(Number(e.target.value))}
       /></Card>
   )
 }

@@ -17,7 +17,8 @@ const ManageLicensesRegistrations = () => {
     const [loading, setLoading] = useState<boolean>(false)
     const [payload, setPayload] = useState<GetLicensesRegistrationsParams>()
     const [pageNumber, setPageNumber] = useState<number>(1)
-    const [pageSize] = useState<number>(10)
+    const [pageSize, setPageSize] = useState<number>(10)
+    const [totalItems, setTotalItems] = useState<number>(0)
     const [isPaid, setIsPaid] = useState<boolean>()
     const [hasCompletedHealthCheck, setHasCompletedHealthCheck] = useState<boolean>()
     const [examScheduleId, setExamScheduleId] = useState<string>()
@@ -55,6 +56,7 @@ const ManageLicensesRegistrations = () => {
             if (res?.data?.data) {
                 const fetchedData = res?.data?.data || []
                 setDataTable(fetchedData)
+                setTotalItems(res?.data?.totalCount || 0)
             }
         } catch (error: any) {
             toast.error(error?.message)
@@ -85,7 +87,15 @@ const ManageLicensesRegistrations = () => {
                 </Button>
             </div>
         </Card>
-        <Table data={dataTable} />
+        <Table
+            data={dataTable}
+            setData={setDataTable}
+            pageNumber={pageNumber}
+            pageSize={pageSize}
+            totalItems={totalItems}
+            onPageChange={(page) => setPageNumber(page)}
+            onPageSizeChange={(size) => setPageSize(size)}
+        />
     </>
 }
 export default ManageLicensesRegistrations
