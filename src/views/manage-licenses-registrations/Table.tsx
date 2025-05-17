@@ -5,6 +5,11 @@ import { useEffect, useMemo, useState } from 'react'
 // MUI Imports
 import TablePagination from '@mui/material/TablePagination'
 import Chip from '@mui/material/Chip'
+import Dialog from '@mui/material/Dialog'
+import DialogTitle from '@mui/material/DialogTitle'
+import DialogContent from '@mui/material/DialogContent'
+import DialogActions from '@mui/material/DialogActions'
+import Button from '@mui/material/Button'
 
 // Next Imports
 import Link from 'next/link'
@@ -39,6 +44,8 @@ import CustomAvatar from '@/@core/components/mui/Avatar'
 import { getInitials } from '@/utils/getInitials'
 import OptionMenu from '@/@core/components/option-menu'
 import CONFIG from '@/configs/config'
+import { toast } from 'react-toastify'
+import LicenseRegistrationAPI from '@/libs/api/licenseRegistrationAPI'
 
 // Data Imports
 
@@ -69,7 +76,6 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
 
 const getAvatar = (params: { avatar?: string | null; customer?: string | null }) => {
   const { avatar, customer } = params
-  debugger
   if (avatar) {
     return <CustomAvatar src={avatar} size={30} className='shadow-md' />
   } else {
@@ -111,7 +117,8 @@ const Table = ({
   pageSize,
   totalItems,
   onPageChange,
-  onPageSizeChange
+  onPageSizeChange,
+  setReloadDataTable
 }: {
   data?: LicenseRegistrationType,
   setData: (data: LicenseRegistrationType) => void,
@@ -119,11 +126,14 @@ const Table = ({
   pageSize: number,
   totalItems: number,
   onPageChange: (page: number) => void,
-  onPageSizeChange: (pageSize: number) => void
+  onPageSizeChange: (pageSize: number) => void,
+  setReloadDataTable: React.Dispatch<React.SetStateAction<boolean>>
 }) => {
   // States
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [globalFilter, setGlobalFilter] = useState('')
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+  const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null);
 
   // Hooks
   const columns = useMemo<ColumnDef<LicenseRegistrationTypeVm, any>[]>(
@@ -221,6 +231,7 @@ const Table = ({
               title="Xóa"
               className="cursor-pointer hover:text-red-800 bg-transparent"
               type="button"
+              onClick={() => handleOpenDeleteDialog(row.original.id)}
             >
               <i className="ri-delete-bin-line text-lg" />
             </button>
@@ -232,7 +243,37 @@ const Table = ({
     [data, setData]
   )
 
+  // Handle delete action
+  const handleOpenDeleteDialog = (id: string | undefined) => {
+    if (id) {
+      setItemIdToDelete(id);
+      setOpenDeleteDialog(true);
+    }
+  };
 
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false);
+    setItemIdToDelete(null);
+  };
+
+  const handleDeleteConfirmed = async () => {
+    if (!itemIdToDelete) return;
+
+    try {
+      const response = await LicenseRegistrationAPI.deleteLicensesRegistrations(itemIdToDelete);
+      if (response.data.success) {
+        toast.success('Xóa thành công');
+        setReloadDataTable(prev => !prev); // Trigger data refresh in parent
+      } else {
+        toast.error(response.data.message || 'Có lỗi xảy ra khi xóa');
+      }
+    } catch (error) {
+      console.error('Error deleting item:', error);
+      toast.error('Có lỗi xảy ra khi xóa');
+    } finally {
+      handleCloseDeleteDialog();
+    }
+  };
 
   const table = useReactTable({
     data: data,
@@ -258,73 +299,94 @@ const Table = ({
 
 
   return (
-    <Card>
-      <div className='overflow-x-auto'>
-        <table className={styles.table}>
-          <thead>
-            {table.getHeaderGroups().map(headerGroup => (
-              <tr key={headerGroup.id} className="h-9">
-                {headerGroup.headers.map(header => {
+    <>
+      <Card>
+        <div className='overflow-x-auto'>
+          <table className={styles.table}>
+            <thead>
+              {table.getHeaderGroups().map(headerGroup => (
+                <tr key={headerGroup.id} className="h-9">
+                  {headerGroup.headers.map(header => {
+                    return (
+                      <th key={header.id}>
+                        {header.isPlaceholder ? null : (
+                          <>
+                            <div
+                              className={classnames({
+                                'flex items-center': header.column.getIsSorted(),
+                                'cursor-pointer select-none': header.column.getCanSort()
+                              })}
+                              onClick={header.column.getToggleSortingHandler()}
+                            >
+                              {flexRender(header.column.columnDef.header, header.getContext())}
+                              {{
+                                asc: <ChevronRight fontSize='1.25rem' className='-rotate-90' />,
+                                desc: <ChevronRight fontSize='1.25rem' className='rotate-90' />
+                              }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
+                            </div>
+                          </>
+                        )}
+                      </th>
+                    )
+                  })}
+                </tr>
+              ))}
+            </thead>
+            {table.getFilteredRowModel().rows.length === 0 ? (
+              <tbody>
+                <tr>
+                  <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
+                    No data available
+                  </td>
+                </tr>
+              </tbody>
+            ) : (
+              <tbody>
+                {table.getRowModel().rows.map(row => {
                   return (
-                    <th key={header.id}>
-                      {header.isPlaceholder ? null : (
-                        <>
-                          <div
-                            className={classnames({
-                              'flex items-center': header.column.getIsSorted(),
-                              'cursor-pointer select-none': header.column.getCanSort()
-                            })}
-                            onClick={header.column.getToggleSortingHandler()}
-                          >
-                            {flexRender(header.column.columnDef.header, header.getContext())}
-                            {{
-                              asc: <ChevronRight fontSize='1.25rem' className='-rotate-90' />,
-                              desc: <ChevronRight fontSize='1.25rem' className='rotate-90' />
-                            }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
-                          </div>
-                        </>
-                      )}
-                    </th>
+                    <tr key={row.id}>
+                      {row.getVisibleCells().map(cell => {
+                        return <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                      })}
+                    </tr>
                   )
                 })}
-              </tr>
-            ))}
-          </thead>
-          {table.getFilteredRowModel().rows.length === 0 ? (
-            <tbody>
-              <tr>
-                <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
-                  No data available
-                </td>
-              </tr>
-            </tbody>
-          ) : (
-            <tbody>
-              {table.getRowModel().rows.map(row => {
-                return (
-                  <tr key={row.id}>
-                    {row.getVisibleCells().map(cell => {
-                      return <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                    })}
-                  </tr>
-                )
-              })}
-            </tbody>
-          )}
-        </table>
-      </div>
-      <TablePagination
-        rowsPerPageOptions={[7, 10, 25]}
-        component='div'
-        className='border-bs'
-        count={totalItems}
-        rowsPerPage={pageSize}
-        page={pageNumber - 1}
-        onPageChange={(_, page) => {
-          onPageChange(page + 1)
-        }}
-        onRowsPerPageChange={e => onPageSizeChange(Number(e.target.value))}
-      /></Card>
+              </tbody>
+            )}
+          </table>
+        </div>
+        <TablePagination
+          rowsPerPageOptions={[7, 10, 25]}
+          component='div'
+          className='border-bs'
+          count={totalItems}
+          rowsPerPage={pageSize}
+          page={pageNumber - 1}
+          onPageChange={(_, page) => {
+            onPageChange(page + 1)
+          }}
+          onRowsPerPageChange={e => onPageSizeChange(Number(e.target.value))}
+        /></Card>
+      <Dialog
+        open={openDeleteDialog}
+        onClose={handleCloseDeleteDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Xác nhận xóa"}</DialogTitle>
+        <DialogContent>
+          <Typography id="alert-dialog-description">
+            Bạn có chắc chắn muốn xóa mục này không?
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDeleteDialog}>Hủy</Button>
+          <Button onClick={handleDeleteConfirmed} autoFocus color="error">
+            Xóa
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   )
 }
 

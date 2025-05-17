@@ -33,7 +33,7 @@ const ManageLicensesRegistrations = () => {
         if (payload) {
             getLicensesRegistrationsData(payload)
         }
-    }, [payload])
+    }, [payload, reloadDataTable])
 
 
     useEffect(() => {
@@ -106,6 +106,7 @@ const ManageLicensesRegistrations = () => {
             totalItems={totalItems}
             onPageChange={(page) => setPageNumber(page)}
             onPageSizeChange={(size) => setPageSize(size)}
+            setReloadDataTable={setReloadDataTable}
         />
     </>
 }
