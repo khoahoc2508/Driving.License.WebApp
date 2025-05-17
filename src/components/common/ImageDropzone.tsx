@@ -21,6 +21,8 @@ import CustomAvatar from '@core/components/mui/Avatar'
 
 // Styled Component Imports
 import AppReactDropzone from '@/libs/styles/AppReactDropzone'
+import UploadAPI from '@/libs/api/uploadAPI'
+import { toast } from 'react-toastify'
 
 type FileProp = {
   name: string
@@ -34,7 +36,7 @@ interface ImageDropzoneProps {
   maxFiles?: number
   accept?: Record<string, string[]>
   onFilesChange?: (files: File[]) => void
-  onUpload?: (files: File[]) => void
+  onUpload?: (response: { data: string[] }) => void
   className?: string
   required?: boolean
   error?: boolean
@@ -135,8 +137,15 @@ const ImageDropzone = ({
     onFilesChange?.([])
   }
 
-  const handleUpload = () => {
-    onUpload?.(files)
+  const handleUpload = async () => {
+    try {
+      const response = await UploadAPI.uploadFiles(files)
+      debugger
+      toast.success("Tải file thành công")
+      onUpload?.({ data: response.data.map((file: { relativeUrl: string | null }) => file.relativeUrl || '') })
+    } catch (error) {
+      toast.error("Tải file thất bại")
+    }
   }
 
   return (
@@ -147,7 +156,7 @@ const ImageDropzone = ({
           <CustomAvatar variant='rounded' skin='light' color={error ? 'error' : 'secondary'}>
             <i className='ri-upload-2-line' />
           </CustomAvatar>
-          <Typography variant='h4'>{title}{required && ' *'}</Typography>
+          <Typography variant='h4'>{title}{required && '(*)'}</Typography>
           <Typography color='text.disabled'>{subtitle}</Typography>
           <Button variant='outlined' size='small'>
             Ảnh từ thiết bị

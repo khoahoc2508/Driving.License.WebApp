@@ -36,7 +36,11 @@ import Link from '@/components/Link'
 import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
 import CustomAvatar from '@/@core/components/mui/Avatar'
 import ImageDropzone from '@/components/common/ImageDropzone'
-// import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
+import CONFIG from '@/configs/config'
+import { LicenseRegistrationCustomerResquest, LicenseRegistrationFormType, LicenseRegistrationResquest } from '@/types/LicensesRegistrations'
+
+import { useUser } from '@/contexts/UserContext'
+
 
 type FormValues = {
     fullName: string
@@ -58,9 +62,10 @@ type FormValues = {
     healthCheck: string
     carLicense: string
     confirmationStatus: string
-    photo3x4: File[]
-    frontPhoto: File[]
-    backPhoto: File[]
+    photo3x4: string[]
+    frontPhoto: string[]
+    backPhoto: string[]
+    note: string
 }
 
 type LicenseRegistrationFormProps = {
@@ -70,11 +75,10 @@ type LicenseRegistrationFormProps = {
 
 const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProps) => {
     // States
-    // const [isPasswordShown, setIsPasswordShown] = useState(false) // Password field is removed
-    const [fileAvatar, setFileAvatar] = useState<File[]>([])
     const [provinces, setProvinces] = useState<any[]>([])
     const [districts, setDistricts] = useState<any[]>([])
     const [wards, setWards] = useState<any[]>([])
+    const { user } = useUser()
 
     // Hooks
     const {
@@ -108,12 +112,12 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
             confirmationStatus: 'Chưa duyệt', // Default based on image
             photo3x4: [],
             frontPhoto: [],
-            backPhoto: []
+            backPhoto: [],
+            note: ''
         },
         mode: 'onChange'
     })
 
-    const photo3x4 = watch('photo3x4')
 
     // Fetch provinces on component mount
     useEffect(() => {
@@ -180,41 +184,40 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
         }
 
         try {
-            const response = await LicenseRegistrationAPI.createLicensesRegistrations({
-                vehicleType: data.licenseType === 'Xe máy' ? 0 : 1, // 0 for motorbike, 1 for car
-                licenseType: data.drivingLicenseType === 'A1' ? 0 :
-                    data.drivingLicenseType === 'A2' ? 1 :
-                        data.drivingLicenseType === 'B1' ? 2 : 3, // Map license types to enum values
+            const payload: LicenseRegistrationResquest = {
+                vehicleType: data.licenseType === CONFIG.VehicleTypeMappingText[0] ? 0 : 1,
+                licenseType: CONFIG.LicenseTypeSelectOption.find(opt => opt.label === data.drivingLicenseType)?.value as 0 | 1 | 2 | 3 || 0,
                 hasCarLicense: data.carLicense === 'Đã có',
                 hasCompletedHealthCheck: data.healthCheck === 'Đã khám',
                 hasApproved: data.confirmationStatus === 'Đã duyệt',
                 person: {
-                    avatarUrl: data.photo3x4[0] ? URL.createObjectURL(data.photo3x4[0]) : '',
+                    avatarUrl: data.photo3x4[0] || '',
                     fullName: data.fullName,
                     birthday: data.dateOfBirth?.toISOString().split('T')[0] || '',
-                    sex: data.gender === 'Nam' ? 0 : data.gender === 'Nữ' ? 1 : 2,
+                    sex: data.gender === CONFIG.SexTypeMappingText[1] ? 1 :
+                        data.gender === CONFIG.SexTypeMappingText[0] ? 0 :
+                            2,
                     phoneNumber: data.phoneNumber,
                     email: data.email,
                     address: {
-                        provinceCode: data.province,
-                        districtCode: data.district,
-                        wardCode: data.ward,
+                        provinceCode: data.province.toString(),
+                        districtCode: data.district.toString(),
+                        wardCode: data.ward.toString(),
                         addressDetail: data.street
                     },
                     citizenCardId: data.cccd,
-                    citizenCardFrontImgUrl: data.frontPhoto[0] ? URL.createObjectURL(data.frontPhoto[0]) : '',
-                    citizenCardBackImgUrl: data.backPhoto[0] ? URL.createObjectURL(data.backPhoto[0]) : '',
-                    citizenCardDateOfIssue: '',
-                    citizenCardPlaceOfIssue: ''
+                    citizenCardFrontImgUrl: data.frontPhoto[0] || '',
+                    citizenCardBackImgUrl: data.backPhoto[0] || '',
                 },
-                note: '',
-                isPaid: data.paymentStatus === 'Đã thanh toán',
-                amount: data.totalAmount || 0
-            })
+                note: data.note,
+                isPaid: data.paymentStatus === CONFIG.IsPaidSelectOption.find(opt => opt.value)?.label,
+                amount: data.totalAmount || 0,
+                ownerId: user?.id
+            }
+            const response = await LicenseRegistrationAPI.createLicensesRegistrations(payload)
 
             if (response.data.success) {
-                toast.success('Đăng ký bằng lái thành công')
-                // Reset form after successful submission
+                toast.success('Thêm mới thành công')
                 reset()
             } else {
                 toast.error(response.data.message || 'Có lỗi xảy ra')
@@ -255,8 +258,8 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                                                 render={({ field }) => (
                                                     <ImageDropzone
                                                         title="Kéo thả file ảnh 3x4"
-                                                        onUpload={(files) => {
-                                                            field.onChange(files || [])
+                                                        onUpload={(response) => {
+                                                            field.onChange(response.data)
                                                             trigger('photo3x4')
                                                         }}
                                                         required
@@ -496,14 +499,18 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                                     <Grid size={{ xs: 12, sm: 6 }}>
                                         <ImageDropzone
                                             title="Kéo thả file để upload (Mặt trước)"
-                                            onUpload={(files) => setFileAvatar(files)}
+                                            onUpload={(response) => {
+                                                setValue('frontPhoto', response.data)
+                                            }}
                                         />
                                     </Grid>
                                     {/* Mặt sau */}
                                     <Grid size={{ xs: 12, sm: 6 }}>
                                         <ImageDropzone
                                             title="Kéo thả file để upload (Mặt sau)"
-                                            onUpload={(files) => setFileAvatar(files)}
+                                            onUpload={(response) => {
+                                                setValue('backPhoto', response.data)
+                                            }}
                                         />
                                     </Grid>
                                 </Grid>
@@ -560,8 +567,11 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                                                 rules={{ required: true }}
                                                 render={({ field }) => (
                                                     <Select label='Bằng lái' {...field} error={Boolean(errors.drivingLicenseType)}>
-                                                        <MenuItem value='A1'>A1</MenuItem>
-                                                        {/* Add other license types if needed */}
+                                                        {CONFIG.LicenseTypeSelectOption.map((option) => (
+                                                            <MenuItem key={option.value} value={option.label}>
+                                                                {option.label}
+                                                            </MenuItem>
+                                                        ))}
                                                     </Select>
                                                 )}
                                             />
@@ -578,8 +588,11 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                                                 rules={{ required: true }}
                                                 render={({ field }) => (
                                                     <Select label='Loại' {...field} error={Boolean(errors.licenseType)}>
-                                                        <MenuItem value='Xe máy'>Xe máy</MenuItem>
-                                                        {/* Add other types if needed */}
+                                                        {CONFIG.VehicleTypeSelectOption.map((option) => (
+                                                            <MenuItem key={option.value} value={option.label}>
+                                                                {option.label}
+                                                            </MenuItem>
+                                                        ))}
                                                     </Select>
                                                 )}
                                             />
@@ -618,9 +631,11 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                                                 rules={{ required: true }}
                                                 render={({ field }) => (
                                                     <Select label='Trạng thái thanh toán' {...field} error={Boolean(errors.paymentStatus)}>
-                                                        <MenuItem value='Chưa thanh toán'>Chưa thanh toán</MenuItem>
-                                                        <MenuItem value='Đã thanh toán'>Đã thanh toán</MenuItem>
-                                                        {/* Add other statuses if needed */}
+                                                        {CONFIG.IsPaidSelectOption.map((option) => (
+                                                            <MenuItem key={option.value.toString()} value={option.label}>
+                                                                {option.label}
+                                                            </MenuItem>
+                                                        ))}
                                                     </Select>
                                                 )}
                                             />
@@ -642,9 +657,11 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                                                 rules={{ required: true }}
                                                 render={({ field }) => (
                                                     <Select label='Khám sức khỏe' {...field} error={Boolean(errors.healthCheck)}>
-                                                        <MenuItem value='Chưa khám'>Chưa khám</MenuItem>
-                                                        <MenuItem value='Đã khám'>Đã khám</MenuItem>
-                                                        {/* Add other statuses if needed */}
+                                                        {CONFIG.HasCompletedHealthCheckSelectOption.map((option) => (
+                                                            <MenuItem key={option.value.toString()} value={option.label}>
+                                                                {option.label}
+                                                            </MenuItem>
+                                                        ))}
                                                     </Select>
                                                 )}
                                             />
@@ -661,9 +678,11 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                                                 rules={{ required: true }}
                                                 render={({ field }) => (
                                                     <Select label='Bằng ô tô' {...field} error={Boolean(errors.carLicense)}>
-                                                        <MenuItem value='Chưa có'>Chưa có</MenuItem>
-                                                        <MenuItem value='Đã có'>Đã có</MenuItem>
-                                                        {/* Add other statuses if needed */}
+                                                        {CONFIG.HasCarLicenseSelectOption.map((option) => (
+                                                            <MenuItem key={option.value.toString()} value={option.label}>
+                                                                {option.label}
+                                                            </MenuItem>
+                                                        ))}
                                                     </Select>
                                                 )}
                                             />
@@ -685,14 +704,33 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                                                 rules={{ required: true }}
                                                 render={({ field }) => (
                                                     <Select label='Xác nhận' {...field} error={Boolean(errors.confirmationStatus)}>
-                                                        <MenuItem value='Chưa duyệt'>Chưa duyệt</MenuItem>
-                                                        <MenuItem value='Đã duyệt'>Đã duyệt</MenuItem>
-                                                        {/* Add other statuses if needed */}
+                                                        {CONFIG.ApprovedOption.map((option) => (
+                                                            <MenuItem key={option.value.toString()} value={option.label}>
+                                                                {option.label}
+                                                            </MenuItem>
+                                                        ))}
                                                     </Select>
                                                 )}
                                             />
                                             {errors.confirmationStatus && <FormHelperText error>Vui lòng nhập trạng thái xác nhận.</FormHelperText>}
                                         </FormControl>
+                                    </Grid>
+                                    {/* Ghi chú */}
+                                    <Grid size={{ xs: 12, sm: 6 }}>
+                                        <Controller
+                                            name='note'
+                                            control={control}
+                                            render={({ field }) => (
+                                                <TextField
+                                                    {...field}
+                                                    fullWidth
+                                                    multiline
+                                                    rows={4}
+                                                    label='Ghi chú'
+                                                    placeholder='Nhập ghi chú...'
+                                                />
+                                            )}
+                                        />
                                     </Grid>
                                 </Grid>
                             </Grid>

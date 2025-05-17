@@ -7,6 +7,7 @@ export type LicenseType = components['schemas']['LicenseType']
 export type LicenseRegistrationStatus = components['schemas']['LicenseRegistrationStatus']
 
 export type LicenseRegistrationFormType = components['schemas']['LicenseRegistrationVm']
+
 export type LicenseRegistrationPaidType =
   components['schemas']['PaginatedListOfLicenseRegistrationHasPaidForAllVm']['data']
 
@@ -29,4 +30,5 @@ export type getLicensesRegistrationsPaidParams = {
   examScheduleId?: string
 }
 
+export type LicenseRegistrationResquest = components['schemas']['CreateLicenseRegistrationCommand']
 export type LicenseRegistrationCustomerResquest = components['schemas']['CreateLicenseRegistrationCommand']

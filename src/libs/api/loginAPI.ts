@@ -1,8 +1,7 @@
 import CONFIG from '@/configs/config'
 import Cookies from 'js-cookie'
 
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID
 const CLIENT_SECRET = process.env.NEXT_PUBLIC_CLIENT_SECRET
 const CLIENT_SCOPE = process.env.NEXT_PUBLIC_CLIENT_SCOPE

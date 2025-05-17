@@ -2,7 +2,8 @@ import type {
   getLicensesRegistrationsPaidParams,
   GetLicensesRegistrationsParams,
   LicenseRegistrationCustomerResquest,
-  LicenseRegistrationFormType
+  LicenseRegistrationFormType,
+  LicenseRegistrationResquest
 } from '@/types/LicensesRegistrations'
 
 import axiosInstance from '../axios'
@@ -55,13 +56,11 @@ const getDetailLicensesRegistration = async (id: string) => {
   })
 }
 
-const createLicensesRegistrations = async (data: LicenseRegistrationFormType) => {
-  return await axiosInstance.post('/api/licenses/registrations', {
-    body: data
-  })
+const createLicensesRegistrations = async (data: LicenseRegistrationResquest) => {
+  return await axiosInstance.post('/api/licenses/registrations', data)
 }
 
-const updateLicensesRegistrations = async (data: LicenseRegistrationFormType) => {
+const updateLicensesRegistrations = async (data: LicenseRegistrationResquest) => {
   return await axiosInstance.put('/api/licenses/registrations', {
     body: data
   })

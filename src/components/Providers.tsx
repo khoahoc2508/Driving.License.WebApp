@@ -7,9 +7,12 @@ import { NextAuthProvider } from '@/contexts/nextAuthProvider'
 import ThemeProvider from '@components/theme'
 import { SettingsProvider } from '@core/contexts/settingsContext'
 import { VerticalNavProvider } from '@menu/contexts/verticalNavContext'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 // Util Imports
 import { getMode, getSettingsFromCookie, getSystemMode } from '@core/utils/serverHelpers'
+import { UserProvider } from '@/contexts/UserContext'
 
 type Props = ChildrenType & {
   direction: Direction
@@ -29,7 +32,8 @@ const Providers = async (props: Props) => {
       <VerticalNavProvider>
         <SettingsProvider settingsCookie={settingsCookie} mode={mode}>
           <ThemeProvider direction={direction} systemMode={systemMode}>
-            {children}
+            <UserProvider>{children}</UserProvider>
+            <ToastContainer />
           </ThemeProvider>
         </SettingsProvider>
       </VerticalNavProvider>
