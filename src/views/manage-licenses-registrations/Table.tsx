@@ -69,7 +69,7 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
 
 const getAvatar = (params: { avatar?: string | null; customer?: string | null }) => {
   const { avatar, customer } = params
-
+  debugger
   if (avatar) {
     return <CustomAvatar src={avatar} size={30} className='shadow-md' />
   } else {
@@ -140,7 +140,7 @@ const Table = ({
         header: 'HỌ TÊN',
         cell: ({ row }) => (
           <div className='flex items-center gap-3'>
-            {getAvatar({ avatar: `${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}/${row.original?.person?.avatarUrl}`, customer: row.original?.person?.fullName })}
+            {getAvatar({ avatar: row.original?.person?.avatarUrl ? `${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}/${row.original?.person?.avatarUrl}` : null, customer: row.original?.person?.fullName })}
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
                 {row.original?.person?.fullName}
@@ -208,13 +208,15 @@ const Table = ({
         header: 'Hành động',
         cell: ({ row }) => (
           <div className="flex items-center gap-2">
-            <button
-              title="Sửa"
-              className="cursor-pointer hover:text-blue-800 bg-transparent"
-              type="button"
-            >
-              <i className="ri-edit-line text-lg" />
-            </button>
+            <Link href={`manage-licenses-registration/edit/${row.original.id}`} passHref legacyBehavior>
+              <button
+                title="Sửa"
+                className="cursor-pointer hover:text-blue-800 bg-transparent"
+                type="button"
+              >
+                <i className="ri-edit-line text-lg" />
+              </button>
+            </Link>
             <button
               title="Xóa"
               className="cursor-pointer hover:text-red-800 bg-transparent"

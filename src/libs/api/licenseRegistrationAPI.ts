@@ -3,7 +3,8 @@ import type {
   GetLicensesRegistrationsParams,
   LicenseRegistrationCustomerResquest,
   LicenseRegistrationFormType,
-  LicenseRegistrationResquest
+  LicenseRegistrationCreateResquest,
+  LicenseRegistrationUpdateResquest
 } from '@/types/LicensesRegistrations'
 
 import axiosInstance from '../axios'
@@ -47,33 +48,19 @@ const getLicensesRegistrationsPaid = async ({
 }
 
 const getDetailLicensesRegistration = async (id: string) => {
-  return await axiosInstance.get(`/api/licenses/registrations/{id}`, {
-    params: {
-      path: {
-        id
-      }
-    }
-  })
+  return await axiosInstance.get(`/api/licenses/registrations/${id}`)
 }
 
-const createLicensesRegistrations = async (data: LicenseRegistrationResquest) => {
+const createLicensesRegistrations = async (data: LicenseRegistrationCreateResquest) => {
   return await axiosInstance.post('/api/licenses/registrations', data)
 }
 
-const updateLicensesRegistrations = async (data: LicenseRegistrationResquest) => {
-  return await axiosInstance.put('/api/licenses/registrations', {
-    body: data
-  })
+const updateLicensesRegistrations = async (data: LicenseRegistrationUpdateResquest) => {
+  return await axiosInstance.put('/api/licenses/registrations', data)
 }
 
 const deleteLicensesRegistrations = async (id: string) => {
-  return await axiosInstance.delete('/api/licenses/registrations/{id}', {
-    params: {
-      path: {
-        id
-      }
-    }
-  })
+  return await axiosInstance.delete(`/api/licenses/registrations/${id}`)
 }
 
 const createLicensesRegistrationsForCustomer = async (data: LicenseRegistrationCustomerResquest) => {

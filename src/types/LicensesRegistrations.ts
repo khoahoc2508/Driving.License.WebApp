@@ -30,5 +30,6 @@ export type getLicensesRegistrationsPaidParams = {
   examScheduleId?: string
 }
 
-export type LicenseRegistrationResquest = components['schemas']['CreateLicenseRegistrationCommand']
+export type LicenseRegistrationCreateResquest = components['schemas']['CreateLicenseRegistrationCommand']
+export type LicenseRegistrationUpdateResquest = components['schemas']['UpdateExamScheduleCommand']
 export type LicenseRegistrationCustomerResquest = components['schemas']['CreateLicenseRegistrationCommand']

@@ -38,7 +38,7 @@ import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
 import CustomAvatar from '@/@core/components/mui/Avatar'
 import ImageDropzone from '@/components/common/ImageDropzone'
 import CONFIG from '@/configs/config'
-import { LicenseRegistrationCustomerResquest, LicenseRegistrationFormType, LicenseRegistrationResquest } from '@/types/LicensesRegistrations'
+import { LicenseRegistrationCustomerResquest, LicenseRegistrationFormType, LicenseRegistrationCreateResquest, LicenseRegistrationUpdateResquest } from '@/types/LicensesRegistrations'
 
 import { useUser } from '@/contexts/UserContext'
 
@@ -96,22 +96,22 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
             fullName: '',
             dateOfBirth: null,
             gender: '',
-            country: 'Việt Nam', // Default to Vietnam based on image
+            country: 'Việt Nam',
             phoneNumber: '',
             email: '',
             province: '',
             district: '',
             ward: '',
             street: '',
-            cardType: 'Căn cước công dân', // Default based on image
+            cardType: 'Căn cước công dân',
             cccd: '',
-            drivingLicenseType: 'A1', // Default based on image
-            licenseType: 'Xe máy', // Default based on image
+            drivingLicenseType: 'A1',
+            licenseType: 'Xe máy',
             totalAmount: null,
-            paymentStatus: 'Chưa thanh toán', // Default based on image
-            healthCheck: 'Chưa khám', // Default based on image
-            carLicense: 'Chưa có', // Default based on image
-            confirmationStatus: 'Chưa duyệt', // Default based on image
+            paymentStatus: 'Chưa thanh toán',
+            healthCheck: 'Chưa khám',
+            carLicense: 'Chưa có',
+            confirmationStatus: 'Chưa duyệt',
             photo3x4: [],
             frontPhoto: [],
             backPhoto: [],
@@ -120,6 +120,58 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
         mode: 'onChange'
     })
 
+    // Fetch data when id exists (edit mode)
+    useEffect(() => {
+        if (id) {
+            const fetchData = async () => {
+                try {
+                    const response = await LicenseRegistrationAPI.getDetailLicensesRegistration(id)
+                    if (response.data.success) {
+                        const data = response.data.data
+                        // Set form values
+                        setValue('fullName', data.person.fullName)
+                        setValue('dateOfBirth', new Date(data.person.birthday))
+                        setValue('gender', data.person.sex === 0 ? 'Nam' : data.person.sex === 1 ? 'Nữ' : 'Khác')
+                        setValue('country', 'Việt Nam')
+                        setValue('phoneNumber', data.person.phoneNumber)
+                        setValue('email', data.person.email)
+                        setValue('province', data.person.address.provinceCode)
+                        setValue('district', data.person.address.districtCode)
+                        setValue('ward', data.person.address.wardCode)
+                        setValue('street', data.person.address.addressDetail)
+                        setValue('cardType', 'Căn cước công dân')
+                        setValue('cccd', data.person.citizenCardId)
+                        setValue('drivingLicenseType', CONFIG.LicenseTypeSelectOption.find(opt => opt.value === data.licenseType)?.label || 'A1')
+                        setValue('licenseType', data.vehicleType === 0 ? CONFIG.VehicleTypeMappingText[0] : CONFIG.VehicleTypeMappingText[1])
+                        setValue('totalAmount', data.amount)
+                        setValue('paymentStatus', data.isPaid ? 'Đã thanh toán' : 'Chưa thanh toán')
+                        setValue('healthCheck', data.hasCompletedHealthCheck ? 'Đã khám' : 'Chưa khám')
+                        setValue('carLicense', data.hasCarLicense ? 'Đã có' : 'Chưa có')
+                        setValue('confirmationStatus', data.hasApproved ? 'Đã duyệt' : 'Chưa duyệt')
+                        setValue('photo3x4', [data.person.avatarUrl])
+                        setValue('frontPhoto', [data.person.citizenCardFrontImgUrl])
+                        setValue('backPhoto', [data.person.citizenCardBackImgUrl])
+                        setValue('note', data.note)
+
+                        // Fetch districts and wards based on province and district
+                        if (data.person.address.provinceCode) {
+                            await fetchDistricts(data.person.address.provinceCode)
+                            setValue('district', data.person.address.districtCode)
+                            if (data.person.address.districtCode) {
+                                await fetchWards(data.person.address.districtCode)
+                                // Wait for wards state to be updated before setting ward value
+                                setValue('ward', data.person.address.wardCode)
+                            }
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error fetching data:', error)
+                    toast.error('Có lỗi xảy ra khi tải dữ liệu')
+                }
+            }
+            fetchData()
+        }
+    }, [id, setValue])
 
     // Fetch provinces on component mount
     useEffect(() => {
@@ -186,7 +238,7 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
         }
 
         try {
-            const payload: LicenseRegistrationResquest = {
+            const payload: LicenseRegistrationCreateResquest | LicenseRegistrationUpdateResquest = {
                 vehicleType: data.licenseType === CONFIG.VehicleTypeMappingText[0] ? 0 : 1,
                 licenseType: CONFIG.LicenseTypeSelectOption.find(opt => opt.label === data.drivingLicenseType)?.value as 0 | 1 | 2 | 3 || 0,
                 hasCarLicense: data.carLicense === 'Đã có',
@@ -214,12 +266,21 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                 note: data.note,
                 isPaid: data.paymentStatus === CONFIG.IsPaidSelectOption.find(opt => opt.value)?.label,
                 amount: data.totalAmount || 0,
-                ownerId: user?.id
+                ownerId: user?.id,
+                id: id
             }
-            const response = await LicenseRegistrationAPI.createLicensesRegistrations(payload)
+
+            let response
+            if (id) {
+                // Edit mode
+                response = await LicenseRegistrationAPI.updateLicensesRegistrations(payload)
+            } else {
+                // Create mode
+                response = await LicenseRegistrationAPI.createLicensesRegistrations(payload)
+            }
 
             if (response.data.success) {
-                toast.success('Thêm mới thành công')
+                toast.success(id ? 'Cập nhật thành công' : 'Thêm mới thành công')
                 router.push('/manage-licenses-registration')
             } else {
                 toast.error(response.data.message || 'Có lỗi xảy ra')
@@ -233,7 +294,7 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
     return (
         <>
             <Card className='flex justify-between items-center mb-1 p-2'>
-                <Typography className='uppercase font-bold'>Thêm mới học viên</Typography>{/* Updated title */}
+                <Typography className='uppercase font-bold'>{id ? 'Chỉnh sửa học viên' : 'Thêm mới học viên'}</Typography>
                 <Link href={'/manage-licenses-registration'}>
                     <IconButton size='small' edge='end' aria-label='close'>
                         <i className='ri-close-line' />
