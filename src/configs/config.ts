@@ -1,255 +1,261 @@
 const LicenseRegistrationStatus = {
-    Pending: 0,
-    Approved: 1,
-    Failed: 2,
-    Completed: 3
+  Pending: 0,
+  Approved: 1,
+  Failed: 2,
+  Completed: 3
+}
+
+const LicenseRegistrationStatusMappingText = {
+  0: 'Đang chờ duyệt',
+  1: 'Đã duyệt',
+  2: 'Thất bại',
+  3: 'Thành công'
+}
+
+const LicenseType = {
+  A1: 0,
+  A2: 1,
+  B1: 2,
+  B2: 3
+}
+
+const LicenseTypeMappingText = {
+  0: 'A1',
+  1: 'A2',
+  2: 'B1',
+  3: 'B2'
+}
+
+const LicenseTypeSelectOption = [
+  {
+    label: 'A1',
+    value: 0
+  },
+  {
+    label: 'A2',
+    value: 1
+  },
+  {
+    label: 'B1',
+    value: 2
+  },
+  {
+    label: 'B2',
+    value: 3
   }
-  
-  const LicenseRegistrationStatusMappingText = {
-    0: 'Đang chờ duyệt',
-    1: 'Đã duyệt',
-    2: 'Thất bại',
-    3: 'Thành công'
+]
+
+const VehicleType = {
+  Motorbike: 0,
+  Car: 1
+}
+
+const VehicleTypeMappingText = {
+  0: 'Xe máy',
+  1: 'Ô tô'
+}
+
+const VehicleTypeSelectOption = [
+  {
+    label: 'Xe máy',
+    value: 0
+  },
+  {
+    label: 'Ô tô',
+    value: 1
   }
-  
-  const LicenseType = {
-    A1: 0,
-    A2: 1,
-    B1: 2,
-    B2: 3
+]
+
+const PayerType = {
+  Student: 0, // Học viên thanh toán
+  Manager: 1 // Bạn (quản lý) thanh toán
+}
+
+const PayerTypeMappingText = {
+  0: 'Học viên thanh toán',
+  1: 'Bạn (quản lý) thanh toán'
+}
+
+const PaymentContext = {
+  RegistrationFee: 0, // Phí đăng ký
+  RetakeExamFee: 1, // Phí thi lại
+  OrganizationFee: 2 // Phí nộp cho trung tâm
+}
+
+const PaymentContextMappingText = {
+  0: 'Phí đăng ký',
+  1: 'Phí thi lại',
+  2: 'Phí nộp cho trung tâm'
+}
+
+const PaymentStatus = {
+  Pending: 0,
+  Completed: 1,
+  Cancelled: 2
+}
+
+const PaymentStatusMappingText = {
+  0: 'Đang chờ',
+  1: 'Đã thanh toán',
+  2: 'Đã hủy'
+}
+
+const SexType = {
+  Female: 0,
+  Male: 1,
+  Other: 2
+}
+
+const SexTypeMappingText = {
+  0: 'Nữ',
+  1: 'Nam',
+  2: 'Khác'
+}
+
+const SexTypeSelectOption = [
+  {
+    label: 'Nữ',
+    value: 0
+  },
+  {
+    label: 'Nam',
+    value: 1
+  },
+  {
+    label: 'Khác',
+    value: 2
   }
-  
-  const LicenseTypeMappingText = {
-    0: 'A1',
-    1: 'A2',
-    2: 'B1',
-    3: 'B2'
+]
+
+const HasCarLicense = {
+  yes: true,
+  no: false
+}
+
+const HasCarLicenseMappingText = {
+  true: 'Chưa có',
+  false: 'Đã có'
+}
+
+const HasCarLicenseSelectOption = [
+  {
+    label: 'Đã có',
+    value: true
+  },
+  {
+    label: 'Chưa có',
+    value: false
   }
-  
-  const LicenseTypeSelectOption = [
-    {
-      label: 'A1',
-      value: 0
-    },
-    {
-      label: 'A2',
-      value: 1
-    },
-    {
-      label: 'B1',
-      value: 2
-    },
-    {
-      label: 'B2',
-      value: 3
-    }
-  ]
-  
-  const VehicleType = {
-    Motorbike: 0,
-    Car: 1
+]
+
+const HasCompletedHealthCheck = {
+  yes: true,
+  no: false
+}
+
+const HasCompletedHealthCheckMappingText = {
+  true: 'Đã khám',
+  false: 'Chưa khám'
+}
+
+const ApprovedOption = [
+  {
+    label: 'Đã duyệt',
+    value: true
+  },
+  {
+    label: 'Chưa duyệt',
+    value: false
   }
-  
-  const VehicleTypeMappingText = {
-    0: 'Xe máy',
-    1: 'Ô tô'
+]
+
+const HasCompletedHealthCheckSelectOption = [
+  {
+    label: 'Đã khám',
+    value: true
+  },
+  {
+    label: 'Chưa khám',
+    value: false
   }
-  
-  const VehicleTypeSelectOption = [
-    {
-      label: 'Xe máy',
-      value: 0
-    },
-    {
-      label: 'Ô tô',
-      value: 1
-    }
-  ]
-  
-  const PayerType = {
-    Student: 0, // Học viên thanh toán
-    Manager: 1 // Bạn (quản lý) thanh toán
+]
+
+const IsPaid = {
+  yes: true,
+  no: false
+}
+
+const IsPaidMappingText = {
+  true: 'Đã thanh toán',
+  false: 'Chưa thanh toán'
+}
+
+const IsPaidSelectOption = [
+  {
+    label: 'Đã thanh toán',
+    value: true
+  },
+  {
+    label: 'Chưa thanh toán',
+    value: false
   }
-  
-  const PayerTypeMappingText = {
-    0: 'Học viên thanh toán',
-    1: 'Bạn (quản lý) thanh toán'
-  }
-  
-  const PaymentContext = {
-    RegistrationFee: 0, // Phí đăng ký
-    RetakeExamFee: 1, // Phí thi lại
-    OrganizationFee: 2 // Phí nộp cho trung tâm
-  }
-  
-  const PaymentContextMappingText = {
-    0: 'Phí đăng ký',
-    1: 'Phí thi lại',
-    2: 'Phí nộp cho trung tâm'
-  }
-  
-  const PaymentStatus = {
-    Pending: 0,
-    Completed: 1,
-    Cancelled: 2
-  }
-  
-  const PaymentStatusMappingText = {
-    0: 'Đang chờ',
-    1: 'Đã thanh toán',
-    2: 'Đã hủy'
-  }
-  
-  const SexType = {
-    Female: 0,
-    Male: 1,
-    Other: 2
-  }
-  
-  const SexTypeMappingText = {
-    0: 'Nữ',
-    1: 'Nam',
-    2: 'Khác'
-  }
-  
-  const SexTypeSelectOption = [
-    {
-      label: 'Nữ',
-      value: 0
-    },
-    {
-      label: 'Nam',
-      value: 1
-    },
-    {
-      label: 'Khác',
-      value: 2
-    }
-  ]
-  
-  const HasCarLicense = {
-    yes: true,
-    no: false
-  }
-  
-  const HasCarLicenseMappingText = {
-    true: 'Chưa có',
-    false: 'Đã có'
-  }
-  
-  const HasCarLicenseSelectOption = [
-    {
-      label: 'Đã có',
-      value: true
-    },
-    {
-      label: 'Chưa có',
-      value: false
-    }
-  ]
-  
-  const HasCompletedHealthCheck = {
-    yes: true,
-    no: false
-  }
-  
-  const HasCompletedHealthCheckMappingText = {
-    true: 'Đã khám',
-    false: 'Chưa khám'
-  }
-  
-  const ApprovedOption = [
-    {
-      label: 'Đã duyệt',
-      value: true
-    },
-    {
-      label: 'Chưa duyệt',
-      value: false
-    }
-  ]
-  
-  const HasCompletedHealthCheckSelectOption = [
-    {
-      label: 'Đã khám',
-      value: true
-    },
-    {
-      label: 'Chưa khám',
-      value: false
-    }
-  ]
-  
-  const IsPaid = {
-    yes: true,
-    no: false
-  }
-  
-  const IsPaidMappingText = {
-    true: 'Đã thanh toán',
-    false: 'Chưa thanh toán'
-  }
-  
-  const IsPaidSelectOption = [
-    {
-      label: 'Đã thanh toán',
-      value: true
-    },
-    {
-      label: 'Chưa thanh toán',
-      value: false
-    }
-  ]
-  
-  const IsRetake = {
-    yes: true,
-    no: false
-  }
-  
-  const IsRetakeMappingText = {
-    true: 'Thi lại',
-    false: 'Thi mới'
-  }
-  
-  const ConfigToken = {
-    tokenType: 'Bearer',
-    storageTokenKeyName: 'accessToken',
-    storageRefreshTokenKeyName: 'refreshToken',
-    expiresTime: 'expiresTime'
-  }
-  
-  const CONFIG = {
-    LicenseRegistrationStatus,
-    LicenseRegistrationStatusMappingText,
-    LicenseType,
-    LicenseTypeMappingText,
-    LicenseTypeSelectOption,
-    VehicleType,
-    VehicleTypeMappingText,
-    VehicleTypeSelectOption,
-    PayerType,
-    PayerTypeMappingText,
-    PaymentContext,
-    PaymentContextMappingText,
-    PaymentStatus,
-    PaymentStatusMappingText,
-    SexType,
-    SexTypeMappingText,
-    SexTypeSelectOption,
-    HasCarLicense,
-    HasCarLicenseMappingText,
-    HasCarLicenseSelectOption,
-    HasCompletedHealthCheck,
-    HasCompletedHealthCheckMappingText,
-    HasCompletedHealthCheckSelectOption,
-    IsPaid,
-    IsPaidMappingText,
-    IsPaidSelectOption,
-    IsRetake,
-    IsRetakeMappingText,
-    ConfigToken,
-    ApprovedOption
-  }
-  
-  export default CONFIG
-  
+]
+
+const IsRetake = {
+  yes: true,
+  no: false
+}
+
+const IsRetakeMappingText = {
+  true: 'Thi lại',
+  false: 'Thi mới'
+}
+
+const ConfigToken = {
+  tokenType: 'Bearer',
+  storageTokenKeyName: 'accessToken',
+  storageRefreshTokenKeyName: 'refreshToken',
+  expiresTime: 'expiresTime'
+}
+
+const Action = {
+  Create: 'CREATE',
+  Update: 'UPDATE',
+  Delete: 'DELETE'
+}
+
+const CONFIG = {
+  LicenseRegistrationStatus,
+  LicenseRegistrationStatusMappingText,
+  LicenseType,
+  LicenseTypeMappingText,
+  LicenseTypeSelectOption,
+  VehicleType,
+  VehicleTypeMappingText,
+  VehicleTypeSelectOption,
+  PayerType,
+  PayerTypeMappingText,
+  PaymentContext,
+  PaymentContextMappingText,
+  PaymentStatus,
+  PaymentStatusMappingText,
+  SexType,
+  SexTypeMappingText,
+  SexTypeSelectOption,
+  HasCarLicense,
+  HasCarLicenseMappingText,
+  HasCarLicenseSelectOption,
+  HasCompletedHealthCheck,
+  HasCompletedHealthCheckMappingText,
+  HasCompletedHealthCheckSelectOption,
+  IsPaid,
+  IsPaidMappingText,
+  IsPaidSelectOption,
+  IsRetake,
+  IsRetakeMappingText,
+  ConfigToken,
+  ApprovedOption,
+  Action
+}
+
+export default CONFIG

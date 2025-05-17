@@ -31,6 +31,7 @@
     "openapi-fetch": "^0.14.0",
     "react": "18.3.1",
     "react-colorful": "5.6.1",
+    "react-datepicker": "^8.3.0",
     "react-dom": "18.3.1",
     "react-perfect-scrollbar": "1.5.8",
     "react-toastify": "^11.0.5",

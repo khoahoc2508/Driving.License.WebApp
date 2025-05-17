@@ -8,6 +8,7 @@ import { GetLicensesRegistrationsParams, LicenseRegistrationType } from '@/types
 import LicenseRegistrationAPI from '@/libs/api/licenseRegistrationAPI'
 import { toast } from 'react-toastify'
 import axiosInstance from '@/libs/axios'
+import Link from '@/components/Link'
 
 const ManageLicensesRegistrations = () => {
     const [search, setSearch] = useState('')
@@ -82,9 +83,12 @@ const ManageLicensesRegistrations = () => {
                     <i className="ri-filter-2-line text-3xl"></i>
                     <span>Lọc</span>
                 </div>
-                <Button variant="contained" color="primary" onClick={() => {/* Add your click handler here */ }} >
-                    Thêm mới
-                </Button>
+                <Link href={'manage-licenses-registration/create'} passHref legacyBehavior>
+                    <Button variant="contained" color="primary" onClick={() => {/* Add your click handler here */ }} >
+                        Thêm mới
+                    </Button>
+                </Link>
+
             </div>
         </Card>
         <Table
