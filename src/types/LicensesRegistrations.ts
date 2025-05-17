@@ -1,8 +1,11 @@
-import CONFIG from "@/configs/config"
-import { components } from "@/libs/api/client/schema"
-
+import CONFIG from '@/configs/config'
+import { components } from '@/libs/api/client/schema'
 
 export type LicenseRegistrationType = components['schemas']['PaginatedListOfLicenseRegistrationVm']['data']
+export type LicenseRegistrationTypeVm = components['schemas']['LicenseRegistrationVm']
+export type LicenseType = components['schemas']['LicenseType']
+export type LicenseRegistrationStatus = components['schemas']['LicenseRegistrationStatus']
+
 export type LicenseRegistrationFormType = components['schemas']['LicenseRegistrationVm']
 export type LicenseRegistrationPaidType =
   components['schemas']['PaginatedListOfLicenseRegistrationHasPaidForAllVm']['data']
@@ -16,7 +19,7 @@ export type GetLicensesRegistrationsParams = {
   search?: string
   licenseType?: (keyof typeof CONFIG.LicenseType)[]
   hasCompletedHealthCheck?: boolean[] | null
-  hasApproved?: boolean,
+  hasApproved?: boolean
 }
 
 export type getLicensesRegistrationsPaidParams = {

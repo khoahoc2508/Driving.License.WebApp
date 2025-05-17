@@ -51,9 +51,8 @@ const ManageLicensesRegistrations = () => {
     const getLicensesRegistrationsData = async (params: GetLicensesRegistrationsParams): Promise<void> => {
         try {
             setLoading(true)
-            const res = await axiosInstance.get('/api/Licenses/registrations')
+            const res = await LicenseRegistrationAPI.getLicensesRegistrations(params)
             if (res?.data?.data) {
-                debugger
                 const fetchedData = res?.data?.data || []
                 setDataTable(fetchedData)
             }

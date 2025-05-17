@@ -5,7 +5,7 @@ import type {
     LicenseRegistrationFormType
   } from '@/types/LicensesRegistrations'
 
-  import client from './client'
+import axiosInstance from '../axios'
   
   const getLicensesRegistrations = async ({
     pageNumber,
@@ -17,7 +17,7 @@ import type {
     hasCompletedHealthCheck
   }: GetLicensesRegistrationsParams) => {
     
-    return await client.GET('/api/licenses/registrations', {
+    return await axiosInstance.get('/api/licenses/registrations', {
       params: {
         query: {
           PageNumber: pageNumber,
@@ -38,7 +38,7 @@ import type {
     search,
     examScheduleId
   }: getLicensesRegistrationsPaidParams) => {
-    return await client.GET('/api/licenses/registrations/paid', {
+    return await axiosInstance.get('/api/licenses/registrations/paid', {
       params: {
         query: {
           PageNumber: pageNumber,
@@ -51,7 +51,7 @@ import type {
   }
   
   const getDetailLicensesRegistration = async (id: string) => {
-    return await client.GET(`/api/licenses/registrations/{id}`, {
+    return await axiosInstance.get(`/api/licenses/registrations/{id}`, {
       params: {
         path: {
           id
@@ -61,19 +61,19 @@ import type {
   }
   
   const createLicensesRegistrations = async (data: LicenseRegistrationFormType) => {
-    return await client.POST('/api/licenses/registrations', {
+    return await axiosInstance.post('/api/licenses/registrations', {
       body: data
     })
   }
   
   const updateLicensesRegistrations = async (data: LicenseRegistrationFormType) => {
-    return await client.PUT('/api/licenses/registrations', {
+    return await axiosInstance.put('/api/licenses/registrations', {
       body: data
     })
   }
   
   const deleteLicensesRegistrations = async (id: string) => {
-    return await client.DELETE('/api/licenses/registrations/{id}', {
+    return await axiosInstance.delete('/api/licenses/registrations/{id}', {
       params: {
         path: {
           id
@@ -83,7 +83,7 @@ import type {
   }
   
   const createLicensesRegistrationsForCustomer = async (data: LicenseRegistrationCustomerResquest) => {
-    return await client.POST('/api/licenses/registrations/customer', {
+    return await axiosInstance.post('/api/licenses/registrations/customer', {
       body: data
     })
   }

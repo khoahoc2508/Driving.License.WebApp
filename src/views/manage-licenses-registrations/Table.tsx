@@ -4,6 +4,10 @@
 import { useEffect, useMemo, useState } from 'react'
 // MUI Imports
 import TablePagination from '@mui/material/TablePagination'
+import Chip from '@mui/material/Chip'
+
+// Next Imports
+import Link from 'next/link'
 
 // Third-party Imports
 import classnames from 'classnames'
@@ -23,20 +27,23 @@ import { rankItem } from '@tanstack/match-sorter-utils'
 import type { Column, Table, ColumnFiltersState, FilterFn, ColumnDef } from '@tanstack/react-table'
 import type { RankingInfo } from '@tanstack/match-sorter-utils'
 
-// Type Imports
 
 // Icon Imports
 import ChevronRight from '@menu/svg/ChevronRight'
 
 // Style Imports
 import styles from '@core/styles/table.module.css'
-import { LicenseRegistrationType } from "@/types/LicensesRegistrations"
-import { Card } from '@mui/material'
+import { LicenseRegistrationStatus, LicenseRegistrationType, LicenseRegistrationTypeVm, LicenseType } from "@/types/LicensesRegistrations"
+import { Card, Typography } from '@mui/material'
+import CustomAvatar from '@/@core/components/mui/Avatar'
+import { getInitials } from '@/utils/getInitials'
+import OptionMenu from '@/@core/components/option-menu'
+import CONFIG from '@/configs/config'
 
 // Data Imports
 
 // Column Definitions
-const columnHelper = createColumnHelper<LicenseRegistrationType>()
+const columnHelper = createColumnHelper<LicenseRegistrationTypeVm>()
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -60,88 +67,166 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   return itemRank.passed
 }
 
+const getAvatar = (params: { avatar?: string | null; customer?: string | null }) => {
+  const { avatar, customer } = params
 
-const Table = ({ data = [] }: { data?: LicenseRegistrationType }) => {
+  if (avatar) {
+    return <CustomAvatar src={avatar} size={30} className='shadow-md' />
+  } else {
+    return (
+      <CustomAvatar size={30} skin='light' color='primary' className='shadow-md'>
+        {getInitials(customer as string)}
+      </CustomAvatar>
+    )
+  }
+}
+
+const getLicenseTypeString = (licenseType: LicenseType | undefined) => {
+  if (licenseType === undefined) return 'N/A';
+  const key = (Object.keys(CONFIG.LicenseType) as (keyof typeof CONFIG.LicenseType)[]).find(
+    (k) => CONFIG.LicenseType[k] === licenseType
+  );
+  return key || 'N/A';
+};
+
+const getStatusTextAndColor = (status: LicenseRegistrationStatus | undefined) => {
+  let text = 'N/A';
+  let color: 'success' | 'error' | 'warning' = 'warning';
+
+  if (status) {
+    text = 'Đã duyệt';
+    color = 'success';
+  } else {
+    text = 'Chưa duyệt';
+    color = 'warning';
+  }
+
+  return { text, color };
+};
+
+const Table = ({ data = [], setData }: { data?: LicenseRegistrationType, setData: (data: LicenseRegistrationType) => void }) => {
   // States
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [globalFilter, setGlobalFilter] = useState('')
 
   // Hooks
-  const columns = useMemo<ColumnDef<LicenseRegistrationType, any>[]>(
+  const columns = useMemo<ColumnDef<LicenseRegistrationTypeVm, any>[]>(
     () => [
-      columnHelper.accessor(row => row.person?.fullName || '', {
-        id: 'fullName',
-        cell: info => info.getValue(),
-        header: 'Họ tên'
+      columnHelper.accessor('id', {
+        header: 'STT',
+        cell: ({ row, table }) => (
+          <Typography>
+            {table.getRowModel().rows.indexOf(row) + 1}
+          </Typography>
+        )
       }),
-      columnHelper.accessor(row => row.person?.phoneNumber || '', {
-        id: 'phoneNumber',
-        cell: info => info.getValue(),
-        header: 'Số điện thoại'
-      }),
-      columnHelper.accessor(row => row.licenseType, {
-        id: 'licenseType',
-        cell: info => {
-          const val = info.getValue();
-          return val === 0 ? 'A1' : val === 1 ? 'A2' : val === 2 ? 'B1' : val === 3 ? 'B2' : '';
-        },
-        header: 'Bằng'
-      }),
-      columnHelper.accessor(row => row.hasCompletedHealthCheck, {
-        id: 'health',
-        cell: info => info.getValue() ? 'Đã khám' : 'Chưa khám',
-        header: 'Sức khỏe'
-      }),
-      columnHelper.accessor(row => row.amount, {
-        id: 'amount',
-        cell: info => info.getValue() ? info.getValue().toLocaleString('vi-VN') : '',
-        header: 'Tổng thanh toán'
-      }),
-      columnHelper.accessor(row => row.isPaid, {
-        id: 'isPaid',
-        cell: info => info.getValue() ? 'Đã thanh toán' : 'Chưa thanh toán',
-        header: 'Thanh toán'
-      }),
-      columnHelper.accessor(row => row.status, {
-        id: 'status',
-        cell: info => {
-          const val = info.getValue();
-          return val === 0 ? 'Chưa duyệt' : val === 1 ? 'Đã duyệt' : val === 2 ? 'Đã thi' : val === 3 ? 'Đã cấp bằng' : '';
-        },
-        header: 'Trạng thái'
-      }),
-      columnHelper.display({
-        id: 'actions',
-        header: 'Hành động',
+      columnHelper.accessor('person.fullName', {
+        header: 'HỌ TÊN',
         cell: ({ row }) => (
-          <div className="flex items-center gap-2">
-            <button
-              title="Xem"
-              className="cursor-pointer hover:text-yellow-800 bg-transparent"
-              type="button"
-            >
-              <i className="ri-eye-line text-lg" />
-            </button>
-            <button
-              title="Sửa"
-              className="cursor-pointer hover:text-blue-800 bg-transparent"
-              type="button"
-            >
-              <i className="ri-edit-line text-lg" />
-            </button>
-            <button
-              title="Xóa"
-              className="cursor-pointer hover:text-red-800 bg-transparent"
-              type="button"
-            >
-              <i className="ri-delete-bin-line text-lg" />
-            </button>
+          <div className='flex items-center gap-3'>
+            {getAvatar({ avatar: row.original?.person?.avatarUrl, customer: row.original?.person?.fullName })}
+            <div className='flex flex-col'>
+              <Typography color='text.primary' className='font-medium'>
+                {row.original?.person?.fullName}
+              </Typography>
+              <Typography variant='body2'>{row.original?.person?.email}</Typography>
+            </div>
           </div>
         )
+      }),
+      columnHelper.accessor('person.phoneNumber', {
+        header: 'SỐ ĐIỆN THOẠI',
+        cell: ({ row }) => (
+          <Typography>{row.original?.person?.phoneNumber}</Typography>
+        )
+      }),
+      columnHelper.accessor('licenseType', {
+        header: 'BẰNG',
+        cell: ({ row }) => {
+          return <Typography>{getLicenseTypeString(row.original?.licenseType)}</Typography>;
+        }
+      }),
+      columnHelper.accessor('hasCompletedHealthCheck', {
+        header: 'SỨC KHỎE',
+        cell: ({ row }) => (
+          <Chip
+            label={row.original?.hasCompletedHealthCheck ? 'Đã khám' : 'Chưa khám'}
+            color={row.original?.hasCompletedHealthCheck ? 'success' : 'error'}
+            variant='tonal'
+            size='small'
+          />
+        )
+      }),
+      columnHelper.accessor('amount', {
+        header: 'TỔNG THANH TOÁN',
+        cell: ({ row }) => (
+          <Typography>{row.original?.amount?.toLocaleString('vi-VN') || '0'}</Typography>
+        )
+      }),
+      columnHelper.accessor('isPaid', {
+        header: 'THANH TOÁN',
+        cell: ({ row }) => (
+          <Chip
+            label={row.original?.isPaid ? 'Đã thanh toán' : 'Chưa thanh toán'}
+            color={row.original?.isPaid ? 'success' : 'error'}
+            variant='tonal'
+            size='small'
+          />
+        )
+      }),
+      columnHelper.accessor('status', {
+        header: 'Trạng thái',
+        cell: ({ row }) => {
+          const { text, color } = getStatusTextAndColor(row.original?.status);
+          return (
+            <Chip
+              label={text}
+              color={color}
+              variant='tonal'
+              size='small'
+            />
+          );
+        }
+      }),
+      columnHelper.accessor('id', {
+        header: 'Hành động',
+        cell: ({ row }) => (
+          <div className='flex items-center'>
+            <OptionMenu
+              iconButtonProps={{ size: 'medium' }}
+              iconClassName='text-[22px]'
+              options={[
+                {
+                  text: 'View',
+                  icon: 'ri-eye-line',
+                  href: `/manage-licenses-registrations/${row.original?.id}`,
+                  linkProps: { className: 'flex items-center is-full gap-2 plb-2 pli-4' }
+                },
+                {
+                  text: 'Edit',
+                  icon: 'ri-pencil-line',
+                  href: `/manage-licenses-registrations/edit/${row.original?.id}`,
+                  linkProps: { className: 'flex items-center is-full gap-2 plb-2 pli-4' }
+                },
+                {
+                  text: 'Delete',
+                  icon: 'ri-delete-bin-7-line text-[22px]',
+                  menuItemProps: {
+                    onClick: () => setData(data?.filter(item => item.id !== row.original?.id) || []),
+                    className: 'flex items-center gap-2 text-error'
+                  }
+                }
+              ]}
+            />
+          </div>
+        ),
+        enableSorting: false
       })
     ],
-    []
+    [data, setData]
   )
+
+
 
   const table = useReactTable({
     data: data,
@@ -165,14 +250,6 @@ const Table = ({ data = [] }: { data?: LicenseRegistrationType }) => {
     getFacetedMinMaxValues: getFacetedMinMaxValues()
   })
 
-  useEffect(() => {
-    if (table.getState().columnFilters[0]?.id === 'fullName') {
-      if (table.getState().sorting[0]?.id !== 'fullName') {
-        table.setSorting([{ id: 'fullName', desc: false }])
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [table.getState().columnFilters[0]?.id])
 
   return (
     <Card>
