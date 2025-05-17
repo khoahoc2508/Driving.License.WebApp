@@ -140,7 +140,7 @@ const Table = ({
         header: 'HỌ TÊN',
         cell: ({ row }) => (
           <div className='flex items-center gap-3'>
-            {getAvatar({ avatar: row.original?.person?.avatarUrl, customer: row.original?.person?.fullName })}
+            {getAvatar({ avatar: `${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}/${row.original?.person?.avatarUrl}`, customer: row.original?.person?.fullName })}
             <div className='flex flex-col'>
               <Typography color='text.primary' className='font-medium'>
                 {row.original?.person?.fullName}
@@ -208,13 +208,6 @@ const Table = ({
         header: 'Hành động',
         cell: ({ row }) => (
           <div className="flex items-center gap-2">
-            <button
-              title="Xem"
-              className="cursor-pointer hover:text-yellow-800 bg-transparent"
-              type="button"
-            >
-              <i className="ri-eye-line text-lg" />
-            </button>
             <button
               title="Sửa"
               className="cursor-pointer hover:text-blue-800 bg-transparent"

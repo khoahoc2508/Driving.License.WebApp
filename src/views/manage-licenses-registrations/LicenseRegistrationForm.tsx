@@ -2,6 +2,7 @@
 
 // React Imports
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 // MUI Imports
 import Card from '@mui/material/Card'
@@ -79,6 +80,7 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
     const [districts, setDistricts] = useState<any[]>([])
     const [wards, setWards] = useState<any[]>([])
     const { user } = useUser()
+    const router = useRouter()
 
     // Hooks
     const {
@@ -218,7 +220,7 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
 
             if (response.data.success) {
                 toast.success('Thêm mới thành công')
-                reset()
+                router.push('/manage-licenses-registration')
             } else {
                 toast.error(response.data.message || 'Có lỗi xảy ra')
             }

@@ -2,13 +2,14 @@
 
 import { useEffect, useState } from 'react'
 import Table from './Table'
-import { Button, Card } from '@mui/material'
 import DebouncedInput from '@/components/common/DebouncedInput'
 import { GetLicensesRegistrationsParams, LicenseRegistrationType } from '@/types/LicensesRegistrations'
 import LicenseRegistrationAPI from '@/libs/api/licenseRegistrationAPI'
 import { toast } from 'react-toastify'
 import axiosInstance from '@/libs/axios'
 import Link from '@/components/Link'
+import Grid from '@mui/material/Grid2'
+import { Button, Card } from '@mui/material'
 
 const ManageLicensesRegistrations = () => {
     const [search, setSearch] = useState('')
@@ -71,26 +72,32 @@ const ManageLicensesRegistrations = () => {
     }
 
     return <>
-        <Card className='flex justify-between items-center mb-1 p-2'>
-            <DebouncedInput
-                value={search}
-                onDebounceChange={onChangeSearch}
-                placeholder='Tìm kiếm'
-            />
-
-            <div className='flex gap-4 items-center'>
-                <div className='flex gap-1 items-center'>
-                    <i className="ri-filter-2-line text-3xl"></i>
-                    <span>Lọc</span>
-                </div>
-                <Link href={'manage-licenses-registration/create'} passHref legacyBehavior>
-                    <Button variant="contained" color="primary" onClick={() => {/* Add your click handler here */ }} >
-                        Thêm mới
-                    </Button>
-                </Link>
-
-            </div>
+        <Card className='flex justify-between items-center p-2 mb-1'>
+            <Grid container spacing={2} justifyContent={'space-between'} className='w-full'>
+                <Grid size={{ xs: 12, sm: 2 }} className='flex items-center'>
+                    <DebouncedInput
+                        value={search}
+                        className='w-full'
+                        onDebounceChange={onChangeSearch}
+                        placeholder='Tìm kiếm'
+                    />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 10 }}>
+                    <div className='flex gap-4 items-center justify-end'>
+                        <div className='flex gap-1 items-center text-gray-600'>
+                            <i className="ri-filter-2-line text-3xl"></i>
+                            <span>Lọc</span>
+                        </div>
+                        <Link href={'manage-licenses-registration/create'} passHref legacyBehavior>
+                            <Button variant="contained" color="primary">
+                                Thêm mới
+                            </Button>
+                        </Link>
+                    </div>
+                </Grid>
+            </Grid>
         </Card>
+
         <Table
             data={dataTable}
             setData={setDataTable}
