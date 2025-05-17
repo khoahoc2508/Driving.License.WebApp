@@ -4,9 +4,6 @@
 import { useState } from 'react'
 
 // MUI Imports
-import Card from '@mui/material/Card'
-import CardHeader from '@mui/material/CardHeader'
-import CardContent from '@mui/material/CardContent'
 import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import List from '@mui/material/List'
@@ -39,6 +36,10 @@ interface ImageDropzoneProps {
   onFilesChange?: (files: File[]) => void
   onUpload?: (files: File[]) => void
   className?: string
+  required?: boolean
+  error?: boolean
+  helperText?: string
+  multiple?: boolean
 }
 
 // Styled Dropzone Component
@@ -64,7 +65,11 @@ const ImageDropzone = ({
   },
   onFilesChange,
   onUpload,
-  className
+  className,
+  required = false,
+  error = false,
+  helperText,
+  multiple = false
 }: ImageDropzoneProps) => {
   // States
   const [files, setFiles] = useState<File[]>([])
@@ -76,9 +81,17 @@ const ImageDropzone = ({
       setFiles(newFiles)
       onFilesChange?.(newFiles)
     },
-    maxFiles,
-    accept
+    maxFiles: multiple ? maxFiles : 1,
+    accept,
+    multiple
   })
+
+  const inputProps = getInputProps()
+  // Ensure value is never null
+  const safeInputProps = {
+    ...inputProps,
+    value: inputProps.value || ''
+  }
 
   const renderFilePreview = (file: FileProp) => {
     if (file.type.startsWith('image')) {
@@ -129,18 +142,23 @@ const ImageDropzone = ({
   return (
     <Dropzone className={className}>
       <div {...getRootProps({ className: 'dropzone' })}>
-        <input {...getInputProps()} />
+        <input {...safeInputProps} />
         <div className='flex items-center flex-col gap-2 text-center'>
-          <CustomAvatar variant='rounded' skin='light' color='secondary'>
+          <CustomAvatar variant='rounded' skin='light' color={error ? 'error' : 'secondary'}>
             <i className='ri-upload-2-line' />
           </CustomAvatar>
-          <Typography variant='h4'>{title}</Typography>
+          <Typography variant='h4'>{title}{required && ' *'}</Typography>
           <Typography color='text.disabled'>{subtitle}</Typography>
           <Button variant='outlined' size='small'>
-            Browse Image
+            Ảnh từ thiết bị
           </Button>
         </div>
       </div>
+      {error && helperText && (
+        <Typography color='error' variant='caption' className='mt-1'>
+          {helperText}
+        </Typography>
+      )}
       {files.length ? (
         <>
           <List>{fileList}</List>

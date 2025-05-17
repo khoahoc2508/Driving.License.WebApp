@@ -57,21 +57,14 @@ type FormValues = {
     healthCheck: string
     carLicense: string
     confirmationStatus: string
-    // Assuming file uploads are handled separately or with a simple input type for now
-    // photo3x4: FileList | null;
-    // frontPhoto: FileList | null;
-    // backPhoto: FileList | null;
+    photo3x4: File[]
+    frontPhoto: File[]
+    backPhoto: File[]
 }
 
 type LicenseRegistrationFormProps = {
     screenType: SCREEN_TYPE
     id?: string
-}
-
-type FileProp = {
-    name: string
-    type: string
-    size: number
 }
 
 const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProps) => {
@@ -84,7 +77,10 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
         control,
         reset,
         handleSubmit,
-        formState: { errors }
+        formState: { errors },
+        setValue,
+        watch,
+        trigger
     } = useForm<FormValues>({
         defaultValues: {
             fullName: '',
@@ -106,16 +102,22 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
             healthCheck: 'Chưa khám', // Default based on image
             carLicense: 'Chưa có', // Default based on image
             confirmationStatus: 'Chưa duyệt', // Default based on image
-            // photo3x4: null,
-            // frontPhoto: null,
-            // backPhoto: null,
-        }
+            photo3x4: [],
+            frontPhoto: [],
+            backPhoto: []
+        },
+        mode: 'onChange'
     })
 
-    const onSubmit = () => {
-        debugger
+    const photo3x4 = watch('photo3x4')
+
+    const onSubmit = handleSubmit((data) => {
+        if (!data.photo3x4 || data.photo3x4.length === 0) {
+            setValue('photo3x4', [], { shouldValidate: true })
+            return
+        }
         toast.success('Form Submitted')
-    }
+    })
 
     return (
         <>
@@ -129,7 +131,7 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
             </Card>
             <Card>
                 <CardContent>
-                    <form onSubmit={handleSubmit(onSubmit)}>
+                    <form onSubmit={onSubmit}>
                         <Grid container spacing={5}>
                             {/* Left Column */}
                             <Grid size={{ xs: 12, sm: 6 }}>
@@ -137,9 +139,27 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                                     {/* Tải đại diện 3x4 */}
                                     <Grid size={{ xs: 12, sm: 6 }}> {/* Column 1 for photo */}
                                         <Grid size={{ xs: 12 }}>
-                                            <ImageDropzone
-                                                title="Kéo thả file ảnh 3x4"
-                                                onUpload={(files) => setFileAvatar(files)}
+                                            <Controller
+                                                name="photo3x4"
+                                                control={control}
+                                                rules={{
+                                                    required: 'Vui lòng tải lên ảnh 3x4',
+                                                    validate: value => (value && value.length > 0) || 'Vui lòng tải lên ảnh 3x4'
+                                                }}
+                                                render={({ field }) => (
+                                                    <ImageDropzone
+                                                        title="Kéo thả file ảnh 3x4"
+                                                        onUpload={(files) => {
+                                                            field.onChange(files || [])
+                                                            trigger('photo3x4')
+                                                        }}
+                                                        required
+                                                        error={Boolean(errors.photo3x4)}
+                                                        helperText={errors.photo3x4?.message}
+                                                        multiple={false}
+                                                        maxFiles={1}
+                                                    />
+                                                )}
                                             />
                                         </Grid>
                                     </Grid>
