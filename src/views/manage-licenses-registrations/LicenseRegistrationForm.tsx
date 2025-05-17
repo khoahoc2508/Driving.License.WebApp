@@ -1,7 +1,7 @@
 'use client'
 
 // React Imports
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 // MUI Imports
 import Card from '@mui/material/Card'
@@ -27,6 +27,7 @@ import IconButton from '@mui/material/IconButton'
 import { toast } from 'react-toastify'
 import { useForm, Controller } from 'react-hook-form'
 import Dropzone, { useDropzone } from 'react-dropzone'
+import LicenseRegistrationAPI from '@/libs/api/licenseRegistrationAPI'
 
 // Styled Component Imports
 import { SCREEN_TYPE } from '@/types/Common'
@@ -71,6 +72,9 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
     // States
     // const [isPasswordShown, setIsPasswordShown] = useState(false) // Password field is removed
     const [fileAvatar, setFileAvatar] = useState<File[]>([])
+    const [provinces, setProvinces] = useState<any[]>([])
+    const [districts, setDistricts] = useState<any[]>([])
+    const [wards, setWards] = useState<any[]>([])
 
     // Hooks
     const {
@@ -111,12 +115,114 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
 
     const photo3x4 = watch('photo3x4')
 
-    const onSubmit = handleSubmit((data) => {
+    // Fetch provinces on component mount
+    useEffect(() => {
+        fetchProvinces()
+    }, [])
+
+    // Watch for province changes to fetch districts
+    useEffect(() => {
+        const subscription = watch((value, { name }) => {
+            if (name === 'province' && value.province) {
+                fetchDistricts(value.province)
+            }
+            if (name === 'district' && value.district) {
+                fetchWards(value.district)
+            }
+        })
+        return () => subscription.unsubscribe()
+    }, [watch])
+
+    const fetchProvinces = async () => {
+        try {
+            const response = await fetch('https://provinces.open-api.vn/api/p')
+            const data = await response.json()
+            setProvinces(data)
+        } catch (error) {
+            console.error('Error fetching provinces:', error)
+            toast.error('Lỗi khi tải danh sách tỉnh/thành phố')
+        }
+    }
+
+    const fetchDistricts = async (provinceCode: string) => {
+        if (!provinceCode) return
+        try {
+            const response = await fetch(`https://provinces.open-api.vn/api/p/${provinceCode}?depth=2`)
+            const data = await response.json()
+            setDistricts(data.districts)
+            // Reset district and ward when province changes
+            setValue('district', '')
+            setValue('ward', '')
+        } catch (error) {
+            console.error('Error fetching districts:', error)
+            toast.error('Lỗi khi tải danh sách quận/huyện')
+        }
+    }
+
+    const fetchWards = async (districtCode: string) => {
+        if (!districtCode) return
+        try {
+            const response = await fetch(`https://provinces.open-api.vn/api/d/${districtCode}?depth=2`)
+            const data = await response.json()
+            setWards(data.wards)
+            // Reset ward when district changes
+            setValue('ward', '')
+        } catch (error) {
+            console.error('Error fetching wards:', error)
+            toast.error('Lỗi khi tải danh sách phường/xã')
+        }
+    }
+
+    const onSubmit = handleSubmit(async (data) => {
         if (!data.photo3x4 || data.photo3x4.length === 0) {
             setValue('photo3x4', [], { shouldValidate: true })
             return
         }
-        toast.success('Form Submitted')
+
+        try {
+            const response = await LicenseRegistrationAPI.createLicensesRegistrations({
+                vehicleType: data.licenseType === 'Xe máy' ? 0 : 1, // 0 for motorbike, 1 for car
+                licenseType: data.drivingLicenseType === 'A1' ? 0 :
+                    data.drivingLicenseType === 'A2' ? 1 :
+                        data.drivingLicenseType === 'B1' ? 2 : 3, // Map license types to enum values
+                hasCarLicense: data.carLicense === 'Đã có',
+                hasCompletedHealthCheck: data.healthCheck === 'Đã khám',
+                hasApproved: data.confirmationStatus === 'Đã duyệt',
+                person: {
+                    avatarUrl: data.photo3x4[0] ? URL.createObjectURL(data.photo3x4[0]) : '',
+                    fullName: data.fullName,
+                    birthday: data.dateOfBirth?.toISOString().split('T')[0] || '',
+                    sex: data.gender === 'Nam' ? 0 : data.gender === 'Nữ' ? 1 : 2,
+                    phoneNumber: data.phoneNumber,
+                    email: data.email,
+                    address: {
+                        provinceCode: data.province,
+                        districtCode: data.district,
+                        wardCode: data.ward,
+                        addressDetail: data.street
+                    },
+                    citizenCardId: data.cccd,
+                    citizenCardFrontImgUrl: data.frontPhoto[0] ? URL.createObjectURL(data.frontPhoto[0]) : '',
+                    citizenCardBackImgUrl: data.backPhoto[0] ? URL.createObjectURL(data.backPhoto[0]) : '',
+                    citizenCardDateOfIssue: '',
+                    citizenCardPlaceOfIssue: ''
+                },
+                note: '',
+                isPaid: data.paymentStatus === 'Đã thanh toán',
+                amount: data.totalAmount || 0
+            })
+
+            if (response.data.success) {
+                toast.success('Đăng ký bằng lái thành công')
+                // Reset form after successful submission
+                reset()
+            } else {
+                toast.error(response.data.message || 'Có lỗi xảy ra')
+            }
+        } catch (error) {
+            console.error('Error submitting form:', error)
+            toast.error('Có lỗi xảy ra khi đăng ký bằng lái')
+        }
     })
 
     return (
@@ -308,9 +414,11 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                                                 rules={{ required: true }}
                                                 render={({ field }) => (
                                                     <Select label='Tỉnh/Thành phố (*)' {...field} error={Boolean(errors.province)}>
-                                                        {/* Add province options here */}
-                                                        <MenuItem value='Option1'>Option 1</MenuItem>
-                                                        <MenuItem value='Option2'>Option 2</MenuItem>
+                                                        {provinces.map((province) => (
+                                                            <MenuItem key={province.code} value={province.code}>
+                                                                {province.name}
+                                                            </MenuItem>
+                                                        ))}
                                                     </Select>
                                                 )}
                                             />
@@ -327,9 +435,11 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                                                 rules={{ required: true }}
                                                 render={({ field }) => (
                                                     <Select label='Quận/Huyện (*)' {...field} error={Boolean(errors.district)}>
-                                                        {/* Add district options here */}
-                                                        <MenuItem value='Option1'>Option 1</MenuItem>
-                                                        <MenuItem value='Option2'>Option 2</MenuItem>
+                                                        {districts.map((district) => (
+                                                            <MenuItem key={district.code} value={district.code}>
+                                                                {district.name}
+                                                            </MenuItem>
+                                                        ))}
                                                     </Select>
                                                 )}
                                             />
@@ -348,9 +458,11 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                                                 rules={{ required: true }}
                                                 render={({ field }) => (
                                                     <Select label='Xã/Phường (*)' {...field} error={Boolean(errors.ward)}>
-                                                        {/* Add ward options here */}
-                                                        <MenuItem value='Option1'>Option 1</MenuItem>
-                                                        <MenuItem value='Option2'>Option 2</MenuItem>
+                                                        {wards.map((ward) => (
+                                                            <MenuItem key={ward.code} value={ward.code}>
+                                                                {ward.name}
+                                                            </MenuItem>
+                                                        ))}
                                                     </Select>
                                                 )}
                                             />
