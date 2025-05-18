@@ -26,9 +26,9 @@ const ManageLicensesRegistrations = () => {
     const [hasNextPage, setHasNextPage] = useState<boolean>(false)
 
     // Filter states
-    const [hasApprovedFilter, setHasApprovedFilter] = useState<boolean | undefined>(undefined);
-    const [licenseTypeFilter, setLicenseTypeFilter] = useState<number | undefined>(undefined);
-    const [examScheduleId, setExamScheduleId] = useState<string | undefined>(undefined);
+    const [hasApprovedFilter, setHasApprovedFilter] = useState<boolean[]>([])
+    const [licenseTypeFilter, setLicenseTypeFilter] = useState<number[]>([])
+    const [examScheduleId, setExamScheduleId] = useState<string | undefined>(undefined)
 
     useEffect(() => {
         if (payload) {
@@ -45,8 +45,8 @@ const ManageLicensesRegistrations = () => {
                     pageNumber: pageNumber,
                     pageSize: pageSize,
                     search,
-                    hasApproved: hasApprovedFilter,
-                    licenseType: licenseTypeFilter,
+                    hasApproved: hasApprovedFilter.length > 0 ? hasApprovedFilter : undefined,
+                    licenseType: licenseTypeFilter.length > 0 ? licenseTypeFilter : undefined,
                     examScheduleId
                 }
             })
@@ -55,7 +55,6 @@ const ManageLicensesRegistrations = () => {
     const getLicensesRegistrationsData = async (params: GetLicensesRegistrationsParams): Promise<void> => {
         try {
             setLoading(true)
-            debugger
             const res = await LicenseRegistrationAPI.getLicensesRegistrations(params)
             if (res?.data?.data) {
                 const fetchedData = res?.data?.data || []
@@ -73,11 +72,11 @@ const ManageLicensesRegistrations = () => {
         setSearch(String(value))
     }
 
-    const handleApplyFilters = (status: boolean | undefined, licenseType: number | undefined) => {
+    const handleApplyFilters = (status: boolean[], licenseType: number[]) => {
         // Update state to trigger API call via useEffect
-        setHasApprovedFilter(status);
-        setLicenseTypeFilter(licenseType);
-    };
+        setHasApprovedFilter(status)
+        setLicenseTypeFilter(licenseType)
+    }
 
     return <>
         <Card className='flex justify-between items-center p-2 mb-1'>

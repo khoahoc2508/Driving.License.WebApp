@@ -40,12 +40,12 @@ import { useSettings } from '@core/hooks/useSettings'
 
 // Util Imports
 // Change component signature to remove notifications prop
-const Filter = ({ onApplyFilters }: { onApplyFilters: (status: boolean | undefined, licenseType: number | undefined) => void }) => {
+const Filter = ({ onApplyFilters }: { onApplyFilters: (status: boolean[], licenseType: number[]) => void }) => {
     // States
     const [open, setOpen] = useState(false)
     // State for selected filter options
-    const [selectedStatus, setSelectedStatus] = useState<boolean | undefined>(undefined);
-    const [selectedLicenseType, setSelectedLicenseType] = useState<number | undefined>(undefined);
+    const [selectedStatus, setSelectedStatus] = useState<boolean[]>([])
+    const [selectedLicenseType, setSelectedLicenseType] = useState<number[]>([])
     // Refs
     const anchorRef = useRef<HTMLButtonElement>(null)
 
@@ -64,27 +64,35 @@ const Filter = ({ onApplyFilters }: { onApplyFilters: (status: boolean | undefin
 
     // Handlers for filter selection
     const handleStatusSelect = (statusValue: boolean) => {
-        setSelectedStatus(prevStatus => (prevStatus === statusValue ? undefined : statusValue));
-    };
+        setSelectedStatus(prevStatus =>
+            prevStatus.includes(statusValue)
+                ? prevStatus.filter(value => value !== statusValue)
+                : [...prevStatus, statusValue]
+        )
+    }
 
     const handleLicenseTypeSelect = (typeValue: number) => {
-        setSelectedLicenseType(prevType => (prevType === typeValue ? undefined : typeValue));
-    };
+        setSelectedLicenseType(prevType =>
+            prevType.includes(typeValue)
+                ? prevType.filter(value => value !== typeValue)
+                : [...prevType, typeValue]
+        )
+    }
 
     // Handlers for filter actions
     const handleReset = () => {
-        setSelectedStatus(undefined);
-        setSelectedLicenseType(undefined);
+        setSelectedStatus([])
+        setSelectedLicenseType([])
         // Optionally close the popover after reset
         // setOpen(false);
-    };
+    }
 
     const handleApply = () => {
         // Implement apply logic here (e.g., call a prop function with selected filters)
-        onApplyFilters(selectedStatus, selectedLicenseType);
+        onApplyFilters(selectedStatus, selectedLicenseType)
         // Close the popover after applying
-        setOpen(false);
-    };
+        setOpen(false)
+    }
 
     return (
         <>
@@ -94,7 +102,7 @@ const Filter = ({ onApplyFilters }: { onApplyFilters: (status: boolean | undefin
                     className='cursor-pointer'
                     variant='dot'
                     overlap='circular'
-                    invisible={!selectedStatus && !selectedLicenseType} // Example: indicate if any filter is selected
+                    invisible={!selectedStatus?.length && !selectedLicenseType?.length} // Example: indicate if any filter is selected
                     anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                 >
                     <i className="ri-filter-2-line text-3xl"></i>
@@ -130,14 +138,14 @@ const Filter = ({ onApplyFilters }: { onApplyFilters: (status: boolean | undefin
                                     </Typography>
                                     <div className='flex gap-2 mbe-4'>
                                         <Button
-                                            variant={selectedStatus === CONFIG.ApprovedOption[0].value ? 'contained' : 'outlined'}
+                                            variant={selectedStatus.includes(CONFIG.ApprovedOption[0].value) ? 'contained' : 'outlined'}
                                             onClick={() => handleStatusSelect(CONFIG.ApprovedOption[0].value)}
                                             size='small'
                                         >
                                             Đã duyệt
                                         </Button>
                                         <Button
-                                            variant={selectedStatus === CONFIG.ApprovedOption[1].value ? 'contained' : 'outlined'}
+                                            variant={selectedStatus.includes(CONFIG.ApprovedOption[1].value) ? 'contained' : 'outlined'}
                                             onClick={() => handleStatusSelect(CONFIG.ApprovedOption[1].value)}
                                             size='small'
                                         >
@@ -151,28 +159,28 @@ const Filter = ({ onApplyFilters }: { onApplyFilters: (status: boolean | undefin
                                     </Typography>
                                     <div className='grid grid-cols-2 gap-2 mbe-6'>
                                         <Button
-                                            variant={selectedLicenseType === CONFIG.LicenseType.A1 ? 'contained' : 'outlined'}
+                                            variant={selectedLicenseType.includes(CONFIG.LicenseType.A1) ? 'contained' : 'outlined'}
                                             onClick={() => handleLicenseTypeSelect(CONFIG.LicenseType.A1)}
                                             size='small'
                                         >
                                             A1
                                         </Button>
                                         <Button
-                                            variant={selectedLicenseType === CONFIG.LicenseType.A2 ? 'contained' : 'outlined'}
+                                            variant={selectedLicenseType.includes(CONFIG.LicenseType.A2) ? 'contained' : 'outlined'}
                                             onClick={() => handleLicenseTypeSelect(CONFIG.LicenseType.A2)}
                                             size='small'
                                         >
                                             A2
                                         </Button>
                                         <Button
-                                            variant={selectedLicenseType === CONFIG.LicenseType.B1 ? 'contained' : 'outlined'}
+                                            variant={selectedLicenseType.includes(CONFIG.LicenseType.B1) ? 'contained' : 'outlined'}
                                             onClick={() => handleLicenseTypeSelect(CONFIG.LicenseType.B1)}
                                             size='small'
                                         >
                                             B1
                                         </Button>
                                         <Button
-                                            variant={selectedLicenseType === CONFIG.LicenseType.B2 ? 'contained' : 'outlined'}
+                                            variant={selectedLicenseType.includes(CONFIG.LicenseType.B2) ? 'contained' : 'outlined'}
                                             onClick={() => handleLicenseTypeSelect(CONFIG.LicenseType.B2)}
                                             size='small'
                                         >

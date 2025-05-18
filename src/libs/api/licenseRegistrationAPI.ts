@@ -8,10 +8,12 @@ import type {
 } from '@/types/LicensesRegistrations'
 
 import axiosInstance from '../axios'
+import { customParamsSerializer } from './commonAPI'
 
 const getLicensesRegistrations = async (params: GetLicensesRegistrationsParams) => {
   return await axiosInstance.get('/api/licenses/registrations', {
-    params
+    params,
+    paramsSerializer: customParamsSerializer
   })
 }
 
@@ -27,7 +29,8 @@ const getLicensesRegistrationsPaid = async ({
       PageSize: pageSize,
       Search: search,
       ExamScheduleId: examScheduleId
-    }
+    },
+    paramsSerializer: customParamsSerializer
   })
 }
 
