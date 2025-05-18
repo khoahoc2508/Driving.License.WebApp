@@ -10,24 +10,25 @@ import axiosInstance from '@/libs/axios'
 import Link from '@/components/Link'
 import Grid from '@mui/material/Grid2'
 import { Button, Card } from '@mui/material'
+import Filter from './Filter'
 
 const ManageLicensesRegistrations = () => {
     const [search, setSearch] = useState('')
-    const [filterStatus, setFilterStatus] = useState('')
-    const [filterLicense, setFilterLicense] = useState('')
     const [dataTable, setDataTable] = useState<LicenseRegistrationType>([])
     const [loading, setLoading] = useState<boolean>(false)
     const [payload, setPayload] = useState<GetLicensesRegistrationsParams>()
     const [pageNumber, setPageNumber] = useState<number>(1)
     const [pageSize, setPageSize] = useState<number>(10)
     const [totalItems, setTotalItems] = useState<number>(0)
-    const [isPaid, setIsPaid] = useState<boolean>()
-    const [hasCompletedHealthCheck, setHasCompletedHealthCheck] = useState<boolean>()
-    const [examScheduleId, setExamScheduleId] = useState<string>()
     const [totalPages, setTotalPages] = useState<number>(10)
     const [reloadDataTable, setReloadDataTable] = useState<boolean>(false)
     const [examScheduleOptions, setExamScheduleOptions] = useState<{ label: any; value: any }[]>([])
     const [hasNextPage, setHasNextPage] = useState<boolean>(false)
+
+    // Filter states
+    const [hasApprovedFilter, setHasApprovedFilter] = useState<boolean | undefined>(undefined);
+    const [licenseTypeFilter, setLicenseTypeFilter] = useState<number | undefined>(undefined);
+    const [examScheduleId, setExamScheduleId] = useState<string | undefined>(undefined);
 
     useEffect(() => {
         if (payload) {
@@ -44,16 +45,17 @@ const ManageLicensesRegistrations = () => {
                     pageNumber: pageNumber,
                     pageSize: pageSize,
                     search,
-                    isPaid,
-                    hasCompletedHealthCheck,
+                    hasApproved: hasApprovedFilter,
+                    licenseType: licenseTypeFilter,
                     examScheduleId
                 }
             })
-    }, [pageSize, pageNumber, search, isPaid, hasCompletedHealthCheck, examScheduleId])
+    }, [pageSize, pageNumber, search, hasApprovedFilter, licenseTypeFilter, examScheduleId])
 
     const getLicensesRegistrationsData = async (params: GetLicensesRegistrationsParams): Promise<void> => {
         try {
             setLoading(true)
+            debugger
             const res = await LicenseRegistrationAPI.getLicensesRegistrations(params)
             if (res?.data?.data) {
                 const fetchedData = res?.data?.data || []
@@ -71,6 +73,12 @@ const ManageLicensesRegistrations = () => {
         setSearch(String(value))
     }
 
+    const handleApplyFilters = (status: boolean | undefined, licenseType: number | undefined) => {
+        // Update state to trigger API call via useEffect
+        setHasApprovedFilter(status);
+        setLicenseTypeFilter(licenseType);
+    };
+
     return <>
         <Card className='flex justify-between items-center p-2 mb-1'>
             <Grid container spacing={2} justifyContent={'space-between'} className='w-full'>
@@ -84,8 +92,8 @@ const ManageLicensesRegistrations = () => {
                 </Grid>
                 <Grid size={{ xs: 12, sm: 10 }}>
                     <div className='flex gap-4 items-center justify-end'>
-                        <div className='flex gap-1 items-center text-gray-600'>
-                            <i className="ri-filter-2-line text-3xl"></i>
+                        <div className='flex gap-1 items-center'>
+                            <Filter onApplyFilters={handleApplyFilters} />
                             <span>Lọc</span>
                         </div>
                         <Link href={'manage-licenses-registration/create'} passHref legacyBehavior>

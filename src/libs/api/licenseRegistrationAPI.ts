@@ -9,25 +9,9 @@ import type {
 
 import axiosInstance from '../axios'
 
-const getLicensesRegistrations = async ({
-  pageNumber,
-  pageSize,
-  search,
-  examScheduleId,
-  isPaid,
-  isExamScheduled,
-  hasCompletedHealthCheck
-}: GetLicensesRegistrationsParams) => {
+const getLicensesRegistrations = async (params: GetLicensesRegistrationsParams) => {
   return await axiosInstance.get('/api/licenses/registrations', {
-    params: {
-      PageNumber: pageNumber,
-      PageSize: pageSize,
-      Search: search,
-      ExamScheduleId: examScheduleId,
-      IsPaid: isPaid,
-      IsExamScheduled: isExamScheduled,
-      HasCompletedHealthCheck: hasCompletedHealthCheck
-    }
+    params
   })
 }
 

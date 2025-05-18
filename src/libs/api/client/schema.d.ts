@@ -1136,6 +1136,7 @@ export interface operations {
                 IsPaid?: boolean | null;
                 IsExamScheduled?: boolean | null;
                 HasCompletedHealthCheck?: boolean[] | null;
+                HasApproved?: boolean[] | null;
                 LicenseType?: components["schemas"]["LicenseType"][] | null;
             };
             header?: never;

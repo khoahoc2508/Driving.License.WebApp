@@ -20,7 +20,7 @@ export type GetLicensesRegistrationsParams = {
   search?: string
   licenseType?: (keyof typeof CONFIG.LicenseType)[]
   hasCompletedHealthCheck?: boolean[] | null
-  hasApproved?: boolean
+  hasApproved?: boolean[] | null
 }
 
 export type getLicensesRegistrationsPaidParams = {

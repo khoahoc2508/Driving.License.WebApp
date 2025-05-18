@@ -140,7 +140,6 @@ const ImageDropzone = ({
   const handleUpload = async () => {
     try {
       const response = await UploadAPI.uploadFiles(files)
-      debugger
       toast.success("Tải file thành công")
       onUpload?.({ data: response.data.map((file: { relativeUrl: string | null }) => file.relativeUrl || '') })
     } catch (error) {
