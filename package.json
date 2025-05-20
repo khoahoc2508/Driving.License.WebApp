@@ -46,6 +46,7 @@
     "@iconify/tools": "4.1.1",
     "@iconify/types": "2.0.0",
     "@iconify/utils": "2.2.1",
+    "@mantine/dropzone": "^8.0.1",
     "@types/node": "^22.10.2",
     "@types/qs": "^6.14.0",
     "@types/react": "^18.3.18",

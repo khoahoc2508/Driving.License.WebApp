@@ -3,6 +3,7 @@ import InitColorSchemeScript from '@mui/material/InitColorSchemeScript'
 
 // Third-party Imports
 import 'react-perfect-scrollbar/dist/css/styles.css'
+import { MantineProvider } from '@mantine/core'
 
 // Type Imports
 import type { ChildrenType } from '@core/types'
@@ -26,7 +27,6 @@ const RootLayout = async (props: ChildrenType) => {
   const { children } = props
 
   // Vars
-
   const systemMode = await getSystemMode()
   const direction = 'ltr'
 
@@ -34,7 +34,9 @@ const RootLayout = async (props: ChildrenType) => {
     <html id='__next' lang='en' dir={direction} suppressHydrationWarning>
       <body className='flex is-full min-bs-full flex-auto flex-col'>
         <InitColorSchemeScript attribute='data' defaultMode={systemMode} />
-        {children}
+        <MantineProvider>
+          {children}
+        </MantineProvider>
       </body>
     </html>
   )

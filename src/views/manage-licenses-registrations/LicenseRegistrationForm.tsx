@@ -36,7 +36,7 @@ import { List, ListItem, Typography } from '@mui/material'
 import Link from '@/components/Link'
 import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
 import CustomAvatar from '@/@core/components/mui/Avatar'
-import ImageDropzone from '@/components/common/ImageDropzone'
+import ImageDropzonev2 from '@/components/common/ImageDropzonev2'
 import CONFIG from '@/configs/config'
 import { LicenseRegistrationCustomerResquest, LicenseRegistrationFormType, LicenseRegistrationCreateResquest, LicenseRegistrationUpdateResquest } from '@/types/LicensesRegistrations'
 
@@ -81,6 +81,9 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
     const [wards, setWards] = useState<any[]>([])
     const { user } = useUser()
     const router = useRouter()
+    const [photo3x4File, setPhoto3x4File] = useState<File | null>(null)
+    const [frontPhotoFile, setFrontPhotoFile] = useState<File | null>(null)
+    const [backPhotoFile, setBackPhotoFile] = useState<File | null>(null)
 
     // Hooks
     const {
@@ -319,17 +322,17 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                                                     validate: value => (value && value.length > 0) || 'Vui lòng tải lên ảnh 3x4'
                                                 }}
                                                 render={({ field }) => (
-                                                    <ImageDropzone
-                                                        title="Kéo thả file ảnh 3x4"
-                                                        onUpload={(response) => {
-                                                            field.onChange(response.data)
+                                                    <ImageDropzonev2
+                                                        file={photo3x4File}
+                                                        setFile={setPhoto3x4File}
+                                                        imageUrl={field.value?.[0]}
+                                                        setImageUrl={(url) => {
+                                                            field.onChange(url ? [url] : [])
                                                             trigger('photo3x4')
                                                         }}
-                                                        required
-                                                        error={Boolean(errors.photo3x4)}
-                                                        helperText={errors.photo3x4?.message}
-                                                        multiple={false}
-                                                        maxFiles={1}
+                                                        isWarning={true}
+                                                        description="Kéo thả file ảnh 3x4"
+                                                        required={true}
                                                     />
                                                 )}
                                             />
@@ -481,7 +484,7 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                                                 render={({ field }) => (
                                                     <Select label='Tỉnh/Thành phố (*)' {...field} error={Boolean(errors.province)}>
                                                         {provinces.map((province) => (
-                                                            <MenuItem key={province.code} value={province.code}>
+                                                            <MenuItem key={`province-${province.code}`} value={province.code}>
                                                                 {province.name}
                                                             </MenuItem>
                                                         ))}
@@ -502,7 +505,7 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                                                 render={({ field }) => (
                                                     <Select label='Quận/Huyện (*)' {...field} error={Boolean(errors.district)}>
                                                         {districts.map((district) => (
-                                                            <MenuItem key={district.code} value={district.code}>
+                                                            <MenuItem key={`district-${district.code}`} value={district.code}>
                                                                 {district.name}
                                                             </MenuItem>
                                                         ))}
@@ -525,7 +528,7 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                                                 render={({ field }) => (
                                                     <Select label='Xã/Phường (*)' {...field} error={Boolean(errors.ward)}>
                                                         {wards.map((ward) => (
-                                                            <MenuItem key={ward.code} value={ward.code}>
+                                                            <MenuItem key={`ward-${ward.code}`} value={ward.code}>
                                                                 {ward.name}
                                                             </MenuItem>
                                                         ))}
@@ -560,20 +563,28 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                                 <Grid container spacing={5}>
                                     {/* Mặt trước */}
                                     <Grid size={{ xs: 12, sm: 6 }}>
-                                        <ImageDropzone
-                                            title="Kéo thả file để upload (Mặt trước)"
-                                            onUpload={(response) => {
-                                                setValue('frontPhoto', response.data)
+                                        <ImageDropzonev2
+                                            file={frontPhotoFile}
+                                            setFile={setFrontPhotoFile}
+                                            imageUrl={watch('frontPhoto')?.[0]}
+                                            setImageUrl={(url) => {
+                                                setValue('frontPhoto', url ? [url] : [])
                                             }}
+                                            isWarning={false}
+                                            description="Kéo thả file để upload (Mặt trước)"
                                         />
                                     </Grid>
                                     {/* Mặt sau */}
                                     <Grid size={{ xs: 12, sm: 6 }}>
-                                        <ImageDropzone
-                                            title="Kéo thả file để upload (Mặt sau)"
-                                            onUpload={(response) => {
-                                                setValue('backPhoto', response.data)
+                                        <ImageDropzonev2
+                                            file={backPhotoFile}
+                                            setFile={setBackPhotoFile}
+                                            imageUrl={watch('backPhoto')?.[0]}
+                                            setImageUrl={(url) => {
+                                                setValue('backPhoto', url ? [url] : [])
                                             }}
+                                            isWarning={false}
+                                            description="Kéo thả file để upload (Mặt sau)"
                                         />
                                     </Grid>
                                 </Grid>
@@ -631,7 +642,7 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                                                 render={({ field }) => (
                                                     <Select label='Bằng lái' {...field} error={Boolean(errors.drivingLicenseType)}>
                                                         {CONFIG.LicenseTypeSelectOption.map((option) => (
-                                                            <MenuItem key={option.value} value={option.label}>
+                                                            <MenuItem key={`license-${option.value}`} value={option.label}>
                                                                 {option.label}
                                                             </MenuItem>
                                                         ))}
@@ -652,7 +663,7 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                                                 render={({ field }) => (
                                                     <Select label='Loại' {...field} error={Boolean(errors.licenseType)}>
                                                         {CONFIG.VehicleTypeSelectOption.map((option) => (
-                                                            <MenuItem key={option.value} value={option.label}>
+                                                            <MenuItem key={`vehicle-${option.value}`} value={option.label}>
                                                                 {option.label}
                                                             </MenuItem>
                                                         ))}
@@ -695,7 +706,7 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                                                 render={({ field }) => (
                                                     <Select label='Trạng thái thanh toán' {...field} error={Boolean(errors.paymentStatus)}>
                                                         {CONFIG.IsPaidSelectOption.map((option) => (
-                                                            <MenuItem key={option.value.toString()} value={option.label}>
+                                                            <MenuItem key={`payment-${option.value}`} value={option.label}>
                                                                 {option.label}
                                                             </MenuItem>
                                                         ))}
@@ -721,7 +732,7 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                                                 render={({ field }) => (
                                                     <Select label='Khám sức khỏe' {...field} error={Boolean(errors.healthCheck)}>
                                                         {CONFIG.HasCompletedHealthCheckSelectOption.map((option) => (
-                                                            <MenuItem key={option.value.toString()} value={option.label}>
+                                                            <MenuItem key={`health-${option.value}`} value={option.label}>
                                                                 {option.label}
                                                             </MenuItem>
                                                         ))}
@@ -742,7 +753,7 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                                                 render={({ field }) => (
                                                     <Select label='Bằng ô tô' {...field} error={Boolean(errors.carLicense)}>
                                                         {CONFIG.HasCarLicenseSelectOption.map((option) => (
-                                                            <MenuItem key={option.value.toString()} value={option.label}>
+                                                            <MenuItem key={`car-${option.value}`} value={option.label}>
                                                                 {option.label}
                                                             </MenuItem>
                                                         ))}
@@ -768,7 +779,7 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                                                 render={({ field }) => (
                                                     <Select label='Xác nhận' {...field} error={Boolean(errors.confirmationStatus)}>
                                                         {CONFIG.ApprovedOption.map((option) => (
-                                                            <MenuItem key={option.value.toString()} value={option.label}>
+                                                            <MenuItem key={`approve-${option.value}`} value={option.label}>
                                                                 {option.label}
                                                             </MenuItem>
                                                         ))}
