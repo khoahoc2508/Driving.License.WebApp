@@ -26,7 +26,7 @@ import type { StepperProps } from '@mui/material/Stepper'
 
 // Third-party Imports
 import { toast } from 'react-toastify'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, useForm, FormProvider, useFormContext } from 'react-hook-form'
 import { valibotResolver } from '@hookform/resolvers/valibot'
 import { email, object, minLength, string, array, forward, pipe, nonEmpty, check } from 'valibot'
 
@@ -36,6 +36,11 @@ import StepperCustomDot from '@components/stepper-dot'
 import DirectionalIcon from '@/components/common/DirectionalIcon'
 import Grid2 from '@mui/material/Grid2'
 
+// Step Component Imports
+import AccountDetailsStep from './AccountDetailsStep'
+import PersonalInfoStep from './PersonalInfoStep'
+import LicenseDetailsStep from './LicenseDetailsStep'
+import PaymentInformationStep from './PaymentInformationStep'
 
 import {
     IconBookUpload,
@@ -45,8 +50,16 @@ import {
     IconUserEdit
 } from '@tabler/icons-react'
 
+// Define a consistent Step type used across components
+export type Step = {
+    active: number;
+    title: string;
+    desc: string | null; // Can be string or null
+    Icon: any; // Use a more specific type if possible, e.g., React.ElementType
+}
+
 // Vars
-const steps = [
+const steps: Step[] = [
     {
         active: 0,
         title: 'Tải lên CCCD',
@@ -84,6 +97,7 @@ const Stepper = styled(MuiStepper)<StepperProps>(({ theme }) => ({
     }
 }))
 
+// Validation Schemas (moved outside the component)
 const accountValidationSchema = object({
     username: pipe(string(), nonEmpty('This field is required'), minLength(1)),
     email: pipe(string(), nonEmpty('This field is required'), email('Please enter a valid email address')),
@@ -117,32 +131,20 @@ const socialSchema = object({
     linkedIn: pipe(string(), nonEmpty('This field is required'), minLength(1))
 })
 
-
 type Props = {
     titlePage: ReactNode
     vehicleTypePage: any
     ownerId?: string
 }
 
-
+// Main Component
 const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
-
 
     // States
     const [activeStep, setActiveStep] = useState(0)
-    const [isPasswordShown, setIsPasswordShown] = useState(false)
-    const [isConfirmPasswordShown, setIsConfirmPasswordShown] = useState(false)
-
-    // Vars
-    const Languages = ['English', 'French', 'Spanish', 'Portuguese', 'Italian', 'German', 'Arabic']
 
     // Hooks
-    const {
-        reset: accountReset,
-        control: accountControl,
-        handleSubmit: handleAccountSubmit,
-        formState: { errors: accountErrors }
-    } = useForm({
+    const accountFormMethods = useForm({
         resolver: valibotResolver(accountSchema),
         defaultValues: {
             username: '',
@@ -152,12 +154,7 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
         }
     })
 
-    const {
-        reset: personalReset,
-        control: personalControl,
-        handleSubmit: handlePersonalSubmit,
-        formState: { errors: personalErrors }
-    } = useForm({
+    const personalFormMethods = useForm({
         resolver: valibotResolver(personalSchema),
         defaultValues: {
             firstName: '',
@@ -167,12 +164,7 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
         }
     })
 
-    const {
-        reset: socialReset,
-        control: socialControl,
-        handleSubmit: handleSocialSubmit,
-        formState: { errors: socialErrors }
-    } = useForm({
+    const socialFormMethods = useForm({
         resolver: valibotResolver(socialSchema),
         defaultValues: {
             twitter: '',
@@ -180,19 +172,17 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
             google: '',
             linkedIn: ''
         }
-    })
+    }) // Note: socialSchema was used for the 3rd step in the original code, but the new steps define 4. Adjust schema for step 3 and 4 as needed.
 
-    const handleClickShowPassword = () => setIsPasswordShown(show => !show)
-
-    const handleClickShowConfirmPassword = () => setIsConfirmPasswordShown(show => !show)
-
-    const onSubmit = () => {
-        setActiveStep(prevActiveStep => prevActiveStep + 1)
-
+    // Function to handle moving to the next step
+    const handleNext = () => {
+        setActiveStep(prevActiveStep => prevActiveStep + 1);
+        // Optionally, collect and process form data here after successful validation of the current step
         if (activeStep === steps.length - 1) {
             toast.success('Form Submitted')
+            // Final submission logic here
         }
-    }
+    };
 
     const handleBack = () => {
         setActiveStep(prevActiveStep => prevActiveStep - 1)
@@ -200,360 +190,72 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
 
     const handleReset = () => {
         setActiveStep(0)
-        accountReset({ email: '', username: '', password: '', confirmPassword: '' })
-        personalReset({ firstName: '', lastName: '', country: '', language: [] })
-        socialReset({ twitter: '', facebook: '', google: '', linkedIn: '' })
-        setIsPasswordShown(false)
-        setIsConfirmPasswordShown(false)
+        accountFormMethods.reset({ email: '', username: '', password: '', confirmPassword: '' })
+        personalFormMethods.reset({ firstName: '', lastName: '', country: '', language: [] })
+        socialFormMethods.reset({ twitter: '', facebook: '', google: '', linkedIn: '' }) // Adjust based on actual step 4 schema
     }
+
+    // // Main onSubmit function in index.tsx to trigger current step's validation
+    // const onSubmit = async () => {
+    //     let isValid = false;
+    //     switch (activeStep) {
+    //         case 0:
+    //             isValid = await accountFormMethods.trigger(); // Trigger validation
+    //             if (isValid) handleNext();
+    //             break;
+    //         case 1:
+    //             isValid = await personalFormMethods.trigger(); // Trigger validation
+    //             if (isValid) handleNext();
+    //             break;
+    //         case 2:
+    //             // Assuming socialFormMethods for step 2 for now, adjust later
+    //             isValid = await socialFormMethods.trigger(); // Trigger validation
+    //             if (isValid) handleNext();
+    //             break;
+    //         case 3:
+    //             // Assuming socialFormMethods for step 3 for now, adjust later
+    //             isValid = await socialFormMethods.trigger(); // Trigger validation
+    //             if (isValid) { /* Optionally handle final submission here */ handleNext(); } // Last step submits
+    //             break;
+    //         default:
+    //             break;
+    //     }
+    // };
 
     const renderStepContent = (activeStep: number) => {
         switch (activeStep) {
             case 0:
                 return (
-                    <form key={0} onSubmit={handleAccountSubmit(onSubmit)} className='h-full w-full'>
-                        <Grid container spacing={5}>
-                            <Grid size={{ xs: 12 }}>
-                                <Typography className='font-medium' color='text.primary'>
-                                    {steps[0].title}
-                                </Typography>
-                                <Typography variant='body2'>{steps[0].desc}</Typography>
-                            </Grid>
-                            <Grid size={{ xs: 12, sm: 6 }}>
-                                <Controller
-                                    name='username'
-                                    control={accountControl}
-                                    rules={{ required: true }}
-                                    render={({ field }) => (
-                                        <TextField
-                                            {...field}
-                                            fullWidth
-                                            label='Username'
-                                            placeholder='johnDoe'
-                                            {...(accountErrors.username && { error: true, helperText: accountErrors.username.message })}
-                                        />
-                                    )}
-                                />
-                            </Grid>
-                            <Grid size={{ xs: 12, sm: 6 }}>
-                                <Controller
-                                    name='email'
-                                    control={accountControl}
-                                    rules={{ required: true }}
-                                    render={({ field }) => (
-                                        <TextField
-                                            {...field}
-                                            fullWidth
-                                            type='email'
-                                            label='Email'
-                                            placeholder='johndoe@gmail.com'
-                                            {...(accountErrors.email && { error: true, helperText: accountErrors.email.message })}
-                                        />
-                                    )}
-                                />
-                            </Grid>
-                            <Grid size={{ xs: 12, sm: 6 }}>
-                                <Controller
-                                    name='password'
-                                    control={accountControl}
-                                    rules={{ required: true }}
-                                    render={({ field }) => (
-                                        <TextField
-                                            {...field}
-                                            fullWidth
-                                            label='Password'
-                                            placeholder='············'
-                                            id='stepper-linear-validation-password'
-                                            type={isPasswordShown ? 'text' : 'password'}
-                                            slotProps={{
-                                                input: {
-                                                    endAdornment: (
-                                                        <InputAdornment position='end'>
-                                                            <IconButton
-                                                                size='small'
-                                                                edge='end'
-                                                                onClick={handleClickShowPassword}
-                                                                onMouseDown={e => e.preventDefault()}
-                                                                aria-label='toggle password visibility'
-                                                            >
-                                                                <i className={isPasswordShown ? 'ri-eye-off-line' : 'ri-eye-line'} />
-                                                            </IconButton>
-                                                        </InputAdornment>
-                                                    )
-                                                }
-                                            }}
-                                            {...(accountErrors.password && { error: true, helperText: accountErrors.password.message })}
-                                        />
-                                    )}
-                                />
-                            </Grid>
-                            <Grid size={{ xs: 12, sm: 6 }}>
-                                <Controller
-                                    name='confirmPassword'
-                                    control={accountControl}
-                                    rules={{ required: true }}
-                                    render={({ field }) => (
-                                        <TextField
-                                            {...field}
-                                            fullWidth
-                                            label='Confirm Password'
-                                            placeholder='············'
-                                            id='stepper-linear-confirmPassword'
-                                            type={isConfirmPasswordShown ? 'text' : 'password'}
-                                            {...(accountErrors['confirmPassword'] && {
-                                                error: true,
-                                                helperText: accountErrors['confirmPassword'].message
-                                            })}
-                                            slotProps={{
-                                                input: {
-                                                    endAdornment: (
-                                                        <InputAdornment position='end'>
-                                                            <IconButton
-                                                                size='small'
-                                                                edge='end'
-                                                                onClick={handleClickShowConfirmPassword}
-                                                                onMouseDown={e => e.preventDefault()}
-                                                                aria-label='toggle password visibility'
-                                                            >
-                                                                <i className={isConfirmPasswordShown ? 'ri-eye-off-line' : 'ri-eye-line'} />
-                                                            </IconButton>
-                                                        </InputAdornment>
-                                                    )
-                                                }
-                                            }}
-                                        />
-                                    )}
-                                />
-                            </Grid>
-                            <Grid size={{ xs: 12 }} className='flex justify-between'>
-                                <Button
-                                    variant='outlined'
-                                    disabled
-                                    color='secondary'
-                                    startIcon={<DirectionalIcon ltrIconClass='ri-arrow-left-line' rtlIconClass='ri-arrow-right-line' />}
-                                >
-                                    Back
-                                </Button>
-                                <Button
-                                    variant='contained'
-                                    type='submit'
-                                    endIcon={<DirectionalIcon ltrIconClass='ri-arrow-right-line' rtlIconClass='ri-arrow-left-line' />}
-                                >
-                                    Next
-                                </Button>
-                            </Grid>
-                        </Grid>
-                    </form>
+                    <FormProvider {...accountFormMethods}>
+                        <AccountDetailsStep steps={steps} handleNext={handleNext} />
+                    </FormProvider>
                 )
             case 1:
                 return (
-                    <form key={1} onSubmit={handlePersonalSubmit(onSubmit)} className='h-full w-full'>
-                        <Grid container spacing={5}>
-                            <Grid size={{ xs: 12 }}>
-                                <Typography className='font-medium' color='text.primary'>
-                                    {steps[1].title}
-                                </Typography>
-                                <Typography variant='body2'>{steps[1].desc}</Typography>
-                            </Grid>
-                            <Grid size={{ xs: 12, sm: 6 }}>
-                                <Controller
-                                    name='firstName'
-                                    control={personalControl}
-                                    rules={{ required: true }}
-                                    render={({ field }) => (
-                                        <TextField
-                                            {...field}
-                                            fullWidth
-                                            label='First Name'
-                                            placeholder='John'
-                                            {...(personalErrors.firstName && {
-                                                error: true,
-                                                helperText: personalErrors.firstName.message
-                                            })}
-                                        />
-                                    )}
-                                />
-                            </Grid>
-                            <Grid size={{ xs: 12, sm: 6 }}>
-                                <Controller
-                                    name='lastName'
-                                    control={personalControl}
-                                    rules={{ required: true }}
-                                    render={({ field }) => (
-                                        <TextField
-                                            {...field}
-                                            fullWidth
-                                            label='Last Name'
-                                            placeholder='Doe'
-                                            {...(personalErrors.lastName && {
-                                                error: true,
-                                                helperText: personalErrors.lastName.message
-                                            })}
-                                        />
-                                    )}
-                                />
-                            </Grid>
-                            <Grid size={{ xs: 12, sm: 6 }}>
-                                <FormControl fullWidth>
-                                    <InputLabel error={Boolean(personalErrors.country)}>Country</InputLabel>
-                                    <Controller
-                                        name='country'
-                                        control={personalControl}
-                                        rules={{ required: true }}
-                                        render={({ field }) => (
-                                            <Select label='Country' {...field} error={Boolean(personalErrors.country)}>
-                                                <MenuItem value='UK'>UK</MenuItem>
-                                                <MenuItem value='USA'>USA</MenuItem>
-                                                <MenuItem value='Australia'>Australia</MenuItem>
-                                                <MenuItem value='Germany'>Germany</MenuItem>
-                                            </Select>
-                                        )}
-                                    />
-                                    {personalErrors.country && <FormHelperText error>country is a required field</FormHelperText>}
-                                </FormControl>
-                            </Grid>
-                            <Grid size={{ xs: 12, sm: 6 }}>
-                                <FormControl fullWidth>
-                                    <InputLabel error={Boolean(personalErrors.language)}>Language</InputLabel>
-                                    <Controller
-                                        name='language'
-                                        control={personalControl}
-                                        rules={{ required: true }}
-                                        render={({ field: { value, onChange } }) => (
-                                            <Select
-                                                multiple
-                                                label='Language'
-                                                value={Array.isArray(value) ? value : []}
-                                                onChange={onChange}
-                                                error={Boolean(personalErrors.language)}
-                                            >
-                                                {Languages.map(language => (
-                                                    <MenuItem key={language} value={language}>
-                                                        {language}
-                                                    </MenuItem>
-                                                ))}
-                                            </Select>
-                                        )}
-                                    />
-                                    {personalErrors.language && <FormHelperText error>language is a required field</FormHelperText>}
-                                </FormControl>
-                            </Grid>
-                            <Grid size={{ xs: 12 }} className='flex justify-between'>
-                                <Button
-                                    variant='outlined'
-                                    onClick={handleBack}
-                                    color='secondary'
-                                    startIcon={<DirectionalIcon ltrIconClass='ri-arrow-left-line' rtlIconClass='ri-arrow-right-line' />}
-                                >
-                                    Back
-                                </Button>
-                                <Button
-                                    variant='contained'
-                                    type='submit'
-                                    endIcon={<DirectionalIcon ltrIconClass='ri-arrow-right-line' rtlIconClass='ri-arrow-left-line' />}
-                                >
-                                    Next
-                                </Button>
-                            </Grid>
-                        </Grid>
-                    </form>
+                    <FormProvider {...personalFormMethods}>
+                        <PersonalInfoStep steps={steps} handleBack={handleBack} handleNext={handleNext} Languages={Languages} />
+                    </FormProvider>
                 )
             case 2:
                 return (
-                    <form key={2} onSubmit={handleSocialSubmit(onSubmit)} className='h-full w-full'>
-                        <Grid container spacing={5}>
-                            <Grid size={{ xs: 12 }}>
-                                <Typography className='font-medium' color='text.primary'>
-                                    {steps[2].title}
-                                </Typography>
-                                <Typography variant='body2'>{steps[2].desc}</Typography>
-                            </Grid>
-                            <Grid size={{ xs: 12, sm: 6 }}>
-                                <Controller
-                                    name='twitter'
-                                    control={socialControl}
-                                    rules={{ required: true }}
-                                    render={({ field: { value, onChange } }) => (
-                                        <TextField
-                                            value={value}
-                                            onChange={onChange}
-                                            fullWidth
-                                            label='Twitter'
-                                            placeholder='https://twitter.com/johndoe'
-                                            {...(socialErrors.twitter && { error: true, helperText: socialErrors.twitter.message })}
-                                        />
-                                    )}
-                                />
-                            </Grid>
-                            <Grid size={{ xs: 12, sm: 6 }}>
-                                <Controller
-                                    name='facebook'
-                                    control={socialControl}
-                                    rules={{ required: true }}
-                                    render={({ field: { value, onChange } }) => (
-                                        <TextField
-                                            value={value}
-                                            onChange={onChange}
-                                            fullWidth
-                                            label='Facebook'
-                                            placeholder='https://facebook.com/johndoe'
-                                            {...(socialErrors.facebook && { error: true, helperText: socialErrors.facebook.message })}
-                                        />
-                                    )}
-                                />
-                            </Grid>
-                            <Grid size={{ xs: 12, sm: 6 }}>
-                                <Controller
-                                    name='google'
-                                    control={socialControl}
-                                    rules={{ required: true }}
-                                    render={({ field }) => (
-                                        <TextField
-                                            {...field}
-                                            fullWidth
-                                            label='Google'
-                                            placeholder='https://google.com/johndoe'
-                                            {...(socialErrors.google && { error: true, helperText: socialErrors.google.message })}
-                                        />
-                                    )}
-                                />
-                            </Grid>
-                            <Grid size={{ xs: 12, sm: 6 }}>
-                                <Controller
-                                    name='linkedIn'
-                                    control={socialControl}
-                                    rules={{ required: true }}
-                                    render={({ field }) => (
-                                        <TextField
-                                            {...field}
-                                            fullWidth
-                                            label='LinkedIn'
-                                            placeholder='https://linkedin.com/johndoe'
-                                            {...(socialErrors.linkedIn && { error: true, helperText: socialErrors.linkedIn.message })}
-                                        />
-                                    )}
-                                />
-                            </Grid>
-                            <Grid size={{ xs: 12 }} className='flex justify-between'>
-                                <Button
-                                    variant='outlined'
-                                    onClick={handleBack}
-                                    color='secondary'
-                                    startIcon={<DirectionalIcon ltrIconClass='ri-arrow-left-line' rtlIconClass='ri-arrow-right-line' />}
-                                >
-                                    Back
-                                </Button>
-                                <Button variant='contained' type='submit' endIcon={<i className='ri-check-line' />}>
-                                    Submit
-                                </Button>
-                            </Grid>
-                        </Grid>
-                    </form>
+                    <FormProvider {...socialFormMethods}> {/* Assuming socialFormMethods will be used for step 2 (License Details) */}
+                        <LicenseDetailsStep steps={steps} handleBack={handleBack} handleNext={handleNext} />
+                    </FormProvider>
+                )
+            case 3:
+                return (
+                    <FormProvider {...socialFormMethods}> {/* Placeholder, replace with actual form methods for step 3 (Payment Information) */}
+                        <PaymentInformationStep steps={steps} handleBack={handleBack} handleNext={handleNext} />
+                    </FormProvider>
                 )
             default:
                 return <Typography color='text.primary'>Unknown stepIndex</Typography>
         }
     }
+
+    // Vars (moved outside the component or kept if needed)
+    const Languages = ['English', 'French', 'Spanish', 'Portuguese', 'Italian', 'German', 'Arabic'] // Keep if used here, otherwise move to component
+
     return (
         <Card className='h-full flex w-full'>
             <Grid2 container width={'100%'}>
@@ -570,7 +272,7 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
 
                 <Grid size={{ xs: 12, md: 9 }}>
                     {/* Cột phải */}
-                    <CardContent className='flex-1 py-5 px-5 pl-0 w-full'>
+                    <CardContent className='flex-1 w-full pl-0'> {/* Removed padding classes here */}
                         <StepperWrapper>
                             <Stepper activeStep={activeStep} orientation="horizontal" className='p-4'>
                                 {steps.map((label, index) => {
@@ -578,42 +280,56 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
                                         error?: boolean
                                     } = {}
 
+                                    // Error logic based on active step and form errors
+                                    // Trigger validation on step change or button click to update errors
+                                    // This part might need more complex logic if you want to show errors for previous steps
                                     if (index === activeStep) {
-                                        labelProps.error = false
-
                                         if (
-                                            (accountErrors.email ||
-                                                accountErrors.username ||
-                                                accountErrors.password ||
-                                                accountErrors['confirmPassword']) &&
+                                            (accountFormMethods.formState.errors.email ||
+                                                accountFormMethods.formState.errors.username ||
+                                                accountFormMethods.formState.errors.password ||
+                                                accountFormMethods.formState.errors['confirmPassword']) &&
                                             activeStep === 0
                                         ) {
                                             labelProps.error = true
                                         } else if (
-                                            (personalErrors.firstName ||
-                                                personalErrors.lastName ||
-                                                personalErrors.country ||
-                                                personalErrors.language) &&
+                                            (personalFormMethods.formState.errors.firstName ||
+                                                personalFormMethods.formState.errors.lastName ||
+                                                personalFormMethods.formState.errors.country ||
+                                                personalFormMethods.formState.errors.language) &&
                                             activeStep === 1
                                         ) {
                                             labelProps.error = true
-                                        } else if (
-                                            (socialErrors.google || socialErrors.twitter || socialErrors.facebook || socialErrors.linkedIn) &&
+                                        } else if ( /* Adjust error checking for new steps 2 and 3 */
+                                            (socialFormMethods.formState.errors.google || socialFormMethods.formState.errors.twitter || socialFormMethods.formState.errors.facebook || socialFormMethods.formState.errors.linkedIn) && // This still uses old social errors
                                             activeStep === 2
                                         ) {
                                             labelProps.error = true
-                                        } else {
+                                        } else if ( /* Add error checking for step 3 (Payment Information) */
+                                            // Add logic for step 3 errors here
+                                            activeStep === 3
+                                        ) {
+                                            // labelProps.error = true; // Set to true if errors exist
+                                        }
+                                        else {
                                             labelProps.error = false
                                         }
+                                    } else if (index < activeStep) {
+                                        // Optionally mark past steps with errors if needed
+                                    } else {
+                                        // Future steps
                                     }
 
                                     return (
                                         <Step key={index}>
                                             <StepLabel
                                                 {...labelProps}
+                                                slots={{
+                                                    stepIcon: StepperCustomDot
+                                                }}
                                             >
                                                 <div className='step-label'>
-                                                    <label.Icon size={30} />
+                                                    {<label.Icon size={30} />}
                                                 </div>
                                             </StepLabel>
                                         </Step>
@@ -622,6 +338,7 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
                             </Stepper>
                         </StepperWrapper>
 
+                        <Divider />
                         <CardContent className='h-full'>
                             {activeStep === steps.length ? (
                                 <>
