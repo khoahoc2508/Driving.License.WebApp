@@ -6,10 +6,10 @@ import type { BoxProps } from '@mui/material/Box'
 const StepperWrapper = styled(Box)<BoxProps>(({ theme }) => {
   return {
     [theme.breakpoints.down('md')]: {
-      '& .MuiStepper-horizontal:not(.MuiStepper-alternativeLabel)': {
-        flexDirection: 'column',
-        alignItems: 'flex-start'
-      }
+      // & .MuiStepper-horizontal:not(.MuiStepper-alternativeLabel)': {
+      //   flexDirection: 'column',
+      //   alignItems: 'flex-start'
+      // }
     },
     '& .MuiStep-root': {
       '& .MuiStepLabel-iconContainer:empty': {
