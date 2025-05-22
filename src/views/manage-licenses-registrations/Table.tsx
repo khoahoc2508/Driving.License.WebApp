@@ -39,7 +39,7 @@ import ChevronRight from '@menu/svg/ChevronRight'
 // Style Imports
 import styles from '@core/styles/table.module.css'
 import { LicenseRegistrationStatus, LicenseRegistrationType, LicenseRegistrationTypeVm, LicenseType } from "@/types/LicensesRegistrations"
-import { Card, Typography } from '@mui/material'
+import { Card, IconButton, Typography } from '@mui/material'
 import CustomAvatar from '@/@core/components/mui/Avatar'
 import { getInitials } from '@/utils/getInitials'
 import OptionMenu from '@/@core/components/option-menu'
@@ -217,24 +217,16 @@ const Table = ({
       columnHelper.accessor('id', {
         header: 'Hành động',
         cell: ({ row }) => (
-          <div className="flex items-center gap-2">
-            <Link href={`manage-licenses-registration/edit/${row.original.id}`} passHref legacyBehavior>
-              <button
-                title="Sửa"
-                className="cursor-pointer hover:text-blue-800 bg-transparent"
-                type="button"
-              >
-                <i className="ri-edit-line text-lg" />
-              </button>
-            </Link>
-            <button
-              title="Xóa"
-              className="cursor-pointer hover:text-red-800 bg-transparent"
-              type="button"
-              onClick={() => handleOpenDeleteDialog(row.original.id)}
-            >
-              <i className="ri-delete-bin-line text-lg" />
-            </button>
+          <div className="flex items-center">
+            <IconButton>
+              <Link href={`manage-licenses-registration/edit/${row.original.id}`} passHref legacyBehavior>
+                <i className="ri-edit-box-line text-textSecondary" />
+              </Link>
+            </IconButton>
+
+            <IconButton onClick={() => handleOpenDeleteDialog(row.original.id)}>
+              <i className='ri-delete-bin-7-line text-textSecondary' />
+            </IconButton>
           </div>
         ),
         enableSorting: false
