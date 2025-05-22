@@ -1,4 +1,4 @@
-import LicenseRegistrationForm from "@/views/manage-licenses-registrations/LicenseRegistrationForm"
+import LicenseRegistrationForm from "@/views/manage-licenses-registrations/form"
 
 
 const page = async () => {
