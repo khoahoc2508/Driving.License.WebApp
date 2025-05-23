@@ -13,7 +13,6 @@ import 'react-toastify/dist/ReactToastify.css'
 
 // Util Imports
 import { getMode, getSettingsFromCookie, getSystemMode } from '@core/utils/serverHelpers'
-import { UserProvider } from '@/contexts/UserContext'
 
 type Props = ChildrenType & {
   direction: Direction
