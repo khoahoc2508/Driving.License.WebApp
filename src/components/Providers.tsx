@@ -1,4 +1,6 @@
 // Type Imports
+import { ToastContainer } from 'react-toastify'
+
 import type { ChildrenType, Direction } from '@core/types'
 
 // Context Imports
@@ -7,7 +9,6 @@ import { NextAuthProvider } from '@/contexts/nextAuthProvider'
 import ThemeProvider from '@components/theme'
 import { SettingsProvider } from '@core/contexts/settingsContext'
 import { VerticalNavProvider } from '@menu/contexts/verticalNavContext'
-import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 // Util Imports
@@ -32,7 +33,7 @@ const Providers = async (props: Props) => {
       <VerticalNavProvider>
         <SettingsProvider settingsCookie={settingsCookie} mode={mode}>
           <ThemeProvider direction={direction} systemMode={systemMode}>
-            <UserProvider>{children}</UserProvider>
+            {children}
             <ToastContainer />
           </ThemeProvider>
         </SettingsProvider>
