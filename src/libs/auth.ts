@@ -46,8 +46,6 @@ export const authOptions: NextAuthOptions = {
 
           const data = await res.json()
 
-          console.log('data', data)
-
           if (res.status === 401) {
             throw new Error(JSON.stringify(data))
           }
@@ -66,7 +64,6 @@ export const authOptions: NextAuthOptions = {
               }
             })
 
-            console.log('userInfoRes', userInfoRes)
             const userInfo = await userInfoRes.json()
 
             return {
