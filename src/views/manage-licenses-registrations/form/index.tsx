@@ -41,12 +41,12 @@ import ImageDropzonev2 from '@/components/common/ImageDropzonev2'
 import CONFIG from '@/configs/config'
 import { LicenseRegistrationCustomerResquest, LicenseRegistrationFormType, LicenseRegistrationCreateResquest, LicenseRegistrationUpdateResquest } from '@/types/LicensesRegistrations'
 
-import { useUser } from '@/contexts/UserContext'
 import PersonalInformation from './PersonalInformation'
 import Header from './Header'
 import CitizenCard from './CitizenCard'
 import Contact from './Contact'
 import Address from './Address'
+import { useSession } from 'next-auth/react'
 
 
 
@@ -86,7 +86,7 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
     const [provinces, setProvinces] = useState<any[]>([])
     const [districts, setDistricts] = useState<any[]>([])
     const [wards, setWards] = useState<any[]>([])
-    const { user } = useUser()
+    const { data: user } = useSession()
     const router = useRouter()
 
     // Hooks
@@ -114,7 +114,7 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
             cccd: '',
             drivingLicenseType: 'A1',
             licenseType: 'Xe máy',
-            totalAmount: null,
+            totalAmount: 0,
             paymentStatus: 'Chưa thanh toán',
             healthCheck: 'Chưa khám',
             carLicense: 'Chưa có',
@@ -291,7 +291,7 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                 note: data.note,
                 isPaid: data.paymentStatus === CONFIG.IsPaidSelectOption.find(opt => opt.value)?.label,
                 amount: data.totalAmount || 0,
-                ownerId: user?.id,
+                ownerId: user?.user.name,
                 id: id
             }
             debugger
@@ -489,6 +489,8 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                                                             type='number'
                                                             error={!!errors.totalAmount}
                                                             helperText={errors.totalAmount?.message}
+                                                            InputLabelProps={{ shrink: true }}
+
                                                         />
                                                     )}
                                                 />
