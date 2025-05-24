@@ -28,7 +28,7 @@ import type { StepperProps } from '@mui/material/Stepper'
 import { toast } from 'react-toastify'
 import { Controller, useForm, FormProvider, useFormContext } from 'react-hook-form'
 import { valibotResolver } from '@hookform/resolvers/valibot'
-import { email, object, minLength, string, array, forward, pipe, nonEmpty, check, number, union, instance } from 'valibot'
+import { email, object, minLength, string, array, forward, pipe, nonEmpty, check, number, union, instance, boolean } from 'valibot'
 import * as v from 'valibot'
 
 // Component Imports
@@ -122,15 +122,15 @@ const personalSchema = object({
 })
 
 const licenseDetailsSchema = object({
-    drivingLicenseType: pipe(string(), nonEmpty('Vui lòng chọn bằng lái')),
-    healthCheck: pipe(string(), nonEmpty('Vui lòng chọn trạng thái sức khỏe')),
-    carLicense: pipe(string(), nonEmpty('Vui lòng chọn trạng thái bằng ô tô'))
+    licenseType: pipe(number()),
+    hasCompletedHealthCheck: pipe(boolean()),
+    hasCarLicense: pipe(boolean())
 });
 
 type LicenseDetailsFormValues = {
-    drivingLicenseType: string;
-    healthCheck: string;
-    carLicense: string;
+    licenseType: number;
+    hasCompletedHealthCheck: boolean;
+    hasCarLicense: boolean;
 };
 
 const socialSchema = object({
@@ -184,9 +184,9 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
     const licenseDetailsFormMethods = useForm<LicenseDetailsFormValues>({
         resolver: valibotResolver(licenseDetailsSchema),
         defaultValues: {
-            drivingLicenseType: '',
-            healthCheck: '',
-            carLicense: ''
+            licenseType: 0,
+            hasCompletedHealthCheck: false,
+            hasCarLicense: false
         }
     });
 
@@ -198,7 +198,7 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
             google: '',
             linkedIn: ''
         }
-    }) // Note: socialSchema was used for the 3rd step in the original code, but the new steps define 4. Adjust schema for step 3 and 4 as needed.
+    })
 
     // Fetch provinces on component mount
     useEffect(() => {
@@ -292,9 +292,9 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
             street: ''
         })
         licenseDetailsFormMethods.reset({
-            drivingLicenseType: '',
-            healthCheck: '',
-            carLicense: ''
+            licenseType: 0,
+            hasCompletedHealthCheck: false,
+            hasCarLicense: false
         });
         socialFormMethods.reset({ twitter: '', facebook: '', google: '', linkedIn: '' })
     }
@@ -364,8 +364,6 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
         }
     }
 
-    // Vars (moved outside the component or kept if needed)
-    const Languages = ['English', 'French', 'Spanish', 'Portuguese', 'Italian', 'German', 'Arabic'] // Keep if used here, otherwise move to component
 
     return (
         <Card className='h-full flex w-full justify-center'>
@@ -415,12 +413,11 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
                                                 personalFormMethods.formState.errors.street) &&
                                             activeStep === 1
                                         ) {
-                                            debugger
                                             labelProps.error = true
                                         } else if ( /* Adjust error checking for new steps 2 and 3 */
-                                            (licenseDetailsFormMethods.formState.errors.drivingLicenseType ||
-                                                licenseDetailsFormMethods.formState.errors.healthCheck ||
-                                                licenseDetailsFormMethods.formState.errors.carLicense) &&
+                                            (licenseDetailsFormMethods.formState.errors.licenseType ||
+                                                licenseDetailsFormMethods.formState.errors.hasCompletedHealthCheck ||
+                                                licenseDetailsFormMethods.formState.errors.hasCarLicense) &&
                                             activeStep === 2
                                         ) {
                                             labelProps.error = true

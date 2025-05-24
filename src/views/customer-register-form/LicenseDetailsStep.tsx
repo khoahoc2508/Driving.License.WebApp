@@ -12,9 +12,9 @@ import CONFIG from '@/configs/config'
 
 // Define types based on your validation schema (adjust as needed)
 type LicenseDetailsForm = {
-    drivingLicenseType: string;
-    healthCheck: string;
-    carLicense: string;
+    licenseType: number;
+    hasCompletedHealthCheck: boolean;
+    hasCarLicense: boolean;
 }
 
 type LicenseDetailsStepProps = {
@@ -28,7 +28,6 @@ const LicenseDetailsStep = ({ steps, handleBack, handleNext }: LicenseDetailsSte
 
     // This function will be called by react-hook-form's handleSubmit with validated data
     const handleLicenseDetailsSubmit = (data: LicenseDetailsForm) => {
-        console.log('License Details Data:', data); // Process step 2 data
         handleNext(); // Call parent's handleNext to move to the next step
     };
 
@@ -48,24 +47,24 @@ const LicenseDetailsStep = ({ steps, handleBack, handleNext }: LicenseDetailsSte
                     </Typography>
                 </Grid>
                 <Grid size={{ xs: 12 }}>
-                    <FormControl fullWidth error={!!errors.drivingLicenseType}>
+                    <FormControl fullWidth error={!!errors.licenseType}>
                         <InputLabel>Bằng lái (*)</InputLabel>
                         <Controller
-                            name='drivingLicenseType'
+                            name='licenseType'
                             control={control}
                             rules={{ required: 'Vui lòng chọn bằng lái' }}
                             render={({ field }) => (
-                                <Select {...field} label='Bằng lái (*)'>
+                                <Select {...field} label='Bằng lái (*) '>
                                     {CONFIG.LicenseTypeSelectOption.map((option) => (
-                                        <MenuItem key={option.value} value={option.label}>
+                                        <MenuItem key={option.value} value={option.value}>
                                             {option.label}
                                         </MenuItem>
                                     ))}
                                 </Select>
                             )}
                         />
-                        {errors.drivingLicenseType && (
-                            <FormHelperText>{errors.drivingLicenseType.message}</FormHelperText>
+                        {errors.licenseType && (
+                            <FormHelperText>{errors.licenseType.message}</FormHelperText>
                         )}
                     </FormControl>
                 </Grid>
@@ -76,47 +75,65 @@ const LicenseDetailsStep = ({ steps, handleBack, handleNext }: LicenseDetailsSte
                     </Typography>
                 </Grid>
                 <Grid size={{ xs: 12 }}>
-                    <FormControl fullWidth error={!!errors.healthCheck}>
-                        <InputLabel>Sức khỏe (*)</InputLabel>
+                    <FormControl fullWidth error={!!errors.hasCompletedHealthCheck}>
                         <Controller
-                            name='healthCheck'
+                            name='hasCompletedHealthCheck'
                             control={control}
                             rules={{ required: 'Vui lòng chọn trạng thái sức khỏe' }}
                             render={({ field }) => (
-                                <Select {...field} label='Sức khỏe (*)'>
-                                    {CONFIG.HasCompletedHealthCheckSelectOption.map((option) => (
-                                        <MenuItem key={String(option.value)} value={option.label}>
-                                            {option.label}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
+                                <FormControl fullWidth error={!!errors.hasCompletedHealthCheck}>
+                                    <InputLabel>Sức khỏe (*) </InputLabel>
+                                    <Select
+                                        {...field}
+                                        label='Sức khỏe (*) '
+                                        value={field.value ? 1 : 0}
+                                        onChange={(event) => {
+                                            field.onChange(event.target.value === 1);
+                                        }}
+                                    >
+                                        {CONFIG.HasCompletedHealthCheckSelectOption.map((option) => (
+                                            <MenuItem key={String(option.value)} value={option.value ? 1 : 0}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
                             )}
                         />
-                        {errors.healthCheck && (
-                            <FormHelperText>{errors.healthCheck.message}</FormHelperText>
+                        {errors.hasCompletedHealthCheck && (
+                            <FormHelperText>{errors.hasCompletedHealthCheck.message}</FormHelperText>
                         )}
                     </FormControl>
                 </Grid>
                 {/* Bằng ô tô */}
                 <Grid size={{ xs: 12 }}>
-                    <FormControl fullWidth error={!!errors.carLicense}>
-                        <InputLabel>Bằng ô tô (*)</InputLabel>
+                    <FormControl fullWidth error={!!errors.hasCarLicense}>
                         <Controller
-                            name='carLicense'
+                            name='hasCarLicense'
                             control={control}
                             rules={{ required: 'Vui lòng chọn trạng thái bằng ô tô' }}
                             render={({ field }) => (
-                                <Select {...field} label='Bằng ô tô (*)'>
-                                    {CONFIG.HasCarLicenseSelectOption.map((option) => (
-                                        <MenuItem key={String(option.value)} value={option.label}>
-                                            {option.label}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
+                                <FormControl fullWidth error={!!errors.hasCarLicense}>
+                                    <InputLabel>Bằng ô tô (*)</InputLabel>
+                                    <Select
+                                        {...field}
+                                        label='Bằng ô tô (*) '
+                                        value={field.value ? 1 : 0}
+                                        onChange={(event) => {
+                                            field.onChange(event.target.value === 1);
+                                        }}
+                                    >
+                                        {CONFIG.HasCarLicenseSelectOption.map((option, index) => (
+                                            <MenuItem key={index} value={option.value ? 1 : 0}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
                             )}
                         />
-                        {errors.carLicense && (
-                            <FormHelperText>{errors.carLicense.message}</FormHelperText>
+                        {errors.hasCarLicense && (
+                            <FormHelperText>{errors.hasCarLicense.message}</FormHelperText>
                         )}
                     </FormControl>
                 </Grid>
