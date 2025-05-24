@@ -28,7 +28,7 @@ import type { StepperProps } from '@mui/material/Stepper'
 import { toast } from 'react-toastify'
 import { Controller, useForm, FormProvider, useFormContext } from 'react-hook-form'
 import { valibotResolver } from '@hookform/resolvers/valibot'
-import { email, object, minLength, string, array, forward, pipe, nonEmpty, check, number, union, instance, boolean } from 'valibot'
+import { email, object, minLength, string, array, forward, pipe, nonEmpty, check, number, union, instance, boolean, minValue } from 'valibot'
 import * as v from 'valibot'
 
 // Component Imports
@@ -121,6 +121,7 @@ const personalSchema = object({
     street: pipe(string(), nonEmpty('Vui lòng nhập địa chỉ'))
 })
 
+
 const licenseDetailsSchema = object({
     licenseType: pipe(number()),
     hasCompletedHealthCheck: pipe(boolean()),
@@ -131,6 +132,18 @@ type LicenseDetailsFormValues = {
     licenseType: number;
     hasCompletedHealthCheck: boolean;
     hasCarLicense: boolean;
+};
+
+const paymentInformationSchema = object({
+    amount: pipe(number(), minValue(0, 'Tổng tiền phải lớn hơn 0')),
+    isPaid: pipe(boolean()),
+    note: string(),
+});
+
+type PaymentInformationFormValues = {
+    amount: number;
+    isPaid: boolean;
+    note: string;
 };
 
 const socialSchema = object({
@@ -187,6 +200,15 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
             licenseType: 0,
             hasCompletedHealthCheck: false,
             hasCarLicense: false
+        }
+    });
+
+    const paymentInformationFormMethods = useForm<PaymentInformationFormValues>({
+        resolver: valibotResolver(paymentInformationSchema),
+        defaultValues: {
+            amount: 0,
+            isPaid: false,
+            note: '',
         }
     });
 
@@ -296,6 +318,11 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
             hasCompletedHealthCheck: false,
             hasCarLicense: false
         });
+        paymentInformationFormMethods.reset({
+            amount: 0,
+            isPaid: false,
+            note: '',
+        });
         socialFormMethods.reset({ twitter: '', facebook: '', google: '', linkedIn: '' })
     }
 
@@ -355,7 +382,7 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
                 )
             case 3:
                 return (
-                    <FormProvider {...socialFormMethods}> {/* Placeholder, replace with actual form methods for step 3 (Payment Information) */}
+                    <FormProvider {...paymentInformationFormMethods}>
                         <PaymentInformationStep steps={steps} handleBack={handleBack} handleNext={handleNext} />
                     </FormProvider>
                 )
@@ -422,10 +449,12 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
                                         ) {
                                             labelProps.error = true
                                         } else if ( /* Add error checking for step 3 (Payment Information) */
-                                            // Add logic for step 3 errors here
+                                            (paymentInformationFormMethods.formState.errors.amount ||
+                                                paymentInformationFormMethods.formState.errors.isPaid ||
+                                                paymentInformationFormMethods.formState.errors.note) &&
                                             activeStep === 3
                                         ) {
-                                            // labelProps.error = true; // Set to true if errors exist
+                                            labelProps.error = true
                                         }
                                         else {
                                             labelProps.error = false
@@ -458,8 +487,14 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
                         <CardContent className='h-full'>
                             {activeStep === steps.length ? (
                                 <>
-                                    <Typography className='mlb-2 mli-1' color='text.primary'>
-                                        All steps are completed!
+                                    <Typography className='mlb-2 mli-1 text-center' color='text.primary'>
+                                        Đăng ký thành công 🎉
+                                    </Typography>
+                                    <Typography className='mlb-2 mli-1 text-center' color='text.primary'>
+                                        Chúng tôi đã nhận được đơn đăng ký của bạn. Chúng tôi sẽ liên hệ với bạn sớm nhất.
+                                    </Typography>
+                                    <Typography className='mlb-2 mli-1 text-center' color='text.primary'>
+                                        Cảm ơn bạn đã tin tưởng và ủng hộ!
                                     </Typography>
                                     <div className='flex justify-end mt-4'>
                                         <Button variant='contained' onClick={handleReset}>
