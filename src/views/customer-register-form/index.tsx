@@ -1,7 +1,7 @@
 'use client'
 
 // React Imports
-import { ReactNode, useState } from 'react'
+import { ReactNode, useState, useEffect } from 'react'
 
 // MUI Imports
 import { styled } from '@mui/material/styles'
@@ -28,7 +28,8 @@ import type { StepperProps } from '@mui/material/Stepper'
 import { toast } from 'react-toastify'
 import { Controller, useForm, FormProvider, useFormContext } from 'react-hook-form'
 import { valibotResolver } from '@hookform/resolvers/valibot'
-import { email, object, minLength, string, array, forward, pipe, nonEmpty, check } from 'valibot'
+import { email, object, minLength, string, array, forward, pipe, nonEmpty, check, number, union, instance } from 'valibot'
+import * as v from 'valibot'
 
 // Component Imports
 import StepperWrapper from '@core/styles/stepper'
@@ -37,7 +38,7 @@ import DirectionalIcon from '@/components/common/DirectionalIcon'
 import Grid2 from '@mui/material/Grid2'
 
 // Step Component Imports
-import AccountDetailsStep from './AccountDetailsStep'
+import AccountDetailsStep from './CitizenCard'
 import PersonalInfoStep from './PersonalInfoStep'
 import LicenseDetailsStep from './LicenseDetailsStep'
 import PaymentInformationStep from './PaymentInformationStep'
@@ -49,6 +50,7 @@ import {
     IconExclamationCircle,
     IconUserEdit
 } from '@tabler/icons-react'
+import CitizendCard from './CitizenCard'
 
 // Define a consistent Step type used across components
 export type Step = {
@@ -99,30 +101,37 @@ const Stepper = styled(MuiStepper)<StepperProps>(({ theme }) => ({
 
 // Validation Schemas (moved outside the component)
 const accountValidationSchema = object({
-    username: pipe(string(), nonEmpty('This field is required'), minLength(1)),
-    email: pipe(string(), nonEmpty('This field is required'), email('Please enter a valid email address')),
-    password: pipe(
-        string(),
-        nonEmpty('This field is required'),
-        minLength(8, 'Password must be at least 8 characters long')
-    ),
-    confirmPassword: pipe(string(), nonEmpty('This field is required'), minLength(1))
+    citizenCardId: pipe(string(), nonEmpty('Vui lòng nhập số CCCD')),
+    citizenCardDateOfIssue: pipe(string(), nonEmpty('Vui lòng nhập ngày cấp')),
+    citizenCardPlaceOfIssue: pipe(string(), nonEmpty('Vui lòng nhập nơi cấp'))
 })
 
-const accountSchema = pipe(
-    accountValidationSchema,
-    forward(
-        check(input => input.password === input.confirmPassword, 'Passwords do not match.'),
-        ['confirmPassword']
-    )
-)
+const accountSchema = accountValidationSchema
 
 const personalSchema = object({
-    firstName: pipe(string(), nonEmpty('This field is required'), minLength(1)),
-    lastName: pipe(string(), nonEmpty('This field is required'), minLength(1)),
-    country: pipe(string(), nonEmpty('This field is required'), minLength(1)),
-    language: pipe(array(string()), nonEmpty('This field is required'), minLength(1))
+    avatarUrl: pipe(array(union([string(), instance(File)])), nonEmpty('Vui lòng tải lên ảnh 3x4')),
+    fullName: pipe(string(), nonEmpty('Vui lòng nhập họ tên')),
+    dateOfBirth: pipe(string(), nonEmpty('Vui lòng chọn ngày sinh')),
+    gender: pipe(string(), nonEmpty('Vui lòng chọn giới tính')),
+    phoneNumber: pipe(string(), nonEmpty('Vui lòng nhập số điện thoại')),
+    email: pipe(string(), nonEmpty('Vui lòng nhập email'), email('Email không hợp lệ')),
+    province: pipe(string(), nonEmpty('Vui lòng chọn tỉnh/thành phố')),
+    district: pipe(string(), nonEmpty('Vui lòng chọn quận/huyện')),
+    ward: pipe(string(), nonEmpty('Vui lòng chọn phường/xã')),
+    street: pipe(string(), nonEmpty('Vui lòng nhập địa chỉ'))
 })
+
+const licenseDetailsSchema = object({
+    drivingLicenseType: pipe(string(), nonEmpty('Vui lòng chọn bằng lái')),
+    healthCheck: pipe(string(), nonEmpty('Vui lòng chọn trạng thái sức khỏe')),
+    carLicense: pipe(string(), nonEmpty('Vui lòng chọn trạng thái bằng ô tô'))
+});
+
+type LicenseDetailsFormValues = {
+    drivingLicenseType: string;
+    healthCheck: string;
+    carLicense: string;
+};
 
 const socialSchema = object({
     twitter: pipe(string(), nonEmpty('This field is required'), minLength(1)),
@@ -142,27 +151,44 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
 
     // States
     const [activeStep, setActiveStep] = useState(0)
+    const [provinces, setProvinces] = useState<any[]>([])
+    const [districts, setDistricts] = useState<any[]>([])
+    const [wards, setWards] = useState<any[]>([])
 
     // Hooks
-    const accountFormMethods = useForm({
+    const citizenCardFormMethods = useForm({
         resolver: valibotResolver(accountSchema),
         defaultValues: {
-            username: '',
-            email: '',
-            password: '',
-            confirmPassword: ''
+            citizenCardId: '',
+            citizenCardDateOfIssue: '',
+            citizenCardPlaceOfIssue: '',
         }
     })
 
     const personalFormMethods = useForm({
         resolver: valibotResolver(personalSchema),
         defaultValues: {
-            firstName: '',
-            lastName: '',
-            country: '',
-            language: []
+            avatarUrl: [],
+            fullName: '',
+            dateOfBirth: '',
+            gender: '',
+            phoneNumber: '',
+            email: '',
+            province: '',
+            district: '',
+            ward: '',
+            street: ''
         }
     })
+
+    const licenseDetailsFormMethods = useForm<LicenseDetailsFormValues>({
+        resolver: valibotResolver(licenseDetailsSchema),
+        defaultValues: {
+            drivingLicenseType: '',
+            healthCheck: '',
+            carLicense: ''
+        }
+    });
 
     const socialFormMethods = useForm({
         resolver: valibotResolver(socialSchema),
@@ -173,6 +199,64 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
             linkedIn: ''
         }
     }) // Note: socialSchema was used for the 3rd step in the original code, but the new steps define 4. Adjust schema for step 3 and 4 as needed.
+
+    // Fetch provinces on component mount
+    useEffect(() => {
+        fetchProvinces()
+    }, [])
+
+    // Watch for province changes to fetch districts
+    useEffect(() => {
+        const subscription = personalFormMethods.watch((value, { name }) => {
+            if (name === 'province' && value.province) {
+                fetchDistricts(value.province)
+            }
+            if (name === 'district' && value.district) {
+                fetchWards(value.district)
+            }
+        })
+        return () => subscription.unsubscribe()
+    }, [personalFormMethods.watch])
+
+    const fetchProvinces = async () => {
+        try {
+            const response = await fetch('https://provinces.open-api.vn/api/p')
+            const data = await response.json()
+            setProvinces(data)
+        } catch (error) {
+            console.error('Error fetching provinces:', error)
+            toast.error('Lỗi khi tải danh sách tỉnh/thành phố')
+        }
+    }
+
+    const fetchDistricts = async (provinceCode: string) => {
+        if (!provinceCode) return
+        try {
+            const response = await fetch(`https://provinces.open-api.vn/api/p/${provinceCode}?depth=2`)
+            const data = await response.json()
+            setDistricts(data.districts)
+            // Reset district and ward when province changes
+            personalFormMethods.setValue('district', '')
+            personalFormMethods.setValue('ward', '')
+        } catch (error) {
+            console.error('Error fetching districts:', error)
+            toast.error('Lỗi khi tải danh sách quận/huyện')
+        }
+    }
+
+    const fetchWards = async (districtCode: string) => {
+        if (!districtCode) return
+        try {
+            const response = await fetch(`https://provinces.open-api.vn/api/d/${districtCode}?depth=2`)
+            const data = await response.json()
+            setWards(data.wards)
+            // Reset ward when district changes
+            personalFormMethods.setValue('ward', '')
+        } catch (error) {
+            console.error('Error fetching wards:', error)
+            toast.error('Lỗi khi tải danh sách phường/xã')
+        }
+    }
 
     // Function to handle moving to the next step
     const handleNext = () => {
@@ -190,9 +274,29 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
 
     const handleReset = () => {
         setActiveStep(0)
-        accountFormMethods.reset({ email: '', username: '', password: '', confirmPassword: '' })
-        personalFormMethods.reset({ firstName: '', lastName: '', country: '', language: [] })
-        socialFormMethods.reset({ twitter: '', facebook: '', google: '', linkedIn: '' }) // Adjust based on actual step 4 schema
+        citizenCardFormMethods.reset({
+            citizenCardId: '',
+            citizenCardDateOfIssue: '',
+            citizenCardPlaceOfIssue: '',
+        })
+        personalFormMethods.reset({
+            avatarUrl: [],
+            fullName: '',
+            dateOfBirth: '',
+            gender: '',
+            phoneNumber: '',
+            email: '',
+            province: '',
+            district: '',
+            ward: '',
+            street: ''
+        })
+        licenseDetailsFormMethods.reset({
+            drivingLicenseType: '',
+            healthCheck: '',
+            carLicense: ''
+        });
+        socialFormMethods.reset({ twitter: '', facebook: '', google: '', linkedIn: '' })
     }
 
     // // Main onSubmit function in index.tsx to trigger current step's validation
@@ -200,7 +304,7 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
     //     let isValid = false;
     //     switch (activeStep) {
     //         case 0:
-    //             isValid = await accountFormMethods.trigger(); // Trigger validation
+    //             isValid = await citizenCardFormMethods.trigger(); // Trigger validation
     //             if (isValid) handleNext();
     //             break;
     //         case 1:
@@ -226,19 +330,26 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
         switch (activeStep) {
             case 0:
                 return (
-                    <FormProvider {...accountFormMethods}>
-                        <AccountDetailsStep steps={steps} handleNext={handleNext} />
+                    <FormProvider {...citizenCardFormMethods}>
+                        <CitizendCard steps={steps} handleNext={handleNext} />
                     </FormProvider>
                 )
             case 1:
                 return (
                     <FormProvider {...personalFormMethods}>
-                        <PersonalInfoStep steps={steps} handleBack={handleBack} handleNext={handleNext} Languages={Languages} />
+                        <PersonalInfoStep
+                            steps={steps}
+                            handleBack={handleBack}
+                            handleNext={handleNext}
+                            provinces={provinces}
+                            districts={districts}
+                            wards={wards}
+                        />
                     </FormProvider>
                 )
             case 2:
                 return (
-                    <FormProvider {...socialFormMethods}> {/* Assuming socialFormMethods will be used for step 2 (License Details) */}
+                    <FormProvider {...licenseDetailsFormMethods}>
                         <LicenseDetailsStep steps={steps} handleBack={handleBack} handleNext={handleNext} />
                     </FormProvider>
                 )
@@ -257,11 +368,11 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
     const Languages = ['English', 'French', 'Spanish', 'Portuguese', 'Italian', 'German', 'Arabic'] // Keep if used here, otherwise move to component
 
     return (
-        <Card className='h-full flex w-full'>
-            <Grid2 container width={'100%'}>
-                <Grid size={{ xs: 0, md: 3 }}>
+        <Card className='h-full flex w-full justify-center'>
+            <Grid2 container width={{ xs: '100%', md: '60%' }}>
+                <Grid size={{ xs: 0, md: 5 }}>
                     {/* Cột trái */}
-                    <CardContent className='h-full hidden md:block'>
+                    <CardContent className='h-full hidden md:block pr-0'>
                         <div className='right h-full w-full flex bg-[#2289E61A]'>
                             <div className='intro__container mt-auto mb-auto h-[48px] w-full flex justify-start items-center bg-[#ffffff] p-3 gap-2'>
                                 <div className='intro__name font-normal text-2xl text-[#425566]'>{titlePage}</div>
@@ -270,7 +381,7 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
                     </CardContent>
                 </Grid>
 
-                <Grid size={{ xs: 12, md: 9 }}>
+                <Grid size={{ xs: 12, md: 7 }}>
                     {/* Cột phải */}
                     <CardContent className='flex-1 w-full pl-0'> {/* Removed padding classes here */}
                         <StepperWrapper>
@@ -285,23 +396,31 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
                                     // This part might need more complex logic if you want to show errors for previous steps
                                     if (index === activeStep) {
                                         if (
-                                            (accountFormMethods.formState.errors.email ||
-                                                accountFormMethods.formState.errors.username ||
-                                                accountFormMethods.formState.errors.password ||
-                                                accountFormMethods.formState.errors['confirmPassword']) &&
+                                            (citizenCardFormMethods.formState.errors.citizenCardId ||
+                                                citizenCardFormMethods.formState.errors.citizenCardDateOfIssue ||
+                                                citizenCardFormMethods.formState.errors.citizenCardPlaceOfIssue) &&
                                             activeStep === 0
                                         ) {
                                             labelProps.error = true
                                         } else if (
-                                            (personalFormMethods.formState.errors.firstName ||
-                                                personalFormMethods.formState.errors.lastName ||
-                                                personalFormMethods.formState.errors.country ||
-                                                personalFormMethods.formState.errors.language) &&
+                                            (personalFormMethods.formState.errors.avatarUrl ||
+                                                personalFormMethods.formState.errors.fullName ||
+                                                personalFormMethods.formState.errors.dateOfBirth ||
+                                                personalFormMethods.formState.errors.gender ||
+                                                personalFormMethods.formState.errors.phoneNumber ||
+                                                personalFormMethods.formState.errors.email ||
+                                                personalFormMethods.formState.errors.province ||
+                                                personalFormMethods.formState.errors.district ||
+                                                personalFormMethods.formState.errors.ward ||
+                                                personalFormMethods.formState.errors.street) &&
                                             activeStep === 1
                                         ) {
+                                            debugger
                                             labelProps.error = true
                                         } else if ( /* Adjust error checking for new steps 2 and 3 */
-                                            (socialFormMethods.formState.errors.google || socialFormMethods.formState.errors.twitter || socialFormMethods.formState.errors.facebook || socialFormMethods.formState.errors.linkedIn) && // This still uses old social errors
+                                            (licenseDetailsFormMethods.formState.errors.drivingLicenseType ||
+                                                licenseDetailsFormMethods.formState.errors.healthCheck ||
+                                                licenseDetailsFormMethods.formState.errors.carLicense) &&
                                             activeStep === 2
                                         ) {
                                             labelProps.error = true

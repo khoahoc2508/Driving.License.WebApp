@@ -103,7 +103,7 @@ const FileUploaderSingle = ({
                             {description}
                         </Typography>
                         <Typography color='text.secondary'>
-                            Kéo file vào hoặc chọn từ thiết bị
+                            Kéo thả file để upload
                         </Typography>
                     </div>
                 )}

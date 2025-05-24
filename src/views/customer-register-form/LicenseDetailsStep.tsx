@@ -7,10 +7,14 @@ import Typography from '@mui/material/Typography'
 import DirectionalIcon from '@/components/common/DirectionalIcon'
 import Button from '@mui/material/Button'
 import { Step } from './index' // Import the Step type
+import { FormControl, FormHelperText, InputLabel, MenuItem, Select } from '@mui/material'
+import CONFIG from '@/configs/config'
 
 // Define types based on your validation schema (adjust as needed)
 type LicenseDetailsForm = {
-    // Add fields for license details here, e.g., licenseNumber, issueDate, expiryDate
+    drivingLicenseType: string;
+    healthCheck: string;
+    carLicense: string;
 }
 
 type LicenseDetailsStepProps = {
@@ -37,25 +41,85 @@ const LicenseDetailsStep = ({ steps, handleBack, handleNext }: LicenseDetailsSte
                     </Typography>
                     {steps[2].desc && <Typography variant='body2'>{steps[2].desc}</Typography>}
                 </Grid>
-                {/* Add form fields for license details here */}
-                {/* Example: */}
-                {/*
-        <Grid size={{ xs: 12, sm: 6 }}>
-          <Controller
-            name='licenseNumber'
-            control={control}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                fullWidth
-                label='License Number'
-                placeholder='ABC-12345'
-                {...(errors.licenseNumber && { error: true, helperText: errors.licenseNumber.message })}
-              />
-            )}
-          />
-        </Grid>
-        */}
+
+                <Grid size={{ xs: 12 }}>
+                    <Typography className='font-medium' color='text.primary'>
+                        ĐĂNG KÝ
+                    </Typography>
+                </Grid>
+                <Grid size={{ xs: 12 }}>
+                    <FormControl fullWidth error={!!errors.drivingLicenseType}>
+                        <InputLabel>Bằng lái (*)</InputLabel>
+                        <Controller
+                            name='drivingLicenseType'
+                            control={control}
+                            rules={{ required: 'Vui lòng chọn bằng lái' }}
+                            render={({ field }) => (
+                                <Select {...field} label='Bằng lái (*)'>
+                                    {CONFIG.LicenseTypeSelectOption.map((option) => (
+                                        <MenuItem key={option.value} value={option.label}>
+                                            {option.label}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            )}
+                        />
+                        {errors.drivingLicenseType && (
+                            <FormHelperText>{errors.drivingLicenseType.message}</FormHelperText>
+                        )}
+                    </FormControl>
+                </Grid>
+
+                <Grid size={{ xs: 12 }}>
+                    <Typography className='font-medium' color='text.primary'>
+                        THÔNG TIN KHÁC
+                    </Typography>
+                </Grid>
+                <Grid size={{ xs: 12 }}>
+                    <FormControl fullWidth error={!!errors.healthCheck}>
+                        <InputLabel>Sức khỏe (*)</InputLabel>
+                        <Controller
+                            name='healthCheck'
+                            control={control}
+                            rules={{ required: 'Vui lòng chọn trạng thái sức khỏe' }}
+                            render={({ field }) => (
+                                <Select {...field} label='Sức khỏe (*)'>
+                                    {CONFIG.HasCompletedHealthCheckSelectOption.map((option) => (
+                                        <MenuItem key={String(option.value)} value={option.label}>
+                                            {option.label}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            )}
+                        />
+                        {errors.healthCheck && (
+                            <FormHelperText>{errors.healthCheck.message}</FormHelperText>
+                        )}
+                    </FormControl>
+                </Grid>
+                {/* Bằng ô tô */}
+                <Grid size={{ xs: 12 }}>
+                    <FormControl fullWidth error={!!errors.carLicense}>
+                        <InputLabel>Bằng ô tô (*)</InputLabel>
+                        <Controller
+                            name='carLicense'
+                            control={control}
+                            rules={{ required: 'Vui lòng chọn trạng thái bằng ô tô' }}
+                            render={({ field }) => (
+                                <Select {...field} label='Bằng ô tô (*)'>
+                                    {CONFIG.HasCarLicenseSelectOption.map((option) => (
+                                        <MenuItem key={String(option.value)} value={option.label}>
+                                            {option.label}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            )}
+                        />
+                        {errors.carLicense && (
+                            <FormHelperText>{errors.carLicense.message}</FormHelperText>
+                        )}
+                    </FormControl>
+                </Grid>
                 <Grid size={{ xs: 12 }} className='flex justify-between'>
                     <Button
                         variant='outlined'

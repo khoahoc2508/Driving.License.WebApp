@@ -294,7 +294,6 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                 ownerId: user?.user.name,
                 id: id
             }
-            debugger
             let response
             if (id) {
                 // Edit mode
