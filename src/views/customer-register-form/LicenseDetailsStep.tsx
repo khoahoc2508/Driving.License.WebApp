@@ -144,14 +144,14 @@ const LicenseDetailsStep = ({ steps, handleBack, handleNext }: LicenseDetailsSte
                         color='secondary'
                         startIcon={<DirectionalIcon ltrIconClass='ri-arrow-left-line' rtlIconClass='ri-arrow-right-line' />}
                     >
-                        Back
+                        Quay lại
                     </Button>
                     <Button
                         variant='contained'
                         type='submit'
                         endIcon={<DirectionalIcon ltrIconClass='ri-arrow-right-line' rtlIconClass='ri-arrow-left-line' />}
                     >
-                        Next
+                        Tiếp theo
                     </Button>
                 </Grid>
             </Grid>

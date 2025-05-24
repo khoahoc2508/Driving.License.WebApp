@@ -127,10 +127,10 @@ const PaymentInformationStep = ({ steps, handleBack, handleNext }: PaymentInform
                         color='secondary'
                         startIcon={<DirectionalIcon ltrIconClass='ri-arrow-left-line' rtlIconClass='ri-arrow-right-line' />}
                     >
-                        Back
+                        Quay lại
                     </Button>
                     <Button variant='contained' type='submit' endIcon={<i className='ri-check-line' />}>
-                        Submit
+                        Lưu
                     </Button>
                 </Grid>
             </Grid>

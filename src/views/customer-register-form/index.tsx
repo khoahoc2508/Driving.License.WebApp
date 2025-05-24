@@ -498,7 +498,7 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
                                     </Typography>
                                     <div className='flex justify-end mt-4'>
                                         <Button variant='contained' onClick={handleReset}>
-                                            Reset
+                                            Làm mới
                                         </Button>
                                     </div>
                                 </>
