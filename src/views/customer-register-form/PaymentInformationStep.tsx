@@ -20,7 +20,7 @@ type PaymentInformationForm = {
 type PaymentInformationStepProps = {
     steps: Step[]; // Use the imported Step type
     handleBack: () => void;
-    handleNext: () => void;
+    handleNext: (data?: any) => void;
 }
 
 const PaymentInformationStep = ({ steps, handleBack, handleNext }: PaymentInformationStepProps) => {
@@ -28,8 +28,14 @@ const PaymentInformationStep = ({ steps, handleBack, handleNext }: PaymentInform
 
     // This function will be called by react-hook-form's handleSubmit with validated data
     const handlePaymentInformationSubmit = (data: PaymentInformationForm) => {
-        console.log('Payment Information Data:', data); // Process step 3 data
-        handleNext(); // Call parent's handleNext to move to the next step (or final submission)
+        // Get all form data from all steps
+        const allFormData = {
+            ...data,
+            // Add other form data from previous steps here
+        };
+
+        // Call the parent's onSubmit with all form data
+        handleNext(allFormData);
     };
 
     return (

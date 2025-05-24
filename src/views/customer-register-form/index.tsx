@@ -29,7 +29,6 @@ import { toast } from 'react-toastify'
 import { Controller, useForm, FormProvider, useFormContext } from 'react-hook-form'
 import { valibotResolver } from '@hookform/resolvers/valibot'
 import { email, object, minLength, string, array, forward, pipe, nonEmpty, check, number, union, instance, boolean, minValue } from 'valibot'
-import * as v from 'valibot'
 
 // Component Imports
 import StepperWrapper from '@core/styles/stepper'
@@ -51,6 +50,10 @@ import {
     IconUserEdit
 } from '@tabler/icons-react'
 import CitizendCard from './CitizenCard'
+import UploadAPI from '@/libs/api/uploadAPI'
+import { LicenseRegistrationCustomerResquest } from '@/types/LicensesRegistrations'
+import LicenseRegistrationAPI from '@/libs/api/licenseRegistrationAPI'
+import CONFIG from '@/configs/config'
 
 // Define a consistent Step type used across components
 export type Step = {
@@ -152,6 +155,34 @@ const socialSchema = object({
     google: pipe(string(), nonEmpty('This field is required'), minLength(1)),
     linkedIn: pipe(string(), nonEmpty('This field is required'), minLength(1))
 })
+
+type FormValues = {
+    // Citizen Card fields
+    citizenCardId: string;
+    citizenCardDateOfIssue: string;
+    citizenCardPlaceOfIssue: string;
+    citizenCardFrontImgUrl: File[];
+    citizenCardBackImgUrl: File[];
+    // Personal Info fields
+    avatarUrl: File[];
+    fullName: string;
+    dateOfBirth: string;
+    gender: string;
+    phoneNumber: string;
+    email: string;
+    province: string;
+    district: string;
+    ward: string;
+    street: string;
+    // License Details fields
+    licenseType: number;
+    hasCompletedHealthCheck: boolean;
+    hasCarLicense: boolean;
+    // Payment Information fields
+    amount: number;
+    isPaid: boolean;
+    note: string;
+};
 
 type Props = {
     titlePage: ReactNode
@@ -281,12 +312,19 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
     }
 
     // Function to handle moving to the next step
-    const handleNext = () => {
-        setActiveStep(prevActiveStep => prevActiveStep + 1);
-        // Optionally, collect and process form data here after successful validation of the current step
+    const handleNext = (data?: any) => {
         if (activeStep === steps.length - 1) {
-            toast.success('Form Submitted')
-            // Final submission logic here
+            // On the last step, collect all form data and submit
+            const allFormData = {
+                ...citizenCardFormMethods.getValues(),
+                ...personalFormMethods.getValues(),
+                ...licenseDetailsFormMethods.getValues(),
+                ...paymentInformationFormMethods.getValues(),
+                ...data // Include any additional data from the last step
+            };
+            onSubmit(allFormData);
+        } else {
+            setActiveStep(prevActiveStep => prevActiveStep + 1);
         }
     };
 
@@ -326,32 +364,66 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
         socialFormMethods.reset({ twitter: '', facebook: '', google: '', linkedIn: '' })
     }
 
-    // // Main onSubmit function in index.tsx to trigger current step's validation
-    // const onSubmit = async () => {
-    //     let isValid = false;
-    //     switch (activeStep) {
-    //         case 0:
-    //             isValid = await citizenCardFormMethods.trigger(); // Trigger validation
-    //             if (isValid) handleNext();
-    //             break;
-    //         case 1:
-    //             isValid = await personalFormMethods.trigger(); // Trigger validation
-    //             if (isValid) handleNext();
-    //             break;
-    //         case 2:
-    //             // Assuming socialFormMethods for step 2 for now, adjust later
-    //             isValid = await socialFormMethods.trigger(); // Trigger validation
-    //             if (isValid) handleNext();
-    //             break;
-    //         case 3:
-    //             // Assuming socialFormMethods for step 3 for now, adjust later
-    //             isValid = await socialFormMethods.trigger(); // Trigger validation
-    //             if (isValid) { /* Optionally handle final submission here */ handleNext(); } // Last step submits
-    //             break;
-    //         default:
-    //             break;
-    //     }
-    // };
+    const onSubmit = async (data: FormValues) => {
+        console.log('Final Form Data:', data);
+
+        try {
+            // TODO: Implement file upload logic before calling the API
+            // You'll need to upload the image files (avatarUrl, citizenCardFrontImgUrl, citizenCardBackImgUrl)
+            // and get their resulting URLs to put into apiData.
+            // Example using a hypothetical uploadAPI:
+            const [avatarResult, frontImgResult, backImgResult] = await Promise.all([
+                data.avatarUrl.length > 0 ? UploadAPI.uploadFiles(data.avatarUrl) : Promise.resolve(null),
+                data.citizenCardFrontImgUrl.length > 0 ? UploadAPI.uploadFiles(data.citizenCardFrontImgUrl) : Promise.resolve(null),
+                data.citizenCardBackImgUrl.length > 0 ? UploadAPI.uploadFiles(data.citizenCardBackImgUrl) : Promise.resolve(null)
+            ]);
+
+
+            // Map form data to API schema
+            const apiData: LicenseRegistrationCustomerResquest = {
+                licenseType: CONFIG.LicenseTypeSelectOption.find(opt => opt.value === data.licenseType)?.value as 0 | 1 | 2 | 3 || 0,
+                hasCarLicense: data.hasCarLicense,
+                hasCompletedHealthCheck: data.hasCompletedHealthCheck,
+                hasApproved: false, // Assuming this is false for customer registration
+                person: {
+                    avatarUrl: avatarResult?.data?.relativeUrl || '',
+                    fullName: data.fullName,
+                    birthday: data.dateOfBirth ? new Date(data.dateOfBirth).toISOString().split('T')[0] : '',
+                    sex: data.gender === CONFIG.SexTypeMappingText[1] ? 1 :
+                        data.gender === CONFIG.SexTypeMappingText[0] ? 0 :
+                            2,
+                    phoneNumber: data.phoneNumber,
+                    email: data.email,
+                    address: {
+                        provinceCode: data.province,
+                        districtCode: data.district,
+                        wardCode: data.ward,
+                        addressDetail: data.street
+                    },
+                    citizenCardId: data.citizenCardId,
+                    citizenCardFrontImgUrl: frontImgResult?.data?.relativeUrl || '',
+                    citizenCardBackImgUrl: backImgResult?.data?.relativeUrl || ''
+                },
+                note: data.note,
+                isPaid: data.isPaid,
+                amount: data.amount
+            };
+
+            debugger
+            const response = await LicenseRegistrationAPI.createLicensesRegistrationsForCustomer(apiData);
+
+            if (response.data?.success) {
+                toast.success('Đăng ký thành công!');
+                // TODO: Optionally redirect or show a success message/summary
+            } else {
+                toast.error(response.data?.message || 'Đăng ký thất bại.');
+            }
+
+        } catch (error) {
+            console.error('API call failed:', error);
+            toast.error('Đã xảy ra lỗi khi đăng ký.');
+        }
+    };
 
     const renderStepContent = (activeStep: number) => {
         switch (activeStep) {
