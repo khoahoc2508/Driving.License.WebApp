@@ -240,7 +240,7 @@ const index = ({ titlePage, vehicleTypePage }: Props) => {
         defaultValues: {
             licenseType: 0,
             hasCompletedHealthCheck: false,
-            hasCarLicense: false
+            hasCarLicense: vehicleTypePage === CONFIG.VehicleType.Car ? true : false
         }
     });
 
@@ -262,6 +262,13 @@ const index = ({ titlePage, vehicleTypePage }: Props) => {
             linkedIn: ''
         }
     })
+
+    // Set default values based on vehicle type
+    useEffect(() => {
+        if (vehicleTypePage === CONFIG.VehicleType.Car) {
+            licenseDetailsFormMethods.setValue('hasCarLicense', true);
+        }
+    }, [vehicleTypePage]);
 
     // Fetch provinces on component mount
     useEffect(() => {
@@ -366,7 +373,7 @@ const index = ({ titlePage, vehicleTypePage }: Props) => {
         licenseDetailsFormMethods.reset({
             licenseType: 0,
             hasCompletedHealthCheck: false,
-            hasCarLicense: false
+            hasCarLicense: vehicleTypePage === CONFIG.VehicleType.Car ? true : false
         });
         paymentInformationFormMethods.reset({
             amount: 0,
@@ -398,12 +405,12 @@ const index = ({ titlePage, vehicleTypePage }: Props) => {
                 data.citizenCardBackImgUrl?.length > 0 ? UploadAPI.uploadFiles(data.citizenCardBackImgUrl) : Promise.resolve(null)
             ]);
 
-
-            // Map form data to API schema
             const apiData: LicenseRegistrationCustomerResquest = {
                 licenseType: CONFIG.LicenseTypeSelectOption.find(opt => opt.value === data.licenseType)?.value as 0 | 1 | 2 | 3 || 0,
                 hasCarLicense: data.hasCarLicense,
                 hasCompletedHealthCheck: data.hasCompletedHealthCheck,
+                hasApproved: false,
+                ownerId: urlOwnerId || '',
                 person: {
                     avatarUrl: avatarResult?.data[0]?.relativeUrl || '',
                     fullName: data.fullName,
@@ -426,10 +433,9 @@ const index = ({ titlePage, vehicleTypePage }: Props) => {
                 note: data.note,
                 isPaid: data.isPaid,
                 amount: data.amount,
-                ownerId: urlOwnerId
+                vehicleType: vehicleTypePage
             };
 
-            debugger
             const response = await LicenseRegistrationAPI.createLicensesRegistrationsForCustomer(apiData);
 
             if (response.data?.success) {
@@ -474,7 +480,12 @@ const index = ({ titlePage, vehicleTypePage }: Props) => {
             case 2:
                 return (
                     <FormProvider {...licenseDetailsFormMethods}>
-                        <LicenseDetailsStep steps={steps} handleBack={handleBack} handleNext={handleNext} />
+                        <LicenseDetailsStep
+                            steps={steps}
+                            handleBack={handleBack}
+                            handleNext={handleNext}
+                            vehicleTypePage={vehicleTypePage}
+                        />
                     </FormProvider>
                 )
             case 3:

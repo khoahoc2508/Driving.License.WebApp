@@ -138,7 +138,7 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                         // Set form values
                         setValue('fullName', data.person.fullName)
                         setValue('dateOfBirth', new Date(data.person.birthday))
-                        setValue('gender', data.person.sex === 0 ? 'Nam' : data.person.sex === 1 ? 'Nữ' : 'Khác')
+                        setValue('gender', data.person.sex === 1 ? 'Nam' : data.person.sex === 0 ? 'Nữ' : 'Khác')
                         setValue('country', 'Việt Nam')
                         setValue('phoneNumber', data.person.phoneNumber)
                         setValue('email', data.person.email)

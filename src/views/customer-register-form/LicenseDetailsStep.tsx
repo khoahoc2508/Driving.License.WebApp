@@ -21,10 +21,21 @@ type LicenseDetailsStepProps = {
     steps: Step[]; // Use the imported Step type
     handleBack: () => void;
     handleNext: () => void;
+    vehicleTypePage?: any; // Add vehicleTypePage prop
 }
 
-const LicenseDetailsStep = ({ steps, handleBack, handleNext }: LicenseDetailsStepProps) => {
+const LicenseDetailsStep = ({ steps, handleBack, handleNext, vehicleTypePage }: LicenseDetailsStepProps) => {
     const { control, formState: { errors }, handleSubmit } = useFormContext<LicenseDetailsForm>();
+
+    // Filter license type options based on vehicle type
+    const licenseTypeOptions = CONFIG.LicenseTypeSelectOption.filter(option => {
+        if (vehicleTypePage === CONFIG.VehicleType.Motorbike) {
+            return option.value === CONFIG.LicenseType.A1 || option.value === CONFIG.LicenseType.A2;
+        } else if (vehicleTypePage === CONFIG.VehicleType.Car) {
+            return option.value === CONFIG.LicenseType.B1 || option.value === CONFIG.LicenseType.B2;
+        }
+        return false;
+    });
 
     // This function will be called by react-hook-form's handleSubmit with validated data
     const handleLicenseDetailsSubmit = (data: LicenseDetailsForm) => {
@@ -55,7 +66,7 @@ const LicenseDetailsStep = ({ steps, handleBack, handleNext }: LicenseDetailsSte
                             rules={{ required: 'Vui lòng chọn bằng lái' }}
                             render={({ field }) => (
                                 <Select {...field} label='Bằng lái (*) '>
-                                    {CONFIG.LicenseTypeSelectOption.map((option) => (
+                                    {licenseTypeOptions.map((option) => (
                                         <MenuItem key={option.value} value={option.value}>
                                             {option.label}
                                         </MenuItem>
@@ -105,38 +116,40 @@ const LicenseDetailsStep = ({ steps, handleBack, handleNext }: LicenseDetailsSte
                         )}
                     </FormControl>
                 </Grid>
-                {/* Bằng ô tô */}
-                <Grid size={{ xs: 12 }}>
-                    <FormControl fullWidth error={!!errors.hasCarLicense}>
-                        <Controller
-                            name='hasCarLicense'
-                            control={control}
-                            rules={{ required: 'Vui lòng chọn trạng thái bằng ô tô' }}
-                            render={({ field }) => (
-                                <FormControl fullWidth error={!!errors.hasCarLicense}>
-                                    <InputLabel>Bằng ô tô (*)</InputLabel>
-                                    <Select
-                                        {...field}
-                                        label='Bằng ô tô (*) '
-                                        value={field.value ? 1 : 0}
-                                        onChange={(event) => {
-                                            field.onChange(event.target.value === 1);
-                                        }}
-                                    >
-                                        {CONFIG.HasCarLicenseSelectOption.map((option, index) => (
-                                            <MenuItem key={index} value={option.value ? 1 : 0}>
-                                                {option.label}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
+                {/* Bằng ô tô - chỉ hiển thị khi đăng ký xe máy */}
+                {vehicleTypePage === CONFIG.VehicleType.Motorbike && (
+                    <Grid size={{ xs: 12 }}>
+                        <FormControl fullWidth error={!!errors.hasCarLicense}>
+                            <Controller
+                                name='hasCarLicense'
+                                control={control}
+                                rules={{ required: 'Vui lòng chọn trạng thái bằng ô tô' }}
+                                render={({ field }) => (
+                                    <FormControl fullWidth error={!!errors.hasCarLicense}>
+                                        <InputLabel>Bằng ô tô (*)</InputLabel>
+                                        <Select
+                                            {...field}
+                                            label='Bằng ô tô (*) '
+                                            value={field.value ? 1 : 0}
+                                            onChange={(event) => {
+                                                field.onChange(event.target.value === 1);
+                                            }}
+                                        >
+                                            {CONFIG.HasCarLicenseSelectOption.map((option, index) => (
+                                                <MenuItem key={index} value={option.value ? 1 : 0}>
+                                                    {option.label}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                )}
+                            />
+                            {errors.hasCarLicense && (
+                                <FormHelperText>{errors.hasCarLicense.message}</FormHelperText>
                             )}
-                        />
-                        {errors.hasCarLicense && (
-                            <FormHelperText>{errors.hasCarLicense.message}</FormHelperText>
-                        )}
-                    </FormControl>
-                </Grid>
+                        </FormControl>
+                    </Grid>
+                )}
                 <Grid size={{ xs: 12 }} className='flex justify-between'>
                     <Button
                         variant='outlined'

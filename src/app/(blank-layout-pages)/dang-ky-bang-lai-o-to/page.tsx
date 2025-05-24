@@ -7,7 +7,6 @@ import CONFIG from '@/configs/config'
 
 const Page = () => {
     const Search = () => {
-
         return (
             <CustomerRegisterForm
                 titlePage='Đăng ký bằng lái ô tô'
