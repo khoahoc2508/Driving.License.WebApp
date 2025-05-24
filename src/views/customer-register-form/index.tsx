@@ -23,6 +23,11 @@ import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 import InputAdornment from '@mui/material/InputAdornment'
 import IconButton from '@mui/material/IconButton'
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogTitle from '@mui/material/DialogTitle'
 import type { StepperProps } from '@mui/material/Stepper'
 
 // Third-party Imports
@@ -195,6 +200,9 @@ type Props = {
 const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
     const searchParams = useSearchParams()
     const urlOwnerId = searchParams.get('ownerid')
+    const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
+    const [openSuccessDialog, setOpenSuccessDialog] = useState(false)
+    const [formDataToSubmit, setFormDataToSubmit] = useState<FormValues | null>(null)
 
     // States
     const [activeStep, setActiveStep] = useState(0)
@@ -325,7 +333,9 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
                 ...paymentInformationFormMethods.getValues(),
                 ...data // Include any additional data from the last step
             };
-            onSubmit(allFormData);
+
+            setFormDataToSubmit(allFormData)
+            setOpenConfirmDialog(true)
         } else {
             setActiveStep(prevActiveStep => prevActiveStep + 1);
         }
@@ -365,6 +375,18 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
             note: '',
         });
         socialFormMethods.reset({ twitter: '', facebook: '', google: '', linkedIn: '' })
+    }
+
+    const handleConfirmSubmit = () => {
+        if (formDataToSubmit) {
+            onSubmit(formDataToSubmit)
+        }
+        setOpenConfirmDialog(false)
+    }
+
+    const handleCancelSubmit = () => {
+        setOpenConfirmDialog(false)
+        setFormDataToSubmit(null)
     }
 
     const onSubmit = async (data: FormValues) => {
@@ -413,6 +435,7 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
 
             if (response.data?.success) {
                 toast.success('Đăng ký thành công!');
+                setOpenSuccessDialog(true);
             } else {
                 toast.error(response.data?.message || 'Đăng ký thất bại.');
             }
@@ -421,6 +444,11 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
             console.error('API call failed:', error);
             toast.error('Đã xảy ra lỗi khi đăng ký.');
         }
+    };
+
+    const handleCloseSuccessDialog = () => {
+        setOpenSuccessDialog(false);
+        handleReset();
     };
 
     const renderStepContent = (activeStep: number) => {
@@ -463,123 +491,175 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
 
 
     return (
-        <Card className='h-full flex w-full justify-center'>
-            <Grid2 container width={{ xs: '100%', md: '60%' }}>
-                <Grid size={{ xs: 0, md: 5 }}>
-                    {/* Cột trái */}
-                    <CardContent className='h-full hidden md:block pr-0'>
-                        <div className='right h-full w-full flex bg-[#2289E61A]'>
-                            <div className='intro__container mt-auto mb-auto h-[48px] w-full flex justify-start items-center bg-[#ffffff] p-3 gap-2'>
-                                <div className='intro__name font-normal text-2xl text-[#425566]'>{titlePage}</div>
+        <>
+            <Card className='h-full flex w-full justify-center'>
+                <Grid2 container width={{ xs: '100%', md: '60%' }}>
+                    <Grid size={{ xs: 0, md: 5 }}>
+                        {/* Cột trái */}
+                        <CardContent className='h-full hidden md:block pr-0'>
+                            <div className='right h-full w-full flex bg-[#2289E61A]'>
+                                <div className='intro__container mt-auto mb-auto h-[48px] w-full flex justify-start items-center bg-[#ffffff] p-3 gap-2'>
+                                    <div className='intro__name font-normal text-2xl text-[#425566]'>{titlePage}</div>
+                                </div>
                             </div>
-                        </div>
-                    </CardContent>
-                </Grid>
-
-                <Grid size={{ xs: 12, md: 7 }}>
-                    {/* Cột phải */}
-                    <CardContent className='flex-1 w-full pl-0'> {/* Removed padding classes here */}
-                        <StepperWrapper>
-                            <Stepper activeStep={activeStep} orientation="horizontal" className='p-4'>
-                                {steps.map((label, index) => {
-                                    const labelProps: {
-                                        error?: boolean
-                                    } = {}
-
-                                    // Error logic based on active step and form errors
-                                    // Trigger validation on step change or button click to update errors
-                                    // This part might need more complex logic if you want to show errors for previous steps
-                                    if (index === activeStep) {
-                                        if (
-                                            (citizenCardFormMethods.formState.errors.citizenCardId ||
-                                                citizenCardFormMethods.formState.errors.citizenCardDateOfIssue ||
-                                                citizenCardFormMethods.formState.errors.citizenCardPlaceOfIssue) &&
-                                            activeStep === 0
-                                        ) {
-                                            labelProps.error = true
-                                        } else if (
-                                            (personalFormMethods.formState.errors.avatarUrl ||
-                                                personalFormMethods.formState.errors.fullName ||
-                                                personalFormMethods.formState.errors.dateOfBirth ||
-                                                personalFormMethods.formState.errors.gender ||
-                                                personalFormMethods.formState.errors.phoneNumber ||
-                                                personalFormMethods.formState.errors.email ||
-                                                personalFormMethods.formState.errors.province ||
-                                                personalFormMethods.formState.errors.district ||
-                                                personalFormMethods.formState.errors.ward ||
-                                                personalFormMethods.formState.errors.street) &&
-                                            activeStep === 1
-                                        ) {
-                                            labelProps.error = true
-                                        } else if ( /* Adjust error checking for new steps 2 and 3 */
-                                            (licenseDetailsFormMethods.formState.errors.licenseType ||
-                                                licenseDetailsFormMethods.formState.errors.hasCompletedHealthCheck ||
-                                                licenseDetailsFormMethods.formState.errors.hasCarLicense) &&
-                                            activeStep === 2
-                                        ) {
-                                            labelProps.error = true
-                                        } else if ( /* Add error checking for step 3 (Payment Information) */
-                                            (paymentInformationFormMethods.formState.errors.amount ||
-                                                paymentInformationFormMethods.formState.errors.isPaid ||
-                                                paymentInformationFormMethods.formState.errors.note) &&
-                                            activeStep === 3
-                                        ) {
-                                            labelProps.error = true
-                                        }
-                                        else {
-                                            labelProps.error = false
-                                        }
-                                    } else if (index < activeStep) {
-                                        // Optionally mark past steps with errors if needed
-                                    } else {
-                                        // Future steps
-                                    }
-
-                                    return (
-                                        <Step key={index}>
-                                            <StepLabel
-                                                {...labelProps}
-                                                slots={{
-                                                    stepIcon: StepperCustomDot
-                                                }}
-                                            >
-                                                <div className='step-label'>
-                                                    {<label.Icon size={30} />}
-                                                </div>
-                                            </StepLabel>
-                                        </Step>
-                                    )
-                                })}
-                            </Stepper>
-                        </StepperWrapper>
-
-                        <Divider />
-                        <CardContent className='h-full'>
-                            {activeStep === steps.length ? (
-                                <>
-                                    <Typography className='mlb-2 mli-1 text-center' color='text.primary'>
-                                        Đăng ký thành công 🎉
-                                    </Typography>
-                                    <Typography className='mlb-2 mli-1 text-center' color='text.primary'>
-                                        Chúng tôi đã nhận được đơn đăng ký của bạn. Chúng tôi sẽ liên hệ với bạn sớm nhất.
-                                    </Typography>
-                                    <Typography className='mlb-2 mli-1 text-center' color='text.primary'>
-                                        Cảm ơn bạn đã tin tưởng và ủng hộ!
-                                    </Typography>
-                                    <div className='flex justify-end mt-4'>
-                                        <Button variant='contained' onClick={handleReset}>
-                                            Làm mới
-                                        </Button>
-                                    </div>
-                                </>
-                            ) : (
-                                renderStepContent(activeStep)
-                            )}
                         </CardContent>
-                    </CardContent>
-                </Grid>
-            </Grid2>
-        </Card>
+                    </Grid>
+
+                    <Grid size={{ xs: 12, md: 7 }}>
+                        {/* Cột phải */}
+                        <CardContent className='flex-1 w-full pl-0'> {/* Removed padding classes here */}
+                            <StepperWrapper>
+                                <Stepper activeStep={activeStep} orientation="horizontal" className='p-4'>
+                                    {steps.map((label, index) => {
+                                        const labelProps: {
+                                            error?: boolean
+                                        } = {}
+
+                                        // Error logic based on active step and form errors
+                                        // Trigger validation on step change or button click to update errors
+                                        // This part might need more complex logic if you want to show errors for previous steps
+                                        if (index === activeStep) {
+                                            if (
+                                                (citizenCardFormMethods.formState.errors.citizenCardId ||
+                                                    citizenCardFormMethods.formState.errors.citizenCardDateOfIssue ||
+                                                    citizenCardFormMethods.formState.errors.citizenCardPlaceOfIssue) &&
+                                                activeStep === 0
+                                            ) {
+                                                labelProps.error = true
+                                            } else if (
+                                                (personalFormMethods.formState.errors.avatarUrl ||
+                                                    personalFormMethods.formState.errors.fullName ||
+                                                    personalFormMethods.formState.errors.dateOfBirth ||
+                                                    personalFormMethods.formState.errors.gender ||
+                                                    personalFormMethods.formState.errors.phoneNumber ||
+                                                    personalFormMethods.formState.errors.email ||
+                                                    personalFormMethods.formState.errors.province ||
+                                                    personalFormMethods.formState.errors.district ||
+                                                    personalFormMethods.formState.errors.ward ||
+                                                    personalFormMethods.formState.errors.street) &&
+                                                activeStep === 1
+                                            ) {
+                                                labelProps.error = true
+                                            } else if ( /* Adjust error checking for new steps 2 and 3 */
+                                                (licenseDetailsFormMethods.formState.errors.licenseType ||
+                                                    licenseDetailsFormMethods.formState.errors.hasCompletedHealthCheck ||
+                                                    licenseDetailsFormMethods.formState.errors.hasCarLicense) &&
+                                                activeStep === 2
+                                            ) {
+                                                labelProps.error = true
+                                            } else if ( /* Add error checking for step 3 (Payment Information) */
+                                                (paymentInformationFormMethods.formState.errors.amount ||
+                                                    paymentInformationFormMethods.formState.errors.isPaid ||
+                                                    paymentInformationFormMethods.formState.errors.note) &&
+                                                activeStep === 3
+                                            ) {
+                                                labelProps.error = true
+                                            }
+                                            else {
+                                                labelProps.error = false
+                                            }
+                                        } else if (index < activeStep) {
+                                            // Optionally mark past steps with errors if needed
+                                        } else {
+                                            // Future steps
+                                        }
+
+                                        return (
+                                            <Step key={index}>
+                                                <StepLabel
+                                                    {...labelProps}
+                                                    slots={{
+                                                        stepIcon: StepperCustomDot
+                                                    }}
+                                                >
+                                                    <div className='step-label'>
+                                                        {<label.Icon size={30} />}
+                                                    </div>
+                                                </StepLabel>
+                                            </Step>
+                                        )
+                                    })}
+                                </Stepper>
+                            </StepperWrapper>
+
+                            <Divider />
+                            <CardContent className='h-full'>
+                                {activeStep === steps.length ? (
+                                    <>
+                                        <Typography className='mlb-2 mli-1 text-center' color='text.primary'>
+                                            Đăng ký thành công 🎉
+                                        </Typography>
+                                        <Typography className='mlb-2 mli-1 text-center' color='text.primary'>
+                                            Chúng tôi đã nhận được đơn đăng ký của bạn. Chúng tôi sẽ liên hệ với bạn sớm nhất.
+                                        </Typography>
+                                        <Typography className='mlb-2 mli-1 text-center' color='text.primary'>
+                                            Cảm ơn bạn đã tin tưởng và ủng hộ!
+                                        </Typography>
+                                        <div className='flex justify-end mt-4'>
+                                            <Button variant='contained' onClick={handleReset}>
+                                                Làm mới
+                                            </Button>
+                                        </div>
+                                    </>
+                                ) : (
+                                    renderStepContent(activeStep)
+                                )}
+                            </CardContent>
+                        </CardContent>
+                    </Grid>
+                </Grid2>
+            </Card>
+
+            <Dialog
+                open={openConfirmDialog}
+                onClose={handleCancelSubmit}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    Xác Nhận Đăng Ký
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        Bạn xác nhận thông tin đăng ký chính xác. Hoàn thành đăng ký?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCancelSubmit} color="primary">
+                        Hủy
+                    </Button>
+                    <Button onClick={handleConfirmSubmit} color="primary" autoFocus>
+                        Xác nhận
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            <Dialog
+                open={openSuccessDialog}
+                onClose={handleCloseSuccessDialog}
+                aria-labelledby="success-dialog-title"
+                aria-describedby="success-dialog-description"
+            >
+                <DialogTitle id="success-dialog-title" className="text-center">
+                    Đăng ký thành công 🎉
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="success-dialog-description" className="text-center">
+                        <Typography className='mb-2' color='text.primary'>
+                            Chúng tôi đã nhận được đơn đăng ký của bạn. Chúng tôi sẽ liên hệ với bạn sớm nhất.
+                        </Typography>
+                        <Typography color='text.primary'>
+                            Cảm ơn bạn đã tin tưởng và ủng hộ!
+                        </Typography>
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions className="justify-center">
+                    <Button onClick={handleCloseSuccessDialog} variant="contained" color="primary">
+                        Đóng
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </>
     )
 }
 
