@@ -2,6 +2,7 @@
 
 // React Imports
 import { ReactNode, useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 
 // MUI Imports
 import { styled } from '@mui/material/styles'
@@ -192,6 +193,8 @@ type Props = {
 
 // Main Component
 const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
+    const searchParams = useSearchParams()
+    const urlOwnerId = searchParams.get('ownerid')
 
     // States
     const [activeStep, setActiveStep] = useState(0)
@@ -368,14 +371,10 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
         console.log('Final Form Data:', data);
 
         try {
-            // TODO: Implement file upload logic before calling the API
-            // You'll need to upload the image files (avatarUrl, citizenCardFrontImgUrl, citizenCardBackImgUrl)
-            // and get their resulting URLs to put into apiData.
-            // Example using a hypothetical uploadAPI:
             const [avatarResult, frontImgResult, backImgResult] = await Promise.all([
-                data.avatarUrl.length > 0 ? UploadAPI.uploadFiles(data.avatarUrl) : Promise.resolve(null),
-                data.citizenCardFrontImgUrl.length > 0 ? UploadAPI.uploadFiles(data.citizenCardFrontImgUrl) : Promise.resolve(null),
-                data.citizenCardBackImgUrl.length > 0 ? UploadAPI.uploadFiles(data.citizenCardBackImgUrl) : Promise.resolve(null)
+                data.avatarUrl?.length > 0 ? UploadAPI.uploadFiles(data.avatarUrl) : Promise.resolve(null),
+                data.citizenCardFrontImgUrl?.length > 0 ? UploadAPI.uploadFiles(data.citizenCardFrontImgUrl) : Promise.resolve(null),
+                data.citizenCardBackImgUrl?.length > 0 ? UploadAPI.uploadFiles(data.citizenCardBackImgUrl) : Promise.resolve(null)
             ]);
 
 
@@ -384,9 +383,8 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
                 licenseType: CONFIG.LicenseTypeSelectOption.find(opt => opt.value === data.licenseType)?.value as 0 | 1 | 2 | 3 || 0,
                 hasCarLicense: data.hasCarLicense,
                 hasCompletedHealthCheck: data.hasCompletedHealthCheck,
-                hasApproved: false, // Assuming this is false for customer registration
                 person: {
-                    avatarUrl: avatarResult?.data?.relativeUrl || '',
+                    avatarUrl: avatarResult?.data[0]?.relativeUrl || '',
                     fullName: data.fullName,
                     birthday: data.dateOfBirth ? new Date(data.dateOfBirth).toISOString().split('T')[0] : '',
                     sex: data.gender === CONFIG.SexTypeMappingText[1] ? 1 :
@@ -401,12 +399,13 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
                         addressDetail: data.street
                     },
                     citizenCardId: data.citizenCardId,
-                    citizenCardFrontImgUrl: frontImgResult?.data?.relativeUrl || '',
-                    citizenCardBackImgUrl: backImgResult?.data?.relativeUrl || ''
+                    citizenCardFrontImgUrl: frontImgResult?.data[0]?.relativeUrl || '',
+                    citizenCardBackImgUrl: backImgResult?.data[0]?.relativeUrl || ''
                 },
                 note: data.note,
                 isPaid: data.isPaid,
-                amount: data.amount
+                amount: data.amount,
+                ownerId: urlOwnerId
             };
 
             debugger
@@ -414,7 +413,6 @@ const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
 
             if (response.data?.success) {
                 toast.success('Đăng ký thành công!');
-                // TODO: Optionally redirect or show a success message/summary
             } else {
                 toast.error(response.data?.message || 'Đăng ký thất bại.');
             }

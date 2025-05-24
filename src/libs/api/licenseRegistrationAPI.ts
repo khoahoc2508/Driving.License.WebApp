@@ -51,9 +51,7 @@ const deleteLicensesRegistrations = async (id: string) => {
 }
 
 const createLicensesRegistrationsForCustomer = async (data: LicenseRegistrationCustomerResquest) => {
-  return await axiosInstance.post('/api/licenses/registrations/customer', {
-    body: data
-  })
+  return await axiosInstance.post('/api/licenses/registrations/customer', data)
 }
 
 const LicenseRegistrationAPI = {
