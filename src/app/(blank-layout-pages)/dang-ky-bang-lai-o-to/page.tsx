@@ -7,10 +7,11 @@ import CONFIG from '@/configs/config'
 
 const Page = () => {
     const Search = () => {
+
         return (
             <CustomerRegisterForm
-                titlePage='Đăng ký bằng lái xe máy'
-                vehicleTypePage={CONFIG.VehicleType.Motorbike}
+                titlePage='Đăng ký bằng lái ô tô'
+                vehicleTypePage={CONFIG.VehicleType.Car}
             />
         )
     }

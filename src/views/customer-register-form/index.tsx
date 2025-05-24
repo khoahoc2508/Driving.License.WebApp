@@ -193,11 +193,10 @@ type FormValues = {
 type Props = {
     titlePage: ReactNode
     vehicleTypePage: any
-    ownerId?: string
 }
 
 // Main Component
-const index = ({ titlePage, vehicleTypePage, ownerId }: Props) => {
+const index = ({ titlePage, vehicleTypePage }: Props) => {
     const searchParams = useSearchParams()
     const urlOwnerId = searchParams.get('ownerid')
     const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
