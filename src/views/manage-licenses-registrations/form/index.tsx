@@ -1,4 +1,3 @@
-
 'use client'
 
 // React Imports
@@ -30,6 +29,7 @@ import { toast } from 'react-toastify'
 import { useForm, Controller, SubmitHandler } from 'react-hook-form'
 import Dropzone, { useDropzone } from 'react-dropzone'
 import LicenseRegistrationAPI from '@/libs/api/licenseRegistrationAPI'
+import UploadAPI from '@/libs/api/uploadAPI'
 
 // Styled Component Imports
 import { SCREEN_TYPE } from '@/types/Common'
@@ -75,9 +75,9 @@ type FormValues = {
     healthCheck: string
     carLicense: string
     confirmationStatus: string
-    photo3x4: string[]
-    frontPhoto: string[]
-    backPhoto: string[]
+    photo3x4: (string | File)[]
+    frontPhoto: (string | File)[]
+    backPhoto: (string | File)[]
     note: string
 }
 
@@ -238,10 +238,32 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
     }
 
     const onSubmit: SubmitHandler<FormValues> = async (data) => {
-        if (!data.photo3x4 || data.photo3x4.length === 0) {
-            setValue('photo3x4', [], { shouldValidate: true })
-            return
-        }
+        debugger
+
+        const uploadFile = async (fileOrUrl: string | File | undefined): Promise<string | undefined> => {
+            if (fileOrUrl instanceof File) {
+                try {
+                    const response = await UploadAPI.uploadFiles([fileOrUrl]);
+                    return response?.[0]?.url; // Return the URL from the upload response
+                } catch (error) {
+                    console.error("Error uploading file:", error);
+                    toast.error("Lỗi khi tải lên ảnh");
+                    return undefined; // Indicate upload failure
+                }
+            } else if (typeof fileOrUrl === 'string') {
+                return fileOrUrl; // Keep existing URL
+            }
+            return undefined; // No file or URL
+        };
+
+        const uploadedPhoto3x4Url = await uploadFile(data.photo3x4?.[0]);
+        const uploadedFrontPhotoUrl = await uploadFile(data.frontPhoto?.[0]);
+        const uploadedBackPhotoUrl = await uploadFile(data.backPhoto?.[0]);
+
+        // if (!data.photo3x4 || data.photo3x4.length === 0) {
+        //     setValue('photo3x4', [], { shouldValidate: true })
+        //     return
+        // }
 
         try {
             const payload: LicenseRegistrationCreateResquest | LicenseRegistrationUpdateResquest = {
@@ -251,9 +273,9 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                 hasCompletedHealthCheck: data.healthCheck === 'Đã khám',
                 hasApproved: data.confirmationStatus === 'Đã duyệt',
                 person: {
-                    avatarUrl: data.photo3x4[0] || '',
+                    avatarUrl: uploadedPhoto3x4Url || '',
                     fullName: data.fullName,
-                    birthday: data.dateOfBirth?.toISOString().split('T')[0] || '',
+                    birthday: data.dateOfBirth ? new Date(data.dateOfBirth).toISOString().split('T')[0] : '',
                     sex: data.gender === CONFIG.SexTypeMappingText[1] ? 1 :
                         data.gender === CONFIG.SexTypeMappingText[0] ? 0 :
                             2,
@@ -266,8 +288,8 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                         addressDetail: data.street
                     },
                     citizenCardId: data.cccd,
-                    citizenCardFrontImgUrl: data.frontPhoto[0] || '',
-                    citizenCardBackImgUrl: data.backPhoto[0] || '',
+                    citizenCardFrontImgUrl: uploadedFrontPhotoUrl || '',
+                    citizenCardBackImgUrl: uploadedBackPhotoUrl || '',
                 },
                 note: data.note,
                 isPaid: data.paymentStatus === CONFIG.IsPaidSelectOption.find(opt => opt.value)?.label,
@@ -345,7 +367,7 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                                 <Card>
                                     <CardHeader title='ĐĂNG KÝ' />
                                     <CardContent>
-                                        <Grid container spacing={5}>
+                                        <Grid container spacing={3}>
                                             {/* Bằng lái */}
                                             <Grid size={{ xs: 12, sm: 6 }}>
                                                 <FormControl fullWidth error={!!errors.drivingLicenseType}>
@@ -400,7 +422,7 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                                 <Card>
                                     <CardHeader title='THÔNG TIN KHÁC' />
                                     <CardContent>
-                                        <Grid container spacing={5}>
+                                        <Grid container spacing={3}>
                                             {/* Sức khỏe */}
                                             <Grid size={{ xs: 12, sm: 6 }}>
                                                 <FormControl fullWidth error={!!errors.healthCheck}>
@@ -455,7 +477,7 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                                 <Card>
                                     <CardHeader title='THANH TOÁN' />
                                     <CardContent>
-                                        <Grid container spacing={5}>
+                                        <Grid container spacing={3}>
                                             {/* Tổng tiền */}
                                             <Grid size={{ xs: 12, sm: 6 }}>
                                                 <Controller
@@ -507,7 +529,7 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                                     <CardContent>
                                         <Grid container spacing={5}>
                                             {/* Xác nhận */}
-                                            <Grid size={{ xs: 12, sm: 6 }}>
+                                            <Grid size={{ xs: 12 }}>
                                                 <FormControl fullWidth error={!!errors.confirmationStatus}>
                                                     <InputLabel>Xác nhận (*)</InputLabel>
                                                     <Controller

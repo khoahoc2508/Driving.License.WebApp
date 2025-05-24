@@ -18,10 +18,10 @@ const Header = ({ onCancel }: HeaderProps) => {
             </div>
             <div className='flex flex-wrap max-sm:flex-col gap-4'>
                 <Button variant='outlined' color='secondary' onClick={onCancel}>
-                    Cancel
+                    Đóng
                 </Button>
                 <Button variant='contained' type='submit' form='license-registration-form'>
-                    Save
+                    Lưu
                 </Button>
             </div>
         </div>

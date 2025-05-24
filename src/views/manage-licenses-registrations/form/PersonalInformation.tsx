@@ -18,13 +18,13 @@ interface PersonalInformationProps {
 }
 
 const PersonalInformation = ({ control, errors, setValue, trigger, watch }: PersonalInformationProps) => {
-    const [photo3x4File, setPhoto3x4File] = useState<File | null>(null)
+    // const [photo3x4File, setPhoto3x4File] = useState<File | null>(null)
 
     return (
         <Card>
             <CardHeader title='THÔNG TIN CÁ NHÂN' />
             <CardContent>
-                <Grid container spacing={5}>
+                <Grid container spacing={3}>
                     {/* Left Column */}
                     <Grid size={{ xs: 12, md: 6 }}>
                         <Controller
@@ -34,13 +34,7 @@ const PersonalInformation = ({ control, errors, setValue, trigger, watch }: Pers
                             render={({ field }) => (
                                 <FormControl fullWidth error={!!errors.photo3x4} className='h-full'>
                                     <FileUploaderSingle
-                                        file={photo3x4File}
-                                        setFile={setPhoto3x4File}
-                                        imageUrl={field.value?.[0]}
-                                        setImageUrl={(url) => {
-                                            field.onChange(url ? [url] : [])
-                                            trigger('photo3x4')
-                                        }}
+                                        field={field}
                                         error={!!errors.photo3x4}
                                         helperText={errors.photo3x4?.message}
                                         description='Tải lên ảnh 3x4'

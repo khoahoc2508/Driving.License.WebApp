@@ -74,7 +74,7 @@ const ManageLicensesRegistrations = () => {
 
     return <>
         <Card>
-            <CardHeader title='Filters' />
+            <CardHeader title='Lọc' />
             <TableFilters onApplyFilters={handleApplyFilters} />
             <Divider />
             <div className='flex justify-end p-5 gap-4 flex-col items-start sm:flex-row sm:items-center'>

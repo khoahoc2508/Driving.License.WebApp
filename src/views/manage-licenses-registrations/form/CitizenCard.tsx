@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, TextField, FormControl, FormHelperText, InputLabel, Select, MenuItem } from '@mui/material';
 import { Controller, Control, UseFormSetValue } from 'react-hook-form';
-import ImageDropzonev2 from '@/components/common/ImageDropzonev2';
+import FileUploaderSingle from '@/components/common/FileUploaderSingle';
 import Grid from '@mui/material/Grid2';
 import { useState } from 'react';
 
@@ -13,58 +13,42 @@ interface CitizenCardProps {
 }
 
 const CitizenCard = ({ control, errors, setValue }: CitizenCardProps) => {
-    const [frontPhotoFile, setFrontPhotoFile] = useState<File | null>(null);
-    const [backPhotoFile, setBackPhotoFile] = useState<File | null>(null);
+    // const [frontPhotoFile, setFrontPhotoFile] = useState<File | null>(null);
+    // const [backPhotoFile, setBackPhotoFile] = useState<File | null>(null);
 
     return (
         <Card>
             <CardHeader title='CĂN CƯỚC CÔNG DÂN' />
             <CardContent>
                 <Grid container spacing={5}>
-                    <Grid size={{ xs: 12, md: 6 }}>
+                    <Grid size={{ xs: 12 }}>
                         <Controller
                             name='frontPhoto'
                             control={control}
-                            rules={{ required: 'Vui lòng tải lên ảnh mặt trước CCCD' }}
                             render={({ field }) => (
                                 <FormControl fullWidth error={!!errors.frontPhoto}>
-                                    {/* <ImageDropzonev2
-                                        file={frontPhotoFile}
-                                        setFile={setFrontPhotoFile}
-                                        imageUrl={field.value?.[0]}
-                                        setImageUrl={(url) => {
-                                            field.onChange(url ? [url] : [])
-                                        }}
-                                        isWarning={false}
+                                    <FileUploaderSingle
+                                        field={field}
+                                        error={!!errors.frontPhoto}
+                                        helperText={errors.frontPhoto?.message}
                                         description='Tải lên ảnh mặt trước CCCD'
-                                    /> */}
-                                    {errors.frontPhoto && (
-                                        <FormHelperText>{errors.frontPhoto.message}</FormHelperText>
-                                    )}
+                                    />
                                 </FormControl>
                             )}
                         />
                     </Grid>
-                    <Grid size={{ xs: 12, md: 6 }}>
+                    <Grid size={{ xs: 12 }}>
                         <Controller
                             name='backPhoto'
                             control={control}
-                            rules={{ required: 'Vui lòng tải lên ảnh mặt sau CCCD' }}
                             render={({ field }) => (
                                 <FormControl fullWidth error={!!errors.backPhoto}>
-                                    {/* <ImageDropzonev2
-                                        file={backPhotoFile}
-                                        setFile={setBackPhotoFile}
-                                        imageUrl={field.value?.[0]}
-                                        setImageUrl={(url) => {
-                                            field.onChange(url ? [url] : [])
-                                        }}
-                                        isWarning={false}
+                                    <FileUploaderSingle
+                                        field={field}
+                                        error={!!errors.backPhoto}
+                                        helperText={errors.backPhoto?.message}
                                         description='Tải lên ảnh mặt sau CCCD'
-                                    /> */}
-                                    {errors.backPhoto && (
-                                        <FormHelperText>{errors.backPhoto.message}</FormHelperText>
-                                    )}
+                                    />
                                 </FormControl>
                             )}
                         />

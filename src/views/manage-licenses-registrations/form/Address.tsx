@@ -17,7 +17,7 @@ const Address = ({ control, errors, provinces, districts, wards }: AddressProps)
         <Card>
             <CardHeader title='ĐỊA CHỈ' />
             <CardContent>
-                <Grid container spacing={5}>
+                <Grid container spacing={3}>
                     <Grid size={{ xs: 12, sm: 6 }}>
                         <Controller
                             name='province'

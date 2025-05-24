@@ -15,7 +15,7 @@ const Contact = ({ control, errors }: ContactProps) => {
         <Card>
             <CardHeader title='LIÊN HỆ' />
             <CardContent>
-                <Grid container spacing={2}>
+                <Grid container spacing={3}>
                     <Grid size={{ xs: 12, sm: 6 }} className='mb-4'>
                         <Controller
                             name='phoneNumber'
