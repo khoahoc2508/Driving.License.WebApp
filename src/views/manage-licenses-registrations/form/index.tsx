@@ -250,17 +250,21 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                     return undefined; // Indicate upload failure
                 }
             } else if (typeof fileOrUrl === 'string') {
-                return fileOrUrl; // Keep existing URL
+                // If it's a string, check if it's a full URL and extract the relative path
+                const uploadsIndex = fileOrUrl.indexOf('training/uploads/');
+                if (uploadsIndex !== -1) {
+                    return fileOrUrl.substring(uploadsIndex);
+                } else {
+                    // If it doesn't contain 'training/uploads/', return as is (might be a relative path already)
+                    return fileOrUrl;
+                }
             }
             return undefined; // No file or URL
         };
 
-
         const uploadedPhoto3x4Url = await uploadFile(data.photo3x4?.[0]);
         const uploadedFrontPhotoUrl = await uploadFile(data.frontPhoto?.[0]);
         const uploadedBackPhotoUrl = await uploadFile(data.backPhoto?.[0]);
-
-
 
         try {
             const payload: LicenseRegistrationCreateResquest | LicenseRegistrationUpdateResquest = {
@@ -291,7 +295,6 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                 note: data.note,
                 isPaid: data.paymentStatus === CONFIG.IsPaidSelectOption.find(opt => opt.value)?.label,
                 amount: data.totalAmount || 0,
-                ownerId: user?.user.name,
                 id: id
             }
             let response
