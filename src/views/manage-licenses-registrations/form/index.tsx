@@ -155,9 +155,9 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                         setValue('healthCheck', data.hasCompletedHealthCheck ? 'Đã khám' : 'Chưa khám')
                         setValue('carLicense', data.hasCarLicense ? 'Đã có' : 'Chưa có')
                         setValue('confirmationStatus', data.hasApproved ? 'Đã duyệt' : 'Chưa duyệt')
-                        setValue('photo3x4', [data.person.avatarUrl])
-                        setValue('frontPhoto', [data.person.citizenCardFrontImgUrl])
-                        setValue('backPhoto', [data.person.citizenCardBackImgUrl])
+                        setValue('photo3x4', [`${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}/${data?.person?.avatarUrl}`])
+                        setValue('frontPhoto', [`${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}/${data?.person?.citizenCardFrontImgUrl}`])
+                        setValue('backPhoto', [`${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}/${data?.person?.citizenCardBackImgUrl}`])
                         setValue('note', data.note)
 
                         // Fetch districts and wards based on province and district
@@ -238,13 +238,12 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
     }
 
     const onSubmit: SubmitHandler<FormValues> = async (data) => {
-        debugger
 
         const uploadFile = async (fileOrUrl: string | File | undefined): Promise<string | undefined> => {
             if (fileOrUrl instanceof File) {
                 try {
                     const response = await UploadAPI.uploadFiles([fileOrUrl]);
-                    return response?.[0]?.url; // Return the URL from the upload response
+                    return response?.data?.[0]?.relativeUrl; // Return the URL from the upload response
                 } catch (error) {
                     console.error("Error uploading file:", error);
                     toast.error("Lỗi khi tải lên ảnh");
@@ -256,14 +255,12 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
             return undefined; // No file or URL
         };
 
+
         const uploadedPhoto3x4Url = await uploadFile(data.photo3x4?.[0]);
         const uploadedFrontPhotoUrl = await uploadFile(data.frontPhoto?.[0]);
         const uploadedBackPhotoUrl = await uploadFile(data.backPhoto?.[0]);
 
-        // if (!data.photo3x4 || data.photo3x4.length === 0) {
-        //     setValue('photo3x4', [], { shouldValidate: true })
-        //     return
-        // }
+
 
         try {
             const payload: LicenseRegistrationCreateResquest | LicenseRegistrationUpdateResquest = {
@@ -297,7 +294,7 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                 ownerId: user?.id,
                 id: id
             }
-
+            debugger
             let response
             if (id) {
                 // Edit mode
