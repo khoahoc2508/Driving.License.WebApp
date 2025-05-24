@@ -303,265 +303,265 @@ const LicenseRegistrationForm = ({ screenType, id }: LicenseRegistrationFormProp
                 <Header onCancel={() => router.push('/manage-licenses-registration')} />
             </Grid>
             <form id="license-registration-form" onSubmit={handleSubmit(onSubmit)}>
-                <Grid size={{ xs: 12, md: 6 }}>
-                    <Grid container spacing={6}>
-                        <Grid size={{ xs: 12 }}>
-                            <PersonalInformation
-                                control={control}
-                                errors={errors}
-                                setValue={setValue}
-                                trigger={trigger}
-                                watch={watch}
-                            />
+                <Grid container spacing={6}>
+                    <Grid size={{ xs: 12, md: 6 }}>
+                        <Grid container spacing={6}>
+                            <Grid size={{ xs: 12 }}>
+                                <PersonalInformation
+                                    control={control}
+                                    errors={errors}
+                                    setValue={setValue}
+                                    trigger={trigger}
+                                    watch={watch}
+                                />
+                            </Grid>
+                            <Grid size={{ xs: 12 }}>
+                                <CitizenCard
+                                    control={control}
+                                    errors={errors}
+                                    setValue={setValue}
+                                />
+                            </Grid>
                         </Grid>
-                        <Grid size={{ xs: 12 }}>
-                            <CitizenCard
-                                control={control}
-                                errors={errors}
-                                setValue={setValue}
-                            />
-                        </Grid>
-                        <Grid size={{ xs: 12 }}>
-                            <Card>
-                                <CardHeader title='ĐĂNG KÝ' />
-                                <CardContent>
-                                    <Grid container spacing={5}>
-                                        {/* Bằng lái */}
-                                        <Grid size={{ xs: 12, sm: 6 }}>
-                                            <FormControl fullWidth error={!!errors.drivingLicenseType}>
-                                                <InputLabel>Bằng lái (*)</InputLabel>
+                    </Grid>
+                    <Grid size={{ xs: 12, md: 6 }}>
+                        <Grid container spacing={6}>
+                            <Grid size={{ xs: 12 }}>
+                                <Contact
+                                    control={control}
+                                    errors={errors}
+                                />
+                            </Grid>
+                            <Grid size={{ xs: 12 }}>
+                                <Address
+                                    control={control}
+                                    errors={errors}
+                                    provinces={provinces}
+                                    districts={districts}
+                                    wards={wards}
+                                />
+                            </Grid>
+                            <Grid size={{ xs: 12 }}>
+                                <Card>
+                                    <CardHeader title='ĐĂNG KÝ' />
+                                    <CardContent>
+                                        <Grid container spacing={5}>
+                                            {/* Bằng lái */}
+                                            <Grid size={{ xs: 12, sm: 6 }}>
+                                                <FormControl fullWidth error={!!errors.drivingLicenseType}>
+                                                    <InputLabel>Bằng lái (*)</InputLabel>
+                                                    <Controller
+                                                        name='drivingLicenseType'
+                                                        control={control}
+                                                        rules={{ required: 'Vui lòng chọn bằng lái' }}
+                                                        render={({ field }) => (
+                                                            <Select {...field} label='Bằng lái (*)'>
+                                                                {CONFIG.LicenseTypeSelectOption.map((option) => (
+                                                                    <MenuItem key={option.value} value={option.label}>
+                                                                        {option.label}
+                                                                    </MenuItem>
+                                                                ))}
+                                                            </Select>
+                                                        )}
+                                                    />
+                                                    {errors.drivingLicenseType && (
+                                                        <FormHelperText>{errors.drivingLicenseType.message}</FormHelperText>
+                                                    )}
+                                                </FormControl>
+                                            </Grid>
+                                            {/* Loại */}
+                                            <Grid size={{ xs: 12, sm: 6 }}>
+                                                <FormControl fullWidth error={!!errors.licenseType}>
+                                                    <InputLabel>Loại (*)</InputLabel>
+                                                    <Controller
+                                                        name='licenseType'
+                                                        control={control}
+                                                        rules={{ required: 'Vui lòng chọn loại bằng lái' }}
+                                                        render={({ field }) => (
+                                                            <Select {...field} label='Loại (*)'>
+                                                                {CONFIG.VehicleTypeSelectOption.map((option) => (
+                                                                    <MenuItem key={option.value} value={option.label}>
+                                                                        {option.label}
+                                                                    </MenuItem>
+                                                                ))}
+                                                            </Select>
+                                                        )}
+                                                    />
+                                                    {errors.licenseType && (
+                                                        <FormHelperText>{errors.licenseType.message}</FormHelperText>
+                                                    )}
+                                                </FormControl>
+                                            </Grid>
+                                        </Grid>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid size={{ xs: 12 }}>
+                                <Card>
+                                    <CardHeader title='THÔNG TIN KHÁC' />
+                                    <CardContent>
+                                        <Grid container spacing={5}>
+                                            {/* Sức khỏe */}
+                                            <Grid size={{ xs: 12, sm: 6 }}>
+                                                <FormControl fullWidth error={!!errors.healthCheck}>
+                                                    <InputLabel>Sức khỏe (*)</InputLabel>
+                                                    <Controller
+                                                        name='healthCheck'
+                                                        control={control}
+                                                        rules={{ required: 'Vui lòng chọn trạng thái sức khỏe' }}
+                                                        render={({ field }) => (
+                                                            <Select {...field} label='Sức khỏe (*)'>
+                                                                {CONFIG.HasCompletedHealthCheckSelectOption.map((option) => (
+                                                                    <MenuItem key={String(option.value)} value={option.label}>
+                                                                        {option.label}
+                                                                    </MenuItem>
+                                                                ))}
+                                                            </Select>
+                                                        )}
+                                                    />
+                                                    {errors.healthCheck && (
+                                                        <FormHelperText>{errors.healthCheck.message}</FormHelperText>
+                                                    )}
+                                                </FormControl>
+                                            </Grid>
+                                            {/* Bằng ô tô */}
+                                            <Grid size={{ xs: 12, sm: 6 }}>
+                                                <FormControl fullWidth error={!!errors.carLicense}>
+                                                    <InputLabel>Bằng ô tô (*)</InputLabel>
+                                                    <Controller
+                                                        name='carLicense'
+                                                        control={control}
+                                                        rules={{ required: 'Vui lòng chọn trạng thái bằng ô tô' }}
+                                                        render={({ field }) => (
+                                                            <Select {...field} label='Bằng ô tô (*)'>
+                                                                {CONFIG.HasCarLicenseSelectOption.map((option) => (
+                                                                    <MenuItem key={String(option.value)} value={option.label}>
+                                                                        {option.label}
+                                                                    </MenuItem>
+                                                                ))}
+                                                            </Select>
+                                                        )}
+                                                    />
+                                                    {errors.carLicense && (
+                                                        <FormHelperText>{errors.carLicense.message}</FormHelperText>
+                                                    )}
+                                                </FormControl>
+                                            </Grid>
+                                        </Grid>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid size={{ xs: 12 }}>
+                                <Card>
+                                    <CardHeader title='THANH TOÁN' />
+                                    <CardContent>
+                                        <Grid container spacing={5}>
+                                            {/* Tổng tiền */}
+                                            <Grid size={{ xs: 12, sm: 6 }}>
                                                 <Controller
-                                                    name='drivingLicenseType'
+                                                    name='totalAmount'
                                                     control={control}
-                                                    rules={{ required: 'Vui lòng chọn bằng lái' }}
+                                                    rules={{ required: 'Vui lòng nhập tổng tiền' }}
                                                     render={({ field }) => (
-                                                        <Select {...field} label='Bằng lái (*)'>
-                                                            {CONFIG.LicenseTypeSelectOption.map((option) => (
-                                                                <MenuItem key={option.value} value={option.label}>
-                                                                    {option.label}
-                                                                </MenuItem>
-                                                            ))}
-                                                        </Select>
+                                                        <TextField
+                                                            {...field}
+                                                            fullWidth
+                                                            label='Tổng tiền (*)'
+                                                            type='number'
+                                                            error={!!errors.totalAmount}
+                                                            helperText={errors.totalAmount?.message}
+                                                        />
                                                     )}
                                                 />
-                                                {errors.drivingLicenseType && (
-                                                    <FormHelperText>{errors.drivingLicenseType.message}</FormHelperText>
-                                                )}
-                                            </FormControl>
+                                            </Grid>
+                                            {/* Trạng thái thanh toán */}
+                                            <Grid size={{ xs: 12, sm: 6 }}>
+                                                <FormControl fullWidth error={!!errors.paymentStatus}>
+                                                    <InputLabel>Trạng thái thanh toán (*)</InputLabel>
+                                                    <Controller
+                                                        name='paymentStatus'
+                                                        control={control}
+                                                        rules={{ required: 'Vui lòng chọn trạng thái thanh toán' }}
+                                                        render={({ field }) => (
+                                                            <Select {...field} label='Trạng thái thanh toán (*)'>
+                                                                {CONFIG.IsPaidSelectOption.map((option) => (
+                                                                    <MenuItem key={String(option.value)} value={option.label}>
+                                                                        {option.label}
+                                                                    </MenuItem>
+                                                                ))}
+                                                            </Select>
+                                                        )}
+                                                    />
+                                                    {errors.paymentStatus && (
+                                                        <FormHelperText>{errors.paymentStatus.message}</FormHelperText>
+                                                    )}
+                                                </FormControl>
+                                            </Grid>
                                         </Grid>
-                                        {/* Loại */}
-                                        <Grid size={{ xs: 12, sm: 6 }}>
-                                            <FormControl fullWidth error={!!errors.licenseType}>
-                                                <InputLabel>Loại (*)</InputLabel>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid size={{ xs: 12 }}>
+                                <Card>
+                                    <CardHeader title='DUYỆT' />
+                                    <CardContent>
+                                        <Grid container spacing={5}>
+                                            {/* Xác nhận */}
+                                            <Grid size={{ xs: 12, sm: 6 }}>
+                                                <FormControl fullWidth error={!!errors.confirmationStatus}>
+                                                    <InputLabel>Xác nhận (*)</InputLabel>
+                                                    <Controller
+                                                        name='confirmationStatus'
+                                                        control={control}
+                                                        rules={{ required: 'Vui lòng chọn trạng thái xác nhận' }}
+                                                        render={({ field }) => (
+                                                            <Select {...field} label='Xác nhận (*)'>
+                                                                {CONFIG.ApprovedOption.map((option) => (
+                                                                    <MenuItem key={String(option.value)} value={option.label}>
+                                                                        {option.label}
+                                                                    </MenuItem>
+                                                                ))}
+                                                            </Select>
+                                                        )}
+                                                    />
+                                                    {errors.confirmationStatus && (
+                                                        <FormHelperText>{errors.confirmationStatus.message}</FormHelperText>
+                                                    )}
+                                                </FormControl>
+                                            </Grid>
+                                        </Grid>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid size={{ xs: 12 }}>
+                                <Card>
+                                    <CardHeader title='GHI CHÚ' />
+                                    <CardContent>
+                                        <Grid container spacing={5}>
+                                            {/* Ghi chú */}
+                                            <Grid size={{ xs: 12 }}>
                                                 <Controller
-                                                    name='licenseType'
+                                                    name='note'
                                                     control={control}
-                                                    rules={{ required: 'Vui lòng chọn loại bằng lái' }}
                                                     render={({ field }) => (
-                                                        <Select {...field} label='Loại (*)'>
-                                                            {CONFIG.VehicleTypeSelectOption.map((option) => (
-                                                                <MenuItem key={option.value} value={option.label}>
-                                                                    {option.label}
-                                                                </MenuItem>
-                                                            ))}
-                                                        </Select>
+                                                        <TextField
+                                                            {...field}
+                                                            fullWidth
+                                                            multiline
+                                                            rows={4}
+                                                            label='Ghi chú'
+                                                            placeholder='Nhập ghi chú...'
+                                                        />
                                                     )}
                                                 />
-                                                {errors.licenseType && (
-                                                    <FormHelperText>{errors.licenseType.message}</FormHelperText>
-                                                )}
-                                            </FormControl>
+                                            </Grid>
                                         </Grid>
-                                    </Grid>
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                        <Grid size={{ xs: 12 }}>
-                            <Card>
-                                <CardHeader title='THÔNG TIN KHÁC' />
-                                <CardContent>
-                                    <Grid container spacing={5}>
-                                        {/* Sức khỏe */}
-                                        <Grid size={{ xs: 12, sm: 6 }}>
-                                            <FormControl fullWidth error={!!errors.healthCheck}>
-                                                <InputLabel>Sức khỏe (*)</InputLabel>
-                                                <Controller
-                                                    name='healthCheck'
-                                                    control={control}
-                                                    rules={{ required: 'Vui lòng chọn trạng thái sức khỏe' }}
-                                                    render={({ field }) => (
-                                                        <Select {...field} label='Sức khỏe (*)'>
-                                                            {CONFIG.HasCompletedHealthCheckSelectOption.map((option) => (
-                                                                <MenuItem key={String(option.value)} value={option.label}>
-                                                                    {option.label}
-                                                                </MenuItem>
-                                                            ))}
-                                                        </Select>
-                                                    )}
-                                                />
-                                                {errors.healthCheck && (
-                                                    <FormHelperText>{errors.healthCheck.message}</FormHelperText>
-                                                )}
-                                            </FormControl>
-                                        </Grid>
-                                        {/* Bằng ô tô */}
-                                        <Grid size={{ xs: 12, sm: 6 }}>
-                                            <FormControl fullWidth error={!!errors.carLicense}>
-                                                <InputLabel>Bằng ô tô (*)</InputLabel>
-                                                <Controller
-                                                    name='carLicense'
-                                                    control={control}
-                                                    rules={{ required: 'Vui lòng chọn trạng thái bằng ô tô' }}
-                                                    render={({ field }) => (
-                                                        <Select {...field} label='Bằng ô tô (*)'>
-                                                            {CONFIG.HasCarLicenseSelectOption.map((option) => (
-                                                                <MenuItem key={String(option.value)} value={option.label}>
-                                                                    {option.label}
-                                                                </MenuItem>
-                                                            ))}
-                                                        </Select>
-                                                    )}
-                                                />
-                                                {errors.carLicense && (
-                                                    <FormHelperText>{errors.carLicense.message}</FormHelperText>
-                                                )}
-                                            </FormControl>
-                                        </Grid>
-                                    </Grid>
-                                </CardContent>
-                            </Card>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid size={{ xs: 12, md: 6 }}>
-                    <Grid container spacing={6}>
-                        <Grid size={{ xs: 12 }}>
-                            <Contact
-                                control={control}
-                                errors={errors}
-                            />
-                        </Grid>
-                        <Grid size={{ xs: 12 }}>
-                            <Address
-                                control={control}
-                                errors={errors}
-                                provinces={provinces}
-                                districts={districts}
-                                wards={wards}
-                            />
-                        </Grid>
-                        <Grid size={{ xs: 12 }}>
-                            <Card>
-                                <CardHeader title='THANH TOÁN' />
-                                <CardContent>
-                                    <Grid container spacing={5}>
-                                        {/* Tổng tiền */}
-                                        <Grid size={{ xs: 12, sm: 6 }}>
-                                            <Controller
-                                                name='totalAmount'
-                                                control={control}
-                                                rules={{ required: 'Vui lòng nhập tổng tiền' }}
-                                                render={({ field }) => (
-                                                    <TextField
-                                                        {...field}
-                                                        fullWidth
-                                                        label='Tổng tiền (*)'
-                                                        type='number'
-                                                        error={!!errors.totalAmount}
-                                                        helperText={errors.totalAmount?.message}
-                                                    />
-                                                )}
-                                            />
-                                        </Grid>
-                                        {/* Trạng thái thanh toán */}
-                                        <Grid size={{ xs: 12, sm: 6 }}>
-                                            <FormControl fullWidth error={!!errors.paymentStatus}>
-                                                <InputLabel>Trạng thái thanh toán (*)</InputLabel>
-                                                <Controller
-                                                    name='paymentStatus'
-                                                    control={control}
-                                                    rules={{ required: 'Vui lòng chọn trạng thái thanh toán' }}
-                                                    render={({ field }) => (
-                                                        <Select {...field} label='Trạng thái thanh toán (*)'>
-                                                            {CONFIG.IsPaidSelectOption.map((option) => (
-                                                                <MenuItem key={String(option.value)} value={option.label}>
-                                                                    {option.label}
-                                                                </MenuItem>
-                                                            ))}
-                                                        </Select>
-                                                    )}
-                                                />
-                                                {errors.paymentStatus && (
-                                                    <FormHelperText>{errors.paymentStatus.message}</FormHelperText>
-                                                )}
-                                            </FormControl>
-                                        </Grid>
-                                    </Grid>
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                        <Grid size={{ xs: 12 }}>
-                            <Card>
-                                <CardHeader title='DUYỆT' />
-                                <CardContent>
-                                    <Grid container spacing={5}>
-                                        {/* Xác nhận */}
-                                        <Grid size={{ xs: 12, sm: 6 }}>
-                                            <FormControl fullWidth error={!!errors.confirmationStatus}>
-                                                <InputLabel>Xác nhận (*)</InputLabel>
-                                                <Controller
-                                                    name='confirmationStatus'
-                                                    control={control}
-                                                    rules={{ required: 'Vui lòng chọn trạng thái xác nhận' }}
-                                                    render={({ field }) => (
-                                                        <Select {...field} label='Xác nhận (*)'>
-                                                            {CONFIG.ApprovedOption.map((option) => (
-                                                                <MenuItem key={String(option.value)} value={option.label}>
-                                                                    {option.label}
-                                                                </MenuItem>
-                                                            ))}
-                                                        </Select>
-                                                    )}
-                                                />
-                                                {errors.confirmationStatus && (
-                                                    <FormHelperText>{errors.confirmationStatus.message}</FormHelperText>
-                                                )}
-                                            </FormControl>
-                                        </Grid>
-                                    </Grid>
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                        <Grid size={{ xs: 12 }}>
-                            <Card>
-                                <CardHeader title='GHI CHÚ' />
-                                <CardContent>
-                                    <Grid container spacing={5}>
-                                        {/* Ghi chú */}
-                                        <Grid size={{ xs: 12 }}>
-                                            <Controller
-                                                name='note'
-                                                control={control}
-                                                render={({ field }) => (
-                                                    <TextField
-                                                        {...field}
-                                                        fullWidth
-                                                        multiline
-                                                        rows={4}
-                                                        label='Ghi chú'
-                                                        placeholder='Nhập ghi chú...'
-                                                    />
-                                                )}
-                                            />
-                                        </Grid>
-                                    </Grid>
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                    </Grid>
-                </Grid>
-                {/* Button Row */}
-                {/* Buttons moved to Header */}
             </form>
         </Grid>
     );
