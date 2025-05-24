@@ -34,7 +34,6 @@ export const authOptions: NextAuthOptions = {
           params.append('client_id', process.env.NEXT_PUBLIC_CLIENT_ID!)
           params.append('client_secret', process.env.NEXT_PUBLIC_CLIENT_SECRET!)
           params.append('grant_type', 'password')
-          params.append('scope', process.env.NEXT_PUBLIC_CLIENT_SCOPE!)
 
           // ** Login API Call to match the user credentials and receive user data in response along with his role
           const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/connect/token`, {
@@ -58,9 +57,19 @@ export const authOptions: NextAuthOptions = {
              * the session which will be accessible all over the app.
              */
 
+            const userInfoRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/connect/userinfo`, {
+              method: 'GET',
+              headers: {
+                Authorization: `Bearer ${data?.access_token}`
+              }
+            })
+
+            const userInfo = await userInfoRes.json()
+
             return {
               access_token: data?.access_token,
-              name: ''
+              name: userInfo?.role,
+              email: userInfo?.email
             } as any
           }
 

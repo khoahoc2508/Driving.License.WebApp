@@ -4,37 +4,33 @@
 import { useState } from 'react'
 
 // Next Imports
-import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 // MUI Imports
-import Typography from '@mui/material/Typography'
-import TextField from '@mui/material/TextField'
+import Alert from '@mui/material/Alert'
+import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import InputAdornment from '@mui/material/InputAdornment'
-import Checkbox from '@mui/material/Checkbox'
-import Button from '@mui/material/Button'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Alert from '@mui/material/Alert'
+import TextField from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
 
 // Third-party Imports
-import { signIn } from 'next-auth/react'
-import { Controller, useForm } from 'react-hook-form'
 import { valibotResolver } from '@hookform/resolvers/valibot'
-import { object, minLength, string, email, pipe, nonEmpty } from 'valibot'
 import classnames from 'classnames'
+import { signIn } from 'next-auth/react'
 import type { SubmitHandler } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import type { InferInput } from 'valibot'
+import { email, minLength, nonEmpty, object, pipe, string } from 'valibot'
 
 // Type Imports
 import type { Mode } from '@core/types'
 
 // Component Imports
-import Logo from '@components/layout/shared/Logo'
 import Illustrations from '@components/Illustrations'
+import Logo from '@components/layout/shared/Logo'
 
 // Config Imports
-import themeConfig from '@configs/themeConfig'
 
 // Hook Imports
 import { useImageVariant } from '@core/hooks/useImageVariant'
@@ -148,7 +144,7 @@ const Login = ({ mode }: { mode: Mode }) => {
         </div>
         <div className='flex flex-col gap-5 is-full sm:is-auto md:is-full sm:max-is-[400px] md:max-is-[unset]'>
           <div>
-            <Typography variant='h4'>{`Welcome to ${themeConfig.templateName}!👋🏻`}</Typography>
+            <Typography variant='h4'>{`Đăng nhập !👋🏻`}</Typography>
             <Typography>Please sign-in to your account and start the adventure</Typography>
           </div>
           <Alert icon={false} className='bg-primaryLight'>
@@ -160,7 +156,7 @@ const Login = ({ mode }: { mode: Mode }) => {
 
           <form
             noValidate
-            action={() => {}}
+            action={() => { }}
             autoComplete='off'
             onSubmit={handleSubmit(onSubmit)}
             className='flex flex-col gap-5'
@@ -223,21 +219,21 @@ const Login = ({ mode }: { mode: Mode }) => {
                 />
               )}
             />
-            <div className='flex justify-between items-center flex-wrap gap-x-3 gap-y-1'>
+            {/* <div className='flex justify-between items-center flex-wrap gap-x-3 gap-y-1'>
               <FormControlLabel control={<Checkbox defaultChecked />} label='Remember me' />
               <Typography className='text-end' color='primary.main' component={Link} href='/forgot-password'>
                 Forgot password?
               </Typography>
-            </div>
+            </div> */}
             <Button fullWidth variant='contained' type='submit'>
-              Log In
+              Đăng nhập
             </Button>
-            <div className='flex justify-center items-center flex-wrap gap-2'>
+            {/* <div className='flex justify-center items-center flex-wrap gap-2'>
               <Typography>New on our platform?</Typography>
               <Typography component={Link} href='/register' color='primary.main'>
                 Create an account
               </Typography>
-            </div>
+            </div> */}
           </form>
         </div>
       </div>
