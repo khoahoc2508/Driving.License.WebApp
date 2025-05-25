@@ -1,50 +1,56 @@
 'use client'
 
 // React Imports
-import { useEffect, useMemo, useState } from 'react'
-// MUI Imports
-import TablePagination from '@mui/material/TablePagination'
-import Chip from '@mui/material/Chip'
-import Dialog from '@mui/material/Dialog'
-import DialogTitle from '@mui/material/DialogTitle'
-import DialogContent from '@mui/material/DialogContent'
-import DialogActions from '@mui/material/DialogActions'
-import Button from '@mui/material/Button'
+import { useMemo, useState } from 'react'
 
-// Next Imports
+
+// MUI Imports
 import Link from 'next/link'
 
+import Button from '@mui/material/Button'
+import Chip from '@mui/material/Chip'
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogTitle from '@mui/material/DialogTitle'
+import TablePagination from '@mui/material/TablePagination'
+
+// Next Imports
+
 // Third-party Imports
-import classnames from 'classnames'
+import type { RankingInfo } from '@tanstack/match-sorter-utils'
+import { rankItem } from '@tanstack/match-sorter-utils'
+import type { ColumnDef, ColumnFiltersState, FilterFn, Table } from '@tanstack/react-table'
 import {
-  useReactTable,
+  createColumnHelper,
+  flexRender,
   getCoreRowModel,
-  getFilteredRowModel,
+  getFacetedMinMaxValues,
   getFacetedRowModel,
   getFacetedUniqueValues,
-  getFacetedMinMaxValues,
+  getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  flexRender,
-  createColumnHelper
+  useReactTable
 } from '@tanstack/react-table'
-import { rankItem } from '@tanstack/match-sorter-utils'
-import type { Column, Table, ColumnFiltersState, FilterFn, ColumnDef } from '@tanstack/react-table'
-import type { RankingInfo } from '@tanstack/match-sorter-utils'
+import classnames from 'classnames'
 
 
 // Icon Imports
+import { Card, IconButton, Typography } from '@mui/material'
+
+import { toast } from 'react-toastify'
+
 import ChevronRight from '@menu/svg/ChevronRight'
 
 // Style Imports
-import styles from '@core/styles/table.module.css'
-import { LicenseRegistrationStatus, LicenseRegistrationType, LicenseRegistrationTypeVm, LicenseType } from "@/types/LicensesRegistrations"
-import { Card, IconButton, Typography } from '@mui/material'
 import CustomAvatar from '@/@core/components/mui/Avatar'
-import { getInitials } from '@/utils/getInitials'
-import OptionMenu from '@/@core/components/option-menu'
 import CONFIG from '@/configs/config'
-import { toast } from 'react-toastify'
+import type { LicenseRegistrationType, LicenseRegistrationTypeVm, LicenseType } from "@/types/LicensesRegistrations"
+import { getInitials } from '@/utils/getInitials'
+import styles from '@core/styles/table.module.css'
+
+
 import LicenseRegistrationAPI from '@/libs/api/licenseRegistrationAPI'
 
 // Data Imports
@@ -76,6 +82,7 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
 
 const getAvatar = (params: { avatar?: string | null; customer?: string | null }) => {
   const { avatar, customer } = params
+
   if (avatar) {
     return <CustomAvatar src={avatar} size={30} className='shadow-md' />
   } else {
@@ -89,13 +96,16 @@ const getAvatar = (params: { avatar?: string | null; customer?: string | null })
 
 const getLicenseTypeString = (licenseType: LicenseType | undefined) => {
   if (licenseType === undefined) return 'N/A';
+
   const key = (Object.keys(CONFIG.LicenseType) as (keyof typeof CONFIG.LicenseType)[]).find(
     (k) => CONFIG.LicenseType[k] === licenseType
   );
+
+
   return key || 'N/A';
 };
 
-const getStatusTextAndColor = (status: Boolean | undefined) => {
+const getStatusTextAndColor = (status: boolean | undefined) => {
   let text = 'N/A';
   let color: 'success' | 'error' | 'warning' = 'warning';
 
@@ -204,6 +214,8 @@ const Table = ({
         header: 'Trạng thái',
         cell: ({ row }) => {
           const { text, color } = getStatusTextAndColor(row.original?.hasApproved);
+
+
           return (
             <Chip
               label={text}
@@ -253,6 +265,7 @@ const Table = ({
 
     try {
       const response = await LicenseRegistrationAPI.deleteLicensesRegistrations(itemIdToDelete);
+
       if (response.data.success) {
         toast.success('Xóa thành công');
         setReloadDataTable(prev => !prev); // Trigger data refresh in parent

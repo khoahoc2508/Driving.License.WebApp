@@ -1,7 +1,8 @@
 'use client'
 
 import { Card, CardContent, CardHeader, TextField, FormControl, FormHelperText, InputLabel, Select, MenuItem } from '@mui/material';
-import { Controller, Control } from 'react-hook-form';
+import type { Control } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 import Grid from '@mui/material/Grid2';
 
 interface AddressProps {

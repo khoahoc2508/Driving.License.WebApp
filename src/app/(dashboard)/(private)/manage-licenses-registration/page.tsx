@@ -5,4 +5,5 @@ const page = async () => {
 
   return <ManageLicensesRegistrations />
 }
+
 export default page

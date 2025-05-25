@@ -1,5 +1,5 @@
-import CONFIG from '@/configs/config'
-import { components } from '@/libs/api/client/schema'
+import type CONFIG from '@/configs/config'
+import type { components } from '@/libs/api/client/schema'
 
 export type LicenseRegistrationType = components['schemas']['PaginatedListOfLicenseRegistrationVm']['data']
 export type LicenseRegistrationTypeVm = components['schemas']['LicenseRegistrationVm']

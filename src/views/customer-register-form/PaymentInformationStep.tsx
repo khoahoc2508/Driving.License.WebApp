@@ -4,10 +4,15 @@ import { Controller, useFormContext } from 'react-hook-form'
 import Grid from '@mui/material/Grid2'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
-import DirectionalIcon from '@/components/common/DirectionalIcon'
+
 import Button from '@mui/material/Button'
-import { Step } from './index' // Import the Step type
+
 import { FormControl, FormHelperText, InputLabel, MenuItem, Select } from '@mui/material'
+
+import DirectionalIcon from '@/components/common/DirectionalIcon'
+import type { Step } from './index' // Import the Step type
+
+
 import CONFIG from '@/configs/config'
 
 // Define types based on your validation schema (adjust as needed)
@@ -31,6 +36,7 @@ const PaymentInformationStep = ({ steps, handleBack, handleNext }: PaymentInform
         // Get all form data from all steps
         const allFormData = {
             ...data,
+
             // Add other form data from previous steps here
         };
 
@@ -68,6 +74,7 @@ const PaymentInformationStep = ({ steps, handleBack, handleNext }: PaymentInform
                                 InputLabelProps={{ shrink: true }}
                                 onChange={(event) => {
                                     const value = parseFloat(event.target.value);
+
                                     field.onChange(isNaN(value) ? '' : value);
                                 }}
                             />
