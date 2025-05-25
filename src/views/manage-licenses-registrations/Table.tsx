@@ -149,6 +149,7 @@ const Table = ({
   const columns = useMemo<ColumnDef<LicenseRegistrationTypeVm, any>[]>(
     () => [
       columnHelper.accessor('id', {
+        id: 'stt',
         header: 'STT',
         cell: ({ row, table }) => (
           <Typography>
@@ -227,6 +228,7 @@ const Table = ({
         }
       }),
       columnHelper.accessor('id', {
+        id: 'actions',
         header: 'Hành động',
         cell: ({ row }) => (
           <div className="flex items-center">
@@ -347,11 +349,11 @@ const Table = ({
               </tbody>
             ) : (
               <tbody>
-                {table.getRowModel().rows.map(row => {
+                {table.getRowModel().rows.map((row, index) => {
                   return (
-                    <tr key={row.id}>
-                      {row.getVisibleCells().map(cell => {
-                        return <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                    <tr key={`${row.id}-${index}`}>
+                      {row.getVisibleCells().map((cell, cellIndex) => {
+                        return <td key={`${cell.id}-${cellIndex}`}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
                       })}
                     </tr>
                   )

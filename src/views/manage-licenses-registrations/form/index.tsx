@@ -91,7 +91,6 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
       fullName: '',
       dateOfBirth: null,
       gender: '',
-      country: 'Việt Nam',
       phoneNumber: '',
       email: '',
       province: '',
@@ -130,7 +129,6 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
             setValue('fullName', data.person.fullName)
             setValue('dateOfBirth', new Date(data.person.birthday))
             setValue('gender', data.person.sex === 1 ? 'Nam' : data.person.sex === 0 ? 'Nữ' : 'Khác')
-            setValue('country', 'Việt Nam')
             setValue('phoneNumber', data.person.phoneNumber)
             setValue('email', data.person.email)
             setValue('province', data.person.address.provinceCode)

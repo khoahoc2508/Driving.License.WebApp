@@ -103,24 +103,6 @@ const PersonalInformation = ({ control, errors }: PersonalInformationProps) => {
                   )}
                 />
               </Grid>
-              <Grid size={{ xs: 12 }}>
-                <Controller
-                  name='country'
-                  control={control}
-                  rules={{ required: 'Vui lòng chọn quốc gia' }}
-                  render={({ field }) => (
-                    <FormControl fullWidth error={!!errors.country}>
-                      <InputLabel>Quốc gia (*)</InputLabel>
-                      <Select {...field} label='Quốc gia (*)'>
-                        <MenuItem value='Việt Nam'>Việt Nam</MenuItem>
-                      </Select>
-                      {errors.country && (
-                        <FormHelperText>{errors.country.message}</FormHelperText>
-                      )}
-                    </FormControl>
-                  )}
-                />
-              </Grid>
             </Grid>
           </Grid>
         </Grid>
