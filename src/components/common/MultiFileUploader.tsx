@@ -58,7 +58,7 @@ const Dropzone = styled(AppReactDropzone)<BoxProps>(({ theme }) => ({
   }
 }))
 
-const ImageDropzone = ({
+const MultiFileUploader = ({
   title = 'Drag and Drop Your Image Here.',
   subtitle = 'or',
   maxFiles = 1,
@@ -182,4 +182,4 @@ const ImageDropzone = ({
   )
 }
 
-export default ImageDropzone
+export default MultiFileUploader
