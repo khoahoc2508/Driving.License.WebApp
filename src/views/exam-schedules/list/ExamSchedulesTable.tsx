@@ -55,6 +55,7 @@ import { ExamScheduleType, GetExamSchedulesWithPaginationQueryParams, PaginatedL
 import ExamScheduleAPI from '@/libs/api/examScheduleAPI'
 import { LinearProgress } from '@mui/material'
 import TableFilters from '@/views/exam-schedules/list/TableFilters'
+import AddExasmScheduleDrawer from '@/views/exam-schedules/list/AddExasmScheduleDrawer'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -150,6 +151,7 @@ const ProductListTable = () => {
   const [rowSelection, setRowSelection] = useState({})
   const [data, setData] = useState<ExamScheduleType[]>([])
   const [globalFilter, setGlobalFilter] = useState('')
+  const [openAddDrawer, setOpenAddDrawer] = useState(false)
 
   // States for data
   const [examSchedules, setExamSchedules] = useState<ExamScheduleType[]>([])
@@ -380,10 +382,11 @@ const ProductListTable = () => {
 
             <Button
               variant='contained'
-              component={Link}
-              href={`/exam-schedules/create`}
+              // component={Link}
+              // href={`/exam-schedules/create`}
               startIcon={<i className='ri-add-line' />}
               className='max-sm:is-full is-auto'
+              onClick={() => setOpenAddDrawer(!openAddDrawer)}
             >
               Thêm
             </Button>
@@ -457,6 +460,7 @@ const ProductListTable = () => {
           onRowsPerPageChange={e => setParams((prev) => ({ ...prev, pageSize: Number(e.target.value) }))}
         />
       </Card>
+      <AddExasmScheduleDrawer open={openAddDrawer} handleClose={() => setOpenAddDrawer(!openAddDrawer)} />
     </>
   )
 }
