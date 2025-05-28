@@ -381,7 +381,7 @@ const ProductListTable = () => {
             <Button
               variant='contained'
               component={Link}
-              href={`/exam-schedules/add`}
+              href={`/exam-schedules/create`}
               startIcon={<i className='ri-add-line' />}
               className='max-sm:is-full is-auto'
             >
