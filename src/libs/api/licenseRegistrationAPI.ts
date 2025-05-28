@@ -1,9 +1,8 @@
 import type {
   getLicensesRegistrationsPaidParams,
   GetLicensesRegistrationsParams,
-  LicenseRegistrationCustomerResquest,
-  LicenseRegistrationFormType,
   LicenseRegistrationCreateResquest,
+  LicenseRegistrationCustomerResquest,
   LicenseRegistrationUpdateResquest
 } from '@/types/LicensesRegistrations'
 

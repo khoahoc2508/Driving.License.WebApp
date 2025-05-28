@@ -1,5 +1,5 @@
 // React Imports
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 // MUI Imports
 import CardContent from '@mui/material/CardContent'
@@ -7,8 +7,9 @@ import FormControl from '@mui/material/FormControl'
 import Grid from '@mui/material/Grid2'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
-import Select, { SelectChangeEvent } from '@mui/material/Select'
-import { UsersType } from '@/types/userTypes'
+import type { SelectChangeEvent } from '@mui/material/Select'
+import Select from '@mui/material/Select'
+
 import CONFIG from '@/configs/config'
 
 // Type Imports
@@ -24,12 +25,14 @@ const TableFilters = ({ onApplyFilters }: TableFiltersProps) => {
   // Handlers for filter selection
   const handleStatusSelect = (event: SelectChangeEvent<boolean[]>) => {
     const value = event.target.value as boolean[]
+
     setSelectedStatus(value)
     onApplyFilters(value, selectedLicenseType)
   }
 
   const handleLicenseTypeSelect = (event: SelectChangeEvent<number[]>) => {
     const value = event.target.value as number[]
+
     setSelectedLicenseType(value)
     onApplyFilters(selectedStatus, value)
   }

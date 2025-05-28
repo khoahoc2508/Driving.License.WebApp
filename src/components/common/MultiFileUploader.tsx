@@ -4,25 +4,25 @@
 import { useState } from 'react'
 
 // MUI Imports
+import type { BoxProps } from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import Typography from '@mui/material/Typography'
 import { styled } from '@mui/material/styles'
-import type { BoxProps } from '@mui/material/Box'
 
 // Third-party Imports
 import { useDropzone } from 'react-dropzone'
 
 // Component Imports
-import Link from '@components/Link'
+import { toast } from 'react-toastify'
+
 import CustomAvatar from '@core/components/mui/Avatar'
 
 // Styled Component Imports
-import AppReactDropzone from '@/libs/styles/AppReactDropzone'
 import UploadAPI from '@/libs/api/uploadAPI'
-import { toast } from 'react-toastify'
+import AppReactDropzone from '@/libs/styles/AppReactDropzone'
 
 type FileProp = {
   name: string
@@ -80,6 +80,7 @@ const MultiFileUploader = ({
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles: File[]) => {
       const newFiles = acceptedFiles.map((file: File) => Object.assign(file))
+
       setFiles(newFiles)
       onFilesChange?.(newFiles)
     },
@@ -89,6 +90,8 @@ const MultiFileUploader = ({
   })
 
   const inputProps = getInputProps()
+
+
   // Ensure value is never null
   const safeInputProps = {
     ...inputProps,
@@ -140,6 +143,7 @@ const MultiFileUploader = ({
   const handleUpload = async () => {
     try {
       const response = await UploadAPI.uploadFiles(files)
+
       toast.success("Tải file thành công")
       onUpload?.({ data: response.data.map((file: { relativeUrl: string | null }) => file.relativeUrl || '') })
     } catch (error) {

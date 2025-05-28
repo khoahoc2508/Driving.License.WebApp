@@ -1,5 +1,6 @@
-import LicenseRegistrationForm from '@/views/manage-licenses-registrations/form'
 import React from 'react'
+
+import LicenseRegistrationForm from '@/views/manage-licenses-registrations/form'
 
 
 const Page = ({ params }: { params: Promise<{ id: string }> }) => {

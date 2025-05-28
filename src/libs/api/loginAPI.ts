@@ -1,5 +1,6 @@
-import CONFIG from '@/configs/config'
 import Cookies from 'js-cookie'
+
+import CONFIG from '@/configs/config'
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL
 const CLIENT_ID = process.env.NEXT_PUBLIC_CLIENT_ID
