@@ -1,11 +1,10 @@
 'use client'
 
+import { useEffect, useState } from "react"
+
 import { Divider, Drawer, IconButton, Typography } from "@mui/material"
 
 // MUI Imports
-import Card from '@mui/material/Card'
-import CardHeader from '@mui/material/CardHeader'
-import CardContent from '@mui/material/CardContent'
 import Grid from '@mui/material/Grid2'
 import TextField from '@mui/material/TextField'
 import Select from '@mui/material/Select'
@@ -22,10 +21,9 @@ import { Controller, useForm } from 'react-hook-form'
 // Styled Component Imports
 import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
 import ExamAddressAPI from "@/libs/api/examAddressAPI"
-import { ExamAddressType, PaginatedListOfExamAddressType } from "@/types/examAddressTypes"
-import { useEffect, useState } from "react"
+import type { ExamAddressType, PaginatedListOfExamAddressType } from "@/types/examAddressTypes"
 import ExamScheduleAPI from "@/libs/api/examScheduleAPI"
-import { CreateExamScheduleCommandType } from "@/types/examScheduleTypes"
+import type { CreateExamScheduleCommandType } from "@/types/examScheduleTypes"
 
 
 type Props = {
@@ -89,10 +87,11 @@ const AddExasmScheduleDrawer = (props: Props) => {
       }
 
       const response = await ExamScheduleAPI.createExamSchedule(payload)
-      
+
       if (response.data?.success) {
         toast.success('Tạo lịch thi thành công')
         handleClose()
+
         // Call onSuccess to reload the data table
         if (onSuccess) onSuccess()
       } else {
@@ -217,6 +216,7 @@ const AddExasmScheduleDrawer = (props: Props) => {
                             label='Suất Thi'
                             onChange={(e) => {
                               const value = Number(e.target.value);
+
                               field.onChange(value);
 
                               // Nếu chọn không giới hạn, set registrationLimit là null

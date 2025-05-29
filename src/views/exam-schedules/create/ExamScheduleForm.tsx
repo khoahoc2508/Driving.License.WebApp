@@ -82,6 +82,8 @@ const ExamScheduleForm = () => {
   })
 
   const onSubmit = () => toast.success('Form Submitted')
+
+
   return (
     <Card>
       <CardHeader title='Basic' />
@@ -186,4 +188,5 @@ const ExamScheduleForm = () => {
     </Card>
   )
 }
+
 export default ExamScheduleForm

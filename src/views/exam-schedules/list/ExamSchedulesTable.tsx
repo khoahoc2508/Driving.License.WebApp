@@ -4,18 +4,13 @@
 import { useEffect, useMemo, useState } from 'react'
 
 // Next Imports
-import Link from 'next/link'
-import { useParams } from 'next/navigation'
 
 // MUI Imports
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
 import Button from '@mui/material/Button'
-import Chip from '@mui/material/Chip'
-import Checkbox from '@mui/material/Checkbox'
 import Divider from '@mui/material/Divider'
 import IconButton from '@mui/material/IconButton'
-import Switch from '@mui/material/Switch'
 import TablePagination from '@mui/material/TablePagination'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
@@ -44,23 +39,23 @@ import type { ColumnDef, FilterFn } from '@tanstack/react-table'
 import type { RankingInfo } from '@tanstack/match-sorter-utils'
 
 // Type Imports
-import type { ThemeColor } from '@core/types'
+import { LinearProgress } from '@mui/material'
+
+import { toast } from 'react-toastify'
+
 
 // Component Imports
-import CustomAvatar from '@core/components/mui/Avatar'
-import OptionMenu from '@core/components/option-menu'
 
 // Util Imports
 // import { getLocalizedUrl } from '@/utils/i18n'
 
 // Style Imports
 import tableStyles from '@core/styles/table.module.css'
-import { ExamScheduleType, GetExamSchedulesWithPaginationQueryParams, PaginatedListOfExamScheduleType } from '@/types/examScheduleTypes'
+import type { ExamScheduleType, GetExamSchedulesWithPaginationQueryParams, PaginatedListOfExamScheduleType } from '@/types/examScheduleTypes'
 import ExamScheduleAPI from '@/libs/api/examScheduleAPI'
-import { LinearProgress } from '@mui/material'
 import TableFilters from '@/views/exam-schedules/list/TableFilters'
 import AddExasmScheduleDrawer from '@/views/exam-schedules/list/AddExasmScheduleDrawer'
-import { toast } from 'react-toastify'
+
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -75,19 +70,7 @@ type ProductWithActionsType = ExamScheduleType & {
   actions?: string
 }
 
-type ProductCategoryType = {
-  [key: string]: {
-    icon: string
-    color: ThemeColor
-  }
-}
 
-type productStatusType = {
-  [key: string]: {
-    title: string
-    color: ThemeColor
-  }
-}
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   // Rank the item
@@ -132,20 +115,7 @@ const DebouncedInput = ({
 }
 
 // Vars
-const productCategoryObj: ProductCategoryType = {
-  Accessories: { icon: 'ri-headphone-line', color: 'error' },
-  'Home Decor': { icon: 'ri-home-6-line', color: 'info' },
-  Electronics: { icon: 'ri-computer-line', color: 'primary' },
-  Shoes: { icon: 'ri-footprint-line', color: 'success' },
-  Office: { icon: 'ri-briefcase-line', color: 'warning' },
-  Games: { icon: 'ri-gamepad-line', color: 'secondary' }
-}
 
-const productStatusObj: productStatusType = {
-  Scheduled: { title: 'Scheduled', color: 'warning' },
-  Published: { title: 'Publish', color: 'success' },
-  Inactive: { title: 'Inactive', color: 'error' }
-}
 
 // Column Definitions
 const columnHelper = createColumnHelper<ProductWithActionsType>()
@@ -162,10 +132,11 @@ const ProductListTable = () => {
   const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null)
 
   // States for data
-  const [examSchedules, setExamSchedules] = useState<ExamScheduleType[]>([])
+  // const [examSchedules, setExamSchedules] = useState<ExamScheduleType[]>([])
   const [totalCount, setTotalCount] = useState(0)
-  const [pageSize, setPageSize] = useState(1)
-  const [loading, setLoading] = useState(false)
+
+  // const [pageSize, setPageSize] = useState(1)
+  // const [loading, setLoading] = useState(false)
 
   // Function to reload data
   const reloadData = () => {
@@ -173,7 +144,6 @@ const ProductListTable = () => {
   }
 
   // Hooks
-  const { lang: locale } = useParams()
 
   const columns = useMemo<ColumnDef<ProductWithActionsType, any>[]>(
     () => [
@@ -224,9 +194,11 @@ const ProductListTable = () => {
         header: 'Thời gian',
         cell: ({ row }) => {
           const dateStr = row.original.dateTime;
+
           if (!dateStr) return <Typography>-</Typography>;
 
           const date = new Date(dateStr);
+
           const formatted = date.toLocaleString('vi-VN', {
             day: '2-digit',
             month: '2-digit',
@@ -253,7 +225,7 @@ const ProductListTable = () => {
       columnHelper.accessor('passedStudents', {
         header: 'Tỷ lệ đỗ',
         cell: ({ row }) => {
-          const examDate = new Date(row.original?.dateTime);
+          const examDate = row.original?.dateTime ? new Date(row.original.dateTime) : new Date();
           const currentDate = new Date();
           const isExamPassed = examDate < currentDate;
 
@@ -267,6 +239,7 @@ const ProductListTable = () => {
 
           const calculatePassRate = () => {
             if (!hasValidResults) return 0;
+
             return Math.floor((passedStudents / registeredStudents) * 100);
           };
 
@@ -363,7 +336,7 @@ const ProductListTable = () => {
   // Fetch data function
   const fetchExamSchedules = async () => {
     try {
-      setLoading(true)
+      // setLoading(true)
 
       const response = await ExamScheduleAPI.getExamSchedules(params)
 
@@ -374,25 +347,10 @@ const ProductListTable = () => {
     } catch (error) {
       console.error('Error fetching exam schedules:', error)
     } finally {
-      setLoading(false)
+      // setLoading(false)
     }
   }
 
-  const handleDeleteExamSchedule = async (id: string) => {
-    try {
-      const response = await ExamScheduleAPI.deleteExamSchedule(id)
-
-      if (response.data?.success) {
-        toast.success('Xóa lịch thi thành công')
-        reloadData() // Reload the table
-      } else {
-        toast.error(response.data?.message || 'Có lỗi xảy ra khi xóa lịch thi')
-      }
-    } catch (error) {
-      console.error('Error deleting exam schedule:', error)
-      toast.error('Có lỗi xảy ra khi xóa lịch thi')
-    }
-  }
 
   const handleOpenDeleteDialog = (id: string | undefined) => {
     if (id) {
@@ -434,7 +392,7 @@ const ProductListTable = () => {
     <>
       <Card>
         <CardHeader title='Filters' className='pbe-4' />
-        <TableFilters data={data} />
+        <TableFilters />
         <Divider />
         <div className='flex justify-between flex-col items-start sm:flex-row sm:items-center gap-y-4 p-5'>
           <DebouncedInput
@@ -447,6 +405,7 @@ const ProductListTable = () => {
 
             <Button
               variant='contained'
+
               // component={Link}
               // href={`/exam-schedules/create`}
               startIcon={<i className='ri-add-line' />}

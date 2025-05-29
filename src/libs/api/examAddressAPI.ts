@@ -1,4 +1,4 @@
-import type { GetExamAddressesWithPaginationQueryParams, CreateExamAddressCommandType } from '@/types/examAddressTypes'
+import type { GetExamAddressesWithPaginationQueryParams } from '@/types/examAddressTypes'
 
 import axiosInstance from '../axios'
 import { customParamsSerializer } from './commonAPI'

@@ -1,7 +1,7 @@
-import type { 
-  GetExamSchedulesWithPaginationQueryParams, 
+import type {
+  GetExamSchedulesWithPaginationQueryParams,
   CreateExamScheduleCommandType,
-  DeleteExamScheduleCommandType 
+  DeleteExamScheduleCommandType
 } from '@/types/examScheduleTypes'
 
 import axiosInstance from '../axios'
@@ -21,8 +21,9 @@ const createExamSchedule = async (data: CreateExamScheduleCommandType) => {
 
 const deleteExamSchedule = async (id: string) => {
   const data: DeleteExamScheduleCommandType = { id }
-  return await axiosInstance.delete('/api/exam/schedules', { 
-    data 
+
+  return await axiosInstance.delete('/api/exam/schedules', {
+    data
   })
 }
 
