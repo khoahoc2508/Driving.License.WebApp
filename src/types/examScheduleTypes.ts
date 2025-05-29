@@ -9,11 +9,9 @@ export type GetExamSchedulesWithPaginationQueryParams = {
 
 // Basic Exam Schedule Types
 export type ExamScheduleType = components['schemas']['ExamScheduleVm']
-export type ExamAddressType = components['schemas']['ExamAddressVm']
 
 // Paginated List Types
 export type PaginatedListOfExamScheduleType = components['schemas']['PaginatedListOfExamScheduleVm']
-export type PaginatedListOfExamAddressType = components['schemas']['PaginatedListOfExamAddressVm']
 
 // API Response Types
 export type ExamSchedulesWithPaginationResponse = {

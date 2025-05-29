@@ -152,6 +152,7 @@ const ProductListTable = () => {
   const [data, setData] = useState<ExamScheduleType[]>([])
   const [globalFilter, setGlobalFilter] = useState('')
   const [openAddDrawer, setOpenAddDrawer] = useState(false)
+  const [reloadFlag, setReloadFlag] = useState(false)
 
   // States for data
   const [examSchedules, setExamSchedules] = useState<ExamScheduleType[]>([])
@@ -159,6 +160,10 @@ const ProductListTable = () => {
   const [pageSize, setPageSize] = useState(1)
   const [loading, setLoading] = useState(false)
 
+  // Function to reload data
+  const reloadData = () => {
+    setReloadFlag(prev => !prev)
+  }
 
   // Hooks
   const { lang: locale } = useParams()
@@ -187,29 +192,38 @@ const ProductListTable = () => {
       //     />
       //   )
       // },
-      columnHelper.accessor('name', {
-        header: 'Tên',
-        cell: ({ row }) => (
-          <Typography>{row.original.name}</Typography>
-        ),
-        enableSorting: false
-      }),
-
-      columnHelper.accessor('dateTime', {
-        header: 'Thời gian',
-        cell: ({ row }) => {
-          const d = new Date(row.original.dateTime || new Date());
-          const f = (n: number) => n.toString().padStart(2, '0');
-          const formatted = `${f(d.getUTCDate())}/${f(d.getUTCMonth() + 1)}/${d.getUTCFullYear()} ${f(d.getUTCHours())}:${f(d.getUTCMinutes())}:${f(d.getUTCSeconds())}`;
-          return <Typography>{formatted}</Typography>;
-        },
-        enableSorting: false
-      }),
+      // columnHelper.accessor('name', {
+      //   header: 'Tên',
+      //   cell: ({ row }) => (
+      //     <Typography>{row.original.name}</Typography>
+      //   ),
+      //   enableSorting: false
+      // }),
       columnHelper.accessor('examAddress.fullAddress', {
         header: 'Địa điểm',
         cell: ({ row }) => <Typography>{row.original.examAddress?.fullAddress}</Typography>,
         enableSorting: false
       }),
+      columnHelper.accessor('dateTime', {
+        header: 'Thời gian',
+        cell: ({ row }) => {
+          const dateStr = row.original.dateTime;
+          if (!dateStr) return <Typography>-</Typography>;
+          
+          const date = new Date(dateStr);
+          const formatted = date.toLocaleString('vi-VN', { 
+            day: '2-digit', 
+            month: '2-digit', 
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          });
+          
+          return <Typography>{formatted}</Typography>;
+        },
+        enableSorting: false
+      }),
+
       columnHelper.accessor('registrationLimit', {
         header: 'Suất thi',
         cell: ({ row }) => <Typography>{row.original.registrationLimit}</Typography>,
@@ -363,7 +377,7 @@ const ProductListTable = () => {
 
   useEffect(() => {
     fetchExamSchedules()
-  }, [params])
+  }, [params, reloadFlag])
 
   return (
     <>
@@ -460,7 +474,11 @@ const ProductListTable = () => {
           onRowsPerPageChange={e => setParams((prev) => ({ ...prev, pageSize: Number(e.target.value) }))}
         />
       </Card>
-      <AddExasmScheduleDrawer open={openAddDrawer} handleClose={() => setOpenAddDrawer(!openAddDrawer)} />
+      <AddExasmScheduleDrawer 
+        open={openAddDrawer} 
+        handleClose={() => setOpenAddDrawer(!openAddDrawer)} 
+        onSuccess={reloadData}
+      />
     </>
   )
 }

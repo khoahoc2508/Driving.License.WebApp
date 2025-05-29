@@ -1,4 +1,4 @@
-import type { GetExamSchedulesWithPaginationQueryParams } from '@/types/examScheduleTypes'
+import type { GetExamSchedulesWithPaginationQueryParams, CreateExamScheduleCommandType } from '@/types/examScheduleTypes'
 
 import axiosInstance from '../axios'
 import { customParamsSerializer } from './commonAPI'
@@ -11,9 +11,14 @@ const getExamSchedules = async (params: GetExamSchedulesWithPaginationQueryParam
   })
 }
 
+const createExamSchedule = async (data: CreateExamScheduleCommandType) => {
+  return await axiosInstance.post('/api/exam/schedules', data)
+}
+
 const ExamScheduleAPI = {
   // Exam Schedules
-  getExamSchedules
+  getExamSchedules,
+  createExamSchedule
 }
 
 export default ExamScheduleAPI
