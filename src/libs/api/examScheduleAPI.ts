@@ -1,4 +1,8 @@
-import type { GetExamSchedulesWithPaginationQueryParams, CreateExamScheduleCommandType } from '@/types/examScheduleTypes'
+import type { 
+  GetExamSchedulesWithPaginationQueryParams, 
+  CreateExamScheduleCommandType,
+  DeleteExamScheduleCommandType 
+} from '@/types/examScheduleTypes'
 
 import axiosInstance from '../axios'
 import { customParamsSerializer } from './commonAPI'
@@ -15,10 +19,18 @@ const createExamSchedule = async (data: CreateExamScheduleCommandType) => {
   return await axiosInstance.post('/api/exam/schedules', data)
 }
 
+const deleteExamSchedule = async (id: string) => {
+  const data: DeleteExamScheduleCommandType = { id }
+  return await axiosInstance.delete('/api/exam/schedules', { 
+    data 
+  })
+}
+
 const ExamScheduleAPI = {
   // Exam Schedules
   getExamSchedules,
-  createExamSchedule
+  createExamSchedule,
+  deleteExamSchedule
 }
 
 export default ExamScheduleAPI

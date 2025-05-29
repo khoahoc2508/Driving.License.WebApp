@@ -20,6 +20,10 @@ import TablePagination from '@mui/material/TablePagination'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import type { TextFieldProps } from '@mui/material/TextField'
+import Dialog from '@mui/material/Dialog'
+import DialogTitle from '@mui/material/DialogTitle'
+import DialogContent from '@mui/material/DialogContent'
+import DialogActions from '@mui/material/DialogActions'
 
 // Third-party Imports
 import classnames from 'classnames'
@@ -56,6 +60,7 @@ import ExamScheduleAPI from '@/libs/api/examScheduleAPI'
 import { LinearProgress } from '@mui/material'
 import TableFilters from '@/views/exam-schedules/list/TableFilters'
 import AddExasmScheduleDrawer from '@/views/exam-schedules/list/AddExasmScheduleDrawer'
+import { toast } from 'react-toastify'
 
 declare module '@tanstack/table-core' {
   interface FilterFns {
@@ -153,6 +158,8 @@ const ProductListTable = () => {
   const [globalFilter, setGlobalFilter] = useState('')
   const [openAddDrawer, setOpenAddDrawer] = useState(false)
   const [reloadFlag, setReloadFlag] = useState(false)
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false)
+  const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null)
 
   // States for data
   const [examSchedules, setExamSchedules] = useState<ExamScheduleType[]>([])
@@ -199,6 +206,15 @@ const ProductListTable = () => {
       //   ),
       //   enableSorting: false
       // }),
+      columnHelper.accessor('id', {
+        id: 'stt',
+        header: 'STT',
+        cell: ({ row, table }) => (
+          <Typography>
+            {table.getRowModel().rows.indexOf(row) + 1}
+          </Typography>
+        )
+      }),
       columnHelper.accessor('examAddress.fullAddress', {
         header: 'Địa điểm',
         cell: ({ row }) => <Typography>{row.original.examAddress?.fullAddress}</Typography>,
@@ -209,16 +225,16 @@ const ProductListTable = () => {
         cell: ({ row }) => {
           const dateStr = row.original.dateTime;
           if (!dateStr) return <Typography>-</Typography>;
-          
+
           const date = new Date(dateStr);
-          const formatted = date.toLocaleString('vi-VN', { 
-            day: '2-digit', 
-            month: '2-digit', 
+          const formatted = date.toLocaleString('vi-VN', {
+            day: '2-digit',
+            month: '2-digit',
             year: 'numeric',
             hour: '2-digit',
             minute: '2-digit'
           });
-          
+
           return <Typography>{formatted}</Typography>;
         },
         enableSorting: false
@@ -303,22 +319,9 @@ const ProductListTable = () => {
             <IconButton size='small'>
               <i className='ri-edit-box-line text-[22px] text-textSecondary' />
             </IconButton>
-            {/* <OptionMenu
-              iconButtonProps={{ size: 'medium' }}
-              iconClassName='text-textSecondary text-[22px]'
-              options={[
-                { text: 'Download', icon: 'ri-download-line', menuItemProps: { className: 'gap-2' } },
-                {
-                  text: 'Delete',
-                  icon: 'ri-delete-bin-7-line',
-                  menuItemProps: {
-                    className: 'gap-2',
-                    onClick: () => setData(data?.filter(product => product.id !== row.original.id))
-                  }
-                },
-                { text: 'Duplicate', icon: 'ri-stack-line', menuItemProps: { className: 'gap-2' } }
-              ]}
-            /> */}
+            <IconButton size='small' onClick={() => handleOpenDeleteDialog(row.original.id)}>
+              <i className='ri-delete-bin-7-line text-[22px] text-textSecondary' />
+            </IconButton>
           </div>
         ),
         enableSorting: false
@@ -372,6 +375,54 @@ const ProductListTable = () => {
       console.error('Error fetching exam schedules:', error)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleDeleteExamSchedule = async (id: string) => {
+    try {
+      const response = await ExamScheduleAPI.deleteExamSchedule(id)
+
+      if (response.data?.success) {
+        toast.success('Xóa lịch thi thành công')
+        reloadData() // Reload the table
+      } else {
+        toast.error(response.data?.message || 'Có lỗi xảy ra khi xóa lịch thi')
+      }
+    } catch (error) {
+      console.error('Error deleting exam schedule:', error)
+      toast.error('Có lỗi xảy ra khi xóa lịch thi')
+    }
+  }
+
+  const handleOpenDeleteDialog = (id: string | undefined) => {
+    if (id) {
+      setItemIdToDelete(id)
+      setOpenDeleteDialog(true)
+    }
+  }
+
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false)
+    setItemIdToDelete(null)
+  }
+
+  const handleDeleteConfirmed = async () => {
+    if (!itemIdToDelete) return
+
+    try {
+      const response = await ExamScheduleAPI.deleteExamSchedule(itemIdToDelete)
+
+      if (response.data?.success) {
+        toast.success('Xóa lịch thi thành công')
+        reloadData() // Reload the table
+      } else {
+        toast.error(response.data?.message || 'Có lỗi xảy ra khi xóa lịch thi')
+      }
+    } catch (error) {
+      console.error('Error deleting exam schedule:', error)
+      toast.error('Có lỗi xảy ra khi xóa lịch thi')
+    } finally {
+      handleCloseDeleteDialog()
     }
   }
 
@@ -474,11 +525,30 @@ const ProductListTable = () => {
           onRowsPerPageChange={e => setParams((prev) => ({ ...prev, pageSize: Number(e.target.value) }))}
         />
       </Card>
-      <AddExasmScheduleDrawer 
-        open={openAddDrawer} 
-        handleClose={() => setOpenAddDrawer(!openAddDrawer)} 
+      <AddExasmScheduleDrawer
+        open={openAddDrawer}
+        handleClose={() => setOpenAddDrawer(!openAddDrawer)}
         onSuccess={reloadData}
       />
+      <Dialog
+        open={openDeleteDialog}
+        onClose={handleCloseDeleteDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Xác nhận xóa"}</DialogTitle>
+        <DialogContent>
+          <Typography id="alert-dialog-description">
+            Bạn có chắc chắn muốn xóa lịch thi này không?
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDeleteDialog}>Hủy</Button>
+          <Button onClick={handleDeleteConfirmed} autoFocus color="error">
+            Xóa
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   )
 }
