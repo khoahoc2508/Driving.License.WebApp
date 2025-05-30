@@ -5,7 +5,6 @@ import { useMemo, useState } from 'react'
 
 
 // MUI Imports
-import Link from 'next/link'
 
 import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
@@ -52,6 +51,7 @@ import styles from '@core/styles/table.module.css'
 
 
 import LicenseRegistrationAPI from '@/libs/api/licenseRegistrationAPI'
+import SkeletonTableRowsLoader from '@/components/common/SkeletonTableRowsLoader'
 
 // Data Imports
 
@@ -128,7 +128,8 @@ const Table = ({
   totalItems,
   onPageChange,
   onPageSizeChange,
-  setReloadDataTable
+  setReloadDataTable,
+  isLoading
 }: {
   data?: LicenseRegistrationType,
   setData: (data: LicenseRegistrationType) => void,
@@ -137,7 +138,8 @@ const Table = ({
   totalItems: number,
   onPageChange: (page: number) => void,
   onPageSizeChange: (pageSize: number) => void,
-  setReloadDataTable: React.Dispatch<React.SetStateAction<boolean>>
+  setReloadDataTable: React.Dispatch<React.SetStateAction<boolean>>,
+  isLoading: boolean
 }) => {
   // States
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -233,9 +235,9 @@ const Table = ({
         cell: ({ row }) => (
           <div className="flex items-center">
             <IconButton>
-              <Link href={`manage-licenses-registration/edit/${row.original.id}`} passHref legacyBehavior>
+              <a href={`manage-licenses-registration/edit/${row.original.id}`}  >
                 <i className="ri-edit-box-line text-textSecondary" />
-              </Link>
+              </a>
             </IconButton>
 
             <IconButton onClick={() => handleOpenDeleteDialog(row.original.id)}>
@@ -305,6 +307,39 @@ const Table = ({
   })
 
 
+  const renderTableRows = () => {
+
+    if (isLoading) {
+      return <SkeletonTableRowsLoader rowsNum={10} columnsNum={9} />
+    }
+
+    if (table.getFilteredRowModel().rows.length === 0) {
+      return (
+        <tr>
+          <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
+            No data available
+          </td>
+        </tr>
+      )
+    }
+
+    return (<>
+      {
+        table.getRowModel().rows.map((row, index) => {
+          return (
+            <tr key={`${row.id}-${index}`}>
+              {row.getVisibleCells().map((cell, cellIndex) => {
+                return <td key={`${cell.id}-${cellIndex}`}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+              })}
+            </tr>
+          )
+        })
+      }
+    </>
+
+    )
+  }
+
   return (
     <>
       <Card>
@@ -339,27 +374,9 @@ const Table = ({
                 </tr>
               ))}
             </thead>
-            {table.getFilteredRowModel().rows.length === 0 ? (
-              <tbody>
-                <tr>
-                  <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
-                    No data available
-                  </td>
-                </tr>
-              </tbody>
-            ) : (
-              <tbody>
-                {table.getRowModel().rows.map((row, index) => {
-                  return (
-                    <tr key={`${row.id}-${index}`}>
-                      {row.getVisibleCells().map((cell, cellIndex) => {
-                        return <td key={`${cell.id}-${cellIndex}`}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                      })}
-                    </tr>
-                  )
-                })}
-              </tbody>
-            )}
+            <tbody>
+              {renderTableRows()}
+            </tbody>
           </table>
         </div>
         <TablePagination
@@ -396,5 +413,7 @@ const Table = ({
     </>
   )
 }
+
+
 
 export default Table
