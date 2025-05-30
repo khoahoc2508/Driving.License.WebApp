@@ -1,5 +1,5 @@
 // React Imports
-import { useState, useEffect, forwardRef } from 'react'
+import { useState, forwardRef } from 'react'
 
 // MUI Imports
 import Grid from '@mui/material/Grid2'
@@ -7,14 +7,16 @@ import CardContent from '@mui/material/CardContent'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
-import Select, { SelectChangeEvent } from '@mui/material/Select'
+import type { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select'
 
 // Third-party Imports
 import { format, addDays } from 'date-fns'
 
 // Type Imports
-import { ExamScheduleType } from '@/types/examScheduleTypes'
-import { TextField, TextFieldProps } from '@mui/material'
+import type { TextFieldProps } from '@mui/material';
+import { TextField } from '@mui/material'
+
 import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
 
 // Types
@@ -27,11 +29,7 @@ type CustomInputProps = TextFieldProps & {
 // Vars
 
 
-const TableFilters = ({
-  data
-}: {
-  data?: ExamScheduleType[]
-}) => {
+const TableFilters = () => {
   // States
   const [registrationLimit, setRegistrationLimit] = useState<string[]>([])
   const [addresses, setAddresses] = useState<string[]>([])

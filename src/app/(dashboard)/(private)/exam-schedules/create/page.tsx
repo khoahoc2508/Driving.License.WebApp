@@ -1,7 +1,8 @@
 // MUI Imports
+import Grid from '@mui/material/Grid2'
+
 import ExamScheduleAddHeader from '@/views/exam-schedules/create/ExamScheduleAddHeader'
 import ExamScheduleForm from '@/views/exam-schedules/create/ExamScheduleForm'
-import Grid from '@mui/material/Grid2'
 
 const examScheduleAddAdd = () => {
   return (
