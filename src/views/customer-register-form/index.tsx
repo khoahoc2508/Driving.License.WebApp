@@ -28,7 +28,7 @@ import Typography from '@mui/material/Typography';
 import { valibotResolver } from '@hookform/resolvers/valibot';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { array, boolean, email, instance, minLength, minValue, nonEmpty, number, object, pipe, string, union } from 'valibot';
+import { array, boolean, email, instance, minLength, minValue, nonEmpty, number, object, pipe, string, union, null_, custom, undefined_, nan } from 'valibot';
 
 // Component Imports
 import Grid2 from '@mui/material/Grid2';
@@ -102,10 +102,17 @@ const Stepper = styled(MuiStepper)<StepperProps>(({ theme }) => ({
   }
 }))
 
-// Validation Schemas (moved outside the component)
 const accountValidationSchema = object({
   citizenCardId: pipe(string(), nonEmpty('Vui lòng nhập số CCCD')),
-  citizenCardDateOfIssue: pipe(string(), nonEmpty('Vui lòng nhập ngày cấp')),
+  citizenCardDateOfIssue: pipe(
+    union([string(), instance(Date), null_()]),
+    custom<string | Date | null>((value) => {
+      if (value === null || (typeof value === 'string' && value.trim() === '')) {
+        return false;
+      }
+      return true;
+    }, 'Vui lòng nhập ngày cấp')
+  ),
   citizenCardPlaceOfIssue: pipe(string(), nonEmpty('Vui lòng nhập nơi cấp'))
 })
 
@@ -114,7 +121,15 @@ const accountSchema = accountValidationSchema
 const personalSchema = object({
   avatarUrl: pipe(array(union([string(), instance(File)])), nonEmpty('Vui lòng tải lên ảnh 3x4')),
   fullName: pipe(string(), nonEmpty('Vui lòng nhập họ tên')),
-  dateOfBirth: pipe(string(), nonEmpty('Vui lòng chọn ngày sinh')),
+  birthday: pipe(
+    union([string(), instance(Date), null_()]),
+    custom<string | Date | null>((value) => {
+      if (value === null || (typeof value === 'string' && value.trim() === '')) {
+        return false;
+      }
+      return true;
+    }, 'Vui lòng chọn ngày sinh')
+  ),
   gender: pipe(string(), nonEmpty('Vui lòng chọn giới tính')),
   phoneNumber: pipe(string(), nonEmpty('Vui lòng nhập số điện thoại')),
   email: pipe(string(), nonEmpty('Vui lòng nhập email'), email('Email không hợp lệ')),
@@ -138,13 +153,24 @@ type LicenseDetailsFormValues = {
 };
 
 const paymentInformationSchema = object({
-  amount: pipe(number(), minValue(0, 'Tổng tiền phải lớn hơn 0')),
+  amount: pipe(
+    union([number(), null_(), undefined_(), nan()]),
+    custom<number | null | undefined>((value) => {
+      if (value === null || value === undefined) {
+        return false;
+      }
+      if (typeof value !== 'number' || isNaN(value) || value <= 0) {
+        return false;
+      }
+      return true;
+    }, 'Vui lòng nhập tổng tiền hợp lệ và lớn hơn 0')
+  ),
   isPaid: pipe(boolean()),
   note: string(),
 });
 
 type PaymentInformationFormValues = {
-  amount: number;
+  amount: number | null | undefined;
   isPaid: boolean;
   note: string;
 };
@@ -160,7 +186,7 @@ type FormValues = {
 
   // Citizen Card fields
   citizenCardId: string;
-  citizenCardDateOfIssue: string;
+  citizenCardDateOfIssue: Date | null | undefined;
   citizenCardPlaceOfIssue: string;
   citizenCardFrontImgUrl: File[];
   citizenCardBackImgUrl: File[];
@@ -168,7 +194,7 @@ type FormValues = {
   // Personal Info fields
   avatarUrl: File[];
   fullName: string;
-  dateOfBirth: string;
+  birthday: Date | null | undefined;
   gender: string;
   phoneNumber: string;
   email: string;
@@ -183,7 +209,7 @@ type FormValues = {
   hasCarLicense: boolean;
 
   // Payment Information fields
-  amount: number;
+  amount: number | null | undefined;
   isPaid: boolean;
   note: string;
 };
@@ -212,7 +238,7 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
     resolver: valibotResolver(accountSchema),
     defaultValues: {
       citizenCardId: '',
-      citizenCardDateOfIssue: '',
+      citizenCardDateOfIssue: null,
       citizenCardPlaceOfIssue: '',
     }
   })
@@ -222,7 +248,7 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
     defaultValues: {
       avatarUrl: [],
       fullName: '',
-      dateOfBirth: '',
+      birthday: null,
       gender: '',
       phoneNumber: '',
       email: '',
@@ -245,7 +271,7 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
   const paymentInformationFormMethods = useForm<PaymentInformationFormValues>({
     resolver: valibotResolver(paymentInformationSchema),
     defaultValues: {
-      amount: 0,
+      amount: undefined,
       isPaid: false,
       note: '',
     }
@@ -363,13 +389,13 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
     setActiveStep(0)
     citizenCardFormMethods.reset({
       citizenCardId: '',
-      citizenCardDateOfIssue: '',
+      citizenCardDateOfIssue: null,
       citizenCardPlaceOfIssue: '',
     })
     personalFormMethods.reset({
       avatarUrl: [],
       fullName: '',
-      dateOfBirth: '',
+      birthday: null,
       gender: '',
       phoneNumber: '',
       email: '',
@@ -384,7 +410,7 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
       hasCarLicense: vehicleTypePage === CONFIG.VehicleType.Car ? true : false
     });
     paymentInformationFormMethods.reset({
-      amount: 0,
+      amount: undefined,
       isPaid: false,
       note: '',
     });
@@ -405,8 +431,6 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
   }
 
   const onSubmit = async (data: FormValues) => {
-    console.log('Final Form Data:', data);
-
     try {
       const [avatarResult, frontImgResult, backImgResult] = await Promise.all([
         data.avatarUrl?.length > 0 ? UploadAPI.uploadFiles(data.avatarUrl) : Promise.resolve(null),
@@ -423,7 +447,7 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
         person: {
           avatarUrl: avatarResult?.data[0]?.relativeUrl || '',
           fullName: data.fullName,
-          birthday: data.dateOfBirth ? new Date(data.dateOfBirth).toISOString().split('T')[0] : '',
+          birthday: data.birthday ? `${data.birthday.getFullYear()}-${(data.birthday.getMonth() + 1).toString().padStart(2, '0')}-${data.birthday.getDate().toString().padStart(2, '0')}` : '',
           sex: data.gender === CONFIG.SexTypeMappingText[1] ? 1 :
             data.gender === CONFIG.SexTypeMappingText[0] ? 0 :
               2,
@@ -436,12 +460,14 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
             addressDetail: data.street
           },
           citizenCardId: data.citizenCardId,
+          citizenCardDateOfIssue: data.citizenCardDateOfIssue ? `${data.citizenCardDateOfIssue.getFullYear()}-${(data.citizenCardDateOfIssue.getMonth() + 1).toString().padStart(2, '0')}-${data.citizenCardDateOfIssue.getDate().toString().padStart(2, '0')}` : '',
+          citizenCardPlaceOfIssue: data.citizenCardPlaceOfIssue,
           citizenCardFrontImgUrl: frontImgResult?.data[0]?.relativeUrl || '',
           citizenCardBackImgUrl: backImgResult?.data[0]?.relativeUrl || ''
         },
         note: data.note,
         isPaid: data.isPaid,
-        amount: data.amount,
+        amount: data.amount ?? undefined,
         vehicleType: vehicleTypePage
       };
 
@@ -548,7 +574,7 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
                       } else if (
                         (personalFormMethods.formState.errors.avatarUrl ||
                           personalFormMethods.formState.errors.fullName ||
-                          personalFormMethods.formState.errors.dateOfBirth ||
+                          personalFormMethods.formState.errors.birthday ||
                           personalFormMethods.formState.errors.gender ||
                           personalFormMethods.formState.errors.phoneNumber ||
                           personalFormMethods.formState.errors.email ||
@@ -664,10 +690,10 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="success-dialog-description" className="text-center">
-            <Typography className='mb-2' color='text.primary'>
+            <Typography component="span" className='mb-2' color='text.primary'>
               Chúng tôi đã nhận được đơn đăng ký của bạn. Chúng tôi sẽ liên hệ với bạn sớm nhất.
             </Typography>
-            <Typography color='text.primary'>
+            <Typography component="span" color='text.primary'>
               Cảm ơn bạn đã tin tưởng và ủng hộ!
             </Typography>
           </DialogContentText>

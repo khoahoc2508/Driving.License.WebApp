@@ -10,11 +10,12 @@ import Button from '@mui/material/Button'
 
 import DirectionalIcon from '@/components/common/DirectionalIcon'
 import FileUploaderSingle from '@/components/common/FileUploaderSingle'
+import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
 
 // Define types based on your validation schema
 type AccountDetailsForm = {
   citizenCardId: string;
-  citizenCardDateOfIssue: string;
+  citizenCardDateOfIssue: Date | null | undefined;
   citizenCardPlaceOfIssue: string;
   citizenCardFrontImgUrl: string[];
   citizenCardBackImgUrl: string[];
@@ -84,6 +85,11 @@ const CitizenCard = ({ steps, handleNext }: CitizenCardProps) => {
           />
         </Grid>
         <Grid size={{ xs: 12 }}>
+          <Button variant='outlined' size='medium' color='info' className='w-full' disabled>
+            Lấy thông tin từ CCCD
+          </Button>
+        </Grid>
+        <Grid size={{ xs: 12 }}>
           <Controller
             name='citizenCardId'
             control={control}
@@ -105,14 +111,14 @@ const CitizenCard = ({ steps, handleNext }: CitizenCardProps) => {
             control={control}
             rules={{ required: 'Vui lòng nhập ngày cấp' }}
             render={({ field }) => (
-              <TextField
-                {...field}
-                fullWidth
-                type='date'
-                label='Ngày cấp (*)'
-                InputLabelProps={{ shrink: true }}
-                error={!!errors.citizenCardDateOfIssue}
-                helperText={errors.citizenCardDateOfIssue?.message}
+              <AppReactDatepicker
+                boxProps={{ className: 'is-full' }}
+                selected={field.value ? new Date(field.value) : null}
+                showYearDropdown
+                showMonthDropdown
+                dateFormat='dd/MM/yyyy'
+                onChange={(date) => field.onChange(date)}
+                customInput={<TextField fullWidth size='medium' label='Ngày cấp (*)' {...(errors.citizenCardDateOfIssue && { error: true, helperText: errors.citizenCardDateOfIssue.message })} />}
               />
             )}
           />

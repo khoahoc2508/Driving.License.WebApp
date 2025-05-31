@@ -1,23 +1,72 @@
 'use client'
 
 
-import { Card, CardContent, CardHeader, FormControl, FormHelperText, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Button, Card, CardContent, CardHeader, FormControl, FormHelperText, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import type { Control, UseFormSetValue } from 'react-hook-form';
 import { Controller } from 'react-hook-form';
 
 import Grid from '@mui/material/Grid2';
 
 import FileUploaderSingle from '@/components/common/FileUploaderSingle';
+import AppReactDatepicker from '@/libs/styles/AppReactDatepicker';
+import { toast } from 'react-toastify';
+import PersonAPI from '@/libs/api/personsApi';
 
 interface CitizenCardProps {
   control: Control<any>
   errors: any
   setValue: UseFormSetValue<any>
+  watch: any
 }
 
-const CitizenCard = ({ control, errors }: CitizenCardProps) => {
-  // const [frontPhotoFile, setFrontPhotoFile] = useState<File | null>(null);
-  // const [backPhotoFile, setBackPhotoFile] = useState<File | null>(null);
+const CitizenCard = ({ control, errors, setValue, watch }: CitizenCardProps) => {
+
+  const handleGetInfoFromCitizenCard = async () => {
+    const frontPhoto = watch('frontPhoto');
+    const backPhoto = watch('backPhoto');
+
+    if (!frontPhoto || frontPhoto.length === 0 || !(frontPhoto[0] instanceof File)) {
+      toast.error('Vui lòng tải lên ảnh mặt trước CCCD.');
+      return;
+    }
+
+    if (!backPhoto || backPhoto.length === 0 || !(backPhoto[0] instanceof File)) {
+      toast.error('Vui lòng tải lên ảnh mặt sau CCCD.');
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('formFile', frontPhoto[0]);
+    formData.append('formFile', backPhoto[0]);
+
+    try {
+      const response = await PersonAPI.postCitizenByFiles(formData);
+      if (response.data?.success && response.data.data && response.data.data.length > 0) {
+
+        const citizenData = response.data.data[0];
+        const frontData = citizenData.front;
+        const backData = citizenData.back;
+
+        // Fill the form fields
+        setValue('cccd', citizenData.id || '');
+        if (frontData) {
+          setValue('fullName', frontData.fullName || '');
+          setValue('birthday', frontData.birthday ? new Date(frontData.birthday) : null);
+          setValue('gender', frontData.sex === 1 ? 'Nam' : frontData.sex === 0 ? 'Nữ' : 'Khác');
+        }
+        if (backData) {
+          setValue('citizenCardDateOfIssue', backData.issuedDate ? new Date(backData.issuedDate) : null);
+          setValue('citizenCardPlaceOfIssue', backData.issuedBy || '');
+        }
+        toast.success('Lấy thông tin CCCD thành công!');
+      } else {
+        toast.error(response.data?.message || 'Không thể nhận dạng thông tin từ ảnh CCCD.');
+      }
+    } catch (error) {
+      console.error('Error recognizing citizen card:', error);
+      toast.error('Đã xảy ra lỗi khi lấy thông tin CCCD.');
+    }
+  };
 
   return (
     <Card>
@@ -57,22 +106,9 @@ const CitizenCard = ({ control, errors }: CitizenCardProps) => {
             />
           </Grid>
           <Grid size={{ xs: 12 }}>
-            <Controller
-              name='cardType'
-              control={control}
-              rules={{ required: 'Vui lòng chọn loại giấy tờ' }}
-              render={({ field }) => (
-                <FormControl fullWidth error={!!errors.cardType}>
-                  <InputLabel>Loại giấy tờ (*)</InputLabel>
-                  <Select {...field} label='Loại giấy tờ (*)'>
-                    <MenuItem value='Căn cước công dân'>Căn cước công dân</MenuItem>
-                  </Select>
-                  {errors.cardType && (
-                    <FormHelperText>{errors.cardType.message}</FormHelperText>
-                  )}
-                </FormControl>
-              )}
-            />
+            <Button variant='outlined' color='info' className='w-full' disabled onClick={handleGetInfoFromCitizenCard}>
+              Lấy thông tin từ CCCD
+            </Button>
           </Grid>
           <Grid size={{ xs: 12 }}>
             <Controller
@@ -86,6 +122,41 @@ const CitizenCard = ({ control, errors }: CitizenCardProps) => {
                   label='Số CCCD (*)'
                   error={!!errors.cccd}
                   helperText={errors.cccd?.message}
+                />
+              )}
+            />
+          </Grid>
+
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <Controller
+              name='citizenCardDateOfIssue'
+              control={control}
+              rules={{ required: 'Vui lòng nhập ngày cấp' }}
+              render={({ field }) => (
+                <AppReactDatepicker
+                  boxProps={{ className: 'is-full' }}
+                  selected={field.value ? new Date(field.value) : null}
+                  showYearDropdown
+                  showMonthDropdown
+                  dateFormat='dd/MM/yyyy'
+                  onChange={(date) => field.onChange(date)}
+                  customInput={<TextField fullWidth size='medium' label='Ngày cấp (*)' {...(errors.citizenCardDateOfIssue && { error: true, helperText: errors.citizenCardDateOfIssue.message })} />}
+                />
+              )}
+            />
+          </Grid>
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <Controller
+              name='citizenCardPlaceOfIssue'
+              control={control}
+              rules={{ required: 'Vui lòng nhập nơi cấp' }}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  fullWidth
+                  label='Nơi cấp (*)'
+                  error={!!errors.citizenCardPlaceOfIssue}
+                  helperText={errors.citizenCardPlaceOfIssue?.message}
                 />
               )}
             />

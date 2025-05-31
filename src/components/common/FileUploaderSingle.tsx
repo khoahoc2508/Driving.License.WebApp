@@ -66,7 +66,7 @@ const FileUploaderSingle = ({
     }
   })
 
-  const displayImage = previewUrl
+  const displayImage = previewUrl != "" ? previewUrl : null
 
   return (
     <Box height={"100%"}>
@@ -85,7 +85,19 @@ const FileUploaderSingle = ({
             }
           }
         })}
-        {...(displayImage && { sx: { height: 260 } })}
+        {...(displayImage && {
+          sx: {
+            height: 260,
+            border: '2px dashed',
+            borderColor: error ? 'error.main' : 'divider',
+            borderRadius: 1,
+            p: 3,
+            cursor: 'pointer',
+            '&:hover': {
+              borderColor: 'primary.main'
+            }
+          }
+        })}
       >
         <input {...getInputProps()} />
         {displayImage ? (
