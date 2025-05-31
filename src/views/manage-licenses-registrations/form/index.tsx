@@ -124,7 +124,9 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
     } else if (watchedLicenseType === CONFIG.VehicleTypeMappingText[1]) { // Ô tô
       return option.label === 'B1' || option.label === 'B2';
     }
-    return true; // Show all if no license type is selected or other cases
+
+    
+return true; // Show all if no license type is selected or other cases
   });
 
   // Fetch data when id exists (edit mode)
@@ -158,15 +160,19 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
             setValue('healthCheck', data.hasCompletedHealthCheck ? 'Đã khám' : 'Chưa khám')
             setValue('carLicense', data.hasCarLicense ? 'Đã có' : 'Chưa có')
             setValue('confirmationStatus', data.hasApproved ? 'Đã duyệt' : 'Chưa duyệt')
+
             if (data?.person?.avatarUrl && data.person.avatarUrl !== '') {
               setValue('photo3x4', [`${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}/${data.person.avatarUrl}`])
             }
+
             if (data?.person?.citizenCardFrontImgUrl && data.person.citizenCardFrontImgUrl !== '') {
               setValue('frontPhoto', [`${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}/${data.person.citizenCardFrontImgUrl}`])
             }
+
             if (data?.person?.citizenCardBackImgUrl && data.person.citizenCardBackImgUrl !== '') {
               setValue('backPhoto', [`${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}/${data.person.citizenCardBackImgUrl}`])
             }
+
             setValue('note', data.note)
 
             // Fetch districts and wards based on province and district
@@ -552,6 +558,7 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
                               onChange={(e) => {
                                 const rawValue = e.target.value.replace(/\./g, ''); // Remove thousands separators (dots)
                                 const numberValue = rawValue ? Number(rawValue) : null;
+
                                 field.onChange(numberValue);
                               }}
                               error={!!errors.amount}

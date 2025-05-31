@@ -76,6 +76,7 @@ const PaymentInformationStep = ({ steps, handleBack, handleNext }: PaymentInform
                                 onChange={(e) => {
                                     const rawValue = e.target.value.replace(/\./g, ''); // Remove thousands separators (dots)
                                     const numberValue = rawValue ? Number(rawValue) : null;
+
                                     field.onChange(numberValue);
                                 }}
                                 error={!!errors.amount}

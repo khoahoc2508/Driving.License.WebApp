@@ -28,7 +28,7 @@ import Typography from '@mui/material/Typography';
 import { valibotResolver } from '@hookform/resolvers/valibot';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { array, boolean, email, instance, minLength, minValue, nonEmpty, number, object, pipe, string, union, null_, custom, undefined_, nan } from 'valibot';
+import { array, boolean, email, instance, minLength, nonEmpty, number, object, pipe, string, union, null_, custom, undefined_, nan } from 'valibot';
 
 // Component Imports
 import Grid2 from '@mui/material/Grid2';
@@ -110,6 +110,8 @@ const accountValidationSchema = object({
       if (value === null || (typeof value === 'string' && value.trim() === '')) {
         return false;
       }
+
+
       return true;
     }, 'Vui lòng nhập ngày cấp')
   ),
@@ -127,6 +129,8 @@ const personalSchema = object({
       if (value === null || (typeof value === 'string' && value.trim() === '')) {
         return false;
       }
+
+
       return true;
     }, 'Vui lòng chọn ngày sinh')
   ),
@@ -159,9 +163,12 @@ const paymentInformationSchema = object({
       if (value === null || value === undefined) {
         return false;
       }
+
       if (typeof value !== 'number' || isNaN(value) || value <= 0) {
         return false;
       }
+
+
       return true;
     }, 'Vui lòng nhập tổng tiền hợp lệ và lớn hơn 0')
   ),
