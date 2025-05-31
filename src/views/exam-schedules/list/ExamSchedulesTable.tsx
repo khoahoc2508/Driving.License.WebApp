@@ -70,6 +70,11 @@ type ProductWithActionsType = ExamScheduleType & {
   actions?: string
 }
 
+enum LimitType {
+  Unlimited,
+  Limited
+}
+
 
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
@@ -130,12 +135,14 @@ const ProductListTable = () => {
   const [reloadFlag, setReloadFlag] = useState(false)
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false)
   const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null)
+  const [selectedExamSchedule, setSelectedExamSchedule] = useState<ExamScheduleType | null>(null)
+  const [selectedExamScheduleId, setSelectedExamScheduleId] = useState<string>()
 
   // States for data
   // const [examSchedules, setExamSchedules] = useState<ExamScheduleType[]>([])
   const [totalCount, setTotalCount] = useState(0)
 
-  // const [pageSize, setPageSize] = useState(1)
+  // const [pageSize, setPageSize] = useState(1)s
   // const [loading, setLoading] = useState(false)
 
   // Function to reload data
@@ -214,7 +221,7 @@ const ProductListTable = () => {
 
       columnHelper.accessor('registrationLimit', {
         header: 'Suất thi',
-        cell: ({ row }) => <Typography>{row.original.registrationLimit}</Typography>,
+        cell: ({ row }) => <Typography>{(row.original.limitType === LimitType.Unlimited) ? 'Không giới hạn' : row.original.registrationLimit}</Typography>,
         enableSorting: false
       }),
       columnHelper.accessor('registeredStudents', {
@@ -289,7 +296,7 @@ const ProductListTable = () => {
         header: 'Actions',
         cell: ({ row }) => (
           <div className='flex items-center'>
-            <IconButton size='small'>
+            <IconButton size='small' onClick={() => handleOpenEditDrawer(row.original)}>
               <i className='ri-edit-box-line text-[22px] text-textSecondary' />
             </IconButton>
             <IconButton size='small' onClick={() => handleOpenDeleteDialog(row.original.id)}>
@@ -384,6 +391,18 @@ const ProductListTable = () => {
     }
   }
 
+  const handleOpenEditDrawer = (examSchedule: ExamScheduleType) => {
+    // setSelectedExamSchedule(examSchedule)
+    setSelectedExamScheduleId(examSchedule.id)
+    // console.log(examSchedule);
+    setOpenAddDrawer(true)
+  }
+
+  const handleOpenAddDrawer = () => {
+    setSelectedExamSchedule(null)
+    setOpenAddDrawer(true)
+  }
+
   useEffect(() => {
     fetchExamSchedules()
   }, [params, reloadFlag])
@@ -405,12 +424,9 @@ const ProductListTable = () => {
 
             <Button
               variant='contained'
-
-              // component={Link}
-              // href={`/exam-schedules/create`}
               startIcon={<i className='ri-add-line' />}
               className='max-sm:is-full is-auto'
-              onClick={() => setOpenAddDrawer(!openAddDrawer)}
+              onClick={handleOpenAddDrawer}
             >
               Thêm
             </Button>
@@ -486,7 +502,14 @@ const ProductListTable = () => {
       </Card>
       <AddExasmScheduleDrawer
         open={openAddDrawer}
-        handleClose={() => setOpenAddDrawer(!openAddDrawer)}
+        handleClose={() => {
+          {
+            setSelectedExamScheduleId(undefined)
+            setOpenAddDrawer(false)
+          }
+        }
+        }
+        examScheduleId={selectedExamScheduleId}
         onSuccess={reloadData}
       />
       <Dialog

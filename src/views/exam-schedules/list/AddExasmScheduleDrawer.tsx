@@ -23,13 +23,14 @@ import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
 import ExamAddressAPI from "@/libs/api/examAddressAPI"
 import type { ExamAddressType, PaginatedListOfExamAddressType } from "@/types/examAddressTypes"
 import ExamScheduleAPI from "@/libs/api/examScheduleAPI"
-import type { CreateExamScheduleCommandType } from "@/types/examScheduleTypes"
-
+import type { CreateExamScheduleCommandType, ExamScheduleType, UpdateExamScheduleCommandType } from "@/types/examScheduleTypes"
+import { is } from "valibot"
 
 type Props = {
   open: boolean
   handleClose: () => void
   onSuccess?: () => void
+  examScheduleId?: string
 }
 
 enum LimitType {
@@ -38,6 +39,7 @@ enum LimitType {
 }
 
 type FormValues = {
+  id?: string;
   name?: string;
   dateTime?: Date;
   limitType?: LimitType;
@@ -48,7 +50,8 @@ type FormValues = {
 
 const AddExasmScheduleDrawer = (props: Props) => {
   // Props
-  const { open, handleClose, onSuccess } = props
+  const { open, handleClose, onSuccess, examScheduleId } = props
+  const isEditMode = !!examScheduleId
   const [examAddresses, setExamAddresses] = useState<ExamAddressType[]>([])
 
   const defaultValues: FormValues = {
@@ -76,6 +79,14 @@ const AddExasmScheduleDrawer = (props: Props) => {
   const currentLimitType = watch('limitType')
 
   const onSubmit = async (data: FormValues) => {
+    if (isEditMode) {
+      onUpdate(data)
+    } else {
+      onCreate(data)
+    }
+  }
+
+  const onCreate = async (data: FormValues) => {
     try {
       const payload: CreateExamScheduleCommandType = {
         name: data.examAddressId, // Using examAddressId as name since there's no name field in the form
@@ -103,6 +114,36 @@ const AddExasmScheduleDrawer = (props: Props) => {
     }
   }
 
+  const onUpdate = async (data: FormValues) => {
+    try {
+      const payload: UpdateExamScheduleCommandType = {
+        id: data.id,
+        name: data.examAddressId, // Using examAddressId as name since there's no name field in the form
+        dateTime: data.dateTime?.toISOString(),
+        limitType: data.limitType,
+        registrationLimit: data.registrationLimit,
+        note: data.note || '',
+        examAddressId: data.examAddressId
+      }
+      console.log(payload)
+      const response = await ExamScheduleAPI.updateExamSchedule(payload)
+
+      if (response.data?.success) {
+        toast.success('Cập nhật lịch thi thành công')
+        handleClose()
+
+        // Call onSuccess to reload the data table
+        if (onSuccess) onSuccess()
+      } else {
+        toast.error(response.data?.message || 'Có lỗi xảy ra')
+      }
+    } catch (error) {
+      console.error('Error updating exam schedule:', error)
+      toast.error('Có lỗi xảy ra khi cập nhật lịch thi')
+    }
+  }
+
+
   // Fetch data function
   const fetchExamAddresses = async () => {
     try {
@@ -113,12 +154,42 @@ const AddExasmScheduleDrawer = (props: Props) => {
 
       if (paginatedData.data && paginatedData.data.length > 0) {
         setExamAddresses(paginatedData.data || [])
-        reset({ ...defaultValues, examAddressId: paginatedData.data[0].id })
+        if (!isEditMode)
+          reset({ ...defaultValues, examAddressId: paginatedData.data[0].id })
       }
 
     } catch (error) {
       console.error('Error fetching exam addesses:', error)
       setExamAddresses([])
+    } finally {
+    }
+  }
+
+  const fetchExamAddressById = async (id: string) => {
+    try {
+
+      const response = await ExamScheduleAPI.getExamScheduleById(id)
+
+      const examSchedule = response.data.data as ExamScheduleType
+
+      if (examSchedule) {
+        console.log(examSchedule)
+        // setExamAddresses(paginatedData.data || [])
+        const examScheduleForUpdate = {
+          id: examSchedule.id,
+          name: examSchedule.name,
+          dateTime: new Date(examSchedule.dateTime),
+          limitType: examSchedule.limitType,
+          registrationLimit: examSchedule.registrationLimit,
+          note: examSchedule.note,
+          examAddressId: examSchedule.examAddress?.id
+        }
+        reset(examScheduleForUpdate)
+      }
+
+    } catch (error) {
+      console.error('Error fetching exam schedule by id:', error)
+      // setExamAddresses([])
     } finally {
     }
   }
@@ -131,6 +202,12 @@ const AddExasmScheduleDrawer = (props: Props) => {
     fetchExamAddresses()
   }, [])
 
+  useEffect(() => {
+    if (examScheduleId) {
+      fetchExamAddressById(examScheduleId)
+    }
+  }, [examScheduleId])
+
   return (
     <Drawer
       open={open}
@@ -142,7 +219,7 @@ const AddExasmScheduleDrawer = (props: Props) => {
     >
 
       <div className='flex items-center justify-between pli-5 plb-4'>
-        <Typography variant='h5'>Tạo lịch thi</Typography>
+        <Typography variant='h5'>{isEditMode ? 'Chỉnh sửa lịch thi' : 'Tạo lịch thi'}</Typography>
         <IconButton size='small' onClick={handleReset}>
           <i className='ri-close-line text-2xl' />
         </IconButton>
@@ -262,10 +339,10 @@ const AddExasmScheduleDrawer = (props: Props) => {
 
               <Grid size={{ xs: 12 }} className='flex gap-4'>
                 <Button variant='contained' type='submit'>
-                  Submit
+                  {isEditMode ? 'Cập nhật' : 'Tạo'}
                 </Button>
                 <Button variant='outlined' type='reset' onClick={() => reset()}>
-                  Reset
+                  Đặt lại
                 </Button>
               </Grid>
             </Grid>
