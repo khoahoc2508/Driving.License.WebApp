@@ -24,6 +24,7 @@ const ManageLicensesRegistrations = () => {
   const [pageSize, setPageSize] = useState<number>(10)
   const [totalItems, setTotalItems] = useState<number>(0)
   const [reloadDataTable, setReloadDataTable] = useState<boolean>(false)
+  const [isLoading, setLoading] = useState<boolean>(true)
 
   // Filter states
   const [hasApprovedFilter, setHasApprovedFilter] = useState<boolean[]>([])
@@ -53,6 +54,7 @@ const ManageLicensesRegistrations = () => {
 
   const getLicensesRegistrationsData = async (params: GetLicensesRegistrationsParams): Promise<void> => {
     try {
+      setLoading(true)
       const res = await LicenseRegistrationAPI.getLicensesRegistrations(params)
 
       if (res?.data?.data) {
@@ -64,6 +66,7 @@ const ManageLicensesRegistrations = () => {
     } catch (error: any) {
       toast.error(error?.message)
     } finally {
+      setLoading(false)
     }
   }
 
@@ -105,6 +108,7 @@ const ManageLicensesRegistrations = () => {
         onPageChange={(page) => setPageNumber(page)}
         onPageSizeChange={(size) => setPageSize(size)}
         setReloadDataTable={setReloadDataTable}
+        isLoading={isLoading}
       />
     </Card>
   </>
