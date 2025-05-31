@@ -235,7 +235,7 @@ const Table = ({
         cell: ({ row }) => (
           <div className="flex items-center">
             <IconButton>
-              <a href={`manage-licenses-registration/edit/${row.original.id}`}  >
+              <a href={`manage-licenses-registration/edit/${row.original.id}`} className='flex items-center'>
                 <i className="ri-edit-box-line text-textSecondary" />
               </a>
             </IconButton>

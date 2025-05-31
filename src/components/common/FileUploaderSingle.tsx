@@ -66,7 +66,7 @@ const FileUploaderSingle = ({
     }
   })
 
-  const displayImage = previewUrl
+  const displayImage = previewUrl != "" ? previewUrl : null
 
   return (
     <Box height={"100%"}>

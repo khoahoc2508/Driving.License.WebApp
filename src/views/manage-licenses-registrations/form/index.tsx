@@ -151,7 +151,6 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
             setValue('cccd', data.person.citizenCardId)
             setValue('citizenCardDateOfIssue', data.person.citizenCardDateOfIssue ? new Date(data.person.citizenCardDateOfIssue) : null)
             setValue('citizenCardPlaceOfIssue', data.person.citizenCardPlaceOfIssue)
-            debugger
             setValue('drivingLicenseType', CONFIG.LicenseTypeSelectOption.find(opt => opt.value === data.licenseType)?.label || 'A1')
             setValue('licenseType', data.vehicleType === 0 ? CONFIG.VehicleTypeMappingText[0] : CONFIG.VehicleTypeMappingText[1])
             setValue('totalAmount', data.amount)
@@ -159,9 +158,15 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
             setValue('healthCheck', data.hasCompletedHealthCheck ? 'Đã khám' : 'Chưa khám')
             setValue('carLicense', data.hasCarLicense ? 'Đã có' : 'Chưa có')
             setValue('confirmationStatus', data.hasApproved ? 'Đã duyệt' : 'Chưa duyệt')
-            setValue('photo3x4', [`${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}/${data?.person?.avatarUrl}`])
-            setValue('frontPhoto', [`${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}/${data?.person?.citizenCardFrontImgUrl}`])
-            setValue('backPhoto', [`${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}/${data?.person?.citizenCardBackImgUrl}`])
+            if (data?.person?.avatarUrl && data.person.avatarUrl !== '') {
+              setValue('photo3x4', [`${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}/${data.person.avatarUrl}`])
+            }
+            if (data?.person?.citizenCardFrontImgUrl && data.person.citizenCardFrontImgUrl !== '') {
+              setValue('frontPhoto', [`${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}/${data.person.citizenCardFrontImgUrl}`])
+            }
+            if (data?.person?.citizenCardBackImgUrl && data.person.citizenCardBackImgUrl !== '') {
+              setValue('backPhoto', [`${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}/${data.person.citizenCardBackImgUrl}`])
+            }
             setValue('note', data.note)
 
             // Fetch districts and wards based on province and district
@@ -311,7 +316,6 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
     const uploadedBackPhotoUrl = await uploadFile(data.backPhoto?.[0]);
 
     try {
-      debugger
       const payload: LicenseRegistrationCreateResquest | LicenseRegistrationUpdateResquest = {
         vehicleType: data.licenseType === CONFIG.VehicleTypeMappingText[0] ? 0 : 1,
         licenseType: CONFIG.LicenseTypeSelectOption.find(opt => opt.label === data.drivingLicenseType)?.value as 0 | 1 | 2 | 3 || 0,
@@ -321,7 +325,7 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
         person: {
           avatarUrl: uploadedPhoto3x4Url || '',
           fullName: data.fullName,
-          birthday: data.birthday ? new Date(data.birthday).toISOString().split('T')[0] : '',
+          birthday: data.birthday ? `${data.birthday.getFullYear()}-${(data.birthday.getMonth() + 1).toString().padStart(2, '0')}-${data.birthday.getDate().toString().padStart(2, '0')}` : '',
           sex: data.gender === CONFIG.SexTypeMappingText[1] ? 1 :
             data.gender === CONFIG.SexTypeMappingText[0] ? 0 :
               2,
@@ -334,7 +338,7 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
             addressDetail: data.street
           },
           citizenCardId: data.cccd,
-          citizenCardDateOfIssue: data.citizenCardDateOfIssue ? new Date(data.citizenCardDateOfIssue).toISOString().split('T')[0] : '',
+          citizenCardDateOfIssue: data.citizenCardDateOfIssue ? `${data.citizenCardDateOfIssue.getFullYear()}-${(data.citizenCardDateOfIssue.getMonth() + 1).toString().padStart(2, '0')}-${data.citizenCardDateOfIssue.getDate().toString().padStart(2, '0')}` : '',
           citizenCardPlaceOfIssue: data.citizenCardPlaceOfIssue,
           citizenCardFrontImgUrl: uploadedFrontPhotoUrl || '',
           citizenCardBackImgUrl: uploadedBackPhotoUrl || '',
@@ -390,6 +394,7 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
                   control={control}
                   errors={errors}
                   setValue={setValue}
+                  watch={watch}
                 />
               </Grid>
             </Grid>
@@ -533,7 +538,10 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
                         <Controller
                           name='totalAmount'
                           control={control}
-                          rules={{ required: 'Vui lòng nhập tổng tiền' }}
+                          rules={{
+                            required: 'Vui lòng nhập tổng tiền',
+                            validate: value => (value !== null && value !== undefined && Number(value) > 0) || 'Tổng tiền phải lớn hơn 0'
+                          }}
                           render={({ field }) => (
                             <TextField
                               {...field}
