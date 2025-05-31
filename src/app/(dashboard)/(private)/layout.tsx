@@ -18,6 +18,8 @@ import VerticalFooter from '@components/layout/vertical/Footer'
 import HorizontalFooter from '@components/layout/horizontal/Footer'
 import ScrollToTop from '@core/components/scroll-to-top'
 
+import { ProgressProvider } from "@/@core/components/ProgressProvider"
+
 import AuthGuard from '@/hocs/AuthGuard'
 
 // Util Imports
@@ -38,12 +40,17 @@ const Layout = async (props: ChildrenType) => {
           systemMode={systemMode}
           verticalLayout={
             <VerticalLayout navigation={<Navigation mode={mode} />} navbar={<Navbar />} footer={<VerticalFooter />}>
-              {children}
+              <ProgressProvider >
+                {children}
+              </ProgressProvider>
             </VerticalLayout>
           }
           horizontalLayout={
             <HorizontalLayout header={<Header />} footer={<HorizontalFooter />}>
-              {children}
+
+              <ProgressProvider >
+                {children}
+              </ProgressProvider>
             </HorizontalLayout>
           }
         />
