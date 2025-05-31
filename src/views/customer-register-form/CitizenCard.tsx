@@ -84,11 +84,11 @@ const CitizenCard = ({ steps, handleNext }: CitizenCardProps) => {
             )}
           />
         </Grid>
-        <Grid size={{ xs: 12 }}>
+        {/* <Grid size={{ xs: 12 }}>
           <Button variant='outlined' size='medium' color='info' className='w-full' disabled>
             Lấy thông tin từ CCCD
           </Button>
-        </Grid>
+        </Grid> */}
         <Grid size={{ xs: 12 }}>
           <Controller
             name='citizenCardId'
