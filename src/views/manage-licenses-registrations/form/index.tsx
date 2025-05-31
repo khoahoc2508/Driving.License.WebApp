@@ -47,7 +47,7 @@ type LicenseRegistrationFormProps = {
 
 type FormValues = {
   fullName: string
-  dateOfBirth: Date | null | undefined
+  birthday: Date | null | undefined
   gender: string
   country: string
   phoneNumber: string
@@ -56,8 +56,9 @@ type FormValues = {
   district: string
   ward: string
   street: string
-  cardType: string
   cccd: string
+  citizenCardDateOfIssue: Date | null | undefined
+  citizenCardPlaceOfIssue: string
   drivingLicenseType: string
   licenseType: string
   totalAmount: number | null | undefined
@@ -89,7 +90,7 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
   } = useForm<FormValues>({
     defaultValues: {
       fullName: '',
-      dateOfBirth: null,
+      birthday: null,
       gender: '',
       phoneNumber: '',
       email: '',
@@ -97,8 +98,9 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
       district: '',
       ward: '',
       street: '',
-      cardType: 'Căn cước công dân',
       cccd: '',
+      citizenCardDateOfIssue: null,
+      citizenCardPlaceOfIssue: '',
       drivingLicenseType: 'A1',
       licenseType: 'Xe máy',
       totalAmount: 0,
@@ -114,6 +116,17 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
     mode: 'onChange'
   })
 
+  const watchedLicenseType = watch('licenseType');
+
+  const filteredLicenseTypes = CONFIG.LicenseTypeSelectOption.filter(option => {
+    if (watchedLicenseType === CONFIG.VehicleTypeMappingText[0]) { // Xe máy
+      return option.label === 'A1' || option.label === 'A2';
+    } else if (watchedLicenseType === CONFIG.VehicleTypeMappingText[1]) { // Ô tô
+      return option.label === 'B1' || option.label === 'B2';
+    }
+    return true; // Show all if no license type is selected or other cases
+  });
+
   // Fetch data when id exists (edit mode)
   useEffect(() => {
     if (id) {
@@ -127,7 +140,7 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
 
             // Set form values
             setValue('fullName', data.person.fullName)
-            setValue('dateOfBirth', new Date(data.person.birthday))
+            setValue('birthday', new Date(data.person.birthday))
             setValue('gender', data.person.sex === 1 ? 'Nam' : data.person.sex === 0 ? 'Nữ' : 'Khác')
             setValue('phoneNumber', data.person.phoneNumber)
             setValue('email', data.person.email)
@@ -135,8 +148,10 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
             setValue('district', data.person.address.districtCode)
             setValue('ward', data.person.address.wardCode)
             setValue('street', data.person.address.addressDetail)
-            setValue('cardType', 'Căn cước công dân')
             setValue('cccd', data.person.citizenCardId)
+            setValue('citizenCardDateOfIssue', data.person.citizenCardDateOfIssue ? new Date(data.person.citizenCardDateOfIssue) : null)
+            setValue('citizenCardPlaceOfIssue', data.person.citizenCardPlaceOfIssue)
+            debugger
             setValue('drivingLicenseType', CONFIG.LicenseTypeSelectOption.find(opt => opt.value === data.licenseType)?.label || 'A1')
             setValue('licenseType', data.vehicleType === 0 ? CONFIG.VehicleTypeMappingText[0] : CONFIG.VehicleTypeMappingText[1])
             setValue('totalAmount', data.amount)
@@ -184,6 +199,31 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
 
       if (name === 'district' && value.district) {
         fetchWards(value.district)
+      }
+
+      if (name === 'licenseType') {
+        const currentDrivingLicenseType = watch('drivingLicenseType');
+        const newLicenseType = value.licenseType;
+        let drivingLicenseTypeToSet = currentDrivingLicenseType;
+
+        const isMotoIncompatible = newLicenseType === CONFIG.VehicleTypeMappingText[0] && (currentDrivingLicenseType === 'B1' || currentDrivingLicenseType === 'B2');
+        const isCarIncompatible = newLicenseType === CONFIG.VehicleTypeMappingText[1] && (currentDrivingLicenseType === 'A1' || currentDrivingLicenseType === 'A2');
+
+        if (isMotoIncompatible || isCarIncompatible) {
+          drivingLicenseTypeToSet = '';
+        }
+
+        if (!drivingLicenseTypeToSet) {
+          if (newLicenseType === CONFIG.VehicleTypeMappingText[0]) { // Xe máy
+            drivingLicenseTypeToSet = 'A1';
+          } else if (newLicenseType === CONFIG.VehicleTypeMappingText[1]) { // Ô tô
+            drivingLicenseTypeToSet = 'B1';
+          }
+        }
+
+        if (drivingLicenseTypeToSet !== currentDrivingLicenseType) {
+          setValue('drivingLicenseType', drivingLicenseTypeToSet);
+        }
       }
     })
 
@@ -245,22 +285,19 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
         try {
           const response = await UploadAPI.uploadFiles([fileOrUrl]);
 
-
-          return response?.data?.[0]?.relativeUrl; // Return the URL from the upload response
+          return response?.data?.[0]?.relativeUrl;
         } catch (error) {
           console.error("Error uploading file:", error);
           toast.error("Lỗi khi tải lên ảnh");
 
-          return undefined; // Indicate upload failure
+          return undefined;
         }
       } else if (typeof fileOrUrl === 'string') {
-        // If it's a string, check if it's a full URL and extract the relative path
         const uploadsIndex = fileOrUrl.indexOf('training/uploads/');
 
         if (uploadsIndex !== -1) {
           return fileOrUrl.substring(uploadsIndex);
         } else {
-          // If it doesn't contain 'training/uploads/', return as is (might be a relative path already)
           return fileOrUrl;
         }
       }
@@ -274,6 +311,7 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
     const uploadedBackPhotoUrl = await uploadFile(data.backPhoto?.[0]);
 
     try {
+      debugger
       const payload: LicenseRegistrationCreateResquest | LicenseRegistrationUpdateResquest = {
         vehicleType: data.licenseType === CONFIG.VehicleTypeMappingText[0] ? 0 : 1,
         licenseType: CONFIG.LicenseTypeSelectOption.find(opt => opt.label === data.drivingLicenseType)?.value as 0 | 1 | 2 | 3 || 0,
@@ -283,7 +321,7 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
         person: {
           avatarUrl: uploadedPhoto3x4Url || '',
           fullName: data.fullName,
-          birthday: data.dateOfBirth ? new Date(data.dateOfBirth).toISOString().split('T')[0] : '',
+          birthday: data.birthday ? new Date(data.birthday).toISOString().split('T')[0] : '',
           sex: data.gender === CONFIG.SexTypeMappingText[1] ? 1 :
             data.gender === CONFIG.SexTypeMappingText[0] ? 0 :
               2,
@@ -296,6 +334,8 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
             addressDetail: data.street
           },
           citizenCardId: data.cccd,
+          citizenCardDateOfIssue: data.citizenCardDateOfIssue ? new Date(data.citizenCardDateOfIssue).toISOString().split('T')[0] : '',
+          citizenCardPlaceOfIssue: data.citizenCardPlaceOfIssue,
           citizenCardFrontImgUrl: uploadedFrontPhotoUrl || '',
           citizenCardBackImgUrl: uploadedBackPhotoUrl || '',
         },
@@ -376,29 +416,6 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
                   <CardHeader title='ĐĂNG KÝ' />
                   <CardContent>
                     <Grid container spacing={3}>
-                      {/* Bằng lái */}
-                      <Grid size={{ xs: 12, sm: 6 }}>
-                        <FormControl fullWidth error={!!errors.drivingLicenseType}>
-                          <InputLabel>Bằng lái (*)</InputLabel>
-                          <Controller
-                            name='drivingLicenseType'
-                            control={control}
-                            rules={{ required: 'Vui lòng chọn bằng lái' }}
-                            render={({ field }) => (
-                              <Select {...field} label='Bằng lái (*)'>
-                                {CONFIG.LicenseTypeSelectOption.map((option) => (
-                                  <MenuItem key={option.value} value={option.label}>
-                                    {option.label}
-                                  </MenuItem>
-                                ))}
-                              </Select>
-                            )}
-                          />
-                          {errors.drivingLicenseType && (
-                            <FormHelperText>{errors.drivingLicenseType.message}</FormHelperText>
-                          )}
-                        </FormControl>
-                      </Grid>
                       {/* Loại */}
                       <Grid size={{ xs: 12, sm: 6 }}>
                         <FormControl fullWidth error={!!errors.licenseType}>
@@ -422,6 +439,31 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
                           )}
                         </FormControl>
                       </Grid>
+
+                      {/* Bằng lái */}
+                      <Grid size={{ xs: 12, sm: 6 }}>
+                        <FormControl fullWidth error={!!errors.drivingLicenseType}>
+                          <InputLabel>Bằng lái (*)</InputLabel>
+                          <Controller
+                            name='drivingLicenseType'
+                            control={control}
+                            rules={{ required: 'Vui lòng chọn bằng lái' }}
+                            render={({ field }) => (
+                              <Select {...field} label='Bằng lái (*)'>
+                                {filteredLicenseTypes.map((option) => (
+                                  <MenuItem key={option.value} value={option.label}>
+                                    {option.label}
+                                  </MenuItem>
+                                ))}
+                              </Select>
+                            )}
+                          />
+                          {errors.drivingLicenseType && (
+                            <FormHelperText>{errors.drivingLicenseType.message}</FormHelperText>
+                          )}
+                        </FormControl>
+                      </Grid>
+
                     </Grid>
                   </CardContent>
                 </Card>
@@ -497,7 +539,13 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
                               {...field}
                               fullWidth
                               label='Tổng tiền (*)'
-                              type='number'
+                              type='text'
+                              value={field.value ? Number(field.value).toLocaleString('vi-VN') : ''}
+                              onChange={(e) => {
+                                const rawValue = e.target.value.replace(/\./g, ''); // Remove thousands separators (dots)
+                                const numberValue = rawValue ? Number(rawValue) : null;
+                                field.onChange(numberValue);
+                              }}
                               error={!!errors.totalAmount}
                               helperText={errors.totalAmount?.message}
                               InputLabelProps={{ shrink: true }}
