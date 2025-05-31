@@ -7,6 +7,7 @@ import { Controller } from 'react-hook-form';
 
 import FileUploaderSingle from '@/components/common/FileUploaderSingle';
 import CONFIG from '@/configs/config';
+import AppReactDatepicker from '@/libs/styles/AppReactDatepicker';
 
 interface PersonalInformationProps {
   control: Control<any>
@@ -62,19 +63,20 @@ const PersonalInformation = ({ control, errors }: PersonalInformationProps) => {
               </Grid>
               <Grid size={{ xs: 12 }}>
                 <Controller
-                  name='dateOfBirth'
+                  name='birthday'
                   control={control}
                   rules={{ required: 'Vui lòng chọn ngày sinh' }}
                   render={({ field }) => (
-                    <TextField
-                      {...field}
-                      fullWidth
-                      type='date'
-                      label='Ngày sinh (*)'
-                      InputLabelProps={{ shrink: true }}
-                      error={!!errors.dateOfBirth}
-                      helperText={errors.dateOfBirth?.message}
+                    <AppReactDatepicker
+                      boxProps={{ className: 'is-full' }}
+                      selected={field.value ? new Date(field.value) : null}
+                      showYearDropdown
+                      showMonthDropdown
+                      dateFormat='dd/MM/yyyy'
+                      onChange={(date) => field.onChange(date)}
+                      customInput={<TextField fullWidth size='medium' label='Ngày sinh (*)' {...(errors.birthday && { error: true, helperText: errors.birthday.message })} />}
                     />
+
                   )}
                 />
               </Grid>

@@ -8,6 +8,7 @@ import { Controller } from 'react-hook-form';
 import Grid from '@mui/material/Grid2';
 
 import FileUploaderSingle from '@/components/common/FileUploaderSingle';
+import AppReactDatepicker from '@/libs/styles/AppReactDatepicker';
 
 interface CitizenCardProps {
   control: Control<any>
@@ -58,24 +59,6 @@ const CitizenCard = ({ control, errors }: CitizenCardProps) => {
           </Grid>
           <Grid size={{ xs: 12 }}>
             <Controller
-              name='cardType'
-              control={control}
-              rules={{ required: 'Vui lòng chọn loại giấy tờ' }}
-              render={({ field }) => (
-                <FormControl fullWidth error={!!errors.cardType}>
-                  <InputLabel>Loại giấy tờ (*)</InputLabel>
-                  <Select {...field} label='Loại giấy tờ (*)'>
-                    <MenuItem value='Căn cước công dân'>Căn cước công dân</MenuItem>
-                  </Select>
-                  {errors.cardType && (
-                    <FormHelperText>{errors.cardType.message}</FormHelperText>
-                  )}
-                </FormControl>
-              )}
-            />
-          </Grid>
-          <Grid size={{ xs: 12 }}>
-            <Controller
               name='cccd'
               control={control}
               rules={{ required: 'Vui lòng nhập số CCCD' }}
@@ -86,6 +69,41 @@ const CitizenCard = ({ control, errors }: CitizenCardProps) => {
                   label='Số CCCD (*)'
                   error={!!errors.cccd}
                   helperText={errors.cccd?.message}
+                />
+              )}
+            />
+          </Grid>
+
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <Controller
+              name='citizenCardDateOfIssue'
+              control={control}
+              rules={{ required: 'Vui lòng nhập ngày cấp' }}
+              render={({ field }) => (
+                <AppReactDatepicker
+                  boxProps={{ className: 'is-full' }}
+                  selected={field.value ? new Date(field.value) : null}
+                  showYearDropdown
+                  showMonthDropdown
+                  dateFormat='dd/MM/yyyy'
+                  onChange={(date) => field.onChange(date)}
+                  customInput={<TextField fullWidth size='medium' label='Ngày cấp (*)' {...(errors.citizenCardDateOfIssue && { error: true, helperText: errors.citizenCardDateOfIssue.message })} />}
+                />
+              )}
+            />
+          </Grid>
+          <Grid size={{ xs: 12, sm: 6 }}>
+            <Controller
+              name='citizenCardPlaceOfIssue'
+              control={control}
+              rules={{ required: 'Vui lòng nhập nơi cấp' }}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  fullWidth
+                  label='Nơi cấp (*)'
+                  error={!!errors.citizenCardPlaceOfIssue}
+                  helperText={errors.citizenCardPlaceOfIssue?.message}
                 />
               )}
             />
