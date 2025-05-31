@@ -135,7 +135,6 @@ const ProductListTable = () => {
   const [reloadFlag, setReloadFlag] = useState(false)
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false)
   const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null)
-  const [selectedExamSchedule, setSelectedExamSchedule] = useState<ExamScheduleType | null>(null)
   const [selectedExamScheduleId, setSelectedExamScheduleId] = useState<string>()
 
   // States for data
@@ -394,12 +393,12 @@ const ProductListTable = () => {
   const handleOpenEditDrawer = (examSchedule: ExamScheduleType) => {
     // setSelectedExamSchedule(examSchedule)
     setSelectedExamScheduleId(examSchedule.id)
+
     // console.log(examSchedule);
     setOpenAddDrawer(true)
   }
 
   const handleOpenAddDrawer = () => {
-    setSelectedExamSchedule(null)
     setOpenAddDrawer(true)
   }
 

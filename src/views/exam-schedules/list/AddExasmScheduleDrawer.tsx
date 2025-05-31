@@ -19,12 +19,12 @@ import { toast } from 'react-toastify'
 import { Controller, useForm } from 'react-hook-form'
 
 // Styled Component Imports
+
 import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
 import ExamAddressAPI from "@/libs/api/examAddressAPI"
 import type { ExamAddressType, PaginatedListOfExamAddressType } from "@/types/examAddressTypes"
 import ExamScheduleAPI from "@/libs/api/examScheduleAPI"
 import type { CreateExamScheduleCommandType, ExamScheduleType, UpdateExamScheduleCommandType } from "@/types/examScheduleTypes"
-import { is } from "valibot"
 
 type Props = {
   open: boolean
@@ -125,6 +125,7 @@ const AddExasmScheduleDrawer = (props: Props) => {
         note: data.note || '',
         examAddressId: data.examAddressId
       }
+
       console.log(payload)
       const response = await ExamScheduleAPI.updateExamSchedule(payload)
 
@@ -174,21 +175,27 @@ const AddExasmScheduleDrawer = (props: Props) => {
 
       if (examSchedule) {
         console.log(examSchedule)
+
+
         // setExamAddresses(paginatedData.data || [])
         const examScheduleForUpdate = {
           id: examSchedule.id,
           name: examSchedule.name,
-          dateTime: new Date(examSchedule.dateTime),
+          dateTime: examSchedule.dateTime
+            ? new Date(examSchedule.dateTime)   // valid string → Date
+            : undefined,
           limitType: examSchedule.limitType,
           registrationLimit: examSchedule.registrationLimit,
           note: examSchedule.note,
           examAddressId: examSchedule.examAddress?.id
         }
+
         reset(examScheduleForUpdate)
       }
 
     } catch (error) {
       console.error('Error fetching exam schedule by id:', error)
+
       // setExamAddresses([])
     } finally {
     }
