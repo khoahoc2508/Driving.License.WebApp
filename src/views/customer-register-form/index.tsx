@@ -690,10 +690,10 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="success-dialog-description" className="text-center">
-            <Typography className='mb-2' color='text.primary'>
+            <Typography component="span" className='mb-2' color='text.primary'>
               Chúng tôi đã nhận được đơn đăng ký của bạn. Chúng tôi sẽ liên hệ với bạn sớm nhất.
             </Typography>
-            <Typography color='text.primary'>
+            <Typography component="span" color='text.primary'>
               Cảm ơn bạn đã tin tưởng và ủng hộ!
             </Typography>
           </DialogContentText>
