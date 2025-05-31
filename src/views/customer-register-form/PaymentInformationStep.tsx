@@ -17,7 +17,7 @@ import CONFIG from '@/configs/config'
 
 // Define types based on your validation schema (adjust as needed)
 type PaymentInformationForm = {
-    amount: number;
+    amount: number | null | undefined;
     isPaid: boolean;
     note?: string;
 }
@@ -62,21 +62,27 @@ const PaymentInformationStep = ({ steps, handleBack, handleNext }: PaymentInform
                     <Controller
                         name='amount'
                         control={control}
-                        rules={{ required: 'Vui lòng nhập tổng tiền' }}
+                        rules={{
+                            required: 'Vui lòng nhập tổng tiền',
+                            validate: value => (value !== null && value !== undefined && Number(value) > 0) || 'Tổng tiền phải lớn hơn 0'
+                        }}
                         render={({ field }) => (
                             <TextField
                                 {...field}
                                 fullWidth
                                 label='Tổng tiền (*)'
-                                type='number'
+                                type='text'
+                                value={field.value ? Number(field.value).toLocaleString('vi-VN') : ''}
+                                onChange={(e) => {
+                                    const rawValue = e.target.value.replace(/\./g, ''); // Remove thousands separators (dots)
+                                    const numberValue = rawValue ? Number(rawValue) : null;
+                                    debugger
+                                    field.onChange(numberValue);
+                                }}
                                 error={!!errors.amount}
                                 helperText={errors.amount?.message}
                                 InputLabelProps={{ shrink: true }}
-                                onChange={(event) => {
-                                    const value = parseFloat(event.target.value);
 
-                                    field.onChange(isNaN(value) ? '' : value);
-                                }}
                             />
                         )}
                     />

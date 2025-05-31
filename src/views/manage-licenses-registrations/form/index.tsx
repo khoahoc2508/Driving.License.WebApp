@@ -61,7 +61,7 @@ type FormValues = {
   citizenCardPlaceOfIssue: string
   drivingLicenseType: string
   licenseType: string
-  totalAmount: number | null | undefined
+  amount: number | null | undefined
   paymentStatus: string
   healthCheck: string
   carLicense: string
@@ -103,7 +103,7 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
       citizenCardPlaceOfIssue: '',
       drivingLicenseType: 'A1',
       licenseType: 'Xe máy',
-      totalAmount: 0,
+      amount: 0,
       paymentStatus: 'Chưa thanh toán',
       healthCheck: 'Chưa khám',
       carLicense: 'Chưa có',
@@ -153,7 +153,7 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
             setValue('citizenCardPlaceOfIssue', data.person.citizenCardPlaceOfIssue)
             setValue('drivingLicenseType', CONFIG.LicenseTypeSelectOption.find(opt => opt.value === data.licenseType)?.label || 'A1')
             setValue('licenseType', data.vehicleType === 0 ? CONFIG.VehicleTypeMappingText[0] : CONFIG.VehicleTypeMappingText[1])
-            setValue('totalAmount', data.amount)
+            setValue('amount', data.amount)
             setValue('paymentStatus', data.isPaid ? 'Đã thanh toán' : 'Chưa thanh toán')
             setValue('healthCheck', data.hasCompletedHealthCheck ? 'Đã khám' : 'Chưa khám')
             setValue('carLicense', data.hasCarLicense ? 'Đã có' : 'Chưa có')
@@ -345,7 +345,7 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
         },
         note: data.note,
         isPaid: data.paymentStatus === CONFIG.IsPaidSelectOption.find(opt => opt.value)?.label,
-        amount: data.totalAmount || 0,
+        amount: data.amount || 0,
         id: id
       }
 
@@ -536,7 +536,7 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
                       {/* Tổng tiền */}
                       <Grid size={{ xs: 12, sm: 6 }}>
                         <Controller
-                          name='totalAmount'
+                          name='amount'
                           control={control}
                           rules={{
                             required: 'Vui lòng nhập tổng tiền',
@@ -554,8 +554,8 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
                                 const numberValue = rawValue ? Number(rawValue) : null;
                                 field.onChange(numberValue);
                               }}
-                              error={!!errors.totalAmount}
-                              helperText={errors.totalAmount?.message}
+                              error={!!errors.amount}
+                              helperText={errors.amount?.message}
                               InputLabelProps={{ shrink: true }}
 
                             />

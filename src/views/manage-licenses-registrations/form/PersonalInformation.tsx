@@ -37,7 +37,7 @@ const PersonalInformation = ({ control, errors }: PersonalInformationProps) => {
                     field={field}
                     error={!!errors.photo3x4}
                     helperText={errors.photo3x4?.message}
-                    description='Tải lên ảnh 3x4'
+                    description='Tải lên ảnh 3x4 (*)'
                   />
                 </FormControl>
               )}
