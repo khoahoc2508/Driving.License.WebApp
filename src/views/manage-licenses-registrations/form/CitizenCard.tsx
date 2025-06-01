@@ -1,80 +1,76 @@
 'use client'
 
 
-import { Button, Card, CardContent, CardHeader, FormControl, TextField } from '@mui/material';
-import type { Control, UseFormSetValue } from 'react-hook-form';
+import { Card, CardContent, CardHeader, FormControl, TextField } from '@mui/material';
+import type { Control } from 'react-hook-form';
 import { Controller } from 'react-hook-form';
 
 import Grid from '@mui/material/Grid2';
 
-import { toast } from 'react-toastify';
 
 import FileUploaderSingle from '@/components/common/FileUploaderSingle';
 import AppReactDatepicker from '@/libs/styles/AppReactDatepicker';
-import PersonAPI from '@/libs/api/personsApi';
 
 interface CitizenCardProps {
   control: Control<any>
   errors: any
-  setValue: UseFormSetValue<any>
-  watch: any
 }
 
-const CitizenCard = ({ control, errors, setValue, watch }: CitizenCardProps) => {
+const CitizenCard = ({ control, errors }: CitizenCardProps) => {
 
-  const handleGetInfoFromCitizenCard = async () => {
-    const frontPhoto = watch('frontPhoto');
-    const backPhoto = watch('backPhoto');
+  // const handleGetInfoFromCitizenCard = async () => {
+  //   const frontPhoto = watch('frontPhoto');
+  //   const backPhoto = watch('backPhoto');
 
-    if (!frontPhoto || frontPhoto.length === 0 || !(frontPhoto[0] instanceof File)) {
-      toast.error('Vui lòng tải lên ảnh mặt trước CCCD.');
+  //   if (!frontPhoto || frontPhoto.length === 0 || !(frontPhoto[0] instanceof File)) {
+  //     toast.error('Vui lòng tải lên ảnh mặt trước CCCD.');
 
-      return;
-    }
+  //     return;
+  //   }
 
-    if (!backPhoto || backPhoto.length === 0 || !(backPhoto[0] instanceof File)) {
-      toast.error('Vui lòng tải lên ảnh mặt sau CCCD.');
+  //   if (!backPhoto || backPhoto.length === 0 || !(backPhoto[0] instanceof File)) {
+  //     toast.error('Vui lòng tải lên ảnh mặt sau CCCD.');
 
-      return;
-    }
+  //     return;
+  //   }
 
-    const formData = new FormData();
+  //   const formData = new FormData();
 
-    formData.append('formFile', frontPhoto[0]);
-    formData.append('formFile', backPhoto[0]);
+  //   formData.append('formFile', frontPhoto[0]);
+  //   formData.append('formFile', backPhoto[0]);
 
-    try {
-      const response = await PersonAPI.postCitizenByFiles(formData);
+  //   try {
+  //     const response = await PersonAPI.postCitizenByFiles(formData);
 
-      if (response.data?.success && response.data.data && response.data.data.length > 0) {
+  //     if (response.data?.success && response.data.data && response.data.data.length > 0) {
 
-        const citizenData = response.data.data[0];
-        const frontData = citizenData.front;
-        const backData = citizenData.back;
+  //       const citizenData = response.data.data[0];
+  //       const frontData = citizenData.front;
+  //       const backData = citizenData.back;
 
-        // Fill the form fields
-        setValue('cccd', citizenData.id || '');
+  //       // Fill the form fields
+  //       setValue('cccd', citizenData.id || '');
 
-        if (frontData) {
-          setValue('fullName', frontData.fullName || '');
-          setValue('birthday', frontData.birthday ? new Date(frontData.birthday) : null);
-          setValue('gender', frontData.sex === 1 ? 'Nam' : frontData.sex === 0 ? 'Nữ' : 'Khác');
-        }
+  //       if (frontData) {
+  //         setValue('fullName', frontData.fullName || '');
+  //         setValue('birthday', frontData.birthday ? new Date(frontData.birthday) : null);
+  //         setValue('gender', frontData.sex === 1 ? 'Nam' : frontData.sex === 0 ? 'Nữ' : 'Khác');
+  //       }
 
-        if (backData) {
-          setValue('citizenCardDateOfIssue', backData.issuedDate ? new Date(backData.issuedDate) : null);
-          setValue('citizenCardPlaceOfIssue', backData.issuedBy || '');
-        }
+  //       if (backData) {
+  //         setValue('citizenCardDateOfIssue', backData.issuedDate ? new Date(backData.issuedDate) : null);
+  //         setValue('citizenCardPlaceOfIssue', backData.issuedBy || '');
+  //       }
 
-        toast.success('Lấy thông tin CCCD thành công!');
-      } else {
-        toast.error(response.data?.message || 'Không thể nhận dạng thông tin từ ảnh CCCD.');
-      }
-    } catch (error) {
-      console.error('Error recognizing citizen card:', error);
-      toast.error('Đã xảy ra lỗi khi lấy thông tin CCCD.');
-    }
-  };
+  //       toast.success('Lấy thông tin CCCD thành công!');
+  //     } else {
+  //       toast.error(response.data?.message || 'Không thể nhận dạng thông tin từ ảnh CCCD.');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error recognizing citizen card:', error);
+  //     toast.error('Đã xảy ra lỗi khi lấy thông tin CCCD.');
+  //   }
+  // };
 
   return (
     <Card>

@@ -450,7 +450,9 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
         data.citizenCardFrontImgUrl?.length > 0 ? UploadAPI.uploadFiles(data.citizenCardFrontImgUrl) : Promise.resolve(null),
         data.citizenCardBackImgUrl?.length > 0 ? UploadAPI.uploadFiles(data.citizenCardBackImgUrl) : Promise.resolve(null)
       ]);
+
       debugger;
+
       const apiData: LicenseRegistrationCustomerResquest = {
         licenseType: CONFIG.LicenseTypeSelectOption.find(opt => opt.value === data.licenseType)?.value as 0 | 1 | 2 | 3 || 0,
         hasCarLicense: data.hasCarLicense,

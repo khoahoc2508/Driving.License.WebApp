@@ -125,8 +125,8 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
       return option.label === 'B1' || option.label === 'B2';
     }
 
-    
-return true; // Show all if no license type is selected or other cases
+
+    return true; // Show all if no license type is selected or other cases
   });
 
   // Fetch data when id exists (edit mode)
@@ -399,8 +399,6 @@ return true; // Show all if no license type is selected or other cases
                 <CitizenCard
                   control={control}
                   errors={errors}
-                  setValue={setValue}
-                  watch={watch}
                 />
               </Grid>
             </Grid>

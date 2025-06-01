@@ -8,10 +8,11 @@ import { Controller, useFormContext } from 'react-hook-form'
 
 import Button from '@mui/material/Button'
 
+import { FormControl } from '@mui/material'
+
 import DirectionalIcon from '@/components/common/DirectionalIcon'
 import FileUploaderSingle from '@/components/common/FileUploaderSingle'
 import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
-import { FormControl } from '@mui/material'
 
 // Define types based on your validation schema
 type AccountDetailsForm = {
