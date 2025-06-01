@@ -115,11 +115,11 @@ const CitizenCard = ({ control, errors, setValue, watch }: CitizenCardProps) => 
               )}
             />
           </Grid>
-          <Grid size={{ xs: 12 }}>
+          {/* <Grid size={{ xs: 12 }}>
             <Button variant='outlined' color='info' className='w-full' disabled onClick={handleGetInfoFromCitizenCard}>
               Lấy thông tin từ CCCD
             </Button>
-          </Grid>
+          </Grid> */}
           <Grid size={{ xs: 12 }}>
             <Controller
               name='cccd'
