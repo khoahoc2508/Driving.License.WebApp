@@ -39,6 +39,7 @@
     "react-perfect-scrollbar": "1.5.8",
     "react-toastify": "^11.0.5",
     "react-use": "17.6.0",
+    "recharts": "^2.15.3",
     "server-only": "0.0.1",
     "valibot": "^1.1.0"
   },
