@@ -85,13 +85,14 @@ const CitizenCard = ({ control, errors, setValue, watch }: CitizenCardProps) => 
             <Controller
               name='frontPhoto'
               control={control}
+              rules={{ required: 'Vui lòng tải lên ảnh mặt trước CCCD' }}
               render={({ field }) => (
                 <FormControl fullWidth error={!!errors.frontPhoto}>
                   <FileUploaderSingle
                     field={field}
                     error={!!errors.frontPhoto}
                     helperText={errors.frontPhoto?.message}
-                    description='Tải lên ảnh mặt trước CCCD'
+                    description='Tải lên ảnh mặt trước CCCD (*)'
                   />
                 </FormControl>
               )}
@@ -101,13 +102,14 @@ const CitizenCard = ({ control, errors, setValue, watch }: CitizenCardProps) => 
             <Controller
               name='backPhoto'
               control={control}
+              rules={{ required: 'Vui lòng tải lên ảnh mặt sau CCCD' }}
               render={({ field }) => (
                 <FormControl fullWidth error={!!errors.backPhoto}>
                   <FileUploaderSingle
                     field={field}
                     error={!!errors.backPhoto}
                     helperText={errors.backPhoto?.message}
-                    description='Tải lên ảnh mặt sau CCCD'
+                    description='Tải lên ảnh mặt sau CCCD (*)'
                   />
                 </FormControl>
               )}

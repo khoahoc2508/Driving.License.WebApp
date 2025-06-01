@@ -103,6 +103,8 @@ const Stepper = styled(MuiStepper)<StepperProps>(({ theme }) => ({
 }))
 
 const accountValidationSchema = object({
+  citizenCardFrontImgUrl: pipe(array(union([string(), instance(File)])), nonEmpty('Vui lòng tải lên ảnh mặt trước CCCD')),
+  citizenCardBackImgUrl: pipe(array(union([string(), instance(File)])), nonEmpty('Vui lòng tải lên ảnh mặt sau CCCD')),
   citizenCardId: pipe(string(), nonEmpty('Vui lòng nhập số CCCD')),
   citizenCardDateOfIssue: pipe(
     union([string(), instance(Date), null_()]),
@@ -247,6 +249,8 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
       citizenCardId: '',
       citizenCardDateOfIssue: null,
       citizenCardPlaceOfIssue: '',
+      citizenCardFrontImgUrl: [],
+      citizenCardBackImgUrl: [],
     }
   })
 
@@ -398,6 +402,8 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
       citizenCardId: '',
       citizenCardDateOfIssue: null,
       citizenCardPlaceOfIssue: '',
+      citizenCardFrontImgUrl: [],
+      citizenCardBackImgUrl: [],
     })
     personalFormMethods.reset({
       avatarUrl: [],
@@ -444,7 +450,7 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
         data.citizenCardFrontImgUrl?.length > 0 ? UploadAPI.uploadFiles(data.citizenCardFrontImgUrl) : Promise.resolve(null),
         data.citizenCardBackImgUrl?.length > 0 ? UploadAPI.uploadFiles(data.citizenCardBackImgUrl) : Promise.resolve(null)
       ]);
-
+      debugger;
       const apiData: LicenseRegistrationCustomerResquest = {
         licenseType: CONFIG.LicenseTypeSelectOption.find(opt => opt.value === data.licenseType)?.value as 0 | 1 | 2 | 3 || 0,
         hasCarLicense: data.hasCarLicense,
@@ -572,7 +578,10 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
                     // This part might need more complex logic if you want to show errors for previous steps
                     if (index === activeStep) {
                       if (
-                        (citizenCardFormMethods.formState.errors.citizenCardId ||
+                        (
+                          citizenCardFormMethods.formState.errors.citizenCardFrontImgUrl ||
+                          citizenCardFormMethods.formState.errors.citizenCardBackImgUrl ||
+                          citizenCardFormMethods.formState.errors.citizenCardId ||
                           citizenCardFormMethods.formState.errors.citizenCardDateOfIssue ||
                           citizenCardFormMethods.formState.errors.citizenCardPlaceOfIssue) &&
                         activeStep === 0

@@ -11,6 +11,7 @@ import Button from '@mui/material/Button'
 import DirectionalIcon from '@/components/common/DirectionalIcon'
 import FileUploaderSingle from '@/components/common/FileUploaderSingle'
 import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
+import { FormControl } from '@mui/material'
 
 // Define types based on your validation schema
 type AccountDetailsForm = {
@@ -60,13 +61,16 @@ const CitizenCard = ({ steps, handleNext }: CitizenCardProps) => {
           <Controller
             name='citizenCardFrontImgUrl'
             control={control}
+            rules={{ required: 'Vui lòng tải lên ảnh mặt trước CCCD' }}
             render={({ field }) => (
-              <FileUploaderSingle
-                field={field}
-                error={!!errors.citizenCardFrontImgUrl}
-                helperText={errors.citizenCardFrontImgUrl?.message}
-                description='Tải lên ảnh mặt trước CCCD'
-              />
+              <FormControl fullWidth error={!!errors.citizenCardFrontImgUrl} className='h-full'>
+                <FileUploaderSingle
+                  field={field}
+                  error={!!errors.citizenCardFrontImgUrl}
+                  helperText={errors.citizenCardFrontImgUrl?.message}
+                  description='Tải lên ảnh mặt trước CCCD (*)'
+                />
+              </FormControl>
             )}
           />
         </Grid>
@@ -74,12 +78,13 @@ const CitizenCard = ({ steps, handleNext }: CitizenCardProps) => {
           <Controller
             name='citizenCardBackImgUrl'
             control={control}
+            rules={{ required: 'Vui lòng tải lên ảnh mặt sau CCCD' }}
             render={({ field }) => (
               <FileUploaderSingle
                 field={field}
                 error={!!errors.citizenCardBackImgUrl}
                 helperText={errors.citizenCardBackImgUrl?.message}
-                description='Tải lên ảnh mặt sau CCCD'
+                description='Tải lên ảnh mặt sau CCCD (*)'
               />
             )}
           />
