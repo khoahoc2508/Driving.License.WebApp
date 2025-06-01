@@ -231,7 +231,7 @@ type Props = {
 // Main Component
 const Page = ({ titlePage, vehicleTypePage }: Props) => {
   const searchParams = useSearchParams()
-  const urlOwnerId = searchParams.get('ownerid')
+  const urlOwnerId = searchParams.get('ownerId')
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
   const [openSuccessDialog, setOpenSuccessDialog] = useState(false)
   const [formDataToSubmit, setFormDataToSubmit] = useState<FormValues | null>(null)
