@@ -1,3 +1,4 @@
+
 import type { components } from '@/libs/api/client/schema'
 
 export type GetExamSchedulesWithPaginationQueryParams = {
@@ -5,6 +6,11 @@ export type GetExamSchedulesWithPaginationQueryParams = {
   pageSize?: number
   search?: string | null
   hasAvailableSlots?: boolean | null
+  examAddressIds?: string[]
+  fromDate?: string
+  toDate?: string
+  limitTypes?: components['schemas']['LimitType'][]
+  licenseTypes?: components['schemas']['LicenseType'][]
 }
 
 // Basic Exam Schedule Types

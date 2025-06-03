@@ -224,6 +224,11 @@ const Action = {
   Delete: 'DELETE'
 }
 
+const LimitType = {
+  Unlimited: 0,
+  Limited: 1
+}
+
 const CONFIG = {
   LicenseRegistrationStatus,
   LicenseRegistrationStatusMappingText,
@@ -255,7 +260,8 @@ const CONFIG = {
   IsRetakeMappingText,
   ConfigToken,
   ApprovedOption,
-  Action
+  Action,
+  LimitType
 }
 
 export default CONFIG

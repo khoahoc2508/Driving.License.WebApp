@@ -21,10 +21,12 @@ import { Controller, useForm } from 'react-hook-form'
 // Styled Component Imports
 
 import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
+import CONFIG from '@/configs/config'
 import ExamAddressAPI from "@/libs/api/examAddressAPI"
 import type { ExamAddressType, PaginatedListOfExamAddressType } from "@/types/examAddressTypes"
 import ExamScheduleAPI from "@/libs/api/examScheduleAPI"
 import type { CreateExamScheduleCommandType, ExamScheduleType, UpdateExamScheduleCommandType } from "@/types/examScheduleTypes"
+import { LicenseType } from "@/types/LicensesRegistrations"
 
 type Props = {
   open: boolean
@@ -46,6 +48,7 @@ type FormValues = {
   registrationLimit?: number | null;
   note?: string;
   examAddressId?: string;
+  licenseType?: LicenseType;
 }
 
 const AddExasmScheduleDrawer = (props: Props) => {
@@ -59,8 +62,9 @@ const AddExasmScheduleDrawer = (props: Props) => {
     dateTime: undefined,
     limitType: LimitType.Limited,
     registrationLimit: 10,
-    note: '',
-    examAddressId: ''
+    note: undefined,
+    examAddressId: undefined,
+    licenseType: undefined
   }
 
   // Hooks
@@ -94,7 +98,8 @@ const AddExasmScheduleDrawer = (props: Props) => {
         limitType: data.limitType,
         registrationLimit: data.registrationLimit,
         note: data.note || '',
-        examAddressId: data.examAddressId
+        examAddressId: data.examAddressId,
+        licenseType: data.licenseType
       }
 
       const response = await ExamScheduleAPI.createExamSchedule(payload)
@@ -148,7 +153,6 @@ const AddExasmScheduleDrawer = (props: Props) => {
   // Fetch data function
   const fetchExamAddresses = async () => {
     try {
-
       const response = await ExamAddressAPI.getExamAddresses({ pageNumber: 1, pageSize: 10 })
 
       const paginatedData = response.data as PaginatedListOfExamAddressType
@@ -342,6 +346,26 @@ const AddExasmScheduleDrawer = (props: Props) => {
                     </div>
                   </Grid>
                 </Grid>
+              </Grid>
+
+              <Grid size={{ xs: 12, sm: 12 }}>
+                <FormControl fullWidth>
+                  <InputLabel>Loại bằng lái</InputLabel>
+                  <Controller
+                    name='licenseType'
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select {...field} label='Loại bằng lái'>
+                        {CONFIG.LicenseTypeSelectOption.map((option) => (
+                          <MenuItem key={option.value} value={option.value}>
+                            {option.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    )}
+                  />
+                </FormControl>
               </Grid>
 
               <Grid size={{ xs: 12 }} className='flex gap-4'>

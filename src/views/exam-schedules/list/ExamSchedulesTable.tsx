@@ -55,6 +55,9 @@ import type { ExamScheduleType, GetExamSchedulesWithPaginationQueryParams, Pagin
 import ExamScheduleAPI from '@/libs/api/examScheduleAPI'
 import TableFilters from '@/views/exam-schedules/list/TableFilters'
 import AddExasmScheduleDrawer from '@/views/exam-schedules/list/AddExasmScheduleDrawer'
+import { ExamAddressType, PaginatedListOfExamAddressType } from '@/types/examAddressTypes'
+import ExamAddressAPI from '@/libs/api/examAddressAPI'
+import OptionMenu from '@/@core/components/option-menu'
 
 
 declare module '@tanstack/table-core' {
@@ -136,6 +139,7 @@ const ProductListTable = () => {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false)
   const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null)
   const [selectedExamScheduleId, setSelectedExamScheduleId] = useState<string>()
+  const [examAddresses, setExamAddresses] = useState<ExamAddressType[]>([])
 
   // States for data
   // const [examSchedules, setExamSchedules] = useState<ExamScheduleType[]>([])
@@ -153,35 +157,6 @@ const ProductListTable = () => {
 
   const columns = useMemo<ColumnDef<ProductWithActionsType, any>[]>(
     () => [
-      // {
-      //   id: 'select',
-      //   header: ({ table }) => (
-      //     <Checkbox
-      //       {...{
-      //         checked: table.getIsAllRowsSelected(),
-      //         indeterminate: table.getIsSomeRowsSelected(),
-      //         onChange: table.getToggleAllRowsSelectedHandler()
-      //       }}
-      //     />
-      //   ),
-      //   cell: ({ row }) => (
-      //     <Checkbox
-      //       {...{
-      //         checked: row.getIsSelected(),
-      //         disabled: !row.getCanSelect(),
-      //         indeterminate: row.getIsSomeSelected(),
-      //         onChange: row.getToggleSelectedHandler()
-      //       }}
-      //     />
-      //   )
-      // },
-      // columnHelper.accessor('name', {
-      //   header: 'Tên',
-      //   cell: ({ row }) => (
-      //     <Typography>{row.original.name}</Typography>
-      //   ),
-      //   enableSorting: false
-      // }),
       columnHelper.accessor('id', {
         id: 'stt',
         header: 'STT',
@@ -301,6 +276,21 @@ const ProductListTable = () => {
             <IconButton size='small' onClick={() => handleOpenDeleteDialog(row.original.id)}>
               <i className='ri-delete-bin-7-line text-[22px] text-textSecondary' />
             </IconButton>
+            <OptionMenu
+              iconButtonProps={{ size: 'medium' }}
+              iconClassName='text-textSecondary text-[22px]'
+              options={[
+                { text: 'Xếp thi', icon: 'ri-id-card-line', menuItemProps: { className: 'gap-2' } },
+                {
+                  text: 'Delete',
+                  icon: 'ri-delete-bin-7-line',
+                  menuItemProps: {
+                    className: 'gap-2',
+                    // onClick: () => setData(data?.filter(product => product.id !== row.original.id))
+                  }
+                },
+              ]}
+            />
           </div>
         ),
         enableSorting: false
@@ -357,6 +347,24 @@ const ProductListTable = () => {
     }
   }
 
+  const fetchExamAddresses = async () => {
+    try {
+
+      const response = await ExamAddressAPI.getExamAddresses({ pageNumber: 1, pageSize: 10 })
+
+      const paginatedData = response.data as PaginatedListOfExamAddressType
+
+      if (paginatedData.data && paginatedData.data.length > 0) {
+        setExamAddresses(paginatedData.data || [])
+      }
+
+    } catch (error) {
+      console.error('Error fetching exam addesses:', error)
+      setExamAddresses([])
+    } finally {
+    }
+  }
+
 
   const handleOpenDeleteDialog = (id: string | undefined) => {
     if (id) {
@@ -404,13 +412,17 @@ const ProductListTable = () => {
 
   useEffect(() => {
     fetchExamSchedules()
-  }, [params, reloadFlag])
+  }, [JSON.stringify(params), reloadFlag])
+
+  useEffect(() => {
+    fetchExamAddresses()
+  }, [])
 
   return (
     <>
       <Card>
         <CardHeader title='Filters' className='pbe-4' />
-        <TableFilters />
+        <TableFilters examAddresses={examAddresses} setParams={setParams} />
         <Divider />
         <div className='flex justify-between flex-col items-start sm:flex-row sm:items-center gap-y-4 p-5'>
           <DebouncedInput
