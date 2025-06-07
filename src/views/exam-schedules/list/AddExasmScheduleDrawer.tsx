@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 
-import { Divider, Drawer, IconButton, Typography } from "@mui/material"
+import { Divider, Drawer, FormHelperText, IconButton, Typography } from "@mui/material"
 
 // MUI Imports
 import Grid from '@mui/material/Grid2'
@@ -63,7 +63,7 @@ const AddExasmScheduleDrawer = (props: Props) => {
     limitType: LimitType.Limited,
     registrationLimit: 10,
     note: undefined,
-    examAddressId: undefined,
+    examAddressId: '',
     licenseType: undefined
   }
 
@@ -159,8 +159,8 @@ const AddExasmScheduleDrawer = (props: Props) => {
 
       if (paginatedData.data && paginatedData.data.length > 0) {
         setExamAddresses(paginatedData.data || [])
-        if (!isEditMode)
-          reset({ ...defaultValues, examAddressId: paginatedData.data[0].id })
+        // if (!isEditMode)
+        //   reset({ ...defaultValues, examAddressId: paginatedData.data[0].id })
       }
 
     } catch (error) {
@@ -191,8 +191,11 @@ const AddExasmScheduleDrawer = (props: Props) => {
           limitType: examSchedule.limitType,
           registrationLimit: examSchedule.registrationLimit,
           note: examSchedule.note,
-          examAddressId: examSchedule.examAddress?.id
+          examAddressId: examSchedule.examAddress?.id,
+          licenseType: undefined
         }
+
+        console.log(examSchedule.examAddress?.id);
 
         reset(examScheduleForUpdate)
       }
@@ -214,7 +217,7 @@ const AddExasmScheduleDrawer = (props: Props) => {
   }, [])
 
   useEffect(() => {
-    if (examScheduleId) {
+    if (examScheduleId && open) {
       fetchExamAddressById(examScheduleId)
     }
   }, [examScheduleId])
@@ -226,7 +229,7 @@ const AddExasmScheduleDrawer = (props: Props) => {
       variant='temporary'
       onClose={() => { }}
       ModalProps={{ keepMounted: true }}
-      sx={{ '& .MuiDrawer-paper': { width: { xs: 400, sm: 600 } } }}
+      sx={{ '& .MuiDrawer-paper': { width: { xs: "90%", sm: 600 } } }}
     >
 
       <div className='flex items-center justify-between pli-5 plb-4'>
@@ -242,13 +245,13 @@ const AddExasmScheduleDrawer = (props: Props) => {
             <Grid container spacing={5}>
               <Grid size={{ xs: 12, sm: 12 }}>
                 <FormControl fullWidth>
-                  <InputLabel>Địa điểm thi</InputLabel>
+                  <InputLabel error={Boolean(errors.examAddressId)}>Địa điểm thi</InputLabel>
                   <Controller
                     name='examAddressId'
                     control={control}
                     rules={{ required: true }}
                     render={({ field }) => (
-                      <Select {...field} label='Địa điểm thi'>
+                      <Select {...field} label='Địa điểm thi' error={Boolean(errors.examAddressId)}>
                         {examAddresses.map((examAddress) => (
                           <MenuItem key={examAddress.id} value={examAddress.id}>
                             {examAddress.fullAddress}
@@ -258,6 +261,7 @@ const AddExasmScheduleDrawer = (props: Props) => {
                       </Select>
                     )}
                   />
+                  {errors.examAddressId && <FormHelperText error>This field is required.</FormHelperText>}
 
                 </FormControl>
 
@@ -350,13 +354,13 @@ const AddExasmScheduleDrawer = (props: Props) => {
 
               <Grid size={{ xs: 12, sm: 12 }}>
                 <FormControl fullWidth>
-                  <InputLabel>Loại bằng lái</InputLabel>
+                  <InputLabel error={Boolean(errors.licenseType)}>Loại bằng lái</InputLabel>
                   <Controller
                     name='licenseType'
                     control={control}
                     rules={{ required: true }}
                     render={({ field }) => (
-                      <Select {...field} label='Loại bằng lái'>
+                      <Select {...field} label='Loại bằng lái' error={Boolean(errors.licenseType)}>
                         {CONFIG.LicenseTypeSelectOption.map((option) => (
                           <MenuItem key={option.value} value={option.value}>
                             {option.label}
@@ -364,7 +368,9 @@ const AddExasmScheduleDrawer = (props: Props) => {
                         ))}
                       </Select>
                     )}
+
                   />
+                  {errors.licenseType && <FormHelperText error>This field is required.</FormHelperText>}
                 </FormControl>
               </Grid>
 

@@ -229,6 +229,11 @@ const LimitType = {
   Limited: 1
 }
 
+const TableAction = {
+  View: 'VIEW',
+  Assign: 'ASSIGN'
+}
+
 const CONFIG = {
   LicenseRegistrationStatus,
   LicenseRegistrationStatusMappingText,
@@ -261,7 +266,8 @@ const CONFIG = {
   ConfigToken,
   ApprovedOption,
   Action,
-  LimitType
+  LimitType,
+  TableAction
 }
 
 export default CONFIG

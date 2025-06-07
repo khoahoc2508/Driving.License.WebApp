@@ -58,6 +58,7 @@ import AddExasmScheduleDrawer from '@/views/exam-schedules/list/AddExasmSchedule
 import { ExamAddressType, PaginatedListOfExamAddressType } from '@/types/examAddressTypes'
 import ExamAddressAPI from '@/libs/api/examAddressAPI'
 import OptionMenu from '@/@core/components/option-menu'
+import AssignLicenseRegistrationsDrawer from '@/views/exam-schedules/list/assign-license-registrations/AssignLicenseRegistrationsDrawer'
 
 
 declare module '@tanstack/table-core' {
@@ -77,8 +78,6 @@ enum LimitType {
   Unlimited,
   Limited
 }
-
-
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   // Rank the item
@@ -134,7 +133,10 @@ const ProductListTable = () => {
   const [rowSelection, setRowSelection] = useState({})
   const [data, setData] = useState<ExamScheduleType[]>([])
   const [globalFilter, setGlobalFilter] = useState('')
+
   const [openAddDrawer, setOpenAddDrawer] = useState(false)
+  const [openAssignDrawer, setOpenAssignDrawer] = useState(false)
+
   const [reloadFlag, setReloadFlag] = useState(false)
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false)
   const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null)
@@ -280,7 +282,7 @@ const ProductListTable = () => {
               iconButtonProps={{ size: 'medium' }}
               iconClassName='text-textSecondary text-[22px]'
               options={[
-                { text: 'Xếp thi', icon: 'ri-id-card-line', menuItemProps: { className: 'gap-2' } },
+                { text: 'Xếp thi', icon: 'ri-id-card-line', menuItemProps: { className: 'gap-2', onClick: () => handleOpenAssignDrawer(row.original) } },
                 {
                   text: 'Delete',
                   icon: 'ri-delete-bin-7-line',
@@ -399,15 +401,17 @@ const ProductListTable = () => {
   }
 
   const handleOpenEditDrawer = (examSchedule: ExamScheduleType) => {
-    // setSelectedExamSchedule(examSchedule)
     setSelectedExamScheduleId(examSchedule.id)
-
-    // console.log(examSchedule);
     setOpenAddDrawer(true)
   }
 
   const handleOpenAddDrawer = () => {
     setOpenAddDrawer(true)
+  }
+
+  const handleOpenAssignDrawer = (examSchedule: ExamScheduleType) => {
+    setSelectedExamScheduleId(examSchedule.id)
+    setOpenAssignDrawer(true)
   }
 
   useEffect(() => {
@@ -518,6 +522,16 @@ const ProductListTable = () => {
             setSelectedExamScheduleId(undefined)
             setOpenAddDrawer(false)
           }
+        }
+        }
+        examScheduleId={selectedExamScheduleId}
+        onSuccess={reloadData}
+      />
+      <AssignLicenseRegistrationsDrawer
+        open={openAssignDrawer}
+        handleClose={() => {
+          setSelectedExamScheduleId(undefined)
+          setOpenAssignDrawer(false)
         }
         }
         examScheduleId={selectedExamScheduleId}
