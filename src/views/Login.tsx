@@ -24,6 +24,7 @@ import type { InferInput } from 'valibot'
 import { email, minLength, nonEmpty, object, pipe, string } from 'valibot'
 
 // Type Imports
+
 import type { Mode } from '@core/types'
 
 // Component Imports
@@ -33,6 +34,7 @@ import Logo from '@components/layout/shared/Logo'
 // Config Imports
 
 // Hook Imports
+import AppLoading from '@/@core/components/AppLoading'
 import { useImageVariant } from '@core/hooks/useImageVariant'
 import { useSettings } from '@core/hooks/useSettings'
 
@@ -56,6 +58,7 @@ const Login = ({ mode }: { mode: Mode }) => {
   // States
   const [isPasswordShown, setIsPasswordShown] = useState(false)
   const [errorState, setErrorState] = useState<ErrorType | null>(null)
+  const [loading, setLoading] = useState<boolean>(false)
 
   // Vars
   const darkImg = '/images/pages/auth-v2-mask-dark.png'
@@ -95,11 +98,15 @@ const Login = ({ mode }: { mode: Mode }) => {
   const handleClickShowPassword = () => setIsPasswordShown(show => !show)
 
   const onSubmit: SubmitHandler<FormData> = async (data: FormData) => {
+    setLoading(true)
+
     const res = await signIn('credentials', {
       email: data.email,
       password: data.password,
       redirect: false
     })
+
+
 
     if (res && res.ok && res.error === null) {
       // Vars
@@ -110,13 +117,17 @@ const Login = ({ mode }: { mode: Mode }) => {
       if (res?.error) {
         setErrorState({ message: ['Email hoặc mật khẩu không hợp lệ!'] })
       }
+
+      setLoading(false)
+
     }
   }
 
-  console.log('errorState', errorState)
-
   return (
     <div className='flex bs-full justify-center'>
+
+      {loading ? <AppLoading /> : <></>}
+
       <div
         className={classnames(
           'flex bs-full items-center justify-center flex-1 min-bs-[100dvh] relative p-6 max-md:hidden',
