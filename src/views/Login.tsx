@@ -77,8 +77,8 @@ const Login = ({ mode }: { mode: Mode }) => {
   } = useForm<FormData>({
     resolver: valibotResolver(schema),
     defaultValues: {
-      email: 'Ngotrungkien2k2@gmail.com',
-      password: 'Kiennt@123'
+      email: '',
+      password: ''
     }
   })
 
@@ -144,15 +144,15 @@ const Login = ({ mode }: { mode: Mode }) => {
         </div>
         <div className='flex flex-col gap-5 is-full sm:is-auto md:is-full sm:max-is-[400px] md:max-is-[unset]'>
           <div>
-            <Typography variant='h4'>{`Đăng nhập !👋🏻`}</Typography>
-            <Typography>Please sign-in to your account and start the adventure</Typography>
+            <Typography variant='h4' color='primary.main'>{`Đăng nhập !👋🏻`}</Typography>
+            <Typography >Chào mừng bạn đến với banglaixanh.vn</Typography>
           </div>
-          <Alert icon={false} className='bg-primaryLight'>
+          {/* <Alert icon={false} className='bg-primaryLight'>
             <Typography variant='body2' color='primary.main'>
               Email: <span className='font-medium'>Ngotrungkien2k2@gmail.com</span> / Pass:{' '}
               <span className='font-medium'>Kiennt@123</span>
             </Typography>
-          </Alert>
+          </Alert> */}
 
           <form
             noValidate
@@ -172,6 +172,7 @@ const Login = ({ mode }: { mode: Mode }) => {
                   autoFocus
                   type='email'
                   label='Email'
+                  placeholder='user@banglaixanh.vn'
                   onChange={e => {
                     field.onChange(e.target.value)
                     errorState !== null && setErrorState(null)
@@ -191,7 +192,7 @@ const Login = ({ mode }: { mode: Mode }) => {
                 <TextField
                   {...field}
                   fullWidth
-                  label='Password'
+                  label='Mật khẩu'
                   id='login-password'
                   type={isPasswordShown ? 'text' : 'password'}
                   onChange={e => {
