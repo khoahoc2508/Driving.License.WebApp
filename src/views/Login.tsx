@@ -7,7 +7,6 @@ import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 // MUI Imports
-import Alert from '@mui/material/Alert'
 import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import InputAdornment from '@mui/material/InputAdornment'
