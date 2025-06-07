@@ -1,29 +1,31 @@
 'use client'
 
 // React Imports
-import { useRef, useState } from 'react'
 import type { MouseEvent } from 'react'
+import { useRef, useState } from 'react'
 
 // Next Imports
 import { useRouter } from 'next/navigation'
 
 // MUI Imports
-import { styled } from '@mui/material/styles'
-import Badge from '@mui/material/Badge'
 import Avatar from '@mui/material/Avatar'
-import Popper from '@mui/material/Popper'
-import Fade from '@mui/material/Fade'
-import Paper from '@mui/material/Paper'
-import ClickAwayListener from '@mui/material/ClickAwayListener'
-import MenuList from '@mui/material/MenuList'
-import Typography from '@mui/material/Typography'
-import Divider from '@mui/material/Divider'
-import MenuItem from '@mui/material/MenuItem'
+import Badge from '@mui/material/Badge'
 import Button from '@mui/material/Button'
+import ClickAwayListener from '@mui/material/ClickAwayListener'
+import Divider from '@mui/material/Divider'
+import Fade from '@mui/material/Fade'
+import MenuItem from '@mui/material/MenuItem'
+import MenuList from '@mui/material/MenuList'
+import Paper from '@mui/material/Paper'
+import Popper from '@mui/material/Popper'
+import { styled } from '@mui/material/styles'
+import Typography from '@mui/material/Typography'
 
 import { signOut, useSession } from 'next-auth/react'
 
 // Hook Imports
+
+import AppLoading from '@/@core/components/AppLoading'
 import { useSettings } from '@core/hooks/useSettings'
 
 // Styled component for badge content
@@ -39,6 +41,7 @@ const BadgeContentSpan = styled('span')({
 const UserDropdown = () => {
   // States
   const [open, setOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   // Refs
   const anchorRef = useRef<HTMLDivElement>(null)
@@ -47,8 +50,6 @@ const UserDropdown = () => {
   const router = useRouter()
 
   const { data } = useSession()
-
-  console.log('data', data)
 
   const { settings } = useSettings()
 
@@ -69,6 +70,8 @@ const UserDropdown = () => {
   }
 
   const handleUserLogout = async () => {
+    setLoading(true)
+
     try {
       // Sign out from the app
       await signOut({ callbackUrl: process.env.NEXT_PUBLIC_APP_URL })
@@ -78,10 +81,15 @@ const UserDropdown = () => {
       // Show above error in a toast like following
       // toastService.error((err as Error).message)
     }
+    finally {
+      setLoading(false)
+    }
   }
 
   return (
     <>
+      {loading ? <AppLoading /> : <></>}
+
       <Badge
         ref={anchorRef}
         overlap='circular'
