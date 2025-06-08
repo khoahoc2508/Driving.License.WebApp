@@ -1,4 +1,4 @@
-import { GetAllVehicleTypesParams } from '@/types/vehicleTypes'
+import type { GetAllVehicleTypesParams } from '@/types/vehicleTypes'
 import axiosInstance from '../axios'
 
 import { customParamsSerializer } from './commonAPI'

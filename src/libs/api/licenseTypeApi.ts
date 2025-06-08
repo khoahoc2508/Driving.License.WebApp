@@ -1,4 +1,4 @@
-import { GetAllLicenseTypesParams } from '@/types/licenseTypes'
+import type { GetAllLicenseTypesParams } from '@/types/licenseTypes'
 import axiosInstance from '../axios'
 
 import { customParamsSerializer } from './commonAPI'

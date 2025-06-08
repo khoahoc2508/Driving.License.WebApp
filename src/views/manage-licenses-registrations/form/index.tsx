@@ -124,6 +124,7 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
     const fetchVehicleTypes = async () => {
       try {
         const response = await VehicleTypeAPI.getAllVehicleTypes({});
+
         if (response.data.success) {
           setVehicleTypes(response.data.data || []);
         }
@@ -145,12 +146,15 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
         const response = await LicenseTypeAPI.getAllLicenseTypes({
           VehicleTypeCode: watchedVehicleType
         });
+
         if (response.data.success) {
           const newLicenseTypes = response.data.data || [];
+
           setLicenseTypes(newLicenseTypes);
 
           const currentLicenseType = getValues('licenseType');
           const licenseTypeExists = newLicenseTypes.some((type: LicenseTypeDto) => type.code === currentLicenseType);
+
           if (!licenseTypeExists) {
             setValue('licenseType', '');
           }
@@ -303,21 +307,27 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
       if (fileOrUrl instanceof File) {
         try {
           const response = await UploadAPI.uploadFiles([fileOrUrl]);
-          return response?.data?.[0]?.relativeUrl;
+
+          
+return response?.data?.[0]?.relativeUrl;
         } catch (error) {
           console.error("Error uploading file:", error);
           toast.error("Lỗi khi tải lên ảnh");
-          return undefined;
+          
+return undefined;
         }
       } else if (typeof fileOrUrl === 'string') {
         const uploadsIndex = fileOrUrl.indexOf('training/uploads/');
+
         if (uploadsIndex !== -1) {
           return fileOrUrl.substring(uploadsIndex);
         } else {
           return fileOrUrl;
         }
       }
-      return undefined;
+
+      
+return undefined;
     };
 
     const uploadedPhoto3x4Url = await uploadFile(data.photo3x4?.[0]);
