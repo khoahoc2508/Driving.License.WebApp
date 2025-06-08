@@ -16,37 +16,43 @@ import HorizontalWithSubtitle from '@components/card-statistics/HorizontalWithSu
 // API Imports
 import StatisticAPI from '@/libs/api/statisticAPI'
 
-const TotalListCards = () => {
+// Props
+
+type Props = {
+  statistics: StatisticOverviewResponse | null
+}
+
+const TotalListCards = ({ statistics }: Props) => {
   // States
-  const [loading, setLoading] = useState(true)
-  const [statistics, setStatistics] = useState<StatisticOverviewResponse | null>(null)
+  // const [loading, setLoading] = useState(true)
+  // const [statistics, setStatistics] = useState<StatisticOverviewResponse | null>(null)
 
   // Fetch statistics data
-  useEffect(() => {
-    const fetchStatistics = async () => {
-      try {
-        setLoading(true)
-        // Lấy dữ liệu thống kê cho 30 ngày gần nhất
-        const endDate = new Date().toISOString()
-        const startDate = new Date(Date.now() - 30000 * 24 * 60 * 60 * 1000).toISOString()
+  // useEffect(() => {
+  //   const fetchStatistics = async () => {
+  //     try {
+  //       setLoading(true)
+  //       // Lấy dữ liệu thống kê cho 30 ngày gần nhất
+  //       const endDate = new Date().toISOString()
+  //       const startDate = new Date(Date.now() - 30000 * 24 * 60 * 60 * 1000).toISOString()
 
-        const response = await StatisticAPI.getStatisticOverview({
-          startDate,
-          endDate
-        })
+  //       const response = await StatisticAPI.getStatisticOverview({
+  //         startDate,
+  //         endDate
+  //       })
 
-        if (response.data?.success && response.data?.data) {
-          setStatistics(response.data.data)
-        }
-      } catch (error) {
-        console.error('Error fetching statistics:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
+  //       if (response.data?.success && response.data?.data) {
+  //         setStatistics(response.data.data)
+  //       }
+  //     } catch (error) {
+  //       console.error('Error fetching statistics:', error)
+  //     } finally {
+  //       setLoading(false)
+  //     }
+  //   }
 
-    fetchStatistics()
-  }, [])
+  //   fetchStatistics()
+  // }, [])
 
   // Format currency
   const formatCurrency = (value: number) => {
@@ -58,83 +64,83 @@ const TotalListCards = () => {
   }
 
   // Prepare data for cards
-  // const data: UserDataType[] = [
-  //   {
-  //     title: 'Tổng hồ sơ',
-  //     stats: statistics ? statistics.totalLicenseRegistration?.toString() || '0' : '...',
-  //     avatarIcon: 'ri-article-line',
-  //     avatarColor: 'primary',
-  //     subtitle: 'So với tháng trước',
-  //     trendNumber: statistics ? `${statistics.increasePercentageLicenseRegistration?.toFixed(1) || '0'}%` : '...',
-  //     trend: statistics && statistics.increasePercentageLicenseRegistration && statistics.increasePercentageLicenseRegistration > 0 ? 'positive' : 'negative'
-  //   },
-  //   {
-  //     title: 'Xe máy',
-  //     stats: statistics ? statistics.totalMotorbike?.toString() || '0' : '...',
-  //     avatarIcon: 'ri-motorbike-line',
-  //     avatarColor: 'info',
-  //     subtitle: 'So với tháng trước',
-  //     trendNumber: statistics ? `${statistics.increasePercentageMotorbike?.toFixed(1) || '0'}%` : '...',
-  //     trend: statistics && statistics.increasePercentageMotorbike && statistics.increasePercentageMotorbike > 0 ? 'positive' : 'negative'
-  //   },
-  //   {
-  //     title: 'Doanh thu',
-  //     stats: statistics ? formatCurrency(statistics.totalRevenue || 0) : '...',
-  //     avatarIcon: 'ri-money-dollar-circle-line',
-  //     avatarColor: 'success',
-  //     subtitle: 'So với tháng trước',
-  //     trendNumber: statistics ? `${statistics.increasePercentageRevenue?.toFixed(1) || '0'}%` : '...',
-  //     trend: statistics && statistics.increasePercentageRevenue && statistics.increasePercentageRevenue > 0 ? 'positive' : 'negative'
-  //   },
-  //   {
-  //     title: 'Ô tô',
-  //     stats: statistics ? statistics.totalCar?.toString() || '0' : '...',
-  //     avatarIcon: 'ri-car-line',
-  //     avatarColor: 'warning',
-  //     subtitle: 'So với tháng trước',
-  //     trendNumber: statistics ? `${statistics.increasePercentageCar?.toFixed(1) || '0'}%` : '...',
-  //     trend: statistics && statistics.increasePercentageCar && statistics.increasePercentageCar > 0 ? 'positive' : 'negative'
-  //   }
-  // ]
-
   const data: UserDataType[] = [
     {
       title: 'Tổng hồ sơ',
-      stats: '$95k',
+      stats: statistics ? statistics.totalLicenseRegistration?.toString() || '0' : '...',
       avatarIcon: 'ri-article-line',
       avatarColor: 'primary',
-      subtitle: 'Revenue Increase',
-      trendNumber: '12%',
-      trend: 'positive'
+      subtitle: 'So với tháng trước',
+      trendNumber: statistics ? `${statistics.increasePercentageLicenseRegistration?.toFixed(1) || '0'}%` : '...',
+      trend: statistics && statistics.increasePercentageLicenseRegistration && statistics.increasePercentageLicenseRegistration > 0 ? 'positive' : 'negative'
     },
     {
-      title: 'Transactions',
-      stats: '12.1k',
+      title: 'Xe máy',
+      stats: statistics ? statistics.totalMotorbike?.toString() || '0' : '...',
       avatarIcon: 'ri-motorbike-line',
       avatarColor: 'info',
-      subtitle: 'Daily Transactions',
-      trendNumber: '38%',
-      trend: 'positive'
+      subtitle: 'So với tháng trước',
+      trendNumber: statistics ? `${statistics.increasePercentageMotorbike?.toFixed(1) || '0'}%` : '...',
+      trend: statistics && statistics.increasePercentageMotorbike && statistics.increasePercentageMotorbike > 0 ? 'positive' : 'negative'
     },
     {
-      title: 'Revenue',
-      stats: '$95k',
+      title: 'Doanh thu',
+      stats: statistics ? formatCurrency(statistics.totalRevenue || 0) : '...',
       avatarIcon: 'ri-money-dollar-circle-line',
       avatarColor: 'success',
-      subtitle: 'Revenue Increase',
-      trendNumber: '12%',
-      trend: 'negative'
+      subtitle: 'So với tháng trước',
+      trendNumber: statistics ? `${statistics.increasePercentageRevenue?.toFixed(1) || '0'}%` : '...',
+      trend: statistics && statistics.increasePercentageRevenue && statistics.increasePercentageRevenue > 0 ? 'positive' : 'negative'
     },
     {
-      title: 'Transactions',
-      stats: '12.1k',
+      title: 'Ô tô',
+      stats: statistics ? statistics.totalCar?.toString() || '0' : '...',
       avatarIcon: 'ri-car-line',
       avatarColor: 'warning',
-      subtitle: 'Daily Transactions',
-      trendNumber: '38%',
-      trend: 'positive'
+      subtitle: 'So với tháng trước',
+      trendNumber: statistics ? `${statistics.increasePercentageCar?.toFixed(1) || '0'}%` : '...',
+      trend: statistics && statistics.increasePercentageCar && statistics.increasePercentageCar > 0 ? 'positive' : 'negative'
     }
   ]
+
+  // const data: UserDataType[] = [
+  //   {
+  //     title: 'Tổng hồ sơ',
+  //     stats: '$95k',
+  //     avatarIcon: 'ri-article-line',
+  //     avatarColor: 'primary',
+  //     subtitle: 'Revenue Increase',
+  //     trendNumber: '12%',
+  //     trend: 'positive'
+  //   },
+  //   {
+  //     title: 'Transactions',
+  //     stats: '12.1k',
+  //     avatarIcon: 'ri-motorbike-line',
+  //     avatarColor: 'info',
+  //     subtitle: 'Daily Transactions',
+  //     trendNumber: '38%',
+  //     trend: 'positive'
+  //   },
+  //   {
+  //     title: 'Revenue',
+  //     stats: '$95k',
+  //     avatarIcon: 'ri-money-dollar-circle-line',
+  //     avatarColor: 'success',
+  //     subtitle: 'Revenue Increase',
+  //     trendNumber: '12%',
+  //     trend: 'negative'
+  //   },
+  //   {
+  //     title: 'Transactions',
+  //     stats: '12.1k',
+  //     avatarIcon: 'ri-car-line',
+  //     avatarColor: 'warning',
+  //     subtitle: 'Daily Transactions',
+  //     trendNumber: '38%',
+  //     trend: 'positive'
+  //   }
+  // ]
 
 
   return (

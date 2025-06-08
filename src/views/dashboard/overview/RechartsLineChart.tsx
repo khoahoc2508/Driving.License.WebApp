@@ -65,50 +65,50 @@ const RechartsLineChart = () => {
   const [chartData, setChartData] = useState(initialData)
 
   // Fetch exam pass/fail percentage data
-  useEffect(() => {
-    const fetchExamPassFailData = async () => {
-      try {
-        setLoading(true)
-        // Lấy dữ liệu thống kê cho 12 tháng gần nhất
-        const endDate = new Date().toISOString()
-        const startDate = new Date(new Date().setFullYear(new Date().getFullYear() - 1)).toISOString()
+  const fetchExamPassFailData = async () => {
+    try {
+      setLoading(true)
+      // Lấy dữ liệu thống kê cho 12 tháng gần nhất
+      const endDate = new Date().toISOString()
+      const startDate = new Date(new Date().setFullYear(new Date().getFullYear() - 1)).toISOString()
 
-        const response = await StatisticAPI.getExamPassFailPercentage({
-          startDate,
-          endDate
-        })
+      const response = await StatisticAPI.getExamPassFailPercentage({
+        startDate,
+        endDate
+      })
 
-        if (response.data?.success && response.data?.data) {
-          const data: ExamPassFailPercentageResponse = response.data.data
+      if (response.data?.success && response.data?.data) {
+        const data: ExamPassFailPercentageResponse = response.data.data
 
-          // Chuyển đổi dữ liệu từ API thành định dạng cho biểu đồ
-          if (data.dataFollowMonth && data.dataFollowMonth.length > 0) {
-            const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        // Chuyển đổi dữ liệu từ API thành định dạng cho biểu đồ
+        if (data.dataFollowMonth && data.dataFollowMonth.length > 0) {
+          const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
-            // Tạo bản sao của initialData
-            const newChartData = [...initialData]
+          // Tạo bản sao của initialData
+          const newChartData = [...initialData]
 
-            // Cập nhật dữ liệu cho các tháng có trong response
-            data.dataFollowMonth.forEach(item => {
-              if (item.monthOfYear !== undefined && item.monthOfYear >= 1 && item.monthOfYear <= 12) {
-                newChartData[item.monthOfYear - 1] = {
-                  pass: item.passPercentage || 0,
-                  fail: item.failPercentage || 0,
-                  name: monthNames[item.monthOfYear - 1]
-                }
+          // Cập nhật dữ liệu cho các tháng có trong response
+          data.dataFollowMonth.forEach(item => {
+            if (item.monthOfYear !== undefined && item.monthOfYear >= 1 && item.monthOfYear <= 12) {
+              newChartData[item.monthOfYear - 1] = {
+                pass: item.passPercentage || 0,
+                fail: item.failPercentage || 0,
+                name: monthNames[item.monthOfYear - 1]
               }
-            })
+            }
+          })
 
-            // setChartData(newChartData)
-          }
+          // setChartData(newChartData)
         }
-      } catch (error) {
-        console.error('Error fetching exam pass/fail data:', error)
-      } finally {
-        setLoading(false)
       }
+    } catch (error) {
+      console.error('Error fetching exam pass/fail data:', error)
+    } finally {
+      setLoading(false)
     }
+  }
 
+  useEffect(() => {
     fetchExamPassFailData()
   }, [])
 

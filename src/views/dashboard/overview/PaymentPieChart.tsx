@@ -12,6 +12,7 @@ import CardContent from '@mui/material/CardContent'
 
 // Component Imports
 import { Tooltip, PieChart, Pie, Cell, ResponsiveContainer } from '@/libs/Recharts'
+import { StatisticOverviewResponse } from '@/types/statisticTypes'
 
 // Styled Component Imports
 const AppRecharts = dynamic(() => import('@/libs/styles/AppRecharts'))
@@ -49,7 +50,25 @@ const renderCustomizedLabel = (props: LabelProp) => {
   )
 }
 
-const PaymentPieChart = () => {
+type Props = {
+  statistics: StatisticOverviewResponse | null
+}
+
+const PaymentPieChart = ({ statistics }: Props) => {
+  // Tạo dữ liệu cho biểu đồ từ statistics
+  const chartData = [
+    { 
+      name: 'Đã thanh toán', 
+      value: statistics?.percentagePaid || 0, 
+      color: '#00d4bd' 
+    },
+    { 
+      name: 'Chưa thanh toán', 
+      value: statistics?.percentageUnpaid || 0, 
+      color: '#FFA1A1' 
+    },
+  ]
+
   return (
     <Card>
       <CardHeader title='Thanh toán' />
@@ -59,14 +78,14 @@ const PaymentPieChart = () => {
             <ResponsiveContainer>
               <PieChart height={240} style={{ direction: 'ltr' }}>
                 <Pie
-                  data={data}
+                  data={chartData}
                   innerRadius={60}
                   dataKey='value'
                   label={renderCustomizedLabel}
                   labelLine={false}
                   stroke='none'
                 >
-                  {data.map((entry, index) => (
+                  {chartData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>
