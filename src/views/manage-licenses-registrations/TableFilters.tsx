@@ -1,5 +1,5 @@
 // React Imports
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 // MUI Imports
 import CardContent from '@mui/material/CardContent'
@@ -9,30 +9,49 @@ import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import type { SelectChangeEvent } from '@mui/material/Select'
 import Select from '@mui/material/Select'
+import { toast } from 'react-toastify'
 
+import LicenseTypeAPI from '@/libs/api/licenseTypeApi'
+import type { LicenseTypeDto } from '@/types/LicensesRegistrations'
 import CONFIG from '@/configs/config'
 
 // Type Imports
 interface TableFiltersProps {
-  onApplyFilters: (status: boolean[], licenseType: number[]) => void;
+  onApplyFilters: (status: boolean[], licenseTypeCodes: string[]) => void;
 }
 
 const TableFilters = ({ onApplyFilters }: TableFiltersProps) => {
   // States
   const [selectedStatus, setSelectedStatus] = useState<boolean[]>([])
-  const [selectedLicenseType, setSelectedLicenseType] = useState<number[]>([])
+  const [selectedLicenseType, setSelectedLicenseType] = useState<string[]>([])
+  const [licenseTypes, setLicenseTypes] = useState<LicenseTypeDto[]>([])
+
+  // Fetch license types on component mount
+  useEffect(() => {
+    const fetchLicenseTypes = async () => {
+      try {
+        const response = await LicenseTypeAPI.getAllLicenseTypes({});
+        if (response.data.success) {
+          setLicenseTypes(response.data.data || []);
+        }
+      } catch (error) {
+        console.error('Error fetching license types:', error);
+        toast.error('Lỗi khi tải danh sách bằng lái');
+      }
+    };
+
+    fetchLicenseTypes();
+  }, []);
 
   // Handlers for filter selection
   const handleStatusSelect = (event: SelectChangeEvent<boolean[]>) => {
     const value = event.target.value as boolean[]
-
     setSelectedStatus(value)
     onApplyFilters(value, selectedLicenseType)
   }
 
-  const handleLicenseTypeSelect = (event: SelectChangeEvent<number[]>) => {
-    const value = event.target.value as number[]
-
+  const handleLicenseTypeSelect = (event: SelectChangeEvent<string[]>) => {
+    const value = event.target.value as string[]
     setSelectedLicenseType(value)
     onApplyFilters(selectedStatus, value)
   }
@@ -69,10 +88,11 @@ const TableFilters = ({ onApplyFilters }: TableFiltersProps) => {
               labelId='license-type-select'
               multiple
             >
-              <MenuItem value={CONFIG.LicenseType.A1.toString()}>A1</MenuItem>
-              <MenuItem value={CONFIG.LicenseType.A2.toString()}>A2</MenuItem>
-              <MenuItem value={CONFIG.LicenseType.B1.toString()}>B1</MenuItem>
-              <MenuItem value={CONFIG.LicenseType.B2.toString()}>B2</MenuItem>
+              {licenseTypes.map((type) => (
+                <MenuItem key={type.code} value={type.code}>
+                  {type.name}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Grid>
