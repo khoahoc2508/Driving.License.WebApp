@@ -10,7 +10,7 @@ const Page = () => {
         return (
             <CustomerRegisterForm
                 titlePage='Đăng ký bằng lái xe máy'
-                vehicleTypePage={CONFIG.VehicleType.Motorbike}
+                vehicleTypePage={CONFIG.VehicleTypeCode.Motorbike}
             />
         )
     }

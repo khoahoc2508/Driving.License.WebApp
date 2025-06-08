@@ -170,6 +170,11 @@ const Action = {
   Delete: 'DELETE'
 }
 
+const VehicleTypeCode = {
+  Motorbike: 'motorbike',
+  Car: 'car'
+}
+
 const CONFIG = {
   LicenseRegistrationStatus,
   LicenseRegistrationStatusMappingText,
@@ -195,7 +200,8 @@ const CONFIG = {
   IsRetakeMappingText,
   ConfigToken,
   ApprovedOption,
-  Action
+  Action,
+  VehicleTypeCode
 }
 
 export default CONFIG
