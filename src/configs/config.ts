@@ -12,60 +12,6 @@ const LicenseRegistrationStatusMappingText = {
   3: 'Thành công'
 }
 
-const LicenseType = {
-  A1: 0,
-  A2: 1,
-  B1: 2,
-  B2: 3
-}
-
-const LicenseTypeMappingText = {
-  0: 'A1',
-  1: 'A2',
-  2: 'B1',
-  3: 'B2'
-}
-
-const LicenseTypeSelectOption = [
-  {
-    label: 'A1',
-    value: 0
-  },
-  {
-    label: 'A2',
-    value: 1
-  },
-  {
-    label: 'B1',
-    value: 2
-  },
-  {
-    label: 'B2',
-    value: 3
-  }
-]
-
-const VehicleType = {
-  Motorbike: 0,
-  Car: 1
-}
-
-const VehicleTypeMappingText = {
-  0: 'Xe máy',
-  1: 'Ô tô'
-}
-
-const VehicleTypeSelectOption = [
-  {
-    label: 'Xe máy',
-    value: 0
-  },
-  {
-    label: 'Ô tô',
-    value: 1
-  }
-]
-
 const PayerType = {
   Student: 0, // Học viên thanh toán
   Manager: 1 // Bạn (quản lý) thanh toán
@@ -227,12 +173,6 @@ const Action = {
 const CONFIG = {
   LicenseRegistrationStatus,
   LicenseRegistrationStatusMappingText,
-  LicenseType,
-  LicenseTypeMappingText,
-  LicenseTypeSelectOption,
-  VehicleType,
-  VehicleTypeMappingText,
-  VehicleTypeSelectOption,
   PayerType,
   PayerTypeMappingText,
   PaymentContext,

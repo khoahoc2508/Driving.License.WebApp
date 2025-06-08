@@ -768,7 +768,6 @@ export interface components {
         BaseResponseOfListOfLicenseTypeDto: components["schemas"]["BaseResponse"] & {
             data?: components["schemas"]["LicenseTypeDto"][] | null;
         };
-        GetAllLicenseTypesQuery: Record<string, never>;
         BaseResponseOfGetStatisticOverviewByTimeRangeResponse: components["schemas"]["BaseResponse"] & {
             data?: components["schemas"]["GetStatisticOverviewByTimeRangeResponse"] | null;
         };
@@ -1391,7 +1390,7 @@ export interface operations {
     LicenseTypes_GetAllLicenseTypes: {
         parameters: {
             query?: {
-                query?: components["schemas"]["GetAllLicenseTypesQuery"];
+                VehicleTypeCode?: string;
             };
             header?: never;
             path?: never;

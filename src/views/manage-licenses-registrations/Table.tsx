@@ -45,7 +45,7 @@ import ChevronRight from '@menu/svg/ChevronRight'
 // Style Imports
 import CustomAvatar from '@/@core/components/mui/Avatar'
 import CONFIG from '@/configs/config'
-import type { LicenseRegistrationType, LicenseRegistrationTypeVm, LicenseType } from "@/types/LicensesRegistrations"
+import type { LicenseRegistrationType, LicenseRegistrationTypeVm, LicenseTypeDto } from "@/types/LicensesRegistrations"
 import { getInitials } from '@/utils/getInitials'
 import styles from '@core/styles/table.module.css'
 
@@ -94,15 +94,9 @@ const getAvatar = (params: { avatar?: string | null; customer?: string | null })
   }
 }
 
-const getLicenseTypeString = (licenseType: LicenseType | undefined) => {
-  if (licenseType === undefined) return 'N/A';
-
-  const key = (Object.keys(CONFIG.LicenseType) as (keyof typeof CONFIG.LicenseType)[]).find(
-    (k) => CONFIG.LicenseType[k] === licenseType
-  );
-
-
-  return key || 'N/A';
+const getLicenseTypeString = (licenseType: LicenseTypeDto | undefined) => {
+  if (!licenseType) return 'N/A';
+  return licenseType.name;
 };
 
 const getStatusTextAndColor = (status: boolean | undefined) => {
