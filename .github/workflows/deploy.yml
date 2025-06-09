@@ -1,0 +1,31 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches:
+      - test # hoặc branch bạn muốn
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v3
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H 103.216.117.220 >> ~/.ssh/known_hosts
+
+      - name: Deploy to VPS
+        run: |
+          ssh -i ~/.ssh/id_rsa root@103.216.117.220 << 'EOF'
+            cd /home/duynq/DrivingLicense/TestEnv/FE/Driving.License.WebApp/
+            git checkout origin test
+            git pull origin test
+            docker compose down
+            docker compose up -d --build
+          EOF
