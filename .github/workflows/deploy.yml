@@ -22,7 +22,7 @@ jobs:
 
       - name: Deploy to VPS
         run: |
-          ssh -i ~/.ssh/id_ed25519 duynq@${{ secrets.VPS_HOST }} << 'EOF'
+          ssh -i ~/.ssh/id_ed25519 duynq@${{ secrets.VPS_HOST }} -p 24700 << 'EOF'
             cd /home/duynq/DrivingLicense/TestEnv/FE/Driving.License.WebApp/
             git pull origin test
             docker compose down
