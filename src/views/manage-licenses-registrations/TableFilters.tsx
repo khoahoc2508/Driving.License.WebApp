@@ -31,6 +31,7 @@ const TableFilters = ({ onApplyFilters }: TableFiltersProps) => {
     const fetchLicenseTypes = async () => {
       try {
         const response = await LicenseTypeAPI.getAllLicenseTypes({});
+
         if (response.data.success) {
           setLicenseTypes(response.data.data || []);
         }
@@ -46,12 +47,14 @@ const TableFilters = ({ onApplyFilters }: TableFiltersProps) => {
   // Handlers for filter selection
   const handleStatusSelect = (event: SelectChangeEvent<boolean[]>) => {
     const value = event.target.value as boolean[]
+
     setSelectedStatus(value)
     onApplyFilters(value, selectedLicenseType)
   }
 
   const handleLicenseTypeSelect = (event: SelectChangeEvent<string[]>) => {
     const value = event.target.value as string[]
+
     setSelectedLicenseType(value)
     onApplyFilters(selectedStatus, value)
   }

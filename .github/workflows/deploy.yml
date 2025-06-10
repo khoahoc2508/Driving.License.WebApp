@@ -1,0 +1,41 @@
+name: Deploy to VPS (test branch)
+
+on:
+  push:
+    branches:
+      - test
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -p 24700 -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to VPS
+        run: |
+          ssh -i ~/.ssh/id_ed25519 duynq@${{ secrets.VPS_HOST }} -p 24700 << 'EOF'
+            set -e
+
+            cd /home/duynq/DrivingLicense/TestEnv/FE/Driving.License.WebApp/
+
+            echo "🛠️  Pulling latest code..."
+            git pull origin test
+
+            echo "🛠️  Building new Docker image..."
+            docker compose build
+
+            echo "🛑 Stopping old container (if any)..."
+            docker compose down
+
+            echo "🚀 Starting new container..."
+            docker compose up -d
+          EOF

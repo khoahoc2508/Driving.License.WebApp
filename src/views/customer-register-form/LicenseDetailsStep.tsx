@@ -1,18 +1,16 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useFormContext } from 'react-hook-form'
+
+import { Controller, useFormContext } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
 import Grid from '@mui/material/Grid2'
 import Typography from '@mui/material/Typography'
-import { Controller } from 'react-hook-form'
 
 import Button from '@mui/material/Button'
 
 import { FormControl, FormHelperText, InputLabel, MenuItem, Select } from '@mui/material'
-import { FormControlLabel } from '@mui/material'
-import Checkbox from '@mui/material/Checkbox'
 
 import DirectionalIcon from '@/components/common/DirectionalIcon'
 import type { Step } from './index'; // Import the Step type
@@ -48,6 +46,7 @@ const LicenseDetailsStep = ({ steps, handleBack, handleNext, vehicleTypePage }: 
         const response = await LicenseTypeAPI.getAllLicenseTypes({
           VehicleTypeCode: vehicleTypePage
         });
+
         if (response.data.success) {
           setLicenseTypes(response.data.data || []);
         }
@@ -63,14 +62,18 @@ const LicenseDetailsStep = ({ steps, handleBack, handleNext, vehicleTypePage }: 
   // This function will be called by react-hook-form's handleSubmit with validated data
   const handleLicenseDetailsSubmit = () => {
     const currentLicenseType = getValues('licenseType');
+
     if (!currentLicenseType) {
       toast.error('Vui lòng chọn bằng lái');
+
       return;
     }
 
     const licenseTypeExists = licenseTypes.some(type => type.code === currentLicenseType);
+
     if (!licenseTypeExists) {
       toast.error('Loại bằng lái không hợp lệ');
+
       return;
     }
 
@@ -101,7 +104,9 @@ const LicenseDetailsStep = ({ steps, handleBack, handleNext, vehicleTypePage }: 
               validate: value => {
                 if (!value) return 'Vui lòng chọn bằng lái';
                 const exists = licenseTypes.some(type => type.code === value);
+
                 if (!exists) return 'Loại bằng lái không hợp lệ';
+
                 return true;
               }
             }}

@@ -426,10 +426,13 @@ export interface components {
     schemas: {
         PaginatedListOfExamAddressVm: {
             data?: components["schemas"]["ExamAddressVm"][];
+
             /** Format: int32 */
             pageNumber?: number;
+
             /** Format: int32 */
             totalPages?: number;
+
             /** Format: int32 */
             totalCount?: number;
             hasPreviousPage?: boolean;
@@ -441,10 +444,13 @@ export interface components {
         };
         PaginatedListOfExamScheduleVm: {
             data?: components["schemas"]["ExamScheduleVm"][];
+
             /** Format: int32 */
             pageNumber?: number;
+
             /** Format: int32 */
             totalPages?: number;
+
             /** Format: int32 */
             totalCount?: number;
             hasPreviousPage?: boolean;
@@ -453,18 +459,23 @@ export interface components {
         ExamScheduleVm: {
             id?: string;
             name?: string;
+
             /** Format: date-time */
             dateTime?: string;
             note?: string;
             limitType?: components["schemas"]["LimitType"];
+
             /** Format: int32 */
             registrationLimit?: number | null;
+
             /** Format: int32 */
             registeredStudents?: number;
+
             /** Format: int32 */
             passedStudents?: number | null;
             examAddress?: components["schemas"]["ExamAddressVm"];
         };
+
         /** @enum {integer} */
         LimitType: 0 | 1;
         BaseResponseOfExamScheduleById: components["schemas"]["BaseResponse"] & {
@@ -473,14 +484,18 @@ export interface components {
         ExamScheduleById: {
             id?: string;
             name?: string;
+
             /** Format: date-time */
             dateTime?: string;
             note?: string;
             limitType?: components["schemas"]["LimitType"];
+
             /** Format: int32 */
             registrationLimit?: number | null;
+
             /** Format: int32 */
             registeredStudents?: number;
+
             /** Format: int32 */
             passedStudents?: number | null;
             examAddress?: components["schemas"]["ExamAddressVm"];
@@ -490,6 +505,7 @@ export interface components {
             message?: string | null;
             statusCode?: components["schemas"]["HttpStatusCode"];
         };
+
         /** @enum {integer} */
         HttpStatusCode: 100 | 101 | 102 | 103 | 200 | 201 | 202 | 203 | 204 | 205 | 206 | 207 | 208 | 226 | 300 | 300 | 301 | 301 | 302 | 302 | 303 | 303 | 304 | 305 | 306 | 307 | 307 | 308 | 400 | 401 | 402 | 403 | 404 | 405 | 406 | 407 | 408 | 409 | 410 | 411 | 412 | 413 | 414 | 415 | 416 | 417 | 421 | 422 | 422 | 423 | 424 | 426 | 428 | 429 | 431 | 451 | 500 | 501 | 502 | 503 | 504 | 505 | 506 | 507 | 508 | 510 | 511;
         BaseResponseOfString: components["schemas"]["BaseResponse"] & {
@@ -497,10 +513,12 @@ export interface components {
         };
         CreateExamScheduleCommand: {
             name?: string;
+
             /** Format: date-time */
             dateTime?: string;
             limitType?: components["schemas"]["LimitType"];
             licenseTypeId?: string;
+
             /** Format: int32 */
             registrationLimit?: number | null;
             note?: string;
@@ -509,10 +527,12 @@ export interface components {
         UpdateExamScheduleCommand: {
             id?: string;
             name?: string;
+
             /** Format: date-time */
             dateTime?: string;
             licenseTypeId?: string;
             limitType?: components["schemas"]["LimitType"];
+
             /** Format: int32 */
             registrationLimit?: number | null;
             note?: string;
@@ -543,10 +563,13 @@ export interface components {
         };
         PaginatedListOfLicenseRegistrationVm: {
             data?: components["schemas"]["LicenseRegistrationVm"][];
+
             /** Format: int32 */
             pageNumber?: number;
+
             /** Format: int32 */
             totalPages?: number;
+
             /** Format: int32 */
             totalCount?: number;
             hasPreviousPage?: boolean;
@@ -562,6 +585,7 @@ export interface components {
             person?: components["schemas"]["PersonVm"];
             note?: string;
             isPaid?: boolean;
+
             /** Format: decimal */
             amount?: number;
             isRetake?: boolean;
@@ -583,6 +607,7 @@ export interface components {
             id?: string;
             avatarUrl?: string;
             fullName?: string;
+
             /** Format: date */
             birthday?: string;
             sex?: components["schemas"]["SexType"];
@@ -592,10 +617,12 @@ export interface components {
             citizenCardId?: string;
             citizenCardFrontImgUrl?: string;
             citizenCardBackImgUrl?: string;
+
             /** Format: date */
             citizenCardDateOfIssue?: string;
             citizenCardPlaceOfIssue?: string;
         };
+
         /** @enum {integer} */
         SexType: 0 | 1 | 2;
         PersonAddressVm: {
@@ -604,6 +631,7 @@ export interface components {
             wardCode?: string;
             addressDetail?: string;
         };
+
         /** @enum {integer} */
         LicenseRegistrationStatus: 0 | 1 | 2 | 3;
         CreateLicenseRegistrationCommand: {
@@ -616,12 +644,14 @@ export interface components {
             person?: components["schemas"]["PersonCommand"];
             note?: string;
             isPaid?: boolean;
+
             /** Format: decimal */
             amount?: number;
         };
         PersonCommand: {
             avatarUrl?: string;
             fullName?: string;
+
             /** Format: date */
             birthday?: string;
             sex?: components["schemas"]["SexType"];
@@ -631,6 +661,7 @@ export interface components {
             citizenCardId?: string;
             citizenCardFrontImgUrl?: string;
             citizenCardBackImgUrl?: string;
+
             /** Format: date */
             citizenCardDateOfIssue?: string;
             citizenCardPlaceOfIssue?: string;
@@ -657,12 +688,14 @@ export interface components {
             person?: components["schemas"]["PersonCommand2"];
             note?: string;
             isPaid?: boolean;
+
             /** Format: decimal */
             amount?: number;
         };
         PersonCommand2: {
             avatarUrl?: string;
             fullName?: string;
+
             /** Format: date */
             birthday?: string;
             sex?: components["schemas"]["SexType"];
@@ -670,6 +703,7 @@ export interface components {
             email?: string;
             address?: components["schemas"]["AddressCommand2"];
             citizenCardId?: string;
+
             /** Format: date */
             citizenCardDateOfIssue?: string;
             citizenCardPlaceOfIssue?: string;
@@ -695,6 +729,7 @@ export interface components {
             person?: components["schemas"]["PersonById"];
             note?: string;
             isPaid?: boolean;
+
             /** Format: decimal */
             amount?: number;
             isRetake?: boolean;
@@ -706,6 +741,7 @@ export interface components {
             id?: string;
             avatarUrl?: string;
             fullName?: string;
+
             /** Format: date */
             birthday?: string;
             sex?: components["schemas"]["SexType"];
@@ -713,6 +749,7 @@ export interface components {
             email?: string;
             address?: components["schemas"]["PersonAddressById"];
             citizenCardId?: string;
+
             /** Format: date */
             citizenCardDateOfIssue?: string;
             citizenCardPlaceOfIssue?: string;
@@ -727,10 +764,13 @@ export interface components {
         };
         PaginatedListOfLicenseRegistrationHasPaidForAllVm: {
             data?: components["schemas"]["LicenseRegistrationHasPaidForAllVm"][];
+
             /** Format: int32 */
             pageNumber?: number;
+
             /** Format: int32 */
             totalPages?: number;
+
             /** Format: int32 */
             totalCount?: number;
             hasPreviousPage?: boolean;
@@ -747,6 +787,7 @@ export interface components {
             id?: string;
             avatarUrl?: string;
             fullName?: string;
+
             /** Format: date */
             birthday?: string;
             sex?: components["schemas"]["SexType"];
@@ -762,6 +803,7 @@ export interface components {
         ExamScheduleHasPaidForAllVm: {
             id?: string;
             name?: string;
+
             /** Format: date-time */
             dateTime?: string;
         };
@@ -772,26 +814,37 @@ export interface components {
             data?: components["schemas"]["GetStatisticOverviewByTimeRangeResponse"] | null;
         };
         GetStatisticOverviewByTimeRangeResponse: {
+
             /** Format: int32 */
             totalLicenseRegistration?: number;
+
             /** Format: float */
             increasePercentageLicenseRegistration?: number;
+
             /** Format: int32 */
             totalMotorbike?: number;
+
             /** Format: float */
             increasePercentageMotorbike?: number;
+
             /** Format: int32 */
             totalCar?: number;
+
             /** Format: float */
             increasePercentageCar?: number;
+
             /** Format: int64 */
             totalRevenue?: number;
+
             /** Format: float */
             increasePercentageRevenue?: number;
+
             /** Format: int32 */
             totalPaid?: number;
+
             /** Format: float */
             percentagePaid?: number;
+
             /** Format: float */
             percentageUnpaid?: number;
         };
@@ -804,20 +857,26 @@ export interface components {
         };
         DataFollowExamScheduleResponse: {
             name?: string;
+
             /** Format: date-time */
             dateTime?: string;
+
             /** Format: float */
             passPercentage?: number;
+
             /** Format: float */
             failPercentage?: number;
         };
         DataFollowMonthResponse: {
             monthOfYear?: components["schemas"]["MonthOfYearType"];
+
             /** Format: float */
             passPercentage?: number;
+
             /** Format: float */
             failPercentage?: number;
         };
+
         /** @enum {integer} */
         MonthOfYearType: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
         BaseResponseOfGetVehicleTypePercentageByTimeRangeResponse: components["schemas"]["BaseResponse"] & {
@@ -829,17 +888,22 @@ export interface components {
         };
         DataFollowExamScheduleResponse2: {
             name?: string;
+
             /** Format: date-time */
             dateTime?: string;
+
             /** Format: float */
             motorbikePercentage?: number;
+
             /** Format: float */
             carPercentage?: number;
         };
         DataFollowMonthResponse2: {
             monthOfYear?: components["schemas"]["MonthOfYearType"];
+
             /** Format: float */
             motorbikePercentage?: number;
+
             /** Format: float */
             carPercentage?: number;
         };
@@ -852,17 +916,22 @@ export interface components {
         };
         DataFollowExamScheduleResponse3: {
             name?: string;
+
             /** Format: date-time */
             dateTime?: string;
+
             /** Format: int32 */
             motorbikeQuantity?: number;
+
             /** Format: int32 */
             carQuantity?: number;
         };
         DataFollowMonthResponse3: {
             monthOfYear?: components["schemas"]["MonthOfYearType"];
+
             /** Format: int32 */
             motorbikeQuantity?: number;
+
             /** Format: int32 */
             carQuantity?: number;
         };
@@ -893,6 +962,7 @@ export interface components {
         };
         FrontCitizenCardDto: {
             fullName?: string;
+
             /** Format: date */
             birthday?: string;
             sex?: components["schemas"]["SexType"];
@@ -907,6 +977,7 @@ export interface components {
             wardCode?: string;
         };
         BackCitizenCardDto: {
+
             /** Format: date */
             issuedDate?: string;
             issuedBy?: string;
@@ -921,11 +992,13 @@ export interface components {
         CitizenCardPdfRequest: {
             id?: string;
             fullName?: string;
+
             /** Format: date */
             birthday?: string;
             placeOfOrigin?: string;
             placeOfResidence?: string;
             nationality?: string;
+
             /** Format: date */
             issuedDate?: string;
             issuedBy?: string;
@@ -1506,6 +1579,7 @@ export interface operations {
         requestBody?: {
             content: {
                 "multipart/form-data": {
+
                     /** Format: binary */
                     File?: string | null;
                 };
