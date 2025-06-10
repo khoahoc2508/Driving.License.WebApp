@@ -1,5 +1,7 @@
 services:
   web:
+    container_name: driving-license
+    image: driving-license:test
     build:
       context: .
       dockerfile: Dockerfile
