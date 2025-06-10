@@ -23,37 +23,6 @@ type Props = {
 }
 
 const TotalListCards = ({ statistics }: Props) => {
-  // States
-  // const [loading, setLoading] = useState(true)
-  // const [statistics, setStatistics] = useState<StatisticOverviewResponse | null>(null)
-
-  // Fetch statistics data
-  // useEffect(() => {
-  //   const fetchStatistics = async () => {
-  //     try {
-  //       setLoading(true)
-  //       // Lấy dữ liệu thống kê cho 30 ngày gần nhất
-  //       const endDate = new Date().toISOString()
-  //       const startDate = new Date(Date.now() - 30000 * 24 * 60 * 60 * 1000).toISOString()
-
-  //       const response = await StatisticAPI.getStatisticOverview({
-  //         startDate,
-  //         endDate
-  //       })
-
-  //       if (response.data?.success && response.data?.data) {
-  //         setStatistics(response.data.data)
-  //       }
-  //     } catch (error) {
-  //       console.error('Error fetching statistics:', error)
-  //     } finally {
-  //       setLoading(false)
-  //     }
-  //   }
-
-  //   fetchStatistics()
-  // }, [])
-
   // Format currency
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('vi-VN', {
@@ -102,45 +71,6 @@ const TotalListCards = ({ statistics }: Props) => {
       trend: statistics && statistics.increasePercentageCar && statistics.increasePercentageCar > 0 ? 'positive' : 'negative'
     }
   ]
-
-  // const data: UserDataType[] = [
-  //   {
-  //     title: 'Tổng hồ sơ',
-  //     stats: '$95k',
-  //     avatarIcon: 'ri-article-line',
-  //     avatarColor: 'primary',
-  //     subtitle: 'Revenue Increase',
-  //     trendNumber: '12%',
-  //     trend: 'positive'
-  //   },
-  //   {
-  //     title: 'Transactions',
-  //     stats: '12.1k',
-  //     avatarIcon: 'ri-motorbike-line',
-  //     avatarColor: 'info',
-  //     subtitle: 'Daily Transactions',
-  //     trendNumber: '38%',
-  //     trend: 'positive'
-  //   },
-  //   {
-  //     title: 'Revenue',
-  //     stats: '$95k',
-  //     avatarIcon: 'ri-money-dollar-circle-line',
-  //     avatarColor: 'success',
-  //     subtitle: 'Revenue Increase',
-  //     trendNumber: '12%',
-  //     trend: 'negative'
-  //   },
-  //   {
-  //     title: 'Transactions',
-  //     stats: '12.1k',
-  //     avatarIcon: 'ri-car-line',
-  //     avatarColor: 'warning',
-  //     subtitle: 'Daily Transactions',
-  //     trendNumber: '38%',
-  //     trend: 'positive'
-  //   }
-  // ]
 
 
   return (

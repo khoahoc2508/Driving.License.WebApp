@@ -40,69 +40,12 @@ const initialSeries = [
 
 type Props = { startDate: Date | null | undefined, endDate: Date | null | undefined }
 
-const LicenseRegistrationColumnChart = ({ startDate, endDate }: Props) => {
+const LicenseRegistrationColumnChart = () => {
   // Hooks
   const theme = useTheme()
-  const [loading, setLoading] = useState(true)
   const [series, setSeries] = useState(initialSeries)
 
-  const fetchData = async () => {
-    try {
-      setLoading(true)
-      const response = await StatisticAPI.getVehicleTypeQuantity({
-        startDate: startDate?.toISOString(),
-        endDate: endDate?.toISOString()
-      })
-
-      if (response.data.success && response.data.data) {
-        const data = response.data.data
-
-        // Create month arrays for both vehicle types
-        const motorbikeData = new Array(12).fill(0)
-        const carData = new Array(12).fill(0)
-
-        // Process data for each month
-        if (data.motorbikeDataByMonth) {
-          data.motorbikeDataByMonth.forEach((item: any) => {
-            if (item.month >= 1 && item.month <= 12) {
-              motorbikeData[item.month - 1] = item.quantity || 0
-            }
-          })
-        }
-
-        if (data.carDataByMonth) {
-          data.carDataByMonth.forEach((item: any) => {
-            if (item.month >= 1 && item.month <= 12) {
-              carData[item.month - 1] = item.quantity || 0
-            }
-          })
-        }
-
-        // Update series with new data
-        setSeries([
-          {
-            name: 'Xe máy',
-            type: 'column',
-            data: motorbikeData
-          },
-          {
-            name: 'Ô tô',
-            type: 'column',
-            data: carData
-          }
-        ])
-      }
-    } catch (error) {
-      console.error('Error fetching vehicle type data:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  // Fetch data from API
-  useEffect(() => {
-    fetchData()
-  }, [startDate, endDate])
+ 
 
   const options: ApexOptions = {
     chart: {

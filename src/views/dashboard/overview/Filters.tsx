@@ -1,78 +1,89 @@
+"use client"
+
 import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
-import { Card, CardContent, Grid2, TextField, TextFieldProps } from '@mui/material'
+import { Card, CardContent, TextField, TextFieldProps } from '@mui/material'
+import Grid from '@mui/material/Grid2'
 import FormControl from '@mui/material/FormControl'
-import InputLabel from '@mui/material/InputLabel'
-import { forwardRef } from 'react'
+import { forwardRef, useState } from 'react'
 
 // Third-party Imports
-import { format, addDays } from 'date-fns'
+import { addDays, format } from 'date-fns'
+import { GetStatisticByTimeRangeParams } from '@/types/statisticTypes'
 
 // Types
 type CustomInputProps = TextFieldProps & {
   label: string
-  end: Date | number
-  start: Date | number
+  end: Date | null | undefined
+  start: Date | null | undefined
 }
 
 type FiltersProps = {
-  startDate: Date | null | undefined
-  endDate: Date | null | undefined
-  setStartDate: (date: Date | null | undefined) => void
-  setEndDate: (date: Date | null | undefined) => void
+  params: GetStatisticByTimeRangeParams
+  setParams: (params: GetStatisticByTimeRangeParams) => void
 }
 
 
-const Filters = ({ startDate, endDate, setStartDate, setEndDate }: FiltersProps) => {
+const Filters = ({ params, setParams }: FiltersProps) => {
+  const [startDate, setStartDate] = useState<Date | null | undefined>(null)
+  const [endDate, setEndDate] = useState<Date | null | undefined>(null)
 
   const handleOnChange = (dates: any) => {
     const [start, end] = dates
 
     setStartDate(start)
     setEndDate(end)
+
+    // Chỉ set params khi cả start và end đã được chọn
+    if (start && end) {
+      setParams({
+        startDate: start.toISOString(),
+        endDate: end.toISOString()
+      })
+    }
   }
 
   const CustomInput = forwardRef((props: CustomInputProps, ref) => {
     const { label, start, end, ...rest } = props
 
-    // Only format dates if they are valid and not null/undefined
-    let value = ''
+    // Safely format dates only if they exist
+    const startDateStr = start ? format(start, 'dd/MM/yyyy') : ''
+    const endDateStr = end ? ` - ${format(end, 'dd/MM/yyyy')}` : ''
 
-    if (start && !isNaN(new Date(start).getTime())) {
-      value = format(start, 'dd/MM/yyyy')
-
-      if (end && !isNaN(new Date(end).getTime())) {
-        value += ` - ${format(end, 'dd/MM/yyyy')}`
-      }
-    }
+    const value = startDateStr + endDateStr
 
     return <TextField fullWidth inputRef={ref} {...rest} label={label} value={value} />
   })
 
-  return <>
 
-    <Card>
+  return (
+    <Card sx={{ width: { xs: '100%', sm: '100%', md: '280px' }, mx: 'auto' }}>
       <CardContent>
-        <Grid2 container justifyContent="center">
-          <Grid2>
-            <FormControl fullWidth>
-              <AppReactDatepicker
-                selectsRange
-                endDate={endDate as Date}
-                selected={startDate}
-                startDate={startDate as Date}
-                id='date-range-picker'
-                onChange={handleOnChange}
-                shouldCloseOnSelect={false}
-                customInput={
-                  <CustomInput label='Thời gian' start={startDate as Date | number} end={endDate as Date | number} />
-                }
-              />
-            </FormControl>
-          </Grid2>
-        </Grid2></CardContent>
-
+        <Grid container justifyContent="center">
+          <Grid size={{ xs: 12, sm: 12 }}>
+            <AppReactDatepicker
+              selectsRange
+              endDate={endDate ? endDate : null}
+              selected={startDate ? startDate : null}
+              startDate={startDate ? startDate : null}
+              id='date-range-picker'
+              onChange={handleOnChange}
+              shouldCloseOnSelect={false}
+              dateFormat="dd/MM/yyyy"
+              isClearable={true}
+              placeholderText="Chọn khoảng thời gian"
+              customInput={
+                <CustomInput
+                  label='Khoảng thời gian'
+                  start={endDate ?? null}
+                  end={startDate ?? null}
+                />
+              }
+            />
+          </Grid>
+        </Grid>
+      </CardContent>
     </Card>
-  </>
+  )
 }
 
 export default Filters

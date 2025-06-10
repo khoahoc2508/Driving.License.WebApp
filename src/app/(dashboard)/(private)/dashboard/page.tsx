@@ -6,6 +6,7 @@ import dynamic from 'next/dynamic'
 
 // Component Imports
 import Dashboard from '@/views/dashboard'
+import { ReactElement } from 'react'
 
 
 // Data Imports
@@ -14,7 +15,7 @@ const OverViewTab = dynamic(() => import('@views/dashboard/overview'))
 const RevenueTab = dynamic(() => import('@views/dashboard/revenue'))
 
 // Vars
-const tabContentList = () => ({
+const tabContentList = (): { [key: string]: ReactElement } => ({
   overview: <OverViewTab />,
   revenue: <RevenueTab />
 })
