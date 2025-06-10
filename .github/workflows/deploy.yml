@@ -23,8 +23,19 @@ jobs:
       - name: Deploy to VPS
         run: |
           ssh -i ~/.ssh/id_ed25519 duynq@${{ secrets.VPS_HOST }} -p 24700 << 'EOF'
+            set -e
+
             cd /home/duynq/DrivingLicense/TestEnv/FE/Driving.License.WebApp/
+
+            echo "🛠️  Pulling latest code..."
             git pull origin test
+
+            echo "🛠️  Building new Docker image..."
+            docker compose build
+
+            echo "🛑 Stopping old container (if any)..."
             docker compose down
-            docker compose up -d --build
+
+            echo "🚀 Starting new container..."
+            docker compose up -d
           EOF
