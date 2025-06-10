@@ -1,7 +1,6 @@
 'use client'
 
 // React Imports
-import { useEffect, useState } from 'react'
 
 // MUI Imports
 import Grid from '@mui/material/Grid2'
@@ -14,7 +13,6 @@ import type { StatisticOverviewResponse } from '@/types/statisticTypes'
 import HorizontalWithSubtitle from '@components/card-statistics/HorizontalWithSubtitle'
 
 // API Imports
-import StatisticAPI from '@/libs/api/statisticAPI'
 
 // Props
 

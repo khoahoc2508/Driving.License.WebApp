@@ -1,14 +1,17 @@
 "use client"
 
-import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
-import { Card, CardContent, TextField, TextFieldProps } from '@mui/material'
-import Grid from '@mui/material/Grid2'
-import FormControl from '@mui/material/FormControl'
 import { forwardRef, useState } from 'react'
 
+import type { TextFieldProps } from '@mui/material';
+import { Card, CardContent, TextField } from '@mui/material'
+import Grid from '@mui/material/Grid2'
+
+
 // Third-party Imports
-import { addDays, format } from 'date-fns'
-import { GetStatisticByTimeRangeParams } from '@/types/statisticTypes'
+import { format } from 'date-fns'
+
+import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
+import type { GetStatisticByTimeRangeParams } from '@/types/statisticTypes'
 
 // Types
 type CustomInputProps = TextFieldProps & {
@@ -23,7 +26,7 @@ type FiltersProps = {
 }
 
 
-const Filters = ({ params, setParams }: FiltersProps) => {
+const Filters = ({ setParams }: FiltersProps) => {
   const [startDate, setStartDate] = useState<Date | null | undefined>(null)
   const [endDate, setEndDate] = useState<Date | null | undefined>(null)
 

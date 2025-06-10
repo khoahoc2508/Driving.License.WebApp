@@ -28,6 +28,7 @@ const Dashboard = ({ tabContentList }: { tabContentList: { [key: string]: ReactE
           <Grid size={{ xs: 12 }}>
             <CustomTabList
               onChange={handleChange}
+
               // variant='scrollable'
               pill='true'
               centered={true}

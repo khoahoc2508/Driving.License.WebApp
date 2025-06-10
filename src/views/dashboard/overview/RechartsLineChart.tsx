@@ -61,13 +61,16 @@ const CustomTooltip = (props: TooltipProps<any, any>) => {
 const RechartsLineChart = () => {
   // Hooks
   const theme = useTheme()
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [loading, setLoading] = useState(true)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [chartData, setChartData] = useState(initialData)
 
   // Fetch exam pass/fail percentage data
   const fetchExamPassFailData = async () => {
     try {
       setLoading(true)
+
       // Lấy dữ liệu thống kê cho 12 tháng gần nhất
       const endDate = new Date().toISOString()
       const startDate = new Date(new Date().setFullYear(new Date().getFullYear() - 1)).toISOString()
@@ -116,6 +119,7 @@ const RechartsLineChart = () => {
     <Card>
       <CardHeader
         title='Tỷ lệ thi'
+
         // subheader='Theo tháng'
         sx={{
           flexDirection: ['column', 'row'],

@@ -1,18 +1,21 @@
 
 'use client'
 
+import { useState } from 'react'
+
+import Grid from '@mui/material/Grid2'
+
+
 import { useStatistics } from '@/hooks/useStatistics'
-import StatisticAPI from '@/libs/api/statisticAPI'
-import { ExamPassFailPercentageResponse, GetStatisticByTimeRangeParams, StatisticOverviewResponse } from '@/types/statisticTypes'
+import type { GetStatisticByTimeRangeParams } from '@/types/statisticTypes';
 import Filters from '@/views/dashboard/overview/Filters'
 import LicenseRegistrationColumnChart from '@/views/dashboard/overview/LicenseRegistrationColumnChart'
+
 // MUI Imports
 import PaymentPieChart from '@/views/dashboard/overview/PaymentPieChart'
 import RechartsLineChart from '@/views/dashboard/overview/RechartsLineChart'
 import TotalListCards from '@/views/dashboard/overview/TotalListCards'
-import Grid from '@mui/material/Grid2'
-import { addDays } from 'date-fns'
-import { useEffect, useState, useCallback } from 'react'
+
 
 const OverViewTab = () => {
   // States
@@ -20,13 +23,10 @@ const OverViewTab = () => {
 
   // Use our custom hook
   const {
-    loading,
-    data,
-    fetchAll
-  } = useStatistics({
-    params,
-    autoFetch: true
-  })
+    data } = useStatistics({
+      params,
+      autoFetch: true
+    })
 
   return (
     <Grid container spacing={6}>

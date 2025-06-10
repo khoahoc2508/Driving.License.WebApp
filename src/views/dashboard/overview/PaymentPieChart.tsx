@@ -12,7 +12,7 @@ import CardContent from '@mui/material/CardContent'
 
 // Component Imports
 import { Tooltip, PieChart, Pie, Cell, ResponsiveContainer } from '@/libs/Recharts'
-import { StatisticOverviewResponse } from '@/types/statisticTypes'
+import type { StatisticOverviewResponse } from '@/types/statisticTypes'
 
 // Styled Component Imports
 const AppRecharts = dynamic(() => import('@/libs/styles/AppRecharts'))
@@ -27,10 +27,6 @@ type LabelProp = {
 }
 
 // Vars
-const data = [
-  { name: 'Đã thanh toán', value: 50, color: '#00d4bd' },
-  { name: 'Chưa thanh toán', value: 16, color: '#FFA1A1' },
-]
 
 const RADIAN = Math.PI / 180
 

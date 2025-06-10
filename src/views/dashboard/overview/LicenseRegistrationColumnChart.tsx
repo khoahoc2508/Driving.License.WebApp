@@ -1,7 +1,7 @@
 'use client'
 
 // React Imports
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 // Next Imports
 import dynamic from 'next/dynamic'
@@ -19,7 +19,6 @@ import type { ApexOptions } from 'apexcharts'
 const AppReactApexCharts = dynamic(() => import('@/libs/styles/AppReactApexCharts'))
 
 // API Imports
-import StatisticAPI from '@/libs/api/statisticAPI'
 
 // Style Imports
 import './styles.css'
@@ -38,11 +37,11 @@ const initialSeries = [
   }
 ]
 
-type Props = { startDate: Date | null | undefined, endDate: Date | null | undefined }
 
 const LicenseRegistrationColumnChart = () => {
   // Hooks
   const theme = useTheme()
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [series, setSeries] = useState(initialSeries)
 
  

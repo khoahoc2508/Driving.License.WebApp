@@ -1,12 +1,15 @@
 // MUI Imports
+import type { ReactElement } from 'react'
+
+import dynamic from 'next/dynamic'
+
 import Grid from '@mui/material/Grid2'
 
 // Next Imports
-import dynamic from 'next/dynamic'
 
 // Component Imports
 import Dashboard from '@/views/dashboard'
-import { ReactElement } from 'react'
+
 
 
 // Data Imports
