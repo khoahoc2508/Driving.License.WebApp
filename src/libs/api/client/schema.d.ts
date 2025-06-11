@@ -180,6 +180,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/license-types": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["LicenseTypes_GetAllLicenseTypes"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/statistics/overview": {
         parameters: {
             query?: never;
@@ -270,6 +286,22 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["Uploads_UploadFiles"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/vehicle-types": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["VehicleTypes_GetAllLicenseTypes"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -394,10 +426,13 @@ export interface components {
     schemas: {
         PaginatedListOfExamAddressVm: {
             data?: components["schemas"]["ExamAddressVm"][];
+
             /** Format: int32 */
             pageNumber?: number;
+
             /** Format: int32 */
             totalPages?: number;
+
             /** Format: int32 */
             totalCount?: number;
             hasPreviousPage?: boolean;
@@ -409,10 +444,13 @@ export interface components {
         };
         PaginatedListOfExamScheduleVm: {
             data?: components["schemas"]["ExamScheduleVm"][];
+
             /** Format: int32 */
             pageNumber?: number;
+
             /** Format: int32 */
             totalPages?: number;
+
             /** Format: int32 */
             totalCount?: number;
             hasPreviousPage?: boolean;
@@ -421,20 +459,26 @@ export interface components {
         ExamScheduleVm: {
             id?: string;
             name?: string;
+
             /** Format: date-time */
             dateTime?: string;
             note?: string;
             limitType?: components["schemas"]["LimitType"];
+
             /** Format: int32 */
             registrationLimit?: number | null;
+
             /** Format: int32 */
             registeredStudents?: number;
+
             /** Format: int32 */
             passedStudents?: number | null;
             examAddress?: components["schemas"]["ExamAddressVm"];
         };
+
         /** @enum {integer} */
         LimitType: 0 | 1;
+
         /** @enum {integer} */
         LicenseType: 0 | 1 | 2 | 3;
         BaseResponseOfExamScheduleById: components["schemas"]["BaseResponse"] & {
@@ -443,14 +487,18 @@ export interface components {
         ExamScheduleById: {
             id?: string;
             name?: string;
+
             /** Format: date-time */
             dateTime?: string;
             note?: string;
             limitType?: components["schemas"]["LimitType"];
+
             /** Format: int32 */
             registrationLimit?: number | null;
+
             /** Format: int32 */
             registeredStudents?: number;
+
             /** Format: int32 */
             passedStudents?: number | null;
             examAddress?: components["schemas"]["ExamAddressVm"];
@@ -460,6 +508,7 @@ export interface components {
             message?: string | null;
             statusCode?: components["schemas"]["HttpStatusCode"];
         };
+
         /** @enum {integer} */
         HttpStatusCode: 100 | 101 | 102 | 103 | 200 | 201 | 202 | 203 | 204 | 205 | 206 | 207 | 208 | 226 | 300 | 300 | 301 | 301 | 302 | 302 | 303 | 303 | 304 | 305 | 306 | 307 | 307 | 308 | 400 | 401 | 402 | 403 | 404 | 405 | 406 | 407 | 408 | 409 | 410 | 411 | 412 | 413 | 414 | 415 | 416 | 417 | 421 | 422 | 422 | 423 | 424 | 426 | 428 | 429 | 431 | 451 | 500 | 501 | 502 | 503 | 504 | 505 | 506 | 507 | 508 | 510 | 511;
         BaseResponseOfString: components["schemas"]["BaseResponse"] & {
@@ -467,10 +516,12 @@ export interface components {
         };
         CreateExamScheduleCommand: {
             name?: string;
+
             /** Format: date-time */
             dateTime?: string;
             limitType?: components["schemas"]["LimitType"];
-            licenseType?: components["schemas"]["LicenseType"];
+            licenseTypeId?: string;
+
             /** Format: int32 */
             registrationLimit?: number | null;
             note?: string;
@@ -479,9 +530,12 @@ export interface components {
         UpdateExamScheduleCommand: {
             id?: string;
             name?: string;
+
             /** Format: date-time */
             dateTime?: string;
+            licenseTypeId?: string;
             limitType?: components["schemas"]["LimitType"];
+
             /** Format: int32 */
             registrationLimit?: number | null;
             note?: string;
@@ -512,10 +566,13 @@ export interface components {
         };
         PaginatedListOfLicenseRegistrationVm: {
             data?: components["schemas"]["LicenseRegistrationVm"][];
+
             /** Format: int32 */
             pageNumber?: number;
+
             /** Format: int32 */
             totalPages?: number;
+
             /** Format: int32 */
             totalCount?: number;
             hasPreviousPage?: boolean;
@@ -523,14 +580,15 @@ export interface components {
         };
         LicenseRegistrationVm: {
             id?: string;
-            vehicleType?: components["schemas"]["VehicleType"];
-            licenseType?: components["schemas"]["LicenseType"];
+            vehicleType?: components["schemas"]["VehicleTypeDto"];
+            licenseType?: components["schemas"]["LicenseTypeDto"];
             hasCarLicense?: boolean;
             hasCompletedHealthCheck?: boolean;
             hasApproved?: boolean;
             person?: components["schemas"]["PersonVm"];
             note?: string;
             isPaid?: boolean;
+
             /** Format: decimal */
             amount?: number;
             isRetake?: boolean;
@@ -538,12 +596,21 @@ export interface components {
             passed?: boolean | null;
             status?: components["schemas"]["LicenseRegistrationStatus"];
         };
-        /** @enum {integer} */
-        VehicleType: 0 | 1;
+        VehicleTypeDto: {
+            code?: string;
+            name?: string;
+            description?: string;
+        };
+        LicenseTypeDto: {
+            code?: string;
+            name?: string;
+            description?: string;
+        };
         PersonVm: {
             id?: string;
             avatarUrl?: string;
             fullName?: string;
+
             /** Format: date */
             birthday?: string;
             sex?: components["schemas"]["SexType"];
@@ -553,10 +620,12 @@ export interface components {
             citizenCardId?: string;
             citizenCardFrontImgUrl?: string;
             citizenCardBackImgUrl?: string;
+
             /** Format: date */
             citizenCardDateOfIssue?: string;
             citizenCardPlaceOfIssue?: string;
         };
+
         /** @enum {integer} */
         SexType: 0 | 1 | 2;
         PersonAddressVm: {
@@ -565,11 +634,12 @@ export interface components {
             wardCode?: string;
             addressDetail?: string;
         };
+
         /** @enum {integer} */
         LicenseRegistrationStatus: 0 | 1 | 2 | 3;
         CreateLicenseRegistrationCommand: {
-            vehicleType?: components["schemas"]["VehicleType"];
-            licenseType?: components["schemas"]["LicenseType"];
+            vehicleTypeCode?: string;
+            licenseTypeCode?: string;
             hasCarLicense?: boolean;
             hasCompletedHealthCheck?: boolean;
             hasApproved?: boolean;
@@ -577,12 +647,14 @@ export interface components {
             person?: components["schemas"]["PersonCommand"];
             note?: string;
             isPaid?: boolean;
+
             /** Format: decimal */
             amount?: number;
         };
         PersonCommand: {
             avatarUrl?: string;
             fullName?: string;
+
             /** Format: date */
             birthday?: string;
             sex?: components["schemas"]["SexType"];
@@ -592,6 +664,7 @@ export interface components {
             citizenCardId?: string;
             citizenCardFrontImgUrl?: string;
             citizenCardBackImgUrl?: string;
+
             /** Format: date */
             citizenCardDateOfIssue?: string;
             citizenCardPlaceOfIssue?: string;
@@ -610,20 +683,22 @@ export interface components {
         };
         UpdateLicenseRegistrationCommand: {
             id?: string;
-            vehicleType?: components["schemas"]["VehicleType"];
-            licenseType?: components["schemas"]["LicenseType"];
+            vehicleTypeCode?: string;
+            licenseTypeCode?: string;
             hasCarLicense?: boolean;
             hasCompletedHealthCheck?: boolean;
             hasApproved?: boolean;
             person?: components["schemas"]["PersonCommand2"];
             note?: string;
             isPaid?: boolean;
+
             /** Format: decimal */
             amount?: number;
         };
         PersonCommand2: {
             avatarUrl?: string;
             fullName?: string;
+
             /** Format: date */
             birthday?: string;
             sex?: components["schemas"]["SexType"];
@@ -631,6 +706,7 @@ export interface components {
             email?: string;
             address?: components["schemas"]["AddressCommand2"];
             citizenCardId?: string;
+
             /** Format: date */
             citizenCardDateOfIssue?: string;
             citizenCardPlaceOfIssue?: string;
@@ -648,14 +724,15 @@ export interface components {
         };
         LicenseRegistrationById: {
             id?: string;
-            vehicleType?: components["schemas"]["VehicleType"];
-            licenseType?: components["schemas"]["LicenseType"];
+            vehicleType?: components["schemas"]["VehicleTypeDto"];
+            licenseType?: components["schemas"]["LicenseTypeDto"];
             hasCarLicense?: boolean;
             hasCompletedHealthCheck?: boolean;
             hasApproved?: boolean;
             person?: components["schemas"]["PersonById"];
             note?: string;
             isPaid?: boolean;
+
             /** Format: decimal */
             amount?: number;
             isRetake?: boolean;
@@ -667,6 +744,7 @@ export interface components {
             id?: string;
             avatarUrl?: string;
             fullName?: string;
+
             /** Format: date */
             birthday?: string;
             sex?: components["schemas"]["SexType"];
@@ -674,6 +752,7 @@ export interface components {
             email?: string;
             address?: components["schemas"]["PersonAddressById"];
             citizenCardId?: string;
+
             /** Format: date */
             citizenCardDateOfIssue?: string;
             citizenCardPlaceOfIssue?: string;
@@ -688,10 +767,13 @@ export interface components {
         };
         PaginatedListOfLicenseRegistrationHasPaidForAllVm: {
             data?: components["schemas"]["LicenseRegistrationHasPaidForAllVm"][];
+
             /** Format: int32 */
             pageNumber?: number;
+
             /** Format: int32 */
             totalPages?: number;
+
             /** Format: int32 */
             totalCount?: number;
             hasPreviousPage?: boolean;
@@ -699,7 +781,7 @@ export interface components {
         };
         LicenseRegistrationHasPaidForAllVm: {
             id?: string;
-            licenseType?: components["schemas"]["LicenseType"];
+            licenseType?: components["schemas"]["LicenseTypeDto"];
             person?: components["schemas"]["PersonHasPaidForAllVm"];
             note?: string;
             examRegistration?: components["schemas"]["ExamRegistrationHasPaidForAllVm"];
@@ -708,6 +790,7 @@ export interface components {
             id?: string;
             avatarUrl?: string;
             fullName?: string;
+
             /** Format: date */
             birthday?: string;
             sex?: components["schemas"]["SexType"];
@@ -723,33 +806,48 @@ export interface components {
         ExamScheduleHasPaidForAllVm: {
             id?: string;
             name?: string;
+
             /** Format: date-time */
             dateTime?: string;
+        };
+        BaseResponseOfListOfLicenseTypeDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["LicenseTypeDto"][] | null;
         };
         BaseResponseOfGetStatisticOverviewByTimeRangeResponse: components["schemas"]["BaseResponse"] & {
             data?: components["schemas"]["GetStatisticOverviewByTimeRangeResponse"] | null;
         };
         GetStatisticOverviewByTimeRangeResponse: {
+
             /** Format: int32 */
             totalLicenseRegistration?: number;
+
             /** Format: float */
             increasePercentageLicenseRegistration?: number;
+
             /** Format: int32 */
             totalMotorbike?: number;
+
             /** Format: float */
             increasePercentageMotorbike?: number;
+
             /** Format: int32 */
             totalCar?: number;
+
             /** Format: float */
             increasePercentageCar?: number;
+
             /** Format: int64 */
             totalRevenue?: number;
+
             /** Format: float */
             increasePercentageRevenue?: number;
+
             /** Format: int32 */
             totalPaid?: number;
+
             /** Format: float */
             percentagePaid?: number;
+
             /** Format: float */
             percentageUnpaid?: number;
         };
@@ -762,20 +860,26 @@ export interface components {
         };
         DataFollowExamScheduleResponse: {
             name?: string;
+
             /** Format: date-time */
             dateTime?: string;
+
             /** Format: float */
             passPercentage?: number;
+
             /** Format: float */
             failPercentage?: number;
         };
         DataFollowMonthResponse: {
             monthOfYear?: components["schemas"]["MonthOfYearType"];
+
             /** Format: float */
             passPercentage?: number;
+
             /** Format: float */
             failPercentage?: number;
         };
+
         /** @enum {integer} */
         MonthOfYearType: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
         BaseResponseOfGetVehicleTypePercentageByTimeRangeResponse: components["schemas"]["BaseResponse"] & {
@@ -787,17 +891,22 @@ export interface components {
         };
         DataFollowExamScheduleResponse2: {
             name?: string;
+
             /** Format: date-time */
             dateTime?: string;
+
             /** Format: float */
             motorbikePercentage?: number;
+
             /** Format: float */
             carPercentage?: number;
         };
         DataFollowMonthResponse2: {
             monthOfYear?: components["schemas"]["MonthOfYearType"];
+
             /** Format: float */
             motorbikePercentage?: number;
+
             /** Format: float */
             carPercentage?: number;
         };
@@ -810,17 +919,22 @@ export interface components {
         };
         DataFollowExamScheduleResponse3: {
             name?: string;
+
             /** Format: date-time */
             dateTime?: string;
+
             /** Format: int32 */
             motorbikeQuantity?: number;
+
             /** Format: int32 */
             carQuantity?: number;
         };
         DataFollowMonthResponse3: {
             monthOfYear?: components["schemas"]["MonthOfYearType"];
+
             /** Format: int32 */
             motorbikeQuantity?: number;
+
             /** Format: int32 */
             carQuantity?: number;
         };
@@ -835,6 +949,10 @@ export interface components {
         BaseResponseOfListOfUploadFileResult: components["schemas"]["BaseResponse"] & {
             data?: components["schemas"]["UploadFileResult"][] | null;
         };
+        BaseResponseOfListOfVehicleTypeDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["VehicleTypeDto"][] | null;
+        };
+        GetAllVehicleTypesQuery: Record<string, never>;
         BaseResponseOfListOfCitizenCardDto: components["schemas"]["BaseResponse"] & {
             data?: components["schemas"]["CitizenCardDto"][] | null;
         };
@@ -847,6 +965,7 @@ export interface components {
         };
         FrontCitizenCardDto: {
             fullName?: string;
+
             /** Format: date */
             birthday?: string;
             sex?: components["schemas"]["SexType"];
@@ -861,6 +980,7 @@ export interface components {
             wardCode?: string;
         };
         BackCitizenCardDto: {
+
             /** Format: date */
             issuedDate?: string;
             issuedBy?: string;
@@ -875,11 +995,13 @@ export interface components {
         CitizenCardPdfRequest: {
             id?: string;
             fullName?: string;
+
             /** Format: date */
             birthday?: string;
             placeOfOrigin?: string;
             placeOfResidence?: string;
             nationality?: string;
+
             /** Format: date */
             issuedDate?: string;
             issuedBy?: string;
@@ -954,7 +1076,7 @@ export interface operations {
                 FromDate?: string;
                 ToDate?: string;
                 LimitTypes?: components["schemas"]["LimitType"][];
-                LicenseTypes?: components["schemas"]["LicenseType"][];
+                LicenseTypeCodes?: string[];
             };
             header?: never;
             path?: never;
@@ -1165,7 +1287,7 @@ export interface operations {
                 IsExamScheduled?: boolean | null;
                 HasCompletedHealthCheck?: boolean[] | null;
                 HasApproved?: boolean[] | null;
-                LicenseType?: components["schemas"]["LicenseType"][] | null;
+                LicenseTypeCodes?: string[];
             };
             header?: never;
             path?: never;
@@ -1341,6 +1463,27 @@ export interface operations {
             };
         };
     };
+    LicenseTypes_GetAllLicenseTypes: {
+        parameters: {
+            query?: {
+                VehicleTypeCode?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfLicenseTypeDto"];
+                };
+            };
+        };
+    };
     Statistics_GetStatisticOverviewByTimeRange: {
         parameters: {
             query?: {
@@ -1439,6 +1582,7 @@ export interface operations {
         requestBody?: {
             content: {
                 "multipart/form-data": {
+
                     /** Format: binary */
                     File?: string | null;
                 };
@@ -1476,6 +1620,27 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BaseResponseOfListOfUploadFileResult"];
+                };
+            };
+        };
+    };
+    VehicleTypes_GetAllLicenseTypes: {
+        parameters: {
+            query?: {
+                query?: components["schemas"]["GetAllVehicleTypesQuery"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfVehicleTypeDto"];
                 };
             };
         };

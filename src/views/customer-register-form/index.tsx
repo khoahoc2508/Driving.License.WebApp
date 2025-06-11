@@ -147,13 +147,13 @@ const personalSchema = object({
 
 
 const licenseDetailsSchema = object({
-  licenseType: pipe(number()),
+  licenseType: pipe(string(), nonEmpty('Vui lòng chọn bằng lái')),
   hasCompletedHealthCheck: pipe(boolean()),
   hasCarLicense: pipe(boolean())
 });
 
 type LicenseDetailsFormValues = {
-  licenseType: number;
+  licenseType: string;
   hasCompletedHealthCheck: boolean;
   hasCarLicense: boolean;
 };
@@ -213,7 +213,7 @@ type FormValues = {
   street: string;
 
   // License Details fields
-  licenseType: number;
+  licenseType: string;
   hasCompletedHealthCheck: boolean;
   hasCarLicense: boolean;
 
@@ -225,7 +225,7 @@ type FormValues = {
 
 type Props = {
   titlePage: ReactNode
-  vehicleTypePage: any
+  vehicleTypePage: string
 }
 
 // Main Component
@@ -273,9 +273,9 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
   const licenseDetailsFormMethods = useForm<LicenseDetailsFormValues>({
     resolver: valibotResolver(licenseDetailsSchema),
     defaultValues: {
-      licenseType: 0,
+      licenseType: '',
       hasCompletedHealthCheck: false,
-      hasCarLicense: vehicleTypePage === CONFIG.VehicleType.Car ? true : false
+      hasCarLicense: vehicleTypePage === CONFIG.VehicleTypeCode.Car ? true : false
     }
   });
 
@@ -300,7 +300,7 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
 
   // Set default values based on vehicle type
   useEffect(() => {
-    if (vehicleTypePage === CONFIG.VehicleType.Car) {
+    if (vehicleTypePage === CONFIG.VehicleTypeCode.Car) {
       licenseDetailsFormMethods.setValue('hasCarLicense', true);
     }
   }, [vehicleTypePage]);
@@ -418,9 +418,9 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
       street: ''
     })
     licenseDetailsFormMethods.reset({
-      licenseType: 0,
+      licenseType: '',
       hasCompletedHealthCheck: false,
-      hasCarLicense: vehicleTypePage === CONFIG.VehicleType.Car ? true : false
+      hasCarLicense: vehicleTypePage === CONFIG.VehicleTypeCode.Car ? true : false
     });
     paymentInformationFormMethods.reset({
       amount: undefined,
@@ -451,10 +451,8 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
         data.citizenCardBackImgUrl?.length > 0 ? UploadAPI.uploadFiles(data.citizenCardBackImgUrl) : Promise.resolve(null)
       ]);
 
-      debugger;
-
       const apiData: LicenseRegistrationCustomerResquest = {
-        licenseType: CONFIG.LicenseTypeSelectOption.find(opt => opt.value === data.licenseType)?.value as 0 | 1 | 2 | 3 || 0,
+        licenseTypeCode: data.licenseType,
         hasCarLicense: data.hasCarLicense,
         hasCompletedHealthCheck: data.hasCompletedHealthCheck,
         hasApproved: false,
@@ -483,7 +481,7 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
         note: data.note,
         isPaid: data.isPaid,
         amount: data.amount ?? undefined,
-        vehicleType: vehicleTypePage
+        vehicleTypeCode: vehicleTypePage
       };
 
       const response = await LicenseRegistrationAPI.createLicensesRegistrationsForCustomer(apiData);

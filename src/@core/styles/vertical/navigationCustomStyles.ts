@@ -16,7 +16,7 @@ const navigationCustomStyles = (verticalNavOptions: VerticalNavState, theme: The
 
   return {
     color: 'var(--mui-palette-text-primary)',
-    zIndex: 'var(--drawer-z-index) !important',
+    zIndex: '1000',
     [`& .${verticalNavClasses.header}`]: {
       paddingBlock: theme.spacing(5),
       paddingInline: theme.spacing(5.5, 4),
