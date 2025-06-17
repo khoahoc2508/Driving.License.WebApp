@@ -20,6 +20,7 @@ import { TextField } from '@mui/material'
 import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
 import { ExamAddressType } from '@/types/examAddressTypes'
 import CONFIG from '@/configs/config'
+import { LicenseTypeDto } from '@/types/LicensesRegistrations'
 
 // Types
 type CustomInputProps = TextFieldProps & {
@@ -30,6 +31,7 @@ type CustomInputProps = TextFieldProps & {
 
 type TableFiltersProps = {
   examAddresses: ExamAddressType[]
+  licenseTypes: LicenseTypeDto[]
   setParams: (params: any) => void
 }
 

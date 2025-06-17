@@ -58,7 +58,9 @@ import AddExasmScheduleDrawer from '@/views/exam-schedules/list/AddExasmSchedule
 import { ExamAddressType, PaginatedListOfExamAddressType } from '@/types/examAddressTypes'
 import ExamAddressAPI from '@/libs/api/examAddressAPI'
 import OptionMenu from '@/@core/components/option-menu'
-import AssignLicenseRegistrationsDrawer from '@/views/exam-schedules/list/assign-license-registrations/AssignLicenseRegistrationsDrawer'
+import ViewLicenseRegistrationsDrawer from '@/views/exam-schedules/list/assign-license-registrations/ViewLicenseRegistrationsDrawer'
+import LicenseTypeAPI from '@/libs/api/licenseTypeApi'
+import { LicenseTypeDto } from '@/types/LicensesRegistrations'
 
 
 declare module '@tanstack/table-core' {
@@ -141,7 +143,10 @@ const ProductListTable = () => {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false)
   const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null)
   const [selectedExamScheduleId, setSelectedExamScheduleId] = useState<string>()
+
+  // States of api
   const [examAddresses, setExamAddresses] = useState<ExamAddressType[]>([])
+  const [licenseTypes, setLicenseTypes] = useState<LicenseTypeDto[]>([])
 
   // States for data
   // const [examSchedules, setExamSchedules] = useState<ExamScheduleType[]>([])
@@ -349,25 +354,6 @@ const ProductListTable = () => {
     }
   }
 
-  const fetchExamAddresses = async () => {
-    try {
-
-      const response = await ExamAddressAPI.getExamAddresses({ pageNumber: 1, pageSize: 10 })
-
-      const paginatedData = response.data as PaginatedListOfExamAddressType
-
-      if (paginatedData.data && paginatedData.data.length > 0) {
-        setExamAddresses(paginatedData.data || [])
-      }
-
-    } catch (error) {
-      console.error('Error fetching exam addesses:', error)
-      setExamAddresses([])
-    } finally {
-    }
-  }
-
-
   const handleOpenDeleteDialog = (id: string | undefined) => {
     if (id) {
       setItemIdToDelete(id)
@@ -418,15 +404,49 @@ const ProductListTable = () => {
     fetchExamSchedules()
   }, [JSON.stringify(params), reloadFlag])
 
+
+  // Fetch license types on component mount
   useEffect(() => {
+    const fetchLicenseTypes = async () => {
+      try {
+        const response = await LicenseTypeAPI.getAllLicenseTypes({});
+
+        if (response.data.success) {
+          setLicenseTypes(response.data.data || []);
+        }
+      } catch (error) {
+        console.error('Error fetching license types:', error);
+        toast.error('Lỗi khi tải danh sách bằng lái');
+      }
+    };
+
+    const fetchExamAddresses = async () => {
+      try {
+
+        const response = await ExamAddressAPI.getExamAddresses({ pageNumber: 1, pageSize: 10 })
+
+        const paginatedData = response.data as PaginatedListOfExamAddressType
+
+        if (paginatedData.data) {
+          setExamAddresses(paginatedData.data || [])
+        }
+
+      } catch (error) {
+        console.error('Error fetching exam addesses:', error)
+        toast.error('Lỗi khi tải danh sách địa điểm thi');
+      }
+    }
+
+
+    fetchLicenseTypes()
     fetchExamAddresses()
-  }, [])
+  }, []);
 
   return (
     <>
       <Card>
         <CardHeader title='Filters' className='pbe-4' />
-        <TableFilters examAddresses={examAddresses} setParams={setParams} />
+        <TableFilters examAddresses={examAddresses} licenseTypes={licenseTypes} setParams={setParams} />
         <Divider />
         <div className='flex justify-between flex-col items-start sm:flex-row sm:items-center gap-y-4 p-5'>
           <DebouncedInput
@@ -516,6 +536,8 @@ const ProductListTable = () => {
         />
       </Card>
       <AddExasmScheduleDrawer
+        examAddresses={examAddresses}
+        licenseTypes={licenseTypes}
         open={openAddDrawer}
         handleClose={() => {
           {
@@ -527,7 +549,7 @@ const ProductListTable = () => {
         examScheduleId={selectedExamScheduleId}
         onSuccess={reloadData}
       />
-      <AssignLicenseRegistrationsDrawer
+      <ViewLicenseRegistrationsDrawer
         open={openAssignDrawer}
         handleClose={() => {
           setSelectedExamScheduleId(undefined)

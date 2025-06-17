@@ -25,10 +25,13 @@ import CONFIG from '@/configs/config'
 import ExamAddressAPI from "@/libs/api/examAddressAPI"
 import type { ExamAddressType, PaginatedListOfExamAddressType } from "@/types/examAddressTypes"
 import ExamScheduleAPI from "@/libs/api/examScheduleAPI"
-import type { CreateExamScheduleCommandType, ExamScheduleType, UpdateExamScheduleCommandType } from "@/types/examScheduleTypes"
-import { LicenseType } from "@/types/LicensesRegistrations"
+import type { CreateExamScheduleCommandType, ExamScheduleByIdType, ExamScheduleType, UpdateExamScheduleCommandType } from "@/types/examScheduleTypes"
+import LicenseTypeAPI from "@/libs/api/licenseTypeApi"
+import { LicenseTypeDto } from "@/types/LicensesRegistrations"
 
 type Props = {
+  examAddresses: ExamAddressType[]
+  licenseTypes: LicenseTypeDto[]
   open: boolean
   handleClose: () => void
   onSuccess?: () => void
@@ -48,14 +51,13 @@ type FormValues = {
   registrationLimit?: number | null;
   note?: string;
   examAddressId?: string;
-  licenseType?: LicenseType;
+  licenseTypeCode?: string;
 }
 
 const AddExasmScheduleDrawer = (props: Props) => {
   // Props
-  const { open, handleClose, onSuccess, examScheduleId } = props
+  const { examAddresses, licenseTypes, open, handleClose, onSuccess, examScheduleId } = props
   const isEditMode = !!examScheduleId
-  const [examAddresses, setExamAddresses] = useState<ExamAddressType[]>([])
 
   const defaultValues: FormValues = {
     name: '',
@@ -64,7 +66,7 @@ const AddExasmScheduleDrawer = (props: Props) => {
     registrationLimit: 10,
     note: undefined,
     examAddressId: '',
-    licenseType: undefined
+    licenseTypeCode: ''
   }
 
   // Hooks
@@ -99,7 +101,7 @@ const AddExasmScheduleDrawer = (props: Props) => {
         registrationLimit: data.registrationLimit,
         note: data.note || '',
         examAddressId: data.examAddressId,
-        licenseType: data.licenseType
+        licenseTypeCode: data.licenseTypeCode
       }
 
       const response = await ExamScheduleAPI.createExamSchedule(payload)
@@ -128,10 +130,10 @@ const AddExasmScheduleDrawer = (props: Props) => {
         limitType: data.limitType,
         registrationLimit: data.registrationLimit,
         note: data.note || '',
-        examAddressId: data.examAddressId
+        examAddressId: data.examAddressId,
+        licenseTypeCode: data.licenseTypeCode
       }
 
-      console.log(payload)
       const response = await ExamScheduleAPI.updateExamSchedule(payload)
 
       if (response.data?.success) {
@@ -149,37 +151,14 @@ const AddExasmScheduleDrawer = (props: Props) => {
     }
   }
 
-
-  // Fetch data function
-  const fetchExamAddresses = async () => {
-    try {
-      const response = await ExamAddressAPI.getExamAddresses({ pageNumber: 1, pageSize: 10 })
-
-      const paginatedData = response.data as PaginatedListOfExamAddressType
-
-      if (paginatedData.data && paginatedData.data.length > 0) {
-        setExamAddresses(paginatedData.data || [])
-        // if (!isEditMode)
-        //   reset({ ...defaultValues, examAddressId: paginatedData.data[0].id })
-      }
-
-    } catch (error) {
-      console.error('Error fetching exam addesses:', error)
-      setExamAddresses([])
-    } finally {
-    }
-  }
-
   const fetchExamAddressById = async (id: string) => {
     try {
 
       const response = await ExamScheduleAPI.getExamScheduleById(id)
 
-      const examSchedule = response.data.data as ExamScheduleType
+      const examSchedule = response.data.data as ExamScheduleByIdType
 
       if (examSchedule) {
-        console.log(examSchedule)
-
 
         // setExamAddresses(paginatedData.data || [])
         const examScheduleForUpdate = {
@@ -192,18 +171,14 @@ const AddExasmScheduleDrawer = (props: Props) => {
           registrationLimit: examSchedule.registrationLimit,
           note: examSchedule.note,
           examAddressId: examSchedule.examAddress?.id,
-          licenseType: undefined
+          licenseTypeCode: examSchedule.licenseTypeCode
         }
-
-        console.log(examSchedule.examAddress?.id);
 
         reset(examScheduleForUpdate)
       }
 
     } catch (error) {
       console.error('Error fetching exam schedule by id:', error)
-
-      // setExamAddresses([])
     } finally {
     }
   }
@@ -212,15 +187,15 @@ const AddExasmScheduleDrawer = (props: Props) => {
     handleClose()
   }
 
-  useEffect(() => {
-    fetchExamAddresses()
-  }, [])
 
   useEffect(() => {
     if (examScheduleId && open) {
       fetchExamAddressById(examScheduleId)
     }
-  }, [examScheduleId])
+    if (!open) {
+      reset(defaultValues)
+    }
+  }, [open])
 
   return (
     <Drawer
@@ -354,23 +329,23 @@ const AddExasmScheduleDrawer = (props: Props) => {
 
               <Grid size={{ xs: 12, sm: 12 }}>
                 <FormControl fullWidth>
-                  <InputLabel error={Boolean(errors.licenseType)}>Loại bằng lái</InputLabel>
+                  <InputLabel error={Boolean(errors.licenseTypeCode)}>Loại bằng lái</InputLabel>
                   <Controller
-                    name='licenseType'
+                    name='licenseTypeCode'
                     control={control}
                     rules={{ required: true }}
                     render={({ field }) => (
-                      <Select {...field} label='Loại bằng lái' error={Boolean(errors.licenseType)}>
-                        {CONFIG.LicenseTypeSelectOption.map((option) => (
-                          <MenuItem key={option.value} value={option.value}>
-                            {option.label}
+                      <Select {...field} label='Loại bằng lái' error={Boolean(errors.licenseTypeCode)}>
+                        {licenseTypes.map((licenseType) => (
+                          <MenuItem key={licenseType.code} value={licenseType.code}>
+                            {licenseType.name}
                           </MenuItem>
                         ))}
                       </Select>
                     )}
 
                   />
-                  {errors.licenseType && <FormHelperText error>This field is required.</FormHelperText>}
+                  {errors.licenseTypeCode && <FormHelperText error>This field is required.</FormHelperText>}
                 </FormControl>
               </Grid>
 

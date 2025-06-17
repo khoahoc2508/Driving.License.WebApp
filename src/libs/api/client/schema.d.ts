@@ -4,6 +4,38 @@
  */
 
 export interface paths {
+    "/connect/token": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Authorization_Exchange"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/connect/userinfo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Authorization_UserinfoGET"];
+        put?: never;
+        post: operations["Authorization_UserinfoPOST"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/exam/addresses": {
         parameters: {
             query?: never;
@@ -100,6 +132,118 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/exams/by-group/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Exams_GetExamsByGroupExamId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/exams/generate-exam": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Exams_GenerateExam"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/exams/full-critical": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Exams_ExportCitizenInfoToPdf"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/examsubmissions/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ExamSubmissions_GetExamSubmissionById"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/examsubmissions/start-exam": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ExamSubmissions_StartExam"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/examsubmissions/submit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ExamSubmissions_SubmitExam"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/group-exams": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["GroupExams_GetAllGroupExams"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/licenses/registrations": {
         parameters: {
             query?: never;
@@ -188,6 +332,86 @@ export interface paths {
             cookie?: never;
         };
         get: operations["LicenseTypes_GetAllLicenseTypes"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/persons/recognition/citizen-by-files": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Persons_RecognizeCitizenByFile"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/persons/export/pdf": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Persons_ExportCitizenInfoToPdf"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/questions/by-exam/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Questions_GetExamsByGroupExamId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/questions/import": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Questions_ExportCitizenInfoToPdf"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/samples": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Samples_GetSecretResources"];
         put?: never;
         post?: never;
         delete?: never;
@@ -292,102 +516,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/vehicle-types": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["VehicleTypes_GetAllLicenseTypes"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/connect/token": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["Authorization_Exchange"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/connect/userinfo": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["Authorization_UserinfoGET"];
-        put?: never;
-        post: operations["Authorization_UserinfoPOST"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/persons/recognition/citizen-by-files": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["Persons_RecognizeCitizenByFile"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/persons/export/pdf": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["Persons_ExportCitizenInfoToPdf"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/samples": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["Samples_GetSecretResources"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/users": {
         parameters: {
             query?: never;
@@ -420,19 +548,32 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/vehicle-types": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["VehicleTypes_GetAllLicenseTypes"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
         PaginatedListOfExamAddressVm: {
             data?: components["schemas"]["ExamAddressVm"][];
-
             /** Format: int32 */
             pageNumber?: number;
-
             /** Format: int32 */
             totalPages?: number;
-
             /** Format: int32 */
             totalCount?: number;
             hasPreviousPage?: boolean;
@@ -444,13 +585,10 @@ export interface components {
         };
         PaginatedListOfExamScheduleVm: {
             data?: components["schemas"]["ExamScheduleVm"][];
-
             /** Format: int32 */
             pageNumber?: number;
-
             /** Format: int32 */
             totalPages?: number;
-
             /** Format: int32 */
             totalCount?: number;
             hasPreviousPage?: boolean;
@@ -459,48 +597,37 @@ export interface components {
         ExamScheduleVm: {
             id?: string;
             name?: string;
-
             /** Format: date-time */
             dateTime?: string;
             note?: string;
             limitType?: components["schemas"]["LimitType"];
-
             /** Format: int32 */
             registrationLimit?: number | null;
-
             /** Format: int32 */
             registeredStudents?: number;
-
             /** Format: int32 */
             passedStudents?: number | null;
             examAddress?: components["schemas"]["ExamAddressVm"];
         };
-
         /** @enum {integer} */
         LimitType: 0 | 1;
-
-        /** @enum {integer} */
-        LicenseType: 0 | 1 | 2 | 3;
         BaseResponseOfExamScheduleById: components["schemas"]["BaseResponse"] & {
             data?: components["schemas"]["ExamScheduleById"] | null;
         };
         ExamScheduleById: {
             id?: string;
             name?: string;
-
             /** Format: date-time */
             dateTime?: string;
             note?: string;
             limitType?: components["schemas"]["LimitType"];
-
             /** Format: int32 */
             registrationLimit?: number | null;
-
             /** Format: int32 */
             registeredStudents?: number;
-
             /** Format: int32 */
             passedStudents?: number | null;
+            licenseTypeCode?: string;
             examAddress?: components["schemas"]["ExamAddressVm"];
         };
         BaseResponse: {
@@ -508,7 +635,6 @@ export interface components {
             message?: string | null;
             statusCode?: components["schemas"]["HttpStatusCode"];
         };
-
         /** @enum {integer} */
         HttpStatusCode: 100 | 101 | 102 | 103 | 200 | 201 | 202 | 203 | 204 | 205 | 206 | 207 | 208 | 226 | 300 | 300 | 301 | 301 | 302 | 302 | 303 | 303 | 304 | 305 | 306 | 307 | 307 | 308 | 400 | 401 | 402 | 403 | 404 | 405 | 406 | 407 | 408 | 409 | 410 | 411 | 412 | 413 | 414 | 415 | 416 | 417 | 421 | 422 | 422 | 423 | 424 | 426 | 428 | 429 | 431 | 451 | 500 | 501 | 502 | 503 | 504 | 505 | 506 | 507 | 508 | 510 | 511;
         BaseResponseOfString: components["schemas"]["BaseResponse"] & {
@@ -516,12 +642,10 @@ export interface components {
         };
         CreateExamScheduleCommand: {
             name?: string;
-
             /** Format: date-time */
             dateTime?: string;
             limitType?: components["schemas"]["LimitType"];
-            licenseTypeId?: string;
-
+            licenseTypeCode?: string;
             /** Format: int32 */
             registrationLimit?: number | null;
             note?: string;
@@ -530,12 +654,10 @@ export interface components {
         UpdateExamScheduleCommand: {
             id?: string;
             name?: string;
-
             /** Format: date-time */
             dateTime?: string;
-            licenseTypeId?: string;
+            licenseTypeCode?: string;
             limitType?: components["schemas"]["LimitType"];
-
             /** Format: int32 */
             registrationLimit?: number | null;
             note?: string;
@@ -564,15 +686,132 @@ export interface components {
             examScheduleId?: string;
             licenseRegistrationId?: string;
         };
+        BaseResponseOfListOfExamDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["ExamDto"][] | null;
+        };
+        ExamDto: {
+            id?: string;
+            name?: string;
+            description?: string;
+            /** Format: int32 */
+            totalQuestions?: number;
+            /** Format: int32 */
+            passingScore?: number;
+            /** Format: int32 */
+            durationMinutes?: number;
+            examType?: components["schemas"]["ExamType"];
+            licenseTypeCode?: string;
+            groupExamId?: string;
+        };
+        /** @enum {integer} */
+        ExamType: 1 | 2;
+        BaseResponseOfBoolean: components["schemas"]["BaseResponse"] & {
+            data?: boolean;
+        };
+        GenerateExamsCommand: {
+            groupExamId?: string;
+            licenseTypeCode?: string;
+            selectedQuestionNumbers?: number[];
+            selectedCriticalQuestionNumbers?: number[];
+            /** Format: int32 */
+            numberOfExams?: number;
+            /** Format: int32 */
+            questionsPerExam?: number;
+            /** Format: int32 */
+            criticalQuestionsPerExam?: number;
+            /** Format: int32 */
+            durationMinutes?: number;
+            /** Format: int32 */
+            passingScore?: number;
+        };
+        GenerationExamFullCriticalCommand: {
+            groupExamId?: string;
+            licenseTypeCode?: string;
+            criticalQuestionNumbers?: number[];
+            /** Format: int32 */
+            order?: number;
+            /** Format: int32 */
+            durationMinutes?: number;
+        };
+        BaseResponseOfExamSubmissionResultDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["ExamSubmissionResultDto"] | null;
+        };
+        ExamSubmissionResultDto: {
+            id?: string;
+            licenseTypeDto?: components["schemas"]["LicenseTypeDto"];
+            /** Format: time */
+            duration?: string;
+            /** Format: int32 */
+            totalQuestions?: number;
+            /** Format: int32 */
+            correctAnswerCount?: number;
+            hasCriticalMistake?: boolean;
+            isPassed?: boolean;
+            userAnswers?: components["schemas"]["ExamSubmissionAnswerDto"][];
+        };
+        LicenseTypeDto: {
+            code?: string;
+            name?: string;
+            description?: string;
+        };
+        ExamSubmissionAnswerDto: {
+            selectedAnswerId?: string;
+            question?: components["schemas"]["SubmitQuestionDto"];
+        };
+        SubmitQuestionDto: {
+            id?: string;
+            explanation?: string | null;
+            /** Format: int32 */
+            order?: number;
+            content?: string;
+            imageUrl?: string | null;
+            isCriticalQuestion?: boolean;
+            answers?: components["schemas"]["SubmitAnswerDto"][];
+        };
+        SubmitAnswerDto: {
+            id?: string;
+            /** Format: int32 */
+            order?: number;
+            isCorrect?: boolean;
+            content?: string;
+        };
+        BaseResponseOfCreateExamSubmissionResultDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["CreateExamSubmissionResultDto"] | null;
+        };
+        CreateExamSubmissionResultDto: {
+            examSubmissionId?: string;
+        };
+        CreateExamSubmissionCommand: {
+            examSubmissionId?: string;
+        };
+        SubmitExamCommand: {
+            examSubmissionId?: string;
+            answers?: components["schemas"]["AnswerSubmissionRequestDto"][];
+        };
+        AnswerSubmissionRequestDto: {
+            questionId?: string;
+            selectedAnswerId?: string;
+        };
+        BaseResponseOfListOfGroupExamDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GroupExamDto"][] | null;
+        };
+        GroupExamDto: {
+            id?: string;
+            name?: string;
+            description?: string;
+            iconUrl?: string | null;
+            /** Format: int32 */
+            order?: number;
+            parentId?: string | null;
+            children?: components["schemas"]["GroupExamDto"][];
+        };
+        GetAllGroupExamQuery: Record<string, never>;
         PaginatedListOfLicenseRegistrationVm: {
             data?: components["schemas"]["LicenseRegistrationVm"][];
-
             /** Format: int32 */
             pageNumber?: number;
-
             /** Format: int32 */
             totalPages?: number;
-
             /** Format: int32 */
             totalCount?: number;
             hasPreviousPage?: boolean;
@@ -588,7 +827,6 @@ export interface components {
             person?: components["schemas"]["PersonVm"];
             note?: string;
             isPaid?: boolean;
-
             /** Format: decimal */
             amount?: number;
             isRetake?: boolean;
@@ -601,16 +839,10 @@ export interface components {
             name?: string;
             description?: string;
         };
-        LicenseTypeDto: {
-            code?: string;
-            name?: string;
-            description?: string;
-        };
         PersonVm: {
             id?: string;
             avatarUrl?: string;
             fullName?: string;
-
             /** Format: date */
             birthday?: string;
             sex?: components["schemas"]["SexType"];
@@ -620,12 +852,10 @@ export interface components {
             citizenCardId?: string;
             citizenCardFrontImgUrl?: string;
             citizenCardBackImgUrl?: string;
-
             /** Format: date */
             citizenCardDateOfIssue?: string;
             citizenCardPlaceOfIssue?: string;
         };
-
         /** @enum {integer} */
         SexType: 0 | 1 | 2;
         PersonAddressVm: {
@@ -634,7 +864,6 @@ export interface components {
             wardCode?: string;
             addressDetail?: string;
         };
-
         /** @enum {integer} */
         LicenseRegistrationStatus: 0 | 1 | 2 | 3;
         CreateLicenseRegistrationCommand: {
@@ -647,14 +876,12 @@ export interface components {
             person?: components["schemas"]["PersonCommand"];
             note?: string;
             isPaid?: boolean;
-
             /** Format: decimal */
             amount?: number;
         };
         PersonCommand: {
             avatarUrl?: string;
             fullName?: string;
-
             /** Format: date */
             birthday?: string;
             sex?: components["schemas"]["SexType"];
@@ -664,7 +891,6 @@ export interface components {
             citizenCardId?: string;
             citizenCardFrontImgUrl?: string;
             citizenCardBackImgUrl?: string;
-
             /** Format: date */
             citizenCardDateOfIssue?: string;
             citizenCardPlaceOfIssue?: string;
@@ -674,9 +900,6 @@ export interface components {
             districtCode?: string;
             wardCode?: string;
             addressDetail?: string;
-        };
-        BaseResponseOfBoolean: components["schemas"]["BaseResponse"] & {
-            data?: boolean;
         };
         ApproveLicenseRegistrationCommand: {
             id?: string;
@@ -691,14 +914,12 @@ export interface components {
             person?: components["schemas"]["PersonCommand2"];
             note?: string;
             isPaid?: boolean;
-
             /** Format: decimal */
             amount?: number;
         };
         PersonCommand2: {
             avatarUrl?: string;
             fullName?: string;
-
             /** Format: date */
             birthday?: string;
             sex?: components["schemas"]["SexType"];
@@ -706,7 +927,6 @@ export interface components {
             email?: string;
             address?: components["schemas"]["AddressCommand2"];
             citizenCardId?: string;
-
             /** Format: date */
             citizenCardDateOfIssue?: string;
             citizenCardPlaceOfIssue?: string;
@@ -732,7 +952,6 @@ export interface components {
             person?: components["schemas"]["PersonById"];
             note?: string;
             isPaid?: boolean;
-
             /** Format: decimal */
             amount?: number;
             isRetake?: boolean;
@@ -744,7 +963,6 @@ export interface components {
             id?: string;
             avatarUrl?: string;
             fullName?: string;
-
             /** Format: date */
             birthday?: string;
             sex?: components["schemas"]["SexType"];
@@ -752,7 +970,6 @@ export interface components {
             email?: string;
             address?: components["schemas"]["PersonAddressById"];
             citizenCardId?: string;
-
             /** Format: date */
             citizenCardDateOfIssue?: string;
             citizenCardPlaceOfIssue?: string;
@@ -767,13 +984,10 @@ export interface components {
         };
         PaginatedListOfLicenseRegistrationHasPaidForAllVm: {
             data?: components["schemas"]["LicenseRegistrationHasPaidForAllVm"][];
-
             /** Format: int32 */
             pageNumber?: number;
-
             /** Format: int32 */
             totalPages?: number;
-
             /** Format: int32 */
             totalCount?: number;
             hasPreviousPage?: boolean;
@@ -790,7 +1004,6 @@ export interface components {
             id?: string;
             avatarUrl?: string;
             fullName?: string;
-
             /** Format: date */
             birthday?: string;
             sex?: components["schemas"]["SexType"];
@@ -806,153 +1019,12 @@ export interface components {
         ExamScheduleHasPaidForAllVm: {
             id?: string;
             name?: string;
-
             /** Format: date-time */
             dateTime?: string;
         };
         BaseResponseOfListOfLicenseTypeDto: components["schemas"]["BaseResponse"] & {
             data?: components["schemas"]["LicenseTypeDto"][] | null;
         };
-        BaseResponseOfGetStatisticOverviewByTimeRangeResponse: components["schemas"]["BaseResponse"] & {
-            data?: components["schemas"]["GetStatisticOverviewByTimeRangeResponse"] | null;
-        };
-        GetStatisticOverviewByTimeRangeResponse: {
-
-            /** Format: int32 */
-            totalLicenseRegistration?: number;
-
-            /** Format: float */
-            increasePercentageLicenseRegistration?: number;
-
-            /** Format: int32 */
-            totalMotorbike?: number;
-
-            /** Format: float */
-            increasePercentageMotorbike?: number;
-
-            /** Format: int32 */
-            totalCar?: number;
-
-            /** Format: float */
-            increasePercentageCar?: number;
-
-            /** Format: int64 */
-            totalRevenue?: number;
-
-            /** Format: float */
-            increasePercentageRevenue?: number;
-
-            /** Format: int32 */
-            totalPaid?: number;
-
-            /** Format: float */
-            percentagePaid?: number;
-
-            /** Format: float */
-            percentageUnpaid?: number;
-        };
-        BaseResponseOfGetExamPassFailPercentageByTimeRangeResponse: components["schemas"]["BaseResponse"] & {
-            data?: components["schemas"]["GetExamPassFailPercentageByTimeRangeResponse"] | null;
-        };
-        GetExamPassFailPercentageByTimeRangeResponse: {
-            dataFollowExamSchedule?: components["schemas"]["DataFollowExamScheduleResponse"][] | null;
-            dataFollowMonth?: components["schemas"]["DataFollowMonthResponse"][] | null;
-        };
-        DataFollowExamScheduleResponse: {
-            name?: string;
-
-            /** Format: date-time */
-            dateTime?: string;
-
-            /** Format: float */
-            passPercentage?: number;
-
-            /** Format: float */
-            failPercentage?: number;
-        };
-        DataFollowMonthResponse: {
-            monthOfYear?: components["schemas"]["MonthOfYearType"];
-
-            /** Format: float */
-            passPercentage?: number;
-
-            /** Format: float */
-            failPercentage?: number;
-        };
-
-        /** @enum {integer} */
-        MonthOfYearType: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
-        BaseResponseOfGetVehicleTypePercentageByTimeRangeResponse: components["schemas"]["BaseResponse"] & {
-            data?: components["schemas"]["GetVehicleTypePercentageByTimeRangeResponse"] | null;
-        };
-        GetVehicleTypePercentageByTimeRangeResponse: {
-            dataFollowExamSchedule?: components["schemas"]["DataFollowExamScheduleResponse2"][] | null;
-            dataFollowMonth?: components["schemas"]["DataFollowMonthResponse2"][] | null;
-        };
-        DataFollowExamScheduleResponse2: {
-            name?: string;
-
-            /** Format: date-time */
-            dateTime?: string;
-
-            /** Format: float */
-            motorbikePercentage?: number;
-
-            /** Format: float */
-            carPercentage?: number;
-        };
-        DataFollowMonthResponse2: {
-            monthOfYear?: components["schemas"]["MonthOfYearType"];
-
-            /** Format: float */
-            motorbikePercentage?: number;
-
-            /** Format: float */
-            carPercentage?: number;
-        };
-        BaseResponseOfGetVehicleTypeQuantityByTimeRangeResponse: components["schemas"]["BaseResponse"] & {
-            data?: components["schemas"]["GetVehicleTypeQuantityByTimeRangeResponse"] | null;
-        };
-        GetVehicleTypeQuantityByTimeRangeResponse: {
-            dataFollowExamSchedule?: components["schemas"]["DataFollowExamScheduleResponse3"][] | null;
-            dataFollowMonth?: components["schemas"]["DataFollowMonthResponse3"][] | null;
-        };
-        DataFollowExamScheduleResponse3: {
-            name?: string;
-
-            /** Format: date-time */
-            dateTime?: string;
-
-            /** Format: int32 */
-            motorbikeQuantity?: number;
-
-            /** Format: int32 */
-            carQuantity?: number;
-        };
-        DataFollowMonthResponse3: {
-            monthOfYear?: components["schemas"]["MonthOfYearType"];
-
-            /** Format: int32 */
-            motorbikeQuantity?: number;
-
-            /** Format: int32 */
-            carQuantity?: number;
-        };
-        BaseResponseOfUploadFileResult: components["schemas"]["BaseResponse"] & {
-            data?: components["schemas"]["UploadFileResult"] | null;
-        };
-        UploadFileResult: {
-            fileNameOrigin?: string | null;
-            fileName?: string | null;
-            relativeUrl?: string | null;
-        };
-        BaseResponseOfListOfUploadFileResult: components["schemas"]["BaseResponse"] & {
-            data?: components["schemas"]["UploadFileResult"][] | null;
-        };
-        BaseResponseOfListOfVehicleTypeDto: components["schemas"]["BaseResponse"] & {
-            data?: components["schemas"]["VehicleTypeDto"][] | null;
-        };
-        GetAllVehicleTypesQuery: Record<string, never>;
         BaseResponseOfListOfCitizenCardDto: components["schemas"]["BaseResponse"] & {
             data?: components["schemas"]["CitizenCardDto"][] | null;
         };
@@ -965,7 +1037,6 @@ export interface components {
         };
         FrontCitizenCardDto: {
             fullName?: string;
-
             /** Format: date */
             birthday?: string;
             sex?: components["schemas"]["SexType"];
@@ -980,7 +1051,6 @@ export interface components {
             wardCode?: string;
         };
         BackCitizenCardDto: {
-
             /** Format: date */
             issuedDate?: string;
             issuedBy?: string;
@@ -995,17 +1065,142 @@ export interface components {
         CitizenCardPdfRequest: {
             id?: string;
             fullName?: string;
-
             /** Format: date */
             birthday?: string;
             placeOfOrigin?: string;
             placeOfResidence?: string;
             nationality?: string;
-
             /** Format: date */
             issuedDate?: string;
             issuedBy?: string;
             imagePath?: string;
+        };
+        BaseResponseOfListOfQuestionDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["QuestionDto"][] | null;
+        };
+        QuestionDto: {
+            id?: string;
+            /** Format: int32 */
+            order?: number;
+            content?: string;
+            imageUrl?: string | null;
+            isCriticalQuestion?: boolean;
+            answers?: components["schemas"]["AnswerDto"][];
+        };
+        AnswerDto: {
+            id?: string;
+            /** Format: int32 */
+            order?: number;
+            content?: string;
+        };
+        BaseResponseOfGetStatisticOverviewByTimeRangeResponse: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetStatisticOverviewByTimeRangeResponse"] | null;
+        };
+        GetStatisticOverviewByTimeRangeResponse: {
+            /** Format: int32 */
+            totalLicenseRegistration?: number;
+            /** Format: float */
+            increasePercentageLicenseRegistration?: number;
+            /** Format: int32 */
+            totalMotorbike?: number;
+            /** Format: float */
+            increasePercentageMotorbike?: number;
+            /** Format: int32 */
+            totalCar?: number;
+            /** Format: float */
+            increasePercentageCar?: number;
+            /** Format: int64 */
+            totalRevenue?: number;
+            /** Format: float */
+            increasePercentageRevenue?: number;
+            /** Format: int32 */
+            totalPaid?: number;
+            /** Format: float */
+            percentagePaid?: number;
+            /** Format: float */
+            percentageUnpaid?: number;
+        };
+        BaseResponseOfGetExamPassFailPercentageByTimeRangeResponse: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetExamPassFailPercentageByTimeRangeResponse"] | null;
+        };
+        GetExamPassFailPercentageByTimeRangeResponse: {
+            dataFollowExamSchedule?: components["schemas"]["DataFollowExamScheduleResponse"][] | null;
+            dataFollowMonth?: components["schemas"]["DataFollowMonthResponse"][] | null;
+        };
+        DataFollowExamScheduleResponse: {
+            name?: string;
+            /** Format: date-time */
+            dateTime?: string;
+            /** Format: float */
+            passPercentage?: number;
+            /** Format: float */
+            failPercentage?: number;
+        };
+        DataFollowMonthResponse: {
+            monthOfYear?: components["schemas"]["MonthOfYearType"];
+            /** Format: float */
+            passPercentage?: number;
+            /** Format: float */
+            failPercentage?: number;
+        };
+        /** @enum {integer} */
+        MonthOfYearType: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+        BaseResponseOfGetVehicleTypePercentageByTimeRangeResponse: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetVehicleTypePercentageByTimeRangeResponse"] | null;
+        };
+        GetVehicleTypePercentageByTimeRangeResponse: {
+            dataFollowExamSchedule?: components["schemas"]["DataFollowExamScheduleResponse2"][] | null;
+            dataFollowMonth?: components["schemas"]["DataFollowMonthResponse2"][] | null;
+        };
+        DataFollowExamScheduleResponse2: {
+            name?: string;
+            /** Format: date-time */
+            dateTime?: string;
+            /** Format: float */
+            motorbikePercentage?: number;
+            /** Format: float */
+            carPercentage?: number;
+        };
+        DataFollowMonthResponse2: {
+            monthOfYear?: components["schemas"]["MonthOfYearType"];
+            /** Format: float */
+            motorbikePercentage?: number;
+            /** Format: float */
+            carPercentage?: number;
+        };
+        BaseResponseOfGetVehicleTypeQuantityByTimeRangeResponse: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetVehicleTypeQuantityByTimeRangeResponse"] | null;
+        };
+        GetVehicleTypeQuantityByTimeRangeResponse: {
+            dataFollowExamSchedule?: components["schemas"]["DataFollowExamScheduleResponse3"][] | null;
+            dataFollowMonth?: components["schemas"]["DataFollowMonthResponse3"][] | null;
+        };
+        DataFollowExamScheduleResponse3: {
+            name?: string;
+            /** Format: date-time */
+            dateTime?: string;
+            /** Format: int32 */
+            motorbikeQuantity?: number;
+            /** Format: int32 */
+            carQuantity?: number;
+        };
+        DataFollowMonthResponse3: {
+            monthOfYear?: components["schemas"]["MonthOfYearType"];
+            /** Format: int32 */
+            motorbikeQuantity?: number;
+            /** Format: int32 */
+            carQuantity?: number;
+        };
+        BaseResponseOfUploadFileResult: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["UploadFileResult"] | null;
+        };
+        UploadFileResult: {
+            fileNameOrigin?: string | null;
+            fileName?: string | null;
+            relativeUrl?: string | null;
+        };
+        BaseResponseOfListOfUploadFileResult: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["UploadFileResult"][] | null;
         };
         RegisterUserRequest: {
             userName?: string;
@@ -1013,6 +1208,10 @@ export interface components {
             password?: string;
             avatarUrl?: string;
         };
+        BaseResponseOfListOfVehicleTypeDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["VehicleTypeDto"][] | null;
+        };
+        GetAllVehicleTypesQuery: Record<string, never>;
     };
     responses: never;
     parameters: never;
@@ -1022,6 +1221,63 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    Authorization_Exchange: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+        };
+    };
+    Authorization_UserinfoGET: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+        };
+    };
+    Authorization_UserinfoPOST: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+        };
+    };
     Exam_GetExamAddressesWithPaginationQuery: {
         parameters: {
             query?: {
@@ -1276,6 +1532,161 @@ export interface operations {
             };
         };
     };
+    Exams_GetExamsByGroupExamId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfExamDto"];
+                };
+            };
+        };
+    };
+    Exams_GenerateExam: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GenerateExamsCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    Exams_ExportCitizenInfoToPdf: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GenerationExamFullCriticalCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    ExamSubmissions_GetExamSubmissionById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfExamSubmissionResultDto"];
+                };
+            };
+        };
+    };
+    ExamSubmissions_StartExam: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateExamSubmissionCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfCreateExamSubmissionResultDto"];
+                };
+            };
+        };
+    };
+    ExamSubmissions_SubmitExam: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubmitExamCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfExamSubmissionResultDto"];
+                };
+            };
+        };
+    };
+    GroupExams_GetAllGroupExams: {
+        parameters: {
+            query?: {
+                query?: components["schemas"]["GetAllGroupExamQuery"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfGroupExamDto"];
+                };
+            };
+        };
+    };
     Licenses_GetLicenseRegistrationsWithPaginationQuery: {
         parameters: {
             query?: {
@@ -1484,6 +1895,120 @@ export interface operations {
             };
         };
     };
+    Persons_RecognizeCitizenByFile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "multipart/form-data": {
+                    formFile?: string[] | null;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfCitizenCardDto"];
+                };
+            };
+        };
+    };
+    Persons_ExportCitizenInfoToPdf: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CitizenCardPdfRequest"][];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfCitizenCardPdfResult"];
+                };
+            };
+        };
+    };
+    Questions_GetExamsByGroupExamId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfQuestionDto"];
+                };
+            };
+        };
+    };
+    Questions_ExportCitizenInfoToPdf: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "multipart/form-data": {
+                    /** Format: binary */
+                    FormFile?: string | null;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    Samples_GetSecretResources: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+        };
+    };
     Statistics_GetStatisticOverviewByTimeRange: {
         parameters: {
             query?: {
@@ -1582,7 +2107,6 @@ export interface operations {
         requestBody?: {
             content: {
                 "multipart/form-data": {
-
                     /** Format: binary */
                     File?: string | null;
                 };
@@ -1620,151 +2144,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BaseResponseOfListOfUploadFileResult"];
-                };
-            };
-        };
-    };
-    VehicleTypes_GetAllLicenseTypes: {
-        parameters: {
-            query?: {
-                query?: components["schemas"]["GetAllVehicleTypesQuery"];
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BaseResponseOfListOfVehicleTypeDto"];
-                };
-            };
-        };
-    };
-    Authorization_Exchange: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/octet-stream": string;
-                };
-            };
-        };
-    };
-    Authorization_UserinfoGET: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/octet-stream": string;
-                };
-            };
-        };
-    };
-    Authorization_UserinfoPOST: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/octet-stream": string;
-                };
-            };
-        };
-    };
-    Persons_RecognizeCitizenByFile: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: {
-            content: {
-                "multipart/form-data": {
-                    formFile?: string[] | null;
-                };
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BaseResponseOfListOfCitizenCardDto"];
-                };
-            };
-        };
-    };
-    Persons_ExportCitizenInfoToPdf: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CitizenCardPdfRequest"][];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BaseResponseOfCitizenCardPdfResult"];
-                };
-            };
-        };
-    };
-    Samples_GetSecretResources: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/octet-stream": string;
                 };
             };
         };
@@ -1807,6 +2186,27 @@ export interface operations {
                 };
                 content: {
                     "application/octet-stream": string;
+                };
+            };
+        };
+    };
+    VehicleTypes_GetAllLicenseTypes: {
+        parameters: {
+            query?: {
+                query?: components["schemas"]["GetAllVehicleTypesQuery"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfVehicleTypeDto"];
                 };
             };
         };

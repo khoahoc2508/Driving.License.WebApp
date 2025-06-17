@@ -1,17 +1,12 @@
 'use client'
 
 // React Imports
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 
 
 // MUI Imports
 
-import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
-import DialogTitle from '@mui/material/DialogTitle'
 import TablePagination from '@mui/material/TablePagination'
 
 // Next Imports
@@ -19,7 +14,7 @@ import TablePagination from '@mui/material/TablePagination'
 // Third-party Imports
 import type { RankingInfo } from '@tanstack/match-sorter-utils'
 import { rankItem } from '@tanstack/match-sorter-utils'
-import type { ColumnDef, ColumnFiltersState, FilterFn, Table } from '@tanstack/react-table'
+import type { ColumnDef, ColumnFiltersState, FilterFn } from '@tanstack/react-table'
 import {
   createColumnHelper,
   flexRender,
@@ -36,21 +31,18 @@ import classnames from 'classnames'
 
 
 // Icon Imports
-import { Card, IconButton, Typography } from '@mui/material'
+import { Card, Checkbox, Typography } from '@mui/material'
 
-import { toast } from 'react-toastify'
 
 import ChevronRight from '@menu/svg/ChevronRight'
 
 // Style Imports
 import CustomAvatar from '@/@core/components/mui/Avatar'
-import CONFIG from '@/configs/config'
-import type { GetLicensesRegistrationsParams, LicenseRegistrationType, LicenseRegistrationTypeVm, LicenseType } from "@/types/LicensesRegistrations"
+import type { GetLicensesRegistrationsParams, LicenseRegistrationType, LicenseRegistrationTypeVm, LicenseTypeDto } from "@/types/LicensesRegistrations"
 import { getInitials } from '@/utils/getInitials'
 import styles from '@core/styles/table.module.css'
 
 
-import LicenseRegistrationAPI from '@/libs/api/licenseRegistrationAPI'
 import SkeletonTableRowsLoader from '@/components/common/SkeletonTableRowsLoader'
 
 // Data Imports
@@ -94,15 +86,10 @@ const getAvatar = (params: { avatar?: string | null; customer?: string | null })
   }
 }
 
-const getLicenseTypeString = (licenseType: LicenseType | undefined) => {
-  if (licenseType === undefined) return 'N/A';
+const getLicenseTypeString = (licenseType: LicenseTypeDto | undefined) => {
+  if (!licenseType) return 'N/A';
 
-  const key = (Object.keys(CONFIG.LicenseType) as (keyof typeof CONFIG.LicenseType)[]).find(
-    (k) => CONFIG.LicenseType[k] === licenseType
-  );
-
-
-  return key || 'N/A';
+  return licenseType.name;
 };
 
 const getStatusTextAndColor = (status: boolean | undefined) => {
@@ -127,8 +114,8 @@ type Props = {
   params: GetLicensesRegistrationsParams,
   setParams: React.Dispatch<React.SetStateAction<GetLicensesRegistrationsParams>>,
   totalItems: number,
-  setReloadDataTable: React.Dispatch<React.SetStateAction<boolean>>,
-  isLoading: boolean
+  isLoading: boolean,
+  onSelectionChange: (selectedIds: string[]) => void
 }
 
 const LicenseRegistrationTable = ({
@@ -137,18 +124,48 @@ const LicenseRegistrationTable = ({
   params,
   setParams,
   totalItems,
-  setReloadDataTable,
-  isLoading
+  isLoading,
+  onSelectionChange
 }: Props) => {
   // States
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [globalFilter, setGlobalFilter] = useState('')
-  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-  const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null);
+  const [rowSelection, setRowSelection] = useState({})
+
+  // Get selected IDs whenever rowSelection changes
+  useEffect(() => {
+    const selectedIds = Object.keys(rowSelection).map(
+      index => data[parseInt(index)]?.id
+    ).filter(Boolean) as string[];
+
+    onSelectionChange(selectedIds);
+  }, [rowSelection]);
 
   // Hooks
   const columns = useMemo<ColumnDef<LicenseRegistrationTypeVm, any>[]>(
     () => [
+      {
+        id: 'select',
+        header: ({ table }) => (
+          <Checkbox
+            {...{
+              checked: table.getIsAllRowsSelected(),
+              indeterminate: table.getIsSomeRowsSelected(),
+              onChange: table.getToggleAllRowsSelectedHandler()
+            }}
+          />
+        ),
+        cell: ({ row }) => (
+          <Checkbox
+            {...{
+              checked: row.getIsSelected(),
+              disabled: !row.getCanSelect(),
+              indeterminate: row.getIsSomeSelected(),
+              onChange: row.getToggleSelectedHandler()
+            }}
+          />
+        )
+      },
       columnHelper.accessor('id', {
         id: 'stt',
         header: 'STT',
@@ -227,61 +244,10 @@ const LicenseRegistrationTable = ({
             />
           );
         }
-      }),
-      columnHelper.accessor('id', {
-        id: 'actions',
-        header: 'Hành động',
-        cell: ({ row }) => (
-          <div className="flex items-center">
-            <IconButton>
-              <a href={`manage-licenses-registration/edit/${row.original.id}`} className='flex items-center'>
-                <i className="ri-edit-box-line text-textSecondary" />
-              </a>
-            </IconButton>
-
-            <IconButton onClick={() => handleOpenDeleteDialog(row.original.id)}>
-              <i className='ri-delete-bin-7-line text-textSecondary' />
-            </IconButton>
-          </div>
-        ),
-        enableSorting: false
       })
     ],
     [data, setData]
   )
-
-  // Handle delete action
-  const handleOpenDeleteDialog = (id: string | undefined) => {
-    if (id) {
-      setItemIdToDelete(id);
-      setOpenDeleteDialog(true);
-    }
-  };
-
-  const handleCloseDeleteDialog = () => {
-    setOpenDeleteDialog(false);
-    setItemIdToDelete(null);
-  };
-
-  const handleDeleteConfirmed = async () => {
-    if (!itemIdToDelete) return;
-
-    try {
-      const response = await LicenseRegistrationAPI.deleteLicensesRegistrations(itemIdToDelete);
-
-      if (response.data.success) {
-        toast.success('Xóa thành công');
-        setReloadDataTable(prev => !prev); // Trigger data refresh in parent
-      } else {
-        toast.error(response.data.message || 'Có lỗi xảy ra khi xóa');
-      }
-    } catch (error) {
-      console.error('Error deleting item:', error);
-      toast.error('Có lỗi xảy ra khi xóa');
-    } finally {
-      handleCloseDeleteDialog();
-    }
-  };
 
   const table = useReactTable({
     data: data,
@@ -291,8 +257,11 @@ const LicenseRegistrationTable = ({
     },
     state: {
       columnFilters,
-      globalFilter
+      globalFilter,
+      rowSelection
     },
+    enableRowSelection: true,
+    onRowSelectionChange: setRowSelection,
     onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
     globalFilterFn: fuzzyFilter,
@@ -322,20 +291,20 @@ const LicenseRegistrationTable = ({
       )
     }
 
-    return (<>
-      {
-        table.getRowModel().rows.map((row, index) => {
-          return (
-            <tr key={`${row.id}-${index}`}>
-              {row.getVisibleCells().map((cell, cellIndex) => {
-                return <td key={`${cell.id}-${cellIndex}`}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-              })}
-            </tr>
-          )
-        })
-      }
-    </>
-
+    return (
+      <>
+        {
+          table.getRowModel().rows.map((row, index) => {
+            return (
+              <tr key={`${row.id}-${index}`}>
+                {row.getVisibleCells().map((cell, cellIndex) => {
+                  return <td key={`${cell.id}-${cellIndex}`}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                })}
+              </tr>
+            )
+          })
+        }
+      </>
     )
   }
 
@@ -389,26 +358,9 @@ const LicenseRegistrationTable = ({
             setParams((prev) => ({ ...prev, pageNumber: page + 1 }))
           }}
           onRowsPerPageChange={e => setParams((prev) => ({ ...prev, pageSize: Number(e.target.value) }))}
-        /></Card>
-      <Dialog
-        open={openDeleteDialog}
-        onClose={handleCloseDeleteDialog}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{"Xác nhận xóa"}</DialogTitle>
-        <DialogContent>
-          <Typography id="alert-dialog-description">
-            Bạn có chắc chắn muốn xóa mục này không?
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDeleteDialog}>Hủy</Button>
-          <Button onClick={handleDeleteConfirmed} autoFocus color="error">
-            Xóa
-          </Button>
-        </DialogActions>
-      </Dialog>
+        />
+      </Card>
+
     </>
   )
 }

@@ -2,7 +2,10 @@ import type {
   GetExamSchedulesWithPaginationQueryParams,
   CreateExamScheduleCommandType,
   DeleteExamScheduleCommandType,
-  UpdateExamScheduleCommandType
+  UpdateExamScheduleCommandType,
+  SetExamScheduleForLicenseRegistrationCommandType,
+  RemoveExamScheduleForLicenseRegistrationCommandType,
+  SetExamScheduleForBulkLicenseRegistrationsCommandType
 } from '@/types/examScheduleTypes'
 
 import axiosInstance from '../axios'
@@ -36,13 +39,33 @@ const deleteExamSchedule = async (id: string) => {
   })
 }
 
+// Exam Schedule Registration API calls
+const setExamScheduleForLicenseRegistration = async (data: SetExamScheduleForLicenseRegistrationCommandType) => {
+  return await axiosInstance.put('/api/exam/schedules/registrations', data)
+}
+
+const removeExamScheduleForLicenseRegistration = async (data: RemoveExamScheduleForLicenseRegistrationCommandType) => {
+  return await axiosInstance.delete('/api/exam/schedules/registrations', {
+    data
+  })
+}
+
+const setExamScheduleForBulkLicenseRegistrations = async (data: SetExamScheduleForBulkLicenseRegistrationsCommandType) => {
+  return await axiosInstance.put('/api/exam/schedules/registrations/bulk', data)
+}
+
 const ExamScheduleAPI = {
   // Exam Schedules
   getExamSchedules,
   getExamScheduleById,
   createExamSchedule,
   updateExamSchedule,
-  deleteExamSchedule
+  deleteExamSchedule,
+  
+  // Exam Schedule Registrations
+  setExamScheduleForLicenseRegistration,
+  removeExamScheduleForLicenseRegistration,
+  setExamScheduleForBulkLicenseRegistrations
 }
 
 export default ExamScheduleAPI
