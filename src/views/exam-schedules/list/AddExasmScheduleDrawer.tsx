@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 
 import { Divider, Drawer, FormHelperText, IconButton, Typography } from "@mui/material"
 
@@ -21,13 +21,10 @@ import { Controller, useForm } from 'react-hook-form'
 // Styled Component Imports
 
 import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
-import CONFIG from '@/configs/config'
-import ExamAddressAPI from "@/libs/api/examAddressAPI"
-import type { ExamAddressType, PaginatedListOfExamAddressType } from "@/types/examAddressTypes"
+import type { ExamAddressType } from "@/types/examAddressTypes"
 import ExamScheduleAPI from "@/libs/api/examScheduleAPI"
-import type { CreateExamScheduleCommandType, ExamScheduleByIdType, ExamScheduleType, UpdateExamScheduleCommandType } from "@/types/examScheduleTypes"
-import LicenseTypeAPI from "@/libs/api/licenseTypeApi"
-import { LicenseTypeDto } from "@/types/LicensesRegistrations"
+import type { CreateExamScheduleCommandType, ExamScheduleByIdType, UpdateExamScheduleCommandType } from "@/types/examScheduleTypes"
+import type { LicenseTypeDto } from "@/types/LicensesRegistrations"
 
 type Props = {
   examAddresses: ExamAddressType[]
@@ -192,6 +189,7 @@ const AddExasmScheduleDrawer = (props: Props) => {
     if (examScheduleId && open) {
       fetchExamAddressById(examScheduleId)
     }
+
     if (!open) {
       reset(defaultValues)
     }

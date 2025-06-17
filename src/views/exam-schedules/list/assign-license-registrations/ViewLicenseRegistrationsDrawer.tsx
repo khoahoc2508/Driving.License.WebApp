@@ -5,32 +5,21 @@ import { useEffect, useState } from "react"
 import { Divider, Drawer, IconButton, Typography } from "@mui/material"
 
 // MUI Imports
-import Grid from '@mui/material/Grid2'
-import TextField from '@mui/material/TextField'
-import Select from '@mui/material/Select'
 import Button from '@mui/material/Button'
-import MenuItem from '@mui/material/MenuItem'
-import InputLabel from '@mui/material/InputLabel'
-import FormControl from '@mui/material/FormControl'
 
 // Third-party Imports
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import { toast } from 'react-toastify'
-import { Controller, useForm } from 'react-hook-form'
 
 // Styled Component Imports
 
-import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
 import CONFIG from '@/configs/config'
-import ExamAddressAPI from "@/libs/api/examAddressAPI"
-import type { ExamAddressType, PaginatedListOfExamAddressType } from "@/types/examAddressTypes"
 import ExamScheduleAPI from "@/libs/api/examScheduleAPI"
-import type { CreateExamScheduleCommandType, ExamScheduleType, UpdateExamScheduleCommandType } from "@/types/examScheduleTypes"
-import { GetLicensesRegistrationsParams, LicenseRegistrationType } from "@/types/LicensesRegistrations"
+import type { ExamScheduleType } from "@/types/examScheduleTypes"
+import type { GetLicensesRegistrationsParams, LicenseRegistrationType } from "@/types/LicensesRegistrations"
 import DebouncedInput from "@/components/common/DebouncedInput"
 import LicenseRegistrationTable from "@/views/exam-schedules/list/assign-license-registrations/list/LicenseRegistrationTable"
 import LicenseRegistrationAPI from "@/libs/api/licenseRegistrationAPI"
-import LicenseRegistrationFormDrawer from "@/views/exam-schedules/list/assign-license-registrations/create"
 import AssignLicenseRegistrationsDrawer from "@/views/exam-schedules/list/assign-license-registrations/assign/AssignLicenseRegistrationsDrawer"
 
 type Props = {
@@ -40,15 +29,12 @@ type Props = {
   examScheduleId?: string
 }
 
-enum LimitType {
-  Unlimited,
-  Limited
-}
 
 const ViewLicenseRegistrationsDrawer = (props: Props) => {
   // Props
   const { open, handleClose, examScheduleId } = props
   const [examSchedule, setExamSchedule] = useState<ExamScheduleType>()
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [search, setSearch] = useState('')
 
   const [openAssignLicenseRegistrationsDrawer, setOpenAssignLicenseRegistrationsDrawer] = useState(false)
@@ -98,9 +84,6 @@ const ViewLicenseRegistrationsDrawer = (props: Props) => {
     }
   }
 
-  const onChangeSearch = (value: string | number) => {
-    setSearch(String(value))
-  }
 
   const handleOpenAssignLicenseRegistrationsDrawer = () => {
     setOpenAssignLicenseRegistrationsDrawer(true)
@@ -172,6 +155,7 @@ const ViewLicenseRegistrationsDrawer = (props: Props) => {
             <div className='flex justify-between flex-col items-start sm:flex-row sm:items-center gap-y-4 p-5'>
               <DebouncedInput
                 value={search}
+
                 // className='w-full'
                 // onDebounceChange={onChangeSearch}
                 onDebounceChange={value => setLicenseRegistrationParams((prev) => ({ ...prev, search: value.toString() ?? '' }))}

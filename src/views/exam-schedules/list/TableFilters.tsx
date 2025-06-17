@@ -11,16 +11,16 @@ import type { SelectChangeEvent } from '@mui/material/Select';
 import Select from '@mui/material/Select'
 
 // Third-party Imports
-import { format, addDays } from 'date-fns'
+import { format } from 'date-fns'
 
 // Type Imports
 import type { TextFieldProps } from '@mui/material';
 import { TextField } from '@mui/material'
 
 import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
-import { ExamAddressType } from '@/types/examAddressTypes'
+import type { ExamAddressType } from '@/types/examAddressTypes'
 import CONFIG from '@/configs/config'
-import { LicenseTypeDto } from '@/types/LicensesRegistrations'
+import type { LicenseTypeDto } from '@/types/LicensesRegistrations'
 
 // Types
 type CustomInputProps = TextFieldProps & {
@@ -89,6 +89,7 @@ const TableFilters = ({ examAddresses, setParams }: TableFiltersProps) => {
               value={addresses}
               onChange={(event: SelectChangeEvent<string[]>) => {
                 const selectedAddresses = event.target.value as string[]
+
                 setAddresses(selectedAddresses)
                 setParams((prev: any) => ({
                   ...prev,
@@ -140,6 +141,7 @@ const TableFilters = ({ examAddresses, setParams }: TableFiltersProps) => {
               value={registrationLimit}
               onChange={(event: SelectChangeEvent<string[]>) => {
                 const selectedLimits = event.target.value as string[]
+
                 setRegistrationLimit(selectedLimits)
                 setParams((prev: any) => ({
                   ...prev,

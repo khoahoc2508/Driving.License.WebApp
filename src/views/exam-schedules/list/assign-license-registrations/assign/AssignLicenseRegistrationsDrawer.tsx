@@ -15,8 +15,7 @@ import { toast } from 'react-toastify'
 
 import CONFIG from '@/configs/config'
 import ExamScheduleAPI from "@/libs/api/examScheduleAPI"
-import type { ExamScheduleType } from "@/types/examScheduleTypes"
-import { GetLicensesRegistrationsParams, LicenseRegistrationType } from "@/types/LicensesRegistrations"
+import type { GetLicensesRegistrationsParams, LicenseRegistrationType } from "@/types/LicensesRegistrations"
 import DebouncedInput from "@/components/common/DebouncedInput"
 import LicenseRegistrationAPI from "@/libs/api/licenseRegistrationAPI"
 import LicenseRegistrationTable from "@/views/exam-schedules/list/assign-license-registrations/assign/LicenseRegistrationTable"
@@ -31,6 +30,7 @@ type Props = {
 const AssignLicenseRegistrationsDrawer = (props: Props) => {
   // Props
   const { open, handleClose, examScheduleId } = props
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [search, setSearch] = useState('')
 
   // table
@@ -48,7 +48,8 @@ const AssignLicenseRegistrationsDrawer = (props: Props) => {
   const handleAssignToExamSchedule = async () => {
     if (selectedLicenseRegistrationIds.length === 0) {
       toast.error('Vui lòng chọn ít nhất một đăng ký');
-      return;
+      
+return;
     }
 
     try {
@@ -87,10 +88,6 @@ const AssignLicenseRegistrationsDrawer = (props: Props) => {
     } finally {
       // setLoading(false)
     }
-  }
-
-  const onChangeSearch = (value: string | number) => {
-    setSearch(String(value))
   }
 
   useEffect(() => {
@@ -134,6 +131,7 @@ const AssignLicenseRegistrationsDrawer = (props: Props) => {
             <div className='flex justify-between flex-col items-start sm:flex-row sm:items-center gap-y-4 p-5'>
               <DebouncedInput
                 value={search}
+
                 // className='w-full'
                 // onDebounceChange={onChangeSearch}
                 onDebounceChange={value => setLicenseRegistrationParams((prev) => ({ ...prev, search: value.toString() ?? '' }))}

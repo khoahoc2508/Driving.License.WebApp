@@ -22,6 +22,8 @@ import type { SubmitHandler } from 'react-hook-form'
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
+import { Drawer } from '@mui/material'
+
 import LicenseRegistrationAPI from '@/libs/api/licenseRegistrationAPI'
 import UploadAPI from '@/libs/api/uploadAPI'
 import LicenseTypeAPI from '@/libs/api/licenseTypeApi'
@@ -37,7 +39,6 @@ import Contact from './Contact'
 import Header from './Header'
 import PersonalInformation from './PersonalInformation'
 import CONFIG from '@/configs/config'
-import { Drawer } from '@mui/material'
 
 type LicenseRegistrationFormProps = {
   screenType: SCREEN_TYPE
@@ -75,7 +76,7 @@ type FormValues = {
   note: string
 }
 
-const LicenseRegistrationFormDrawer = ({ id, examScheduleId, open, handleClose }: LicenseRegistrationFormProps) => {
+const LicenseRegistrationFormDrawer = ({ id, open, handleClose }: LicenseRegistrationFormProps) => {
   // States
   const [provinces, setProvinces] = useState<any[]>([])
   const [districts, setDistricts] = useState<any[]>([])

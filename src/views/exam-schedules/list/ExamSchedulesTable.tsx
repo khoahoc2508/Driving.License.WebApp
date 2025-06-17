@@ -55,12 +55,12 @@ import type { ExamScheduleType, GetExamSchedulesWithPaginationQueryParams, Pagin
 import ExamScheduleAPI from '@/libs/api/examScheduleAPI'
 import TableFilters from '@/views/exam-schedules/list/TableFilters'
 import AddExasmScheduleDrawer from '@/views/exam-schedules/list/AddExasmScheduleDrawer'
-import { ExamAddressType, PaginatedListOfExamAddressType } from '@/types/examAddressTypes'
+import type { ExamAddressType, PaginatedListOfExamAddressType } from '@/types/examAddressTypes'
 import ExamAddressAPI from '@/libs/api/examAddressAPI'
 import OptionMenu from '@/@core/components/option-menu'
 import ViewLicenseRegistrationsDrawer from '@/views/exam-schedules/list/assign-license-registrations/ViewLicenseRegistrationsDrawer'
 import LicenseTypeAPI from '@/libs/api/licenseTypeApi'
-import { LicenseTypeDto } from '@/types/LicensesRegistrations'
+import type { LicenseTypeDto } from '@/types/LicensesRegistrations'
 
 
 declare module '@tanstack/table-core' {
@@ -293,6 +293,7 @@ const ProductListTable = () => {
                   icon: 'ri-delete-bin-7-line',
                   menuItemProps: {
                     className: 'gap-2',
+
                     // onClick: () => setData(data?.filter(product => product.id !== row.original.id))
                   }
                 },

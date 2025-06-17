@@ -19,7 +19,7 @@ import TablePagination from '@mui/material/TablePagination'
 // Third-party Imports
 import type { RankingInfo } from '@tanstack/match-sorter-utils'
 import { rankItem } from '@tanstack/match-sorter-utils'
-import type { ColumnDef, ColumnFiltersState, FilterFn, Table } from '@tanstack/react-table'
+import type { ColumnDef, ColumnFiltersState, FilterFn } from '@tanstack/react-table'
 import {
   createColumnHelper,
   flexRender,
@@ -36,7 +36,7 @@ import classnames from 'classnames'
 
 
 // Icon Imports
-import { Card, Checkbox, IconButton, Typography } from '@mui/material'
+import { Card, IconButton, Typography } from '@mui/material'
 
 import { toast } from 'react-toastify'
 
@@ -49,7 +49,6 @@ import { getInitials } from '@/utils/getInitials'
 import styles from '@core/styles/table.module.css'
 
 
-import LicenseRegistrationAPI from '@/libs/api/licenseRegistrationAPI'
 import SkeletonTableRowsLoader from '@/components/common/SkeletonTableRowsLoader'
 import ExamScheduleAPI from '@/libs/api/examScheduleAPI'
 

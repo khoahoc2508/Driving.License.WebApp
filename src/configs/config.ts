@@ -180,6 +180,7 @@ const TableAction = {
   Assign: 'ASSIGN'
 
 }
+
 const VehicleTypeCode = {
   Motorbike: 'motorbike',
   Car: 'car'
