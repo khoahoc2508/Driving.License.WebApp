@@ -36,8 +36,6 @@ const ResultLicenseRegistrationsDrawer = (props: Props) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [search, setSearch] = useState('')
 
-  const [openAssignLicenseRegistrationsDrawer, setOpenAssignLicenseRegistrationsDrawer] = useState(false)
-
   // table
   const [licenseRegistrationParams, setLicenseRegistrationParams] = useState<GetLicensesRegistrationsParams>({ pageNumber: 1, pageSize: 10, search: '' })
   const [dataTable, setDataTable] = useState<LicenseRegistrationType>()
@@ -81,11 +79,6 @@ const ResultLicenseRegistrationsDrawer = (props: Props) => {
     } finally {
       // setLoading(false)
     }
-  }
-
-
-  const handleOpenAssignLicenseRegistrationsDrawer = () => {
-    setOpenAssignLicenseRegistrationsDrawer(true)
   }
 
   useEffect(() => {
@@ -167,7 +160,7 @@ const ResultLicenseRegistrationsDrawer = (props: Props) => {
                   variant='contained'
                   startIcon={<i className='ri-add-line' />}
                   className='max-sm:is-full is-auto'
-                  onClick={handleOpenAssignLicenseRegistrationsDrawer}
+                  onClick={() => { }}
                 >
                   Lưu
                 </Button>
@@ -178,7 +171,7 @@ const ResultLicenseRegistrationsDrawer = (props: Props) => {
         </PerfectScrollbar>
       </Drawer>
 
-      
+
     </>
   )
 }

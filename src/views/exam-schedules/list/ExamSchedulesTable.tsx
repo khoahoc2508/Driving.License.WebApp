@@ -105,6 +105,7 @@ const getProgressColor = (percentage: number): 'error' | 'warning' | 'primary' |
   if (percentage >= 80) return 'success'  // >= 80%: green
   if (percentage >= 60) return 'primary'  // 60-79%: blue
   if (percentage >= 30) return 'warning'  // 30-59%: orange
+
   return 'error'                          // < 30%: red
 }
 

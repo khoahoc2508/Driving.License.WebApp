@@ -6,12 +6,6 @@ import { useMemo, useState } from 'react'
 
 // MUI Imports
 
-import Button from '@mui/material/Button'
-import Chip from '@mui/material/Chip'
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
-import DialogTitle from '@mui/material/DialogTitle'
 import TablePagination from '@mui/material/TablePagination'
 
 // Next Imports
@@ -36,9 +30,8 @@ import classnames from 'classnames'
 
 
 // Icon Imports
-import { Card, IconButton, Switch, Typography } from '@mui/material'
+import { Card, Switch, Typography } from '@mui/material'
 
-import { toast } from 'react-toastify'
 
 import ChevronRight from '@menu/svg/ChevronRight'
 
@@ -50,7 +43,6 @@ import styles from '@core/styles/table.module.css'
 
 
 import SkeletonTableRowsLoader from '@/components/common/SkeletonTableRowsLoader'
-import ExamScheduleAPI from '@/libs/api/examScheduleAPI'
 
 // Data Imports
 
@@ -99,21 +91,6 @@ const getLicenseTypeString = (licenseType: LicenseTypeDto | undefined) => {
   return licenseType.name;
 };
 
-const getStatusTextAndColor = (status: boolean | undefined) => {
-  let text = 'N/A';
-  let color: 'success' | 'error' | 'warning' = 'warning';
-
-  if (status) {
-    text = 'Đã duyệt';
-    color = 'success';
-  } else {
-    text = 'Chưa duyệt';
-    color = 'error';
-  }
-
-  return { text, color };
-};
-
 type Props = {
   tableAction: string,
   data?: LicenseRegistrationType,
@@ -132,15 +109,11 @@ const LicenseRegistrationTable = ({
   params,
   setParams,
   totalItems,
-  reloadDataTable,
   isLoading,
-  examScheduleId
 }: Props) => {
   // States
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [globalFilter, setGlobalFilter] = useState('')
-  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-  const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null);
 
   // Hooks
   const columns = useMemo<ColumnDef<LicenseRegistrationTypeVm, any>[]>(
@@ -180,6 +153,7 @@ const LicenseRegistrationTable = ({
           return <Typography>{getLicenseTypeString(row.original?.licenseType)}</Typography>;
         }
       }),
+
       // columnHelper.accessor('hasCompletedHealthCheck', {
       //   header: 'SỨC KHỎE',
       //   cell: ({ row }) => (
@@ -213,6 +187,7 @@ const LicenseRegistrationTable = ({
         cell: ({ row }) => <Switch defaultChecked={row.original.passed ?? false} />,
         enableSorting: true
       }),
+
       // columnHelper.accessor('id', {
       //   id: 'actions',
       //   header: 'Hành động',
@@ -234,42 +209,6 @@ const LicenseRegistrationTable = ({
     ],
     [data, setData]
   )
-
-  // Handle delete action
-  const handleOpenDeleteDialog = (id: string | undefined) => {
-    if (id) {
-      setItemIdToDelete(id);
-      setOpenDeleteDialog(true);
-    }
-  };
-
-  const handleCloseDeleteDialog = () => {
-    setOpenDeleteDialog(false);
-    setItemIdToDelete(null);
-  };
-
-  const handleDeleteConfirmed = async () => {
-    if (!itemIdToDelete) return;
-
-    try {
-      const response = await ExamScheduleAPI.removeExamScheduleForLicenseRegistration({
-        examScheduleId: examScheduleId,
-        licenseRegistrationId: itemIdToDelete
-      });
-
-      if (response.data.success) {
-        toast.success('Xóa thành công');
-        reloadDataTable()
-      } else {
-        toast.error(response.data.message || 'Có lỗi xảy ra khi xóa');
-      }
-    } catch (error) {
-      console.error('Error deleting item:', error);
-      toast.error('Có lỗi xảy ra khi xóa');
-    } finally {
-      handleCloseDeleteDialog();
-    }
-  };
 
   const table = useReactTable({
     data: data,
