@@ -61,6 +61,7 @@ import OptionMenu from '@/@core/components/option-menu'
 import ViewLicenseRegistrationsDrawer from '@/views/exam-schedules/list/assign-license-registrations/ViewLicenseRegistrationsDrawer'
 import LicenseTypeAPI from '@/libs/api/licenseTypeApi'
 import type { LicenseTypeDto } from '@/types/LicensesRegistrations'
+import ResultLicenseRegistrationsDrawer from '@/views/exam-schedules/list/update-result-license-registrations/ResultLicenseRegistrationsDrawer'
 
 
 declare module '@tanstack/table-core' {
@@ -92,6 +93,19 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
 
   // Return if the item should be filtered in/out
   return itemRank.passed
+}
+
+// Function to get progress color based on percentage
+// Tính toán màu sắc dựa trên tỷ lệ đỗ:
+// - >= 80%: success (xanh lá) - tỷ lệ đỗ cao
+// - 60-79%: primary (xanh dương) - tỷ lệ đỗ khá
+// - 30-59%: warning (cam) - tỷ lệ đỗ trung bình
+// - < 30%: error (đỏ) - tỷ lệ đỗ thấp
+const getProgressColor = (percentage: number): 'error' | 'warning' | 'primary' | 'success' => {
+  if (percentage >= 80) return 'success'  // >= 80%: green
+  if (percentage >= 60) return 'primary'  // 60-79%: blue
+  if (percentage >= 30) return 'warning'  // 30-59%: orange
+  return 'error'                          // < 30%: red
 }
 
 const DebouncedInput = ({
@@ -138,6 +152,7 @@ const ProductListTable = () => {
 
   const [openAddDrawer, setOpenAddDrawer] = useState(false)
   const [openAssignDrawer, setOpenAssignDrawer] = useState(false)
+  const [openResultDrawer, setOpenResultDrawer] = useState(false)
 
   const [reloadFlag, setReloadFlag] = useState(false)
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false)
@@ -231,44 +246,59 @@ const ProductListTable = () => {
             return Math.floor((passedStudents / registeredStudents) * 100);
           };
 
+          const passRate = calculatePassRate();
+          const progressColor = getProgressColor(passRate);
+
           return (
-            <div className='flex items-center gap-4 min-is-48'>
+            <>
               {isExamPassed ? (
                 hasValidResults ? (
                   <>
-                    <Typography
-                      className='font-medium'
-                      color='text.primary'
-                    >
-                      {`${calculatePassRate()}%`}
-                    </Typography>
-                    <LinearProgress
-                      color='primary'
-                      value={calculatePassRate()}
-                      variant='determinate'
-                      className='is-full bs-2'
-                    />
-                    <Typography variant='body2'>
-                      {`${passedStudents}/${registeredStudents}`}
-                    </Typography>
+                    <div className='flex flex-col gap-2 min-w-[120px]'>
+                      <div className='flex items-center justify-between'>
+                        <Typography
+                          className='font-semibold text-sm'
+                          color='text.primary'
+                        >
+                          {`${passRate}%`}
+                        </Typography>
+                        <Typography
+                          variant='caption'
+                          className='text-textSecondary font-medium'
+                        >
+                          {`${passedStudents}/${registeredStudents}`}
+                        </Typography>
+                      </div>
+                      <LinearProgress
+                        color={progressColor}
+                        value={passRate}
+                        variant='determinate'
+                        className='is-full bs-2'
+                      />
+
+                    </div>
                   </>
                 ) : (
-                  <Typography
+                  <div className='flex items-center gap-4 min-is-48'><Typography
                     className='font-medium'
                     color='text.primary'
                   >
                     Chưa có kết quả thi
-                  </Typography>
+                  </Typography></div>
+
                 )
               ) : (
-                <Typography
-                  className='font-medium'
-                  color='text.primary'
-                >
-                  Chưa thi
-                </Typography>
+                <div className='flex items-center gap-4 min-is-48'>
+
+                  <Typography
+                    className='font-medium'
+                    color='text.primary'
+                  >
+                    Chưa thi
+                  </Typography></div>
+
               )}
-            </div>
+            </>
           );
         },
         enableSorting: false
@@ -289,13 +319,9 @@ const ProductListTable = () => {
               options={[
                 { text: 'Xếp thi', icon: 'ri-id-card-line', menuItemProps: { className: 'gap-2', onClick: () => handleOpenAssignDrawer(row.original) } },
                 {
-                  text: 'Delete',
-                  icon: 'ri-delete-bin-7-line',
-                  menuItemProps: {
-                    className: 'gap-2',
-
-                    // onClick: () => setData(data?.filter(product => product.id !== row.original.id))
-                  }
+                  text: 'Kết quả',
+                  icon: 'ri-toggle-line',
+                  menuItemProps: { className: 'gap-2', onClick: () => handleOpenResultDrawer(row.original) }
                 },
               ]}
             />
@@ -399,6 +425,11 @@ const ProductListTable = () => {
   const handleOpenAssignDrawer = (examSchedule: ExamScheduleType) => {
     setSelectedExamScheduleId(examSchedule.id)
     setOpenAssignDrawer(true)
+  }
+
+  const handleOpenResultDrawer = (examSchedule: ExamScheduleType) => {
+    setSelectedExamScheduleId(examSchedule.id)
+    setOpenResultDrawer(true)
   }
 
   useEffect(() => {
@@ -560,6 +591,18 @@ const ProductListTable = () => {
         examScheduleId={selectedExamScheduleId}
         onSuccess={reloadData}
       />
+
+      <ResultLicenseRegistrationsDrawer
+        open={openResultDrawer}
+        handleClose={() => {
+          setSelectedExamScheduleId(undefined)
+          setOpenResultDrawer(false)
+        }
+        }
+        examScheduleId={selectedExamScheduleId}
+        onSuccess={reloadData}
+      />
+
       <Dialog
         open={openDeleteDialog}
         onClose={handleCloseDeleteDialog}
