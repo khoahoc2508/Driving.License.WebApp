@@ -3,8 +3,7 @@
 import { forwardRef, useState } from 'react'
 
 import type { TextFieldProps } from '@mui/material';
-import { Card, CardContent, TextField } from '@mui/material'
-import Grid from '@mui/material/Grid2'
+import { Card, IconButton, TextField, Tooltip } from '@mui/material'
 
 
 // Third-party Imports
@@ -23,10 +22,11 @@ type CustomInputProps = TextFieldProps & {
 type FiltersProps = {
   params: GetStatisticByTimeRangeParams
   setParams: (params: GetStatisticByTimeRangeParams) => void
+  onRefresh: () => void
 }
 
 
-const Filters = ({ setParams }: FiltersProps) => {
+const Filters = ({ setParams, onRefresh }: FiltersProps) => {
   const [startDate, setStartDate] = useState<Date | null | undefined>(null)
   const [endDate, setEndDate] = useState<Date | null | undefined>(null)
 
@@ -59,32 +59,38 @@ const Filters = ({ setParams }: FiltersProps) => {
 
 
   return (
-    <Card sx={{ width: { xs: '100%', sm: '100%', md: '280px' }, mx: 'auto' }}>
-      <CardContent>
-        <Grid container justifyContent="center">
-          <Grid size={{ xs: 12, sm: 12 }}>
-            <AppReactDatepicker
-              selectsRange
-              endDate={endDate ? endDate : null}
-              selected={startDate ? startDate : null}
-              startDate={startDate ? startDate : null}
-              id='date-range-picker'
-              onChange={handleOnChange}
-              shouldCloseOnSelect={false}
-              dateFormat="dd/MM/yyyy"
-              isClearable={true}
-              placeholderText="Chọn khoảng thời gian"
-              customInput={
-                <CustomInput
-                  label='Khoảng thời gian'
-                  start={endDate ?? null}
-                  end={startDate ?? null}
-                />
-              }
+    <Card >
+      <div className='flex justify-between flex-row items-center gap-y-4 p-5'>
+        <AppReactDatepicker
+          selectsRange
+          endDate={endDate ? endDate : null}
+          selected={startDate ? startDate : null}
+          startDate={startDate ? startDate : null}
+          id='date-range-picker'
+          onChange={handleOnChange}
+          shouldCloseOnSelect={false}
+          dateFormat="dd/MM/yyyy"
+          isClearable={true}
+          placeholderText="Chọn khoảng thời gian"
+          className='min-w-[240px]'
+          customInput={
+            <CustomInput
+              label='Khoảng thời gian'
+              start={endDate ?? null}
+              end={startDate ?? null}
             />
-          </Grid>
-        </Grid>
-      </CardContent>
+          }
+        />
+        <div className='flex items-center max-sm:flex-col gap-4'>
+          <Tooltip title='Refresh' placement='top'>
+            <IconButton onClick={onRefresh}>
+              <i className='ri-refresh-line text-textSecondary' />
+            </IconButton>
+          </Tooltip>
+
+        </div>
+      </div>
+
     </Card>
   )
 }

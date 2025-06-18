@@ -122,6 +122,7 @@ const TableFilters = ({ examAddresses, setParams }: TableFiltersProps) => {
               onChange={handleOnChange}
               shouldCloseOnSelect={false}
               showTimeSelect
+              isClearable={true}
               timeFormat="HH:mm"
               timeIntervals={1}
               dateFormat="dd/MM/yyyy HH:mm"
