@@ -5,6 +5,7 @@ import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Grid from '@mui/material/Grid2'
+import CircularProgress from '@mui/material/CircularProgress'
 
 import { toast } from 'react-toastify'
 
@@ -13,6 +14,8 @@ import classNames from 'classnames'
 import styles from './styles.module.css'
 import GroupExamAPI from '@/libs/api/GroupExamAPI'
 import type { GetGroupExamsParams } from '@/types/groupExamTypes'
+import Grid2 from '@mui/material/Grid2'
+import ExamAPI from '@/libs/api/examAPI'
 
 interface GroupExamDto {
   id: string
@@ -24,11 +27,25 @@ interface GroupExamDto {
   children?: GroupExamDto[]
 }
 
+interface ExamDto {
+  id: string
+  name: string
+  description?: string
+  totalQuestions?: number
+  passingScore?: number
+  durationMinutes?: number
+  examType?: number
+  licenseTypeCode?: string
+  groupExamId?: string
+}
+
 const Articles = () => {
   const [groups, setGroups] = useState<GroupExamDto[]>([])
   const [loading, setLoading] = useState(true)
   const [params, setParams] = useState<GetGroupExamsParams>({})
   const [selectedClass, setSelectedClass] = useState<GroupExamDto | null>(null)
+  const [examList, setExamList] = useState<ExamDto[] | null>(null)
+  const [examLoading, setExamLoading] = useState(false)
 
   useEffect(() => {
     setParams({})
@@ -52,6 +69,23 @@ const Articles = () => {
     fetchGroups()
   }, [])
 
+  const handleShowExamList = async (groupExamId: string) => {
+    try {
+      setExamLoading(true)
+      const res = await ExamAPI.GetExamsByGroups(groupExamId)
+      if (res?.data?.data) {
+        const fetchedData = res?.data?.data || []
+
+        setExamList(fetchedData.data || [])
+
+      }
+    } catch (error: any) {
+      toast.error(error?.message)
+    } finally {
+      setExamLoading(false)
+    }
+  }
+
   if (loading) {
     return <Typography className='text-center'>Đang tải...</Typography>
   }
@@ -60,7 +94,7 @@ const Articles = () => {
     return (
       <div className='bg-backgroundPaper py-10'>
         <div className={styles.layoutSpacing}>
-          <Button variant='outlined' onClick={() => setSelectedClass(null)} style={{ marginBottom: 32 }}>
+          <Button variant='outlined' onClick={() => { setSelectedClass(null); setExamList(null); }} style={{ marginBottom: 32 }}>
             Quay lại
           </Button>
           <Typography variant='h4' className='text-center mbe-8 flex items-center justify-center gap-2'>
@@ -75,15 +109,42 @@ const Articles = () => {
                     <Typography variant='h5'>{child.name}</Typography>
                     <Typography style={{ flex: 1 }}>{child.description}</Typography>
                     <div style={{ marginTop: 'auto' }}>
-                      <Button variant='outlined'>
-                        {child.name === 'THI THEO BỘ ĐỀ' ? 'Chi tiết' : 'Bắt đầu thi'}
-                      </Button>
+                      {child.name === 'THI THEO BỘ ĐỀ' ? (
+                        <Button variant='outlined' onClick={() => handleShowExamList(child.id)} disabled={examLoading}>
+                          {examLoading ? <CircularProgress size={20} /> : 'Chi tiết'}
+                        </Button>
+                      ) : (
+                        <Button variant='outlined'>Bắt đầu thi</Button>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
               </Grid>
             ))}
           </Grid>
+
+          {/* Hiển thị danh sách đề thi nếu có */}
+          {examLoading && (
+            <div className='flex justify-center mt-8'><CircularProgress /></div>
+          )}
+          {examList && (
+            <div className='mt-8'>
+              <Typography variant='h5' className='mb-4 font-bold'>Danh sách đề thi</Typography>
+              <Grid2 container spacing={2}>
+                {examList.map(exam => (
+                  <Card variant='outlined' sx={{ borderRadius: 3, p: 2 }}>
+                    <CardContent>
+                      <Typography variant='subtitle1' className='font-bold'>{exam.name}</Typography>
+                      <Typography variant='body2' color='text.secondary'>{exam.description}</Typography>
+                      <Typography variant='body2' color='text.secondary'>Số câu: {exam.totalQuestions} | Thời gian: {exam.durationMinutes} phút</Typography>
+                      <Typography variant='body2' color='text.secondary'>Điểm đạt: {exam.passingScore}</Typography>
+                      <Button variant='contained' color='primary' sx={{ mt: 2 }}>Làm đề này</Button>
+                    </CardContent>
+                  </Card>
+                ))}
+              </Grid2>
+            </div>
+          )}
         </div>
       </div>
     )
