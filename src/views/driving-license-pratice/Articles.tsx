@@ -28,6 +28,7 @@ const Articles = () => {
   const [groups, setGroups] = useState<GroupExamDto[]>([])
   const [loading, setLoading] = useState(true)
   const [params, setParams] = useState<GetGroupExamsParams>({})
+  const [selectedClass, setSelectedClass] = useState<GroupExamDto | null>(null)
 
   useEffect(() => {
     setParams({})
@@ -55,6 +56,39 @@ const Articles = () => {
     return <Typography className='text-center'>Đang tải...</Typography>
   }
 
+  if (selectedClass) {
+    return (
+      <div className='bg-backgroundPaper'>
+        <div className={styles.layoutSpacing}>
+          <Button variant='outlined' onClick={() => setSelectedClass(null)} style={{ marginBottom: 32 }}>
+            Quay lại
+          </Button>
+          <Typography variant='h4' className='text-center mbe-8 flex items-center justify-center gap-2 font-bold'>
+            {selectedClass.name}
+          </Typography>
+          <Grid container spacing={4} justifyContent='center' alignItems='center'>
+            {selectedClass.children?.map(child => (
+              <Grid size={{ xs: 12, md: 6, lg: 4 }} key={child.id}>
+                <Card variant='outlined' style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                  <CardContent className='flex flex-col items-center justify-between gap-3 text-center' style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                    <i className={classNames(child.iconUrl, 'text-[26px]')} />
+                    <Typography variant='h5'>{child.name}</Typography>
+                    <Typography style={{ flex: 1 }}>{child.description}</Typography>
+                    <div style={{ marginTop: 'auto' }}>
+                      <Button variant='outlined'>
+                        {child.name === 'THI THEO BỘ ĐỀ' ? 'Chi tiết' : 'Bắt đầu thi'}
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className='bg-backgroundPaper'>
       <div className={styles.layoutSpacing}>
@@ -69,13 +103,17 @@ const Articles = () => {
             <Grid container spacing={6} justifyContent='center'>
               {group.children?.map(child => (
                 <Grid size={{ xs: 12, md: 6, lg: 4 }} key={child.id}>
-                  <Card variant='outlined' style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                  <Card
+                    variant='outlined'
+                    style={{ height: '100%', display: 'flex', flexDirection: 'column', cursor: 'pointer' }}
+                    onClick={() => setSelectedClass(child)}
+                  >
                     <CardContent className='flex flex-col items-center justify-between gap-3 text-center' style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                       <i className={classNames(child.iconUrl, 'text-[26px]')} />
                       <Typography variant='h5'>{child.name}</Typography>
                       <Typography style={{ flex: 1 }}>{child.description}</Typography>
                       <div style={{ marginTop: 'auto' }}>
-                        <Button variant='outlined'>Chi tiết</Button>
+                        <Button variant='outlined'>Chọn hạng</Button>
                       </div>
                     </CardContent>
                   </Card>

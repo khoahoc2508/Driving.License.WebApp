@@ -102,7 +102,11 @@ const FileUploaderSingle = ({
         <input {...getInputProps()} />
         {displayImage ? (
           <img
-            src={displayImage}
+            src={
+              displayImage.startsWith('blob:') || displayImage.startsWith('http')
+                ? displayImage
+                : `${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}${displayImage}`
+            }
             alt="Uploaded file"
             style={{
               width: '100%',

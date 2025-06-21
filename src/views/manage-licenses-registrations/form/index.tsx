@@ -199,16 +199,17 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
             setValue('carLicense', data.hasCarLicense ? 'Đã có' : 'Chưa có')
             setValue('confirmationStatus', data.hasApproved ? 'Đã duyệt' : 'Chưa duyệt')
 
+
             if (data?.person?.avatarUrl && data.person.avatarUrl !== '') {
-              setValue('photo3x4', [`${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}/${data.person.avatarUrl}`])
+              setValue('photo3x4', [`${data.person.avatarUrl}`])
             }
 
             if (data?.person?.citizenCardFrontImgUrl && data.person.citizenCardFrontImgUrl !== '') {
-              setValue('frontPhoto', [`${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}/${data.person.citizenCardFrontImgUrl}`])
+              setValue('frontPhoto', [`${data.person.citizenCardFrontImgUrl}`])
             }
 
             if (data?.person?.citizenCardBackImgUrl && data.person.citizenCardBackImgUrl !== '') {
-              setValue('backPhoto', [`${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}/${data.person.citizenCardBackImgUrl}`])
+              setValue('backPhoto', [`${data.person.citizenCardBackImgUrl}`])
             }
 
             setValue('note', data.note)
@@ -308,13 +309,13 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
         try {
           const response = await UploadAPI.uploadFiles([fileOrUrl]);
 
-          
-return response?.data?.[0]?.relativeUrl;
+
+          return response?.data?.[0]?.relativeUrl;
         } catch (error) {
           console.error("Error uploading file:", error);
           toast.error("Lỗi khi tải lên ảnh");
-          
-return undefined;
+
+          return undefined;
         }
       } else if (typeof fileOrUrl === 'string') {
         const uploadsIndex = fileOrUrl.indexOf('training/uploads/');
@@ -326,13 +327,15 @@ return undefined;
         }
       }
 
-      
-return undefined;
+
+      return undefined;
     };
 
     const uploadedPhoto3x4Url = await uploadFile(data.photo3x4?.[0]);
     const uploadedFrontPhotoUrl = await uploadFile(data.frontPhoto?.[0]);
     const uploadedBackPhotoUrl = await uploadFile(data.backPhoto?.[0]);
+
+    debugger
 
     try {
       const payload: LicenseRegistrationCreateResquest | LicenseRegistrationUpdateResquest = {
