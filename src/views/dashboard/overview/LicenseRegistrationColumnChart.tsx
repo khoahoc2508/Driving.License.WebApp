@@ -44,7 +44,7 @@ const LicenseRegistrationColumnChart = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [series, setSeries] = useState(initialSeries)
 
- 
+
 
   const options: ApexOptions = {
     chart: {

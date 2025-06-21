@@ -74,7 +74,7 @@ const TotalListCards = ({ statistics }: Props) => {
   return (
     <Grid container spacing={6}>
       {data.map((item, i) => (
-        <Grid key={i} size={{ xs: 12, sm: 6 }}>
+        <Grid key={i} size={{ xs: 12, sm: 6, lg: 3 }}>
           <HorizontalWithSubtitle {...item} />
         </Grid>
       ))}

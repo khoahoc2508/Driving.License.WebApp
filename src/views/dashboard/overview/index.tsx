@@ -20,36 +20,40 @@ import TotalListCards from '@/views/dashboard/overview/TotalListCards'
 const OverViewTab = () => {
   // States
   const [params, setParams] = useState<GetStatisticByTimeRangeParams>({ startDate: undefined, endDate: undefined })
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [reloadFlag, setReloadFlag] = useState(false)
 
   // Use our custom hook
-  const {
-    data } = useStatistics({
-      params,
-      autoFetch: true
-    })
+  const { data } = useStatistics({
+    params,
+    autoFetch: true
+  })
+
+  const handleRefresh = () => {
+    setReloadFlag(prev => !prev)
+  }
 
   return (
     <Grid container spacing={6}>
       <Grid size={{ xs: 12, md: 12 }}>
-        <Filters setParams={setParams} params={params} />
+        <Filters setParams={setParams} params={params} onRefresh={handleRefresh} />
       </Grid>
-      <Grid container spacing={6} size={{ xs: 12, md: 6 }}>
-        <Grid size={{ xs: 12, md: 12 }}>
-          <TotalListCards statistics={data.overview} />
 
-        </Grid>
-        <Grid size={{ xs: 12, md: 12 }}>
-          <RechartsLineChart />
 
-        </Grid>
+      <Grid size={{ xs: 12, md: 12 }}>
+        <TotalListCards statistics={data.overview} />
       </Grid>
-      <Grid container spacing={6} size={{ xs: 12, md: 6 }}>
-        <Grid size={{ xs: 12, md: 12 }}>
+      <Grid container spacing={6} size={{ xs: 12, md: 12 }}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <PaymentPieChart statistics={data.overview} />
+
         </Grid>
-        <Grid size={{ xs: 12, md: 12 }}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <LicenseRegistrationColumnChart />
         </Grid>
+      </Grid>
+      <Grid size={{ xs: 12, md: 12 }}>
+        <RechartsLineChart />
       </Grid>
     </Grid>
   )
