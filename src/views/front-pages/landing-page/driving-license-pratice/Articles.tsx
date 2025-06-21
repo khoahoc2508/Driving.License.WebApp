@@ -58,12 +58,12 @@ const Articles = () => {
 
   if (selectedClass) {
     return (
-      <div className='bg-backgroundPaper'>
+      <div className='bg-backgroundPaper py-10'>
         <div className={styles.layoutSpacing}>
           <Button variant='outlined' onClick={() => setSelectedClass(null)} style={{ marginBottom: 32 }}>
             Quay lại
           </Button>
-          <Typography variant='h4' className='text-center mbe-8 flex items-center justify-center gap-2 font-bold'>
+          <Typography variant='h4' className='text-center mbe-8 flex items-center justify-center gap-2'>
             {selectedClass.name}
           </Typography>
           <Grid container spacing={4} justifyContent='center' alignItems='center'>
@@ -95,7 +95,7 @@ const Articles = () => {
         {groups.map((group, idx) => (
           <section
             key={group.id}
-            className={`mb-10 pb-10 ${idx === 0 ? 'pt-10' : ''}`}
+            className={`pb-10 ${idx === 0 ? 'pt-10' : ''}`}
           >
             <Typography variant='h4' className='text-center mbe-6 flex items-center justify-center gap-2'>
               {group.name}
