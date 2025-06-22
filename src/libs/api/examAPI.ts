@@ -8,8 +8,13 @@ const GetExamsByGroups = async (groupId: string) => {
   })
 }
 
+const getQuestionsByExam = async (examId: string) => {
+  return await axiosInstance.get(`/api/questions/by-exam/${examId}`)
+}
+
 const ExamAPI = {
-  GetExamsByGroups
+  GetExamsByGroups,
+  getQuestionsByExam
 }
 
 export default ExamAPI

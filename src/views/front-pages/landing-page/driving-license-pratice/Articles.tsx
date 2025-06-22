@@ -14,7 +14,7 @@ import ExamTypeSection from './ExamTypeSection'
 import ExamListSection from './ExamListSection'
 import { GroupExamDto } from '@/types/groupExamTypes'
 import ExamPractice from './ExamPractice'
-import { questionTypes } from '@/types/questionTypes'
+import { questionTypes as Question } from '@/types/questionTypes'
 import QuestionAPI from '@/libs/api/questionAPI'
 
 const Articles = () => {
@@ -25,7 +25,8 @@ const Articles = () => {
   const [examList, setExamList] = useState<any[] | null>(null)
   const [examLoading, setExamLoading] = useState(false)
   const [selectedExam, setSelectedExam] = useState<any | null>(null)
-  const [examQuestions, setExamQuestions] = useState<questionTypes[] | null>(null)
+  const [examQuestions, setExamQuestions] = useState<Question[] | null>(null)
+  const [selectedExamType, setSelectedExamType] = useState<GroupExamDto | null>(null)
 
   useEffect(() => {
     setParams({})
@@ -84,10 +85,16 @@ const Articles = () => {
   }
 
   if (selectedExam && examQuestions) {
-    return <ExamPractice exam={selectedExam} questions={examQuestions} onBack={() => {
-      setSelectedExam(null)
-      setExamQuestions(null)
-    }} />
+    return <ExamPractice
+      exam={selectedExam}
+      questions={examQuestions}
+      onBack={() => {
+        setSelectedExam(null)
+        setExamQuestions(null)
+      }}
+      selectedClass={selectedClass}
+      selectedExamType={selectedExamType}
+    />
   }
 
   if (examList) {
@@ -96,6 +103,7 @@ const Articles = () => {
 
   if (selectedClass) {
     return <ExamTypeSection selectedClass={selectedClass} onBack={() => setSelectedClass(null)} onSelectType={async (child) => {
+      setSelectedExamType(child)
       if (child.name === 'THI THEO BỘ ĐỀ') {
         setExamLoading(true)
         try {

@@ -5,6 +5,7 @@ import { Box, Button, Card, CardContent, Chip, Grid, Typography, Container, Divi
 import { styled } from '@mui/material/styles'
 import { toast } from 'react-toastify'
 import { questionTypes } from '@/types/questionTypes'
+import { GroupExamDto } from '@/types/groupExamTypes'
 
 
 const QuestionImage = styled('img')({
@@ -28,7 +29,19 @@ const AnswerLabel = styled('div')<{ selected: boolean }>(({ theme, selected }) =
     },
 }))
 
-const ExamPractice = ({ exam, questions, onBack }: { exam: any, questions: questionTypes[], onBack: () => void }) => {
+const ExamPractice = ({
+    exam,
+    questions,
+    onBack,
+    selectedClass,
+    selectedExamType
+}: {
+    exam: any,
+    questions: questionTypes[],
+    onBack: () => void,
+    selectedClass: GroupExamDto | null,
+    selectedExamType: GroupExamDto | null
+}) => {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
     const [answers, setAnswers] = useState<Record<string, string>>({})
     const [timeLeft, setTimeLeft] = useState(1365) // 22:45 in seconds
@@ -75,6 +88,9 @@ const ExamPractice = ({ exam, questions, onBack }: { exam: any, questions: quest
         <Container className='max-w-[85%]'>
             <Box sx={{ p: { xs: 2, md: 6 } }}>
                 <Typography variant="h4" gutterBottom align="center">
+                    {selectedClass?.name?.toUpperCase()} - {selectedExamType?.name?.toUpperCase()}
+                </Typography>
+                <Typography variant="h5" gutterBottom align="center" sx={{ color: 'text.secondary', mb: 4 }}>
                     {exam.name}
                 </Typography>
                 <Grid container spacing={2}>
