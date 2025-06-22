@@ -1,7 +1,7 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import { Box, Button, Card, CardContent, Grid, Typography, Container, Divider } from '@mui/material'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
+import { Box, Button, Card, CardContent, Grid, Typography, Container, Divider, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { toast } from 'react-toastify'
 import { questionTypes } from '@/types/questionTypes'
@@ -13,7 +13,7 @@ const QuestionImage = styled('img')({
     maxWidth: '100%',
     maxHeight: '300px',
     objectFit: 'contain',
-    margin: '16px 0',
+    margin: '12px 0',
     borderRadius: '8px'
 })
 
@@ -48,13 +48,72 @@ const ExamPractice = ({
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
     const [answers, setAnswers] = useState<Record<string, string>>({})
     const [timeLeft, setTimeLeft] = useState(exam.durationMinutes * 60)
+    const [isSubmitting, setIsSubmitting] = useState(false)
+    const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+
+    const handleSubmit = useCallback(async (isAutoSubmit = false) => {
+        if (isSubmitting) return;
+        setIsSubmitting(true);
+
+        if (isAutoSubmit) {
+            toast.info('Hết giờ! Tự động nộp bài...');
+        }
+
+        try {
+            const answerPayload = Object.entries(answers).map(([questionId, selectedAnswerId]) => ({
+                questionId,
+                selectedAnswerId
+            }));
+
+            await ExamSubmissionAPI.submitExam({
+                examSubmissionId,
+                answers: answerPayload
+            });
+
+            toast.success('Nộp bài thành công!');
+            onBack();
+        } catch (error) {
+            toast.error('Nộp bài thất bại. Vui lòng thử lại.');
+            setIsSubmitting(false);
+        }
+    }, [answers, examSubmissionId, onBack, isSubmitting]);
+
+    const handleSubmitRef = useRef(handleSubmit);
 
     useEffect(() => {
-        const timer = setInterval(() => {
-            setTimeLeft(prev => (prev > 0 ? prev - 1 : 0))
-        }, 1000)
-        return () => clearInterval(timer)
-    }, [])
+        handleSubmitRef.current = handleSubmit;
+    }, [handleSubmit]);
+
+    useEffect(() => {
+        if (timeLeft <= 0) {
+            return;
+        }
+
+        const timerId = setInterval(() => {
+            setTimeLeft(prev => prev - 1);
+        }, 1000);
+
+        return () => clearInterval(timerId);
+    }, [timeLeft]);
+
+    useEffect(() => {
+        if (timeLeft === 0) {
+            handleSubmitRef.current(true);
+        }
+    }, [timeLeft]);
+
+    const handleOpenConfirmDialog = () => {
+        setOpenConfirmDialog(true);
+    };
+
+    const handleCloseConfirmDialog = () => {
+        setOpenConfirmDialog(false);
+    };
+
+    const handleConfirmSubmit = () => {
+        handleSubmit(false);
+        handleCloseConfirmDialog();
+    };
 
     const handleAnswerChange = (questionId: string | undefined, answerId: string) => {
         if (questionId) {
@@ -68,24 +127,6 @@ const ExamPractice = ({
         const mins = Math.floor(seconds / 60)
         const secs = seconds % 60
         return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
-    }
-
-    const handleSubmit = async () => {
-        try {
-            const answerPayload = Object.entries(answers).map(([questionId, selectedAnswerId]) => ({
-                questionId,
-                selectedAnswerId
-            }));
-            await ExamSubmissionAPI.submitExam({
-                examSubmissionId,
-                answers: answerPayload
-            });
-
-            toast.success('Nộp bài thành công!');
-            onBack();
-        } catch (error) {
-            toast.error('Nộp bài thất bại. Vui lòng thử lại.');
-        }
     }
 
     if (!currentQuestion) {
@@ -190,7 +231,14 @@ const ExamPractice = ({
                                         SAU
                                     </Button>
                                 </div>
-                                <Button variant="contained" color="primary" onClick={handleSubmit}>KẾT THÚC THI</Button>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={handleOpenConfirmDialog}
+                                    disabled={isSubmitting || Object.keys(answers).length === 0}
+                                >
+                                    KẾT THÚC THI
+                                </Button>
                             </Box>
                         </Card>
                     </Grid>
@@ -199,6 +247,27 @@ const ExamPractice = ({
                     <Button variant="text" onClick={onBack}>Quay lại danh sách đề</Button>
                 </Box>
             </Box>
+            <Dialog
+                open={openConfirmDialog}
+                onClose={handleCloseConfirmDialog}
+                fullWidth
+                maxWidth="xs"
+            >
+                <DialogTitle>Kết thúc bài thi?</DialogTitle>
+                <DialogContent>
+                    <Typography>
+                        Bạn chắc chắn muốn kết thúc bài thi?
+                    </Typography>
+                </DialogContent>
+                <DialogActions className='p-4'>
+                    <Button onClick={handleCloseConfirmDialog} variant="outlined" color="error">
+                        Hủy
+                    </Button>
+                    <Button onClick={handleConfirmSubmit} variant="contained" color="primary">
+                        Xác nhận
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Container>
     )
 }
