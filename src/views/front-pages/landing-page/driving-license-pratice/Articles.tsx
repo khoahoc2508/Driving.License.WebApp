@@ -13,6 +13,9 @@ import GroupSection from './GroupSection'
 import ExamTypeSection from './ExamTypeSection'
 import ExamListSection from './ExamListSection'
 import { GroupExamDto } from '@/types/groupExamTypes'
+import ExamPractice from './ExamPractice'
+import { questionTypes } from '@/types/questionTypes'
+import QuestionAPI from '@/libs/api/questionAPI'
 
 const Articles = () => {
   const [groups, setGroups] = useState<GroupExamDto[]>([])
@@ -21,6 +24,8 @@ const Articles = () => {
   const [selectedClass, setSelectedClass] = useState<GroupExamDto | null>(null)
   const [examList, setExamList] = useState<any[] | null>(null)
   const [examLoading, setExamLoading] = useState(false)
+  const [selectedExam, setSelectedExam] = useState<any | null>(null)
+  const [examQuestions, setExamQuestions] = useState<questionTypes[] | null>(null)
 
   useEffect(() => {
     setParams({})
@@ -44,6 +49,19 @@ const Articles = () => {
     fetchGroups()
   }, [])
 
+  const handleStartExam = async (exam: any) => {
+    setExamLoading(true)
+    try {
+      const res = await QuestionAPI.getExamQuestions(exam.id)
+      setExamQuestions(res.data.data)
+      setSelectedExam(exam)
+    } catch (err) {
+      toast.error('Không thể tải câu hỏi thi.')
+    } finally {
+      setExamLoading(false)
+    }
+  }
+
   const handleShowExamList = async (groupExamId: string) => {
     try {
       setExamLoading(true)
@@ -61,12 +79,19 @@ const Articles = () => {
     }
   }
 
-  if (loading) {
+  if (loading || examLoading) {
     return <Typography className='text-center'>Đang tải...</Typography>
   }
 
+  if (selectedExam && examQuestions) {
+    return <ExamPractice exam={selectedExam} questions={examQuestions} onBack={() => {
+      setSelectedExam(null)
+      setExamQuestions(null)
+    }} />
+  }
+
   if (examList) {
-    return <ExamListSection selectedClass={selectedClass} examList={examList} onBack={() => setExamList(null)} />
+    return <ExamListSection selectedClass={selectedClass} examList={examList} onBack={() => setExamList(null)} onStartExam={handleStartExam} />
   }
 
   if (selectedClass) {

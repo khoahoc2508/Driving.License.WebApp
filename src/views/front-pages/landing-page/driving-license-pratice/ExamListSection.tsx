@@ -10,9 +10,10 @@ interface ExamListSectionProps {
     selectedClass: GroupExamDto | null
     examList: any[]
     onBack: () => void
+    onStartExam: (exam: any) => void
 }
 
-const ExamListSection = ({ selectedClass, examList, onBack }: ExamListSectionProps) => (
+const ExamListSection = ({ selectedClass, examList, onBack, onStartExam }: ExamListSectionProps) => (
     <div className='bg-backgroundPaper py-10'>
         <div className={styles.layoutSpacing}>
             <Button variant='outlined' onClick={onBack} style={{ marginBottom: 32 }}>
@@ -32,6 +33,7 @@ const ExamListSection = ({ selectedClass, examList, onBack }: ExamListSectionPro
                             title={exam.name || `Đề ${exam.id}`}
                             description={exam.description || ''}
                             buttonText='Bắt đầu thi'
+                            onButtonClick={() => onStartExam(exam)}
                         />
                     </Grid>
                 ))}
