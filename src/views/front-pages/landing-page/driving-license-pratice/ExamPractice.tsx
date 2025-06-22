@@ -1,18 +1,19 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { Box, Button, Card, CardContent, Chip, Grid, Typography, Container, Divider } from '@mui/material'
+import { Box, Button, Card, CardContent, Grid, Typography, Container, Divider } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { toast } from 'react-toastify'
 import { questionTypes } from '@/types/questionTypes'
 import { GroupExamDto } from '@/types/groupExamTypes'
+import ExamSubmissionAPI from '@/libs/api/examSubmissionAPI'
 
 
 const QuestionImage = styled('img')({
     maxWidth: '100%',
     maxHeight: '300px',
     objectFit: 'contain',
-    margin: '12px 0',
+    margin: '16px 0',
     borderRadius: '8px'
 })
 
@@ -34,17 +35,19 @@ const ExamPractice = ({
     questions,
     onBack,
     selectedClass,
-    selectedExamType
+    selectedExamType,
+    examSubmissionId
 }: {
     exam: any,
     questions: questionTypes[],
     onBack: () => void,
     selectedClass: GroupExamDto | null,
-    selectedExamType: GroupExamDto | null
+    selectedExamType: GroupExamDto | null,
+    examSubmissionId: string
 }) => {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
     const [answers, setAnswers] = useState<Record<string, string>>({})
-    const [timeLeft, setTimeLeft] = useState(1365) // 22:45 in seconds
+    const [timeLeft, setTimeLeft] = useState(exam.durationMinutes * 60)
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -67,8 +70,22 @@ const ExamPractice = ({
         return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
     }
 
-    const handleSubmit = () => {
-        toast.success('Nộp bài thành công!')
+    const handleSubmit = async () => {
+        try {
+            const answerPayload = Object.entries(answers).map(([questionId, selectedAnswerId]) => ({
+                questionId,
+                selectedAnswerId
+            }));
+            await ExamSubmissionAPI.submitExam({
+                examSubmissionId,
+                answers: answerPayload
+            });
+
+            toast.success('Nộp bài thành công!');
+            onBack();
+        } catch (error) {
+            toast.error('Nộp bài thất bại. Vui lòng thử lại.');
+        }
     }
 
     if (!currentQuestion) {

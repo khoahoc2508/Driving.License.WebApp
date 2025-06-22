@@ -16,6 +16,7 @@ import { GroupExamDto } from '@/types/groupExamTypes'
 import ExamPractice from './ExamPractice'
 import { questionTypes as Question } from '@/types/questionTypes'
 import QuestionAPI from '@/libs/api/questionAPI'
+import ExamSubmissionAPI from '@/libs/api/examSubmissionAPI'
 
 const Articles = () => {
   const [groups, setGroups] = useState<GroupExamDto[]>([])
@@ -27,6 +28,7 @@ const Articles = () => {
   const [selectedExam, setSelectedExam] = useState<any | null>(null)
   const [examQuestions, setExamQuestions] = useState<Question[] | null>(null)
   const [selectedExamType, setSelectedExamType] = useState<GroupExamDto | null>(null)
+  const [examSubmissionId, setExamSubmissionId] = useState<string | null>(null)
 
   useEffect(() => {
     setParams({})
@@ -53,9 +55,16 @@ const Articles = () => {
   const handleStartExam = async (exam: any) => {
     setExamLoading(true)
     try {
-      const res = await QuestionAPI.getExamQuestions(exam.id)
-      setExamQuestions(res.data.data)
-      setSelectedExam(exam)
+      const submissionRes = await ExamSubmissionAPI.startExam(exam.id)
+      if (submissionRes.data.success && submissionRes.data.data?.examSubmissionId) {
+        setExamSubmissionId(submissionRes.data.data.examSubmissionId)
+
+        const questionsRes = await QuestionAPI.getExamQuestions(exam.id)
+        setExamQuestions(questionsRes.data.data)
+        setSelectedExam(exam)
+      } else {
+        toast.error('Không thể bắt đầu bài thi. Vui lòng thử lại.')
+      }
     } catch (err) {
       toast.error('Không thể tải câu hỏi thi.')
     } finally {
@@ -84,16 +93,18 @@ const Articles = () => {
     return <Typography className='text-center'>Đang tải...</Typography>
   }
 
-  if (selectedExam && examQuestions) {
+  if (selectedExam && examQuestions && examSubmissionId) {
     return <ExamPractice
       exam={selectedExam}
       questions={examQuestions}
       onBack={() => {
         setSelectedExam(null)
         setExamQuestions(null)
+        setExamSubmissionId(null)
       }}
       selectedClass={selectedClass}
       selectedExamType={selectedExamType}
+      examSubmissionId={examSubmissionId}
     />
   }
 
