@@ -25,7 +25,7 @@ const ExamTypeSection = ({ selectedClass, onBack, onSelectType }: ExamTypeSectio
                 {selectedClass.children?.map(child => (
                     <Grid item xs={12} md={6} lg={4} key={child.id}>
                         <PracticeCard
-                            icon={child.iconUrl || ''}
+                            icon={'ri-file-list-2-line'}
                             title={child.name}
                             description={child.description}
                             buttonText={child.name === 'THI THEO BỘ ĐỀ' ? 'Chi tiết' : 'Bắt đầu thi'}

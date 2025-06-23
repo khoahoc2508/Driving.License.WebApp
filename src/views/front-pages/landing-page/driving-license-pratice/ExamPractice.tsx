@@ -159,9 +159,9 @@ const ExamPractice = ({
                                     <CardContent>
                                         <Box display="flex" justifyContent="space-between" alignItems="center">
                                             <Typography variant="h6">Thời gian:</Typography>
-                                            <Box sx={{ display: 'flex', alignItems: 'center', color: 'primary.main' }}>
+                                            <Box sx={{ display: 'flex', alignItems: 'center', color: timeLeft <= exam.durationMinutes * 60 * 0.05 ? 'error.main' : 'primary.main' }}>
                                                 <i className='ri-time-line' style={{ fontSize: '1.25rem', marginRight: '4px' }} />
-                                                <Typography variant='h6' component='span' sx={{ fontWeight: 'medium' }} className='text-primary'>
+                                                <Typography variant='h6' component='span' sx={{ fontWeight: 'medium' }} className={timeLeft <= exam.durationMinutes * 60 * 0.05 ? 'text-error' : 'text-primary'}>
                                                     {formatTime(timeLeft)}
                                                 </Typography>
                                             </Box>
@@ -194,7 +194,7 @@ const ExamPractice = ({
                     <Grid item xs={12} md={8}>
                         <Card sx={{ height: '100%' }} className='flex flex-col justify-between'>
                             <CardContent sx={{ flexGrow: 1 }}>
-                                <Typography variant="h5" className='text-[#98999e]'>Câu {currentQuestionIndex + 1} {currentQuestion.isCriticalQuestion && <span className='text-red-600'>*</span>}</Typography>
+                                <Typography variant="h5" className='text-[#98999e]'>Câu {currentQuestionIndex + 1}</Typography>
                                 <Typography variant="h6" className='my-3' sx={{ fontWeight: 600 }}>{currentQuestion.content}</Typography>
                                 {currentQuestion.imageUrl && <QuestionImage src={currentQuestion.imageUrl} alt={`Question ${currentQuestionIndex + 1}`} />}
                                 <Divider sx={{ mb: 4 }} />
@@ -235,7 +235,7 @@ const ExamPractice = ({
                                     variant="contained"
                                     color="primary"
                                     onClick={handleOpenConfirmDialog}
-                                    disabled={isSubmitting || Object.keys(answers).length === 0}
+                                    disabled={isSubmitting}
                                 >
                                     KẾT THÚC THI
                                 </Button>
