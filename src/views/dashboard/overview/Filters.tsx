@@ -15,8 +15,7 @@ import type { GetStatisticByTimeRangeParams } from '@/types/statisticTypes'
 // Types
 type CustomInputProps = TextFieldProps & {
   label: string
-  end: Date | null | undefined
-  start: Date | null | undefined
+  value?: string
 }
 
 type FiltersProps = {
@@ -30,67 +29,87 @@ const Filters = ({ setParams, onRefresh }: FiltersProps) => {
   const [startDate, setStartDate] = useState<Date | null | undefined>(null)
   const [endDate, setEndDate] = useState<Date | null | undefined>(null)
 
-  const handleOnChange = (dates: any) => {
-    const [start, end] = dates
+  const handleStartDateChange = (date: Date | null) => {
+    setStartDate(date)
 
-    setStartDate(start)
-    setEndDate(end)
-
-    // Chỉ set params khi cả start và end đã được chọn
-    if (start && end) {
+    // Cập nhật params khi có thay đổi
+    if (date && endDate) {
       setParams({
-        startDate: start.toISOString(),
-        endDate: end.toISOString()
+        startDate: date.toISOString(),
+        endDate: endDate.toISOString()
+      })
+    } else if (date && !endDate) {
+      // Nếu chỉ có startDate, có thể set endDate = startDate hoặc để trống
+      // Tùy theo logic business của bạn
+    }
+  }
+
+  const handleEndDateChange = (date: Date | null) => {
+    setEndDate(date)
+
+    // Cập nhật params khi có thay đổi
+    if (startDate && date) {
+      setParams({
+        startDate: startDate.toISOString(),
+        endDate: date.toISOString()
       })
     }
   }
 
   const CustomInput = forwardRef((props: CustomInputProps, ref) => {
-    const { label, start, end, ...rest } = props
+    const { label, value, ...rest } = props
 
-    // Safely format dates only if they exist
-    const startDateStr = start ? format(start, 'dd/MM/yyyy') : ''
-    const endDateStr = end ? ` - ${format(end, 'dd/MM/yyyy')}` : ''
-
-    const value = startDateStr + endDateStr
-
-    return <TextField fullWidth inputRef={ref} {...rest} label={label} value={value} />
+    return <TextField fullWidth inputRef={ref} {...rest} label={label} value={value || ''} />
   })
 
 
   return (
     <Card >
       <div className='flex justify-between flex-row items-center gap-y-4 p-5'>
-        <AppReactDatepicker
-          selectsRange
-          endDate={endDate ? endDate : null}
-          selected={startDate ? startDate : null}
-          startDate={startDate ? startDate : null}
-          id='date-range-picker'
-          onChange={handleOnChange}
-          shouldCloseOnSelect={false}
-          dateFormat="dd/MM/yyyy"
-          isClearable={true}
-          placeholderText="Chọn khoảng thời gian"
-          className='min-w-[240px]'
-          customInput={
-            <CustomInput
-              label='Khoảng thời gian'
-              start={endDate ?? null}
-              end={startDate ?? null}
-            />
-          }
-        />
+        <div className='flex items-center gap-4 flex-col sm:flex-row'>
+          {/* Start Date Picker */}
+          <AppReactDatepicker
+            selected={startDate}
+            onChange={handleStartDateChange}
+            dateFormat="dd/MM/yyyy"
+            isClearable={true}
+            placeholderText="Chọn ngày bắt đầu"
+            className='w-[240px] sm:w-full'
+            maxDate={endDate || undefined} // Không cho chọn ngày sau endDate
+            customInput={
+              <CustomInput
+                label='Ngày bắt đầu'
+                value={startDate ? format(startDate, 'dd/MM/yyyy') : ''}
+              />
+            }
+          />
+
+          {/* End Date Picker */}
+          <AppReactDatepicker
+            selected={endDate}
+            onChange={handleEndDateChange}
+            dateFormat="dd/MM/yyyy"
+            isClearable={true}
+            placeholderText="Chọn ngày kết thúc"
+            className='w-[240px] sm:w-full'
+            minDate={startDate || undefined} // Không cho chọn ngày trước startDate
+            customInput={
+              <CustomInput
+                label='Ngày kết thúc'
+                value={endDate ? format(endDate, 'dd/MM/yyyy') : ''}
+              />
+            }
+          />
+        </div>
+
         <div className='flex items-center max-sm:flex-col gap-4'>
           <Tooltip title='Refresh' placement='top'>
             <IconButton onClick={onRefresh}>
               <i className='ri-refresh-line text-textSecondary' />
             </IconButton>
           </Tooltip>
-
         </div>
       </div>
-
     </Card>
   )
 }

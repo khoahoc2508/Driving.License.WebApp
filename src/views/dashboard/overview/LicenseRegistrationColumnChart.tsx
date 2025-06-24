@@ -148,7 +148,7 @@ const LicenseRegistrationColumnChart = () => {
         <AppReactApexCharts
           id='shipment-statistics'
           type='line'
-          height={313}
+          height={280}
           width='100%'
           series={series}
           options={options}

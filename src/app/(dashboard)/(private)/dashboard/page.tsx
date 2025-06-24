@@ -25,12 +25,13 @@ const tabContentList = (): { [key: string]: ReactElement } => ({
 
 const dashboard = async () => {
   return (
-    <Grid container spacing={6}>
-      <Grid size={{ xs: 12 }}>
-        {/* <ExamSchedulesTable /> */}
-        <Dashboard tabContentList={tabContentList()} />
-      </Grid>
-    </Grid>
+    // <Grid container spacing={6}>
+    //   <Grid size={{ xs: 12 }}>
+    //     {/* <ExamSchedulesTable /> */}
+    //     <Dashboard tabContentList={tabContentList()} />
+    //   </Grid>
+    // </Grid>
+    <OverViewTab />
   )
 }
 

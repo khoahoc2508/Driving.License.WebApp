@@ -53,15 +53,15 @@ type Props = {
 const PaymentPieChart = ({ statistics }: Props) => {
   // Tạo dữ liệu cho biểu đồ từ statistics
   const chartData = [
-    { 
-      name: 'Đã thanh toán', 
-      value: statistics?.percentagePaid || 0, 
-      color: '#00d4bd' 
+    {
+      name: 'Đã thanh toán',
+      value: statistics?.percentagePaid || 0,
+      color: '#00d4bd'
     },
-    { 
-      name: 'Chưa thanh toán', 
-      value: statistics?.percentageUnpaid || 0, 
-      color: '#FFA1A1' 
+    {
+      name: 'Chưa thanh toán',
+      value: statistics?.percentageUnpaid || 0,
+      color: '#FFA1A1'
     },
   ]
 
@@ -70,9 +70,9 @@ const PaymentPieChart = ({ statistics }: Props) => {
       <CardHeader title='Thanh toán' />
       <CardContent>
         <AppRecharts>
-          <div className='bs-[240px]'>
+          <div className='bs-[245px]'>
             <ResponsiveContainer>
-              <PieChart height={240} style={{ direction: 'ltr' }}>
+              <PieChart height={280} style={{ direction: 'ltr' }}>
                 <Pie
                   data={chartData}
                   innerRadius={60}
