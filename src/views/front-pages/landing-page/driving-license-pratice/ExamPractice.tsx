@@ -7,6 +7,7 @@ import { toast } from 'react-toastify'
 import { questionTypes } from '@/types/questionTypes'
 import { GroupExamDto } from '@/types/groupExamTypes'
 import ExamSubmissionAPI from '@/libs/api/examSubmissionAPI'
+import type { ExamSubmissionResultDto, ExamSubmissionAnswerDto } from '@/types/examSubmissionTypes'
 
 
 const QuestionImage = styled('img')({
@@ -50,6 +51,7 @@ const ExamPractice = ({
     const [timeLeft, setTimeLeft] = useState(exam.durationMinutes * 60)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+    const [result, setResult] = useState<ExamSubmissionResultDto | null>(null)
 
     const handleSubmit = useCallback(async (isAutoSubmit = false) => {
         if (isSubmitting) return;
@@ -65,13 +67,13 @@ const ExamPractice = ({
                 selectedAnswerId
             }));
 
-            await ExamSubmissionAPI.submitExam({
+            const res = await ExamSubmissionAPI.submitExam({
                 examSubmissionId,
                 answers: answerPayload
             });
 
             toast.success('Nộp bài thành công!');
-            onBack();
+            setResult(res.data?.data || null);
         } catch (error) {
             toast.error('Nộp bài thất bại. Vui lòng thử lại.');
             setIsSubmitting(false);
@@ -127,6 +129,153 @@ const ExamPractice = ({
         const mins = Math.floor(seconds / 60)
         const secs = seconds % 60
         return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
+    }
+
+    if (result) {
+        // Hiển thị kết quả thi
+        const isPassed = result.isPassed;
+        const hasCriticalMistake = result.hasCriticalMistake;
+        const currentResultAnswer: ExamSubmissionAnswerDto | undefined = result.userAnswers?.find((a: ExamSubmissionAnswerDto) => a.question?.id === questions[currentQuestionIndex]?.id);
+        return (
+            <Container maxWidth="lg">
+                <Box sx={{ p: { xs: 2, md: 6 } }}>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} md={4}>
+                            <Card>
+                                <CardContent>
+                                    <Typography variant="h6" mb={2}>Kết quả thi</Typography>
+                                    <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
+                                        <Typography>Hạng xe:</Typography>
+                                        <Typography fontWeight={600}>{selectedClass?.name || '-'}</Typography>
+                                    </Box>
+                                    <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
+                                        <Typography>Thời gian làm bài:</Typography>
+                                        <Typography fontWeight={600}>{result.duration || '-'}</Typography>
+                                    </Box>
+                                    <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
+                                        <Typography>Tổng câu đúng:</Typography>
+                                        <Typography fontWeight={600}>{result.correctAnswerCount}/{result.totalQuestions}</Typography>
+                                    </Box>
+                                    <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
+                                        <Typography>Kết quả:</Typography>
+                                        <Typography fontWeight={600} color={isPassed ? 'primary' : 'error'}>
+                                            {isPassed ? 'ĐẠT' : 'KHÔNG ĐẠT'}
+                                        </Typography>
+                                    </Box>
+                                    {hasCriticalMistake && (
+                                        <Typography color="error" fontWeight={600} mt={2}>
+                                            Lưu ý: Bạn đã trả lời sai câu liệt.
+                                        </Typography>
+                                    )}
+                                    <Button variant="contained" color="primary" fullWidth sx={{ mt: 3 }} onClick={() => window.location.reload()}>
+                                        THI LẠI
+                                    </Button>
+                                </CardContent>
+                            </Card>
+                            <Card className='mt-2'>
+                                <CardContent>
+                                    <Typography variant="h6" mb={2}>Danh sách câu hỏi</Typography>
+                                    <Grid container spacing={1} className='border rounded-sm px-8 py-4 mt-5'>
+                                        {questions.map((q, index) => {
+                                            const userAnswer: ExamSubmissionAnswerDto | undefined = result.userAnswers?.find((a: ExamSubmissionAnswerDto) => a.question?.id === q.id);
+                                            let color: 'success' | 'error' | 'inherit' = 'inherit';
+                                            if (userAnswer?.selectedAnswerId) {
+                                                const isCorrect = userAnswer.question?.answers?.find((ans) => ans.id === userAnswer.selectedAnswerId)?.isCorrect;
+                                                color = isCorrect ? 'success' : 'error';
+                                            }
+                                            return (
+                                                <Grid item xs={3} key={q.id || index}>
+                                                    <Button
+                                                        variant={index + 1 === currentQuestionIndex + 1 ? 'contained' : 'outlined'}
+                                                        color={color}
+                                                        onClick={() => setCurrentQuestionIndex(index)}
+                                                    >
+                                                        {index + 1}
+                                                    </Button>
+                                                </Grid>
+                                            );
+                                        })}
+                                    </Grid>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                        <Grid item xs={12} md={8}>
+                            <Card sx={{ height: '100%' }} className='flex flex-col justify-between'>
+                                <CardContent sx={{ flexGrow: 1 }}>
+                                    <Typography variant="h5" className='text-[#98999e]'>Câu {currentQuestionIndex + 1}{questions[currentQuestionIndex]?.isCriticalQuestion ? ' *' : ''}</Typography>
+                                    <Typography variant="h6" className='my-3' sx={{ fontWeight: 600 }}>{questions[currentQuestionIndex]?.content}</Typography>
+                                    {questions[currentQuestionIndex]?.imageUrl && <QuestionImage src={questions[currentQuestionIndex]?.imageUrl} alt={`Question ${currentQuestionIndex + 1}`} />}
+                                    <Divider sx={{ mb: 4 }} />
+                                    <div>
+                                        {(currentResultAnswer?.question?.answers || questions[currentQuestionIndex]?.answers)?.map(ans => {
+                                            const answer = ans as { id?: string; order?: number; content?: string; isCorrect?: boolean };
+                                            const isCorrect = answer.isCorrect;
+                                            const isSelected = currentResultAnswer?.selectedAnswerId === answer.id;
+                                            let bg = 'transparent', color = 'inherit', border = '1px solid #e0e0e0';
+                                            if (isCorrect) {
+                                                bg = '#4caf50'; color = '#fff'; border = '1px solid #4caf50';
+                                            } else if (isSelected) {
+                                                bg = '#ffebee'; color = '#d32f2f'; border = '1px solid #d32f2f';
+                                            }
+                                            return (
+                                                <Box key={answer.id} sx={{
+                                                    background: bg,
+                                                    color,
+                                                    border,
+                                                    borderRadius: '8px',
+                                                    p: '12px 16px',
+                                                    mb: '8px',
+                                                    fontWeight: isCorrect ? 600 : 400
+                                                }}>
+                                                    {`${answer.order}. ${answer.content}`}
+                                                </Box>
+                                            );
+                                        })}
+                                    </div>
+                                    {currentResultAnswer?.question && (currentResultAnswer.question as { explanation?: string }).explanation && (
+                                        <Box sx={{ mt: 2, p: 2, border: '1px solid #b39ddb', borderRadius: '8px', color: '#7c4dff', background: '#f3e5f5' }}>
+                                            Giải thích: {(currentResultAnswer.question as { explanation?: string }).explanation}
+                                        </Box>
+                                    )}
+                                </CardContent>
+                                <Divider />
+                                <Box display="flex" justifyContent="space-between" alignItems="center" paddingX={6} paddingY={3}>
+                                    <div>
+                                        <Button
+                                            variant="outlined"
+                                            disabled={currentQuestionIndex === 0}
+                                            onClick={() => setCurrentQuestionIndex(prev => prev - 1)}
+                                            startIcon={<i className='ri-arrow-left-line' />}
+                                        >
+                                            TRƯỚC
+                                        </Button>
+                                        <Button
+                                            variant="outlined"
+                                            disabled={currentQuestionIndex === questions.length - 1}
+                                            onClick={() => setCurrentQuestionIndex(prev => prev + 1)}
+                                            sx={{ ml: 2 }}
+                                            endIcon={<i className='ri-arrow-right-line' />}
+                                        >
+                                            SAU
+                                        </Button>
+                                    </div>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={() => window.location.reload()}
+                                    >
+                                        THI LẠI
+                                    </Button>
+                                </Box>
+                            </Card>
+                        </Grid>
+                    </Grid>
+                    <Box mt={4} display="flex" justifyContent="center">
+                        <Button variant="text" onClick={onBack}>Quay lại danh sách đề</Button>
+                    </Box>
+                </Box>
+            </Container>
+        );
     }
 
     if (!currentQuestion) {
