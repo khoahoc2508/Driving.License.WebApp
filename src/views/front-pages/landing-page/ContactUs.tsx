@@ -60,17 +60,17 @@ const ContactUs = () => {
           <div className='flex items-center justify-center mbe-6 gap-3'>
             <Lines />
             <Typography variant='h6' className='uppercase'>
-              Contact Us
+              Liên Hệ Với Chúng Tôi
             </Typography>
           </div>
         </div>
         <div className='flex items-baseline flex-wrap gap-2 mbe-3 sm:mbe-1'>
-          <Typography variant='h4' className='font-bold'>
-            Lets work
+          <Typography variant='h5' className='font-bold'>
+            Cùng hợp tác để đơn giản hóa việc quản lý hồ sơ
           </Typography>
-          <Typography variant='h5'>together</Typography>
         </div>
-        <Typography className='font-medium text-center'>Any question or remark? just write us a message</Typography>
+        <Typography className='font-medium text-center'>Có thắc mắc hoặc cần tư vấn thêm?
+          Hãy để lại tin nhắn – chúng tôi sẽ phản hồi trong thời gian sớm nhất.</Typography>
       </div>
       <div>
         <Grid container spacing={6}>
@@ -78,15 +78,14 @@ const ContactUs = () => {
             <Card className='bg-primary'>
               <CardContent className='flex flex-col gap-5 pli-8 pbs-8 pbe-7'>
                 <div className='flex flex-col gap-1.5'>
-                  <Typography className='font-medium text-white'>Let&apos;s contact with us</Typography>
+                  <Typography className='font-medium text-white'>Liên Hệ Với Chúng Tôi</Typography>
                   <Typography variant='h4' className='text-white'>
-                    Share your ideas or requirement with our experts.
+                    Chia sẻ nhu cầu hoặc ý tưởng của bạn cùng đội ngũ của chúng tôi.
                   </Typography>
                 </div>
                 <img src='/images/front-pages/landing-page/chat.png' alt='chat' className='is-full' />
                 <Typography className='text-white'>
-                  Looking for more customisation, more features, and more anything? Don&apos;t worry, We&apos;ve provide
-                  you with an entire team of experienced professionals.
+                  Cần tuỳ biến thêm, bổ sung tính năng riêng, hoặc có yêu cầu đặc thù? Đừng lo – đội ngũ giàu kinh nghiệm của chúng tôi luôn sẵn sàng đồng hành cùng bạn.
                 </Typography>
               </CardContent>
             </Card>
@@ -95,15 +94,15 @@ const ContactUs = () => {
             <Card>
               <CardContent>
                 <Typography variant='h5' className='mbe-5'>
-                  Share your ideas
+                  Liên hệ chúng tôi
                 </Typography>
                 <form className='flex flex-col items-start gap-5'>
                   <div className='flex gap-5 is-full'>
-                    <TextField fullWidth label='Full name' id='name-input' />
-                    <TextField fullWidth label='Email address' id='email-input' type='email' />
+                    <TextField fullWidth label='Họ và tên' id='name-input' />
+                    <TextField fullWidth label='Địa chỉ Email' id='email-input' type='email' />
                   </div>
-                  <TextField fullWidth multiline rows={6} label='Message' id='message-input' />
-                  <Button variant='contained'>Send Inquiry</Button>
+                  <TextField fullWidth multiline rows={6} label='Tin nhắn' id='message-input' />
+                  <Button variant='contained'>Gửi yêu cầu</Button>
                 </form>
               </CardContent>
             </Card>

@@ -7,16 +7,14 @@ import { useEffect } from 'react'
 import type { Mode } from '@core/types'
 
 // Component Imports
-import HeroSection from './HeroSection'
-import UsefulFeature from './UsefulFeature'
+import { useSettings } from '@core/hooks/useSettings'
+import ContactUs from './ContactUs'
 import CustomerReviews from './CustomerReviews'
-import OurTeam from './OurTeam'
-import Pricing from './Pricing'
-import ProductStat from './ProductStat'
 import Faqs from './Faqs'
 import GetStarted from './GetStarted'
-import ContactUs from './ContactUs'
-import { useSettings } from '@core/hooks/useSettings'
+import HeroSection from './HeroSection'
+import ProductStat from './ProductStat'
+import UsefulFeature from './UsefulFeature'
 
 const LandingPageWrapper = ({ mode }: { mode: Mode }) => {
   // Hooks

@@ -30,74 +30,39 @@ import frontCommonStyles from '@views/front-pages/styles.module.css'
 // Data
 const data = [
   {
-    desc: "I've never used a theme as versatile and flexible as Vuexy. It's my go to for building dashboard sites on almost any project.",
+    desc: "Chúng tôi từng gặp rất nhiều khó khăn khi thu hồ sơ học viên, nhưng từ khi sử dụng phần mềm này, mọi thứ trở nên rõ ràng và dễ kiểm soát hơn rất nhiều.",
     svg: <Eckerd color='#2882C3' />,
     rating: 5,
-    name: 'Eugenia Moore',
-    position: 'Founder of Hubspot'
+    name: 'Nguyễn Văn Hải',
+    position: 'Giám đốc Trung tâm Đào tạo Lái xe Hòa Bình'
   },
   {
-    desc: 'Materio is awesome, and I particularly enjoy knowing that if I get stuck on something.',
+    desc: "Giao diện thân thiện, dễ dùng, nhân viên tiếp nhận hồ sơ mới vào là làm được ngay. Tôi rất hài lòng về tính năng xuất báo cáo.",
     svg: <Levis color='#A8112E' />,
     rating: 5,
-    name: 'Tommy haffman',
-    position: 'Founder of Levis'
+    name: 'Lê Thị Thanh',
+    position: 'Quản lý hành chính - Trung tâm GPLX Quang Minh'
   },
   {
-    desc: "This template is superior in so many ways. The code, the design, the regular updates, the support.. It's the whole package. Excellent Work.",
+    desc: "Phần mềm giúp chúng tôi tiết kiệm hàng giờ mỗi tuần so với việc làm thủ công bằng Excel. Tìm kiếm và phân loại hồ sơ cực kỳ nhanh.",
     svg: <Airbnb color='#FF5A60' />,
     rating: 4,
-    name: 'Eugenia Moore',
-    position: 'CTO of Airbnb'
+    name: 'Phạm Văn Nam',
+    position: 'Trưởng phòng đào tạo - Trường dạy lái Thành Công'
   },
   {
-    desc: "All the requirements for developers have been taken into consideration, so I'm able to build any interface I want.",
+    desc: "Tôi rất ấn tượng với cách hệ thống hỗ trợ phân quyền rõ ràng cho nhân viên. Điều đó giúp kiểm soát dữ liệu tốt hơn nhiều.",
     svg: <Continental color='#F39409' />,
     rating: 5,
-    name: 'Sara Smith',
-    position: 'Founder of Continental'
+    name: 'Ngô Thị Mai',
+    position: 'Phó Giám đốc Trung tâm GPLX Bình Dương'
   },
   {
-    desc: "I've never used a theme as versatile and flexible as Vuexy. It's my go to for building dashboard sites on almost any project.",
+    desc: "Chúng tôi có thể theo dõi tiến độ xử lý hồ sơ của từng đợt một cách trực quan. Đây thực sự là công cụ không thể thiếu.",
     svg: <Dribbble color='#ea4c89' />,
     rating: 5,
-    name: 'Tommy haffman',
-    position: 'Founder of Hubspot'
-  },
-  {
-    desc: "I've never used a theme as versatile and flexible as Vuexy. It's my go to for building dashboard sites on almost any project.",
-    svg: <Eckerd color='#2882C3' />,
-    rating: 5,
-    name: 'Eugenia Moore',
-    position: 'Founder of Hubspot'
-  },
-  {
-    desc: 'Materio is awesome, and I particularly enjoy knowing that if I get stuck on something.',
-    svg: <Levis color='#A8112E' />,
-    rating: 5,
-    name: 'Tommy haffman',
-    position: 'Founder of Levis'
-  },
-  {
-    desc: "This template is superior in so many ways. The code, the design, the regular updates, the support.. It's the whole package. Excellent Work.",
-    svg: <Airbnb color='#FF5A60' />,
-    rating: 4,
-    name: 'Eugenia Moore',
-    position: 'CTO of Airbnb'
-  },
-  {
-    desc: "All the requirements for developers have been taken into consideration, so I'm able to build any interface I want.",
-    svg: <Continental color='#F39409' />,
-    rating: 5,
-    name: 'Sara Smith',
-    position: 'Founder of Continental'
-  },
-  {
-    desc: 'Materio is awesome, and I particularly enjoy knowing that if I get stuck on something.',
-    svg: <Dribbble color='#ea4c89' />,
-    rating: 5,
-    name: 'Tommy haffman',
-    position: 'Founder of Levis'
+    name: 'Vũ Đức Anh',
+    position: 'Cán bộ hồ sơ - Sở GTVT Hà Tĩnh'
   }
 ]
 

@@ -20,7 +20,7 @@ import frontCommonStyles from '@views/front-pages/styles.module.css'
 // Type
 type StatData = {
   title: string
-  value: number
+  value: string
   icon: string
   color: ThemeColor
   isHover: boolean
@@ -29,33 +29,34 @@ type StatData = {
 // Data
 const statData: StatData[] = [
   {
-    title: 'Completed Sites',
-    value: 137,
+    title: 'Hồ sơ được xử lý mỗi tháng',
+    value: "1500+",
     icon: 'ri-layout-line',
     color: 'primary',
     isHover: false
   },
   {
-    title: 'Working Hours',
-    value: 1100,
+    title: 'Giờ làm việc được tiết kiệm',
+    value: "3000+",
     icon: 'ri-time-line',
     color: 'success',
     isHover: false
   },
+
   {
-    title: 'Happy Customers',
-    value: 137,
+    title: 'Trung tâm và đơn vị đang sử dụng',
+    value: "12+",
+    icon: 'ri-award-line',
+    color: 'info',
+    isHover: false
+  },
+  {
+    title: 'Người dùng hài lòng',
+    value: "98%",
     icon: 'ri-user-smile-line',
     color: 'warning',
     isHover: false
   },
-  {
-    title: 'Awards Winning',
-    value: 23,
-    icon: 'ri-award-line',
-    color: 'info',
-    isHover: false
-  }
 ]
 
 const ProductStat = () => {
@@ -84,7 +85,7 @@ const ProductStat = () => {
                 </CustomAvatar>
                 <div className='text-center'>
                   <Typography color='text.primary' className='font-bold text-[34px]'>
-                    {stat.value}+
+                    {stat.value}
                   </Typography>
                   <Typography className='font-medium'>{stat.title}</Typography>
                 </div>

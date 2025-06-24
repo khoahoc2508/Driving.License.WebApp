@@ -1,10 +1,6 @@
 // MUI Imports
 import Grid from '@mui/material/Grid2'
 import Typography from '@mui/material/Typography'
-import Button from '@mui/material/Button'
-import Chip from '@mui/material/Chip'
-import TextField from '@mui/material/TextField'
-import IconButton from '@mui/material/IconButton'
 
 // Third-party Imports
 import classnames from 'classnames'
@@ -17,7 +13,6 @@ import Logo from '@components/layout/shared/Logo'
 import { frontLayoutClasses } from '@layouts/utils/layoutClasses'
 
 // Styles Imports
-import styles from './styles.module.css'
 import frontCommonStyles from '@views/front-pages/styles.module.css'
 
 const Footer = () => {
@@ -71,24 +66,20 @@ const Footer = () => {
                 Trang
               </Typography>
               <div className='flex flex-col gap-4'>
-                <Typography component={Link} href='/front-pages/pricing' color='white' className='opacity-[0.78]'>
+                <Typography color='white' className='opacity-[0.78]'>
                   Giới thiệu
                 </Typography>
-                <Link href='/front-pages/payment' className='flex items-center gap-[10px]'>
-                  <Typography color='white' className='opacity-[0.78]'>
-                    Bảng giá
-                  </Typography>
-                  <Chip label='New' color='primary' size='small' />
-                </Link>
+                <Typography color='white' className='opacity-[0.78]'>
+                  Bảng giá
+                </Typography>
                 <Typography
-                  component={Link}
-                  href='/pages/misc/under-maintenance'
+
                   color='white'
                   className='opacity-[0.78]'
                 >
                   Câu hỏi thường gặp
                 </Typography>
-                <Typography component={Link} href='/pages/misc/coming-soon' color='white' className='opacity-[0.78]'>
+                <Typography color='white' className='opacity-[0.78]'>
                   Liên hệ
                 </Typography>
               </div>
@@ -98,16 +89,16 @@ const Footer = () => {
                 Chức năng
               </Typography>
               <div className='flex flex-col gap-4'>
-                <Typography component={Link} href='/front-pages/landing-page' color='white' className='opacity-[0.78]'>
+                <Typography color='white' className='opacity-[0.78]'>
                   Quản lý hồ sơ
                 </Typography>
-                <Typography component={Link} href='/front-pages/landing-page' color='white' className='opacity-[0.78]'>
+                <Typography color='white' className='opacity-[0.78]'>
                   Thống kê
                 </Typography>
-                <Typography component={Link} href='/front-pages/landing-page' color='white' className='opacity-[0.78]'>
+                <Typography color='white' className='opacity-[0.78]'>
                   Phân quyền
                 </Typography>
-                <Typography component={Link} href='/front-pages/landing-page' color='white' className='opacity-[0.78]'>
+                <Typography color='white' className='opacity-[0.78]'>
                   Tra cứu nhanh hồ sơ
                 </Typography>
               </div>
@@ -159,9 +150,7 @@ const Footer = () => {
             <span>{`© ${new Date().getFullYear()}, Bản quyền `}</span>
             <span>{`❤️`}</span>
             <span>{`  `}</span>
-            <Link href='https://themeselection.com' target='_blank' className='font-medium text-white'>
-              banglaixanh.vn
-            </Link>
+            banglaixanh.vn
           </Typography>
           {/* <div className='flex gap-6 items-center'>
             <IconButton component={Link} size='small' href='https://github.com/themeselection' target='_blank'>
@@ -171,7 +160,7 @@ const Footer = () => {
               <i className='ri-facebook-fill text-white text-lg' />
             </IconButton>
             <IconButton component={Link} size='small' href='https://twitter.com/Theme_Selection' target='_blank'>
-              <i className='ri-twitter-fill text-white text-lg' />
+              <i className='ri-twitter-fill text-white text-lg' />https://next-auth.js.org
             </IconButton>
             <IconButton
               component={Link}
