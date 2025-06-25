@@ -105,6 +105,7 @@ const Articles = () => {
       selectedClass={selectedClass}
       selectedExamType={selectedExamType}
       examSubmissionId={examSubmissionId}
+      onStartExam={handleStartExam}
     />
   }
 

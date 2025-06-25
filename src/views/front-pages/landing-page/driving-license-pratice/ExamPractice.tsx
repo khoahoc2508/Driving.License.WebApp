@@ -37,14 +37,16 @@ const ExamPractice = ({
     onBack,
     selectedClass,
     selectedExamType,
-    examSubmissionId
+    examSubmissionId,
+    onStartExam
 }: {
     exam: any,
     questions: questionTypes[],
     onBack: () => void,
     selectedClass: GroupExamDto | null,
     selectedExamType: GroupExamDto | null,
-    examSubmissionId: string
+    examSubmissionId: string,
+    onStartExam: (exam: any) => void
 }) => {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
     const [answers, setAnswers] = useState<Record<string, string>>({})
@@ -137,6 +139,7 @@ const ExamPractice = ({
         return hms;
     };
 
+
     if (result) {
         // Hiển thị kết quả thi
         const isPassed = result.isPassed;
@@ -178,7 +181,7 @@ const ExamPractice = ({
                                             </Box>
                                         )}
                                     </Box>
-                                    <Button variant="contained" fullWidth sx={{ mt: 3, background: '#8B5CF6', color: '#fff', fontWeight: 700, fontSize: 15, py: 1.5, boxShadow: 'none', ':hover': { background: '#7C3AED' } }} onClick={() => window.location.reload()}>
+                                    <Button variant="contained" fullWidth sx={{ mt: 3, background: '#8B5CF6', color: '#fff', fontWeight: 700, fontSize: 15, py: 1.5, boxShadow: 'none', ':hover': { background: '#7C3AED' } }} onClick={() => onStartExam(exam)}>
                                         THI LẠI
                                     </Button>
                                 </CardContent>
@@ -279,7 +282,7 @@ const ExamPractice = ({
                                     <Button
                                         variant="contained"
                                         color="primary"
-                                        onClick={() => window.location.reload()}
+                                        onClick={() => onStartExam(exam)}
                                     >
                                         THI LẠI
                                     </Button>
