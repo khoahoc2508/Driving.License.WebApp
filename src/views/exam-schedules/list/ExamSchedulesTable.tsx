@@ -62,6 +62,7 @@ import ViewLicenseRegistrationsDrawer from '@/views/exam-schedules/list/assign-l
 import LicenseTypeAPI from '@/libs/api/licenseTypeApi'
 import type { LicenseTypeDto } from '@/types/LicensesRegistrations'
 import ResultLicenseRegistrationsDrawer from '@/views/exam-schedules/list/update-result-license-registrations/ResultLicenseRegistrationsDrawer'
+import AddExamScheduleDialog from '@/views/exam-schedules/list/AddExamScheduleDialog'
 
 
 declare module '@tanstack/table-core' {
@@ -180,15 +181,15 @@ const ProductListTable = () => {
 
   const columns = useMemo<ColumnDef<ProductWithActionsType, any>[]>(
     () => [
-      columnHelper.accessor('id', {
-        id: 'stt',
-        header: 'STT',
-        cell: ({ row, table }) => (
-          <Typography>
-            {table.getRowModel().rows.indexOf(row) + 1}
-          </Typography>
-        )
-      }),
+      // columnHelper.accessor('id', {
+      //   id: 'stt',
+      //   header: 'STT',
+      //   cell: ({ row, table }) => (
+      //     <Typography>
+      //       {table.getRowModel().rows.indexOf(row) + 1}
+      //     </Typography>
+      //   )
+      // }),
       columnHelper.accessor('examAddress.fullAddress', {
         header: 'Địa điểm',
         cell: ({ row }) => <Typography>{row.original.examAddress?.fullAddress}</Typography>,
@@ -216,94 +217,142 @@ const ProductListTable = () => {
         enableSorting: false
       }),
 
-      columnHelper.accessor('registrationLimit', {
-        header: 'Suất thi',
-        cell: ({ row }) => <Typography>{(row.original.limitType === LimitType.Unlimited) ? 'Không giới hạn' : row.original.registrationLimit}</Typography>,
-        enableSorting: false
-      }),
+      // columnHelper.accessor('registrationLimit', {
+      //   header: 'Suất thi',
+      //   cell: ({ row }) => <Typography>{(row.original.limitType === LimitType.Unlimited) ? 'Không giới hạn' : row.original.registrationLimit}</Typography>,
+      //   enableSorting: false
+      // }),
       columnHelper.accessor('registeredStudents', {
-        header: 'Đã xếp',
-        cell: ({ row }) => <Typography>{`${row.original?.registeredStudents}/${row.original?.registrationLimit}`}</Typography>,
-        enableSorting: false
-      }),
-      columnHelper.accessor('passedStudents', {
-        header: 'Tỷ lệ đỗ',
+        header: 'Suất thi',
         cell: ({ row }) => {
-          const examDate = row.original?.dateTime ? new Date(row.original.dateTime) : new Date();
-          const currentDate = new Date();
-          const isExamPassed = examDate < currentDate;
+          const registrationLimit = row.original?.registrationLimit;
+          const registeredStudents = row.original?.registeredStudents || 0;
 
-          const passedStudents = row.original?.passedStudents;
-          const registeredStudents = row.original?.registeredStudents;
+          // Helper function for common badge style
+          const getBadgeStyle = (color: string) => ({
+            width: '80px',
+            height: '24px',
+            borderRadius: '16px',
+            paddingTop: '3px',
+            paddingRight: '4px',
+            paddingBottom: '3px',
+            paddingLeft: '4px',
+            border: `1px solid ${color}`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          })
 
-          const hasValidResults = passedStudents != null &&
-            passedStudents !== undefined &&
-            registeredStudents != null &&
-            registeredStudents !== undefined;
+          const getTextStyle = (color: string) => ({
+            color: color,
+            fontSize: '14px',
+            fontWeight: 400
+          })
 
-          const calculatePassRate = () => {
-            if (!hasValidResults) return 0;
+          if (registrationLimit === null) {
+            // Unlimited case
+            const color = '#9155FD';
+            return (
+              <div style={getBadgeStyle(color)}>
+                <Typography style={getTextStyle(color)}>
+                  Unlimited
+                </Typography>
+              </div>
+            );
+          } else {
+            // Limited case - calculate percentage
+            const percentage = (registrationLimit && registrationLimit > 0) ? (registeredStudents / registrationLimit) * 100 : 0;
+            const color = percentage < 50 ? '#56CA00' : '#FF4C51';
 
-            return Math.floor((passedStudents / registeredStudents) * 100);
-          };
-
-          const passRate = calculatePassRate();
-          const progressColor = getProgressColor(passRate);
-
-          return (
-            <>
-              {isExamPassed ? (
-                hasValidResults ? (
-                  <>
-                    <div className='flex flex-col gap-2 min-w-[120px]'>
-                      <div className='flex items-center justify-between'>
-                        <Typography
-                          className='font-semibold text-sm'
-                          color='text.primary'
-                        >
-                          {`${passRate}%`}
-                        </Typography>
-                        <Typography
-                          variant='caption'
-                          className='text-textSecondary font-medium'
-                        >
-                          {`${passedStudents}/${registeredStudents}`}
-                        </Typography>
-                      </div>
-                      <LinearProgress
-                        color={progressColor}
-                        value={passRate}
-                        variant='determinate'
-                        className='is-full bs-2'
-                      />
-
-                    </div>
-                  </>
-                ) : (
-                  <div className='flex items-center gap-4 min-is-48'><Typography
-                    className='font-medium'
-                    color='text.primary'
-                  >
-                    Chưa có kết quả thi
-                  </Typography></div>
-
-                )
-              ) : (
-                <div className='flex items-center gap-4 min-is-48'>
-
-                  <Typography
-                    className='font-medium'
-                    color='text.primary'
-                  >
-                    Chưa thi
-                  </Typography></div>
-
-              )}
-            </>
-          );
+            return (
+              <div style={getBadgeStyle(color)}>
+                <Typography style={getTextStyle(color)}>
+                  {`${registeredStudents}/${registrationLimit}`}
+                </Typography>
+              </div>
+            );
+          }
         },
         enableSorting: false
       }),
+      // columnHelper.accessor('passedStudents', {
+      //   header: 'Tỷ lệ đỗ',
+      //   cell: ({ row }) => {
+      //     const examDate = row.original?.dateTime ? new Date(row.original.dateTime) : new Date();
+      //     const currentDate = new Date();
+      //     const isExamPassed = examDate < currentDate;
+
+      //     const passedStudents = row.original?.passedStudents;
+      //     const registeredStudents = row.original?.registeredStudents;
+
+      //     const hasValidResults = passedStudents != null &&
+      //       passedStudents !== undefined &&
+      //       registeredStudents != null &&
+      //       registeredStudents !== undefined;
+
+      //     const calculatePassRate = () => {
+      //       if (!hasValidResults) return 0;
+
+      //       return Math.floor((passedStudents / registeredStudents) * 100);
+      //     };
+
+      //     const passRate = calculatePassRate();
+      //     const progressColor = getProgressColor(passRate);
+
+      //     return (
+      //       <>
+      //         {isExamPassed ? (
+      //           hasValidResults ? (
+      //             <>
+      //               <div className='flex flex-col gap-2 min-w-[120px]'>
+      //                 <div className='flex items-center justify-between'>
+      //                   <Typography
+      //                     className='font-semibold text-sm'
+      //                     color='text.primary'
+      //                   >
+      //                     {`${passRate}%`}
+      //                   </Typography>
+      //                   <Typography
+      //                     variant='caption'
+      //                     className='text-textSecondary font-medium'
+      //                   >
+      //                     {`${passedStudents}/${registeredStudents}`}
+      //                   </Typography>
+      //                 </div>
+      //                 <LinearProgress
+      //                   color={progressColor}
+      //                   value={passRate}
+      //                   variant='determinate'
+      //                   className='is-full bs-2'
+      //                 />
+
+      //               </div>
+      //             </>
+      //           ) : (
+      //             <div className='flex items-center gap-4 min-is-48'><Typography
+      //               className='font-medium'
+      //               color='text.primary'
+      //             >
+      //               Chưa có kết quả thi
+      //             </Typography></div>
+
+      //           )
+      //         ) : (
+      //           <div className='flex items-center gap-4 min-is-48'>
+
+      //             <Typography
+      //               className='font-medium'
+      //               color='text.primary'
+      //             >
+      //               Chưa thi
+      //             </Typography></div>
+
+      //         )}
+      //       </>
+      //     );
+      //   },
+      //   enableSorting: false
+      // }),
       columnHelper.accessor('actions', {
         header: 'Actions',
         cell: ({ row }) => (
@@ -478,7 +527,7 @@ const ProductListTable = () => {
   return (
     <>
       <Card>
-        <CardHeader title='Filters' className='pbe-4' />
+        <CardHeader title='Lọc lịch thi' className='pbe-4' />
         <TableFilters examAddresses={examAddresses} licenseTypes={licenseTypes} setParams={setParams} />
         <Divider />
         <div className='flex justify-between flex-col items-start sm:flex-row sm:items-center gap-y-4 p-5'>
@@ -496,7 +545,7 @@ const ProductListTable = () => {
               className='max-sm:is-full is-auto'
               onClick={handleOpenAddDrawer}
             >
-              Thêm
+              Thêm mới
             </Button>
           </div>
         </div>
@@ -568,7 +617,21 @@ const ProductListTable = () => {
           onRowsPerPageChange={e => setParams((prev) => ({ ...prev, pageSize: Number(e.target.value) }))}
         />
       </Card>
-      <AddExasmScheduleDrawer
+      {/* <AddExasmScheduleDrawer
+        examAddresses={examAddresses}
+        licenseTypes={licenseTypes}
+        open={openAddDrawer}
+        handleClose={() => {
+          {
+            setSelectedExamScheduleId(undefined)
+            setOpenAddDrawer(false)
+          }
+        }
+        }
+        examScheduleId={selectedExamScheduleId}
+        onSuccess={reloadData}
+      /> */}
+      <AddExamScheduleDialog
         examAddresses={examAddresses}
         licenseTypes={licenseTypes}
         open={openAddDrawer}
