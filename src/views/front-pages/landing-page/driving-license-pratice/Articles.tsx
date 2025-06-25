@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import Typography from '@mui/material/Typography'
 
@@ -7,14 +6,13 @@ import { toast } from 'react-toastify'
 
 import styles from './styles.module.css'
 import GroupExamAPI from '@/libs/api/GroupExamAPI'
-import type { GetGroupExamsParams } from '@/types/groupExamTypes'
+import type { GetGroupExamsParams, GroupExamDto } from '@/types/groupExamTypes'
 import ExamAPI from '@/libs/api/examAPI'
 import GroupSection from './GroupSection'
 import ExamTypeSection from './ExamTypeSection'
 import ExamListSection from './ExamListSection'
-import { GroupExamDto } from '@/types/groupExamTypes'
 import ExamPractice from './ExamPractice'
-import { questionTypes as Question } from '@/types/questionTypes'
+import type { questionTypes as Question } from '@/types/questionTypes'
 import QuestionAPI from '@/libs/api/questionAPI'
 import ExamSubmissionAPI from '@/libs/api/examSubmissionAPI'
 
@@ -54,12 +52,15 @@ const Articles = () => {
 
   const handleStartExam = async (exam: any) => {
     setExamLoading(true)
+
     try {
       const submissionRes = await ExamSubmissionAPI.startExam(exam.id)
+
       if (submissionRes.data.success && submissionRes.data.data?.examSubmissionId) {
         setExamSubmissionId(submissionRes.data.data.examSubmissionId)
 
         const questionsRes = await QuestionAPI.getExamQuestions(exam.id)
+
         setExamQuestions(questionsRes.data.data)
         setSelectedExam(exam)
       } else {
@@ -67,23 +68,6 @@ const Articles = () => {
       }
     } catch (err) {
       toast.error('Không thể tải câu hỏi thi.')
-    } finally {
-      setExamLoading(false)
-    }
-  }
-
-  const handleShowExamList = async (groupExamId: string) => {
-    try {
-      setExamLoading(true)
-      const res = await ExamAPI.GetExamsByGroups(groupExamId)
-      if (res?.data?.data) {
-        const fetchedData = res?.data?.data || []
-
-        setExamList(fetchedData.data || [])
-
-      }
-    } catch (error: any) {
-      toast.error(error?.message)
     } finally {
       setExamLoading(false)
     }
@@ -116,10 +100,13 @@ const Articles = () => {
   if (selectedClass) {
     return <ExamTypeSection selectedClass={selectedClass} onBack={() => setSelectedClass(null)} onSelectType={async (child) => {
       setSelectedExamType(child)
+
       if (child.name === 'THI THEO BỘ ĐỀ') {
         setExamLoading(true)
+
         try {
           const res = await ExamAPI.GetExamsByGroups(child.id)
+
           setExamList(res.data.data || [])
         } catch (err) {
           toast.error('Không thể tải danh sách đề thi.')
@@ -133,7 +120,7 @@ const Articles = () => {
   return (
     <div className='bg-backgroundPaper'>
       <div className={styles.layoutSpacing}>
-        {groups.map((group, idx) => (
+        {groups.map((group) => (
           <GroupSection key={group.id} group={group} onSelect={setSelectedClass} />
         ))}
       </div>

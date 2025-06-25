@@ -4,12 +4,11 @@
 import { useEffect } from 'react'
 
 // Type Imports
-import type { Mode } from '@core/types'
 
 import { useSettings } from '@core/hooks/useSettings'
 import DrivingLicensePractice from './driving-license-pratice/Index'
 
-const LandingPageWrapper = ({ mode }: { mode: Mode }) => {
+const LandingPageWrapper = () => {
   // Hooks
   const { updatePageSettings } = useSettings()
 

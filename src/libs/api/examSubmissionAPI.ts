@@ -1,10 +1,9 @@
-import { CreateExamSubmissionCommand, SubmitExamPayload } from '@/types/examSubmissionTypes'
+import type { CreateExamSubmissionCommand, SubmitExamPayload } from '@/types/examSubmissionTypes'
 import axiosInstance from '../axios'
-import { components } from './client/schema'
 
 import { customParamsSerializer } from './commonAPI'
 
-const GetExamsByGroups = async (groupId: string) => {
+const GetExamsByGroups = async () => {
   return await axiosInstance.get(`/api/examsubmissions/start-exam`, {
     paramsSerializer: customParamsSerializer
   })

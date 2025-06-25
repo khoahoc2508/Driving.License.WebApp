@@ -1,10 +1,12 @@
 import React from 'react'
+
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
+
 import PracticeCard from './PracticeCard'
 import styles from './styles.module.css'
-import { GroupExamDto } from '@/types/groupExamTypes'
+import type { GroupExamDto } from '@/types/groupExamTypes'
 
 interface ExamTypeSectionProps {
     selectedClass: GroupExamDto

@@ -1,11 +1,13 @@
 'use client'
 
 import React, { useState, useEffect, useCallback, useRef } from 'react'
+
 import { Box, Button, Card, CardContent, Grid, Typography, Container, Divider, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { toast } from 'react-toastify'
-import { questionTypes } from '@/types/questionTypes'
-import { GroupExamDto } from '@/types/groupExamTypes'
+
+import type { questionTypes } from '@/types/questionTypes'
+import type { GroupExamDto } from '@/types/groupExamTypes'
 import ExamSubmissionAPI from '@/libs/api/examSubmissionAPI'
 import type { ExamSubmissionResultDto, ExamSubmissionAnswerDto } from '@/types/examSubmissionTypes'
 
@@ -130,13 +132,17 @@ const ExamPractice = ({
     const formatTime = (seconds: number) => {
         const mins = Math.floor(seconds / 60)
         const secs = seconds % 60
-        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
+
+        
+return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
     }
 
     const formatResultDuration = (duration?: string) => {
         if (!duration) return '-';
         const [hms] = duration.split('.');
-        return hms;
+
+        
+return hms;
     };
 
 
@@ -145,7 +151,9 @@ const ExamPractice = ({
         const isPassed = result.isPassed;
         const hasCriticalMistake = result.hasCriticalMistake;
         const currentResultAnswer: ExamSubmissionAnswerDto | undefined = result.userAnswers?.find((a: ExamSubmissionAnswerDto) => a.question?.id === questions[currentQuestionIndex]?.id);
-        return (
+
+        
+return (
             <Container maxWidth="lg">
                 <Box sx={{ p: { xs: 2, md: 6 } }}>
                     <Grid container spacing={2}>
@@ -193,12 +201,17 @@ const ExamPractice = ({
                                         {questions.map((q, index) => {
                                             const userAnswer: ExamSubmissionAnswerDto | undefined = result.userAnswers?.find((a: ExamSubmissionAnswerDto) => a.question?.id === q.id);
                                             let color: 'success' | 'error' | 'inherit' = 'inherit';
+
                                             if (userAnswer?.selectedAnswerId) {
                                                 const isCorrect = userAnswer.question?.answers?.find((ans) => ans.id === userAnswer.selectedAnswerId)?.isCorrect;
+
                                                 color = isCorrect ? 'success' : 'error';
                                             }
+
                                             const isCritical = userAnswer?.question?.isCriticalQuestion || q.isCriticalQuestion;
-                                            return (
+
+                                            
+return (
                                                 <Grid item xs={3} key={q.id || index} sx={{ position: 'relative' }}>
                                                     <Button
                                                         variant={index + 1 === currentQuestionIndex + 1 ? 'contained' : 'outlined'}
@@ -231,12 +244,15 @@ const ExamPractice = ({
                                             const isCorrect = answer.isCorrect;
                                             const isSelected = currentResultAnswer?.selectedAnswerId === answer.id;
                                             let bg = 'transparent', color = 'inherit', border = '1px solid #e0e0e0';
+
                                             if (isCorrect) {
                                                 bg = '#4caf50'; color = '#fff'; border = '1px solid #4caf50';
                                             } else if (isSelected) {
                                                 color = 'red'; border = '1px solid red';
                                             }
-                                            return (
+
+                                            
+return (
                                                 <Box key={answer.id} sx={{
                                                     background: bg,
                                                     color,

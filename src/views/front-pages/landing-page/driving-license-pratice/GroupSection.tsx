@@ -1,8 +1,10 @@
 import React from 'react'
+
 import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid'
+
 import PracticeCard from './PracticeCard'
-import { GroupExamDto } from '@/types/groupExamTypes'
+import type { GroupExamDto } from '@/types/groupExamTypes'
 
 interface GroupSectionProps {
     group: GroupExamDto
