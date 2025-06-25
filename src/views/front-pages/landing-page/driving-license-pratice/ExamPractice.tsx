@@ -131,6 +131,12 @@ const ExamPractice = ({
         return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
     }
 
+    const formatResultDuration = (duration?: string) => {
+        if (!duration) return '-';
+        const [hms] = duration.split('.');
+        return hms;
+    };
+
     if (result) {
         // Hiển thị kết quả thi
         const isPassed = result.isPassed;
@@ -143,38 +149,43 @@ const ExamPractice = ({
                         <Grid item xs={12} md={4}>
                             <Card>
                                 <CardContent>
-                                    <Typography variant="h6" mb={2}>Kết quả thi</Typography>
                                     <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
-                                        <Typography>Hạng xe:</Typography>
-                                        <Typography fontWeight={600}>{selectedClass?.name || '-'}</Typography>
+                                        <Typography variant="h5" fontWeight={500}>Kết quả thi</Typography>
+                                        <Box sx={{ background: isPassed ? '#F3F7FF' : '#FFEFF0', borderRadius: '16px', px: 2, py: 0.5 }}>
+                                            <Typography fontWeight={500} color={isPassed ? 'primary.main' : '#f55156'} fontSize={14}>
+                                                {isPassed ? 'ĐẠT' : 'KHÔNG ĐẠT'}
+                                            </Typography>
+                                        </Box>
                                     </Box>
-                                    <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
-                                        <Typography>Thời gian làm bài:</Typography>
-                                        <Typography fontWeight={600}>{result.duration || '-'}</Typography>
+                                    <Divider />
+                                    <Box mt={2} mb={2}>
+                                        <Box display="flex" alignItems="center" mb={4}>
+                                            <Typography>Hạng xe:&nbsp;</Typography>
+                                            <Typography fontWeight={600}>{selectedClass?.name || '-'}</Typography>
+                                        </Box>
+                                        <Box display="flex" alignItems="center" mb={4}>
+                                            <Typography>Thời gian làm bài:&nbsp;</Typography>
+                                            <Typography fontWeight={600}>{formatResultDuration(result.duration)}</Typography>
+                                        </Box>
+                                        <Box display="flex" alignItems="center" mb={4}>
+                                            <Typography>Tổng câu đúng:&nbsp;</Typography>
+                                            <Typography fontWeight={600}>{result.correctAnswerCount}/{result.totalQuestions}</Typography>
+                                        </Box>
+                                        {hasCriticalMistake && (
+                                            <Box mt={2}>
+                                                <Typography component="span" fontWeight={600}>Lưu ý: </Typography>
+                                                <Typography component="span" fontWeight={600} color="red">Bạn đã trả lời sai câu liệt.</Typography>
+                                            </Box>
+                                        )}
                                     </Box>
-                                    <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
-                                        <Typography>Tổng câu đúng:</Typography>
-                                        <Typography fontWeight={600}>{result.correctAnswerCount}/{result.totalQuestions}</Typography>
-                                    </Box>
-                                    <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
-                                        <Typography>Kết quả:</Typography>
-                                        <Typography fontWeight={600} color={isPassed ? 'primary' : 'error'}>
-                                            {isPassed ? 'ĐẠT' : 'KHÔNG ĐẠT'}
-                                        </Typography>
-                                    </Box>
-                                    {hasCriticalMistake && (
-                                        <Typography color="error" fontWeight={600} mt={2}>
-                                            Lưu ý: Bạn đã trả lời sai câu liệt.
-                                        </Typography>
-                                    )}
-                                    <Button variant="contained" color="primary" fullWidth sx={{ mt: 3 }} onClick={() => window.location.reload()}>
+                                    <Button variant="contained" fullWidth sx={{ mt: 3, background: '#8B5CF6', color: '#fff', fontWeight: 700, fontSize: 15, py: 1.5, boxShadow: 'none', ':hover': { background: '#7C3AED' } }} onClick={() => window.location.reload()}>
                                         THI LẠI
                                     </Button>
                                 </CardContent>
                             </Card>
                             <Card className='mt-2'>
                                 <CardContent>
-                                    <Typography variant="h6" mb={2}>Danh sách câu hỏi</Typography>
+                                    <Typography variant="h5" mb={2} fontWeight={500}>Danh sách câu hỏi</Typography>
                                     <Grid container spacing={1} className='border rounded-sm px-8 py-4 mt-5'>
                                         {questions.map((q, index) => {
                                             const userAnswer: ExamSubmissionAnswerDto | undefined = result.userAnswers?.find((a: ExamSubmissionAnswerDto) => a.question?.id === q.id);
@@ -183,14 +194,19 @@ const ExamPractice = ({
                                                 const isCorrect = userAnswer.question?.answers?.find((ans) => ans.id === userAnswer.selectedAnswerId)?.isCorrect;
                                                 color = isCorrect ? 'success' : 'error';
                                             }
+                                            const isCritical = userAnswer?.question?.isCriticalQuestion || q.isCriticalQuestion;
                                             return (
-                                                <Grid item xs={3} key={q.id || index}>
+                                                <Grid item xs={3} key={q.id || index} sx={{ position: 'relative' }}>
                                                     <Button
                                                         variant={index + 1 === currentQuestionIndex + 1 ? 'contained' : 'outlined'}
                                                         color={color}
                                                         onClick={() => setCurrentQuestionIndex(index)}
+                                                        sx={{ position: 'relative', width: 50, height: 45, fontSize: 15, p: 0 }}
                                                     >
                                                         {index + 1}
+                                                        {isCritical && (
+                                                            <Box component="span" sx={{ position: 'absolute', top: 4, right: 6, color: 'red', fontSize: 18, fontWeight: 700 }}>*</Box>
+                                                        )}
                                                     </Button>
                                                 </Grid>
                                             );
@@ -202,7 +218,7 @@ const ExamPractice = ({
                         <Grid item xs={12} md={8}>
                             <Card sx={{ height: '100%' }} className='flex flex-col justify-between'>
                                 <CardContent sx={{ flexGrow: 1 }}>
-                                    <Typography variant="h5" className='text-[#98999e]'>Câu {currentQuestionIndex + 1}{questions[currentQuestionIndex]?.isCriticalQuestion ? ' *' : ''}</Typography>
+                                    <Typography variant="h5" className='text-[#98999e]'>Câu {currentQuestionIndex + 1}{questions[currentQuestionIndex]?.isCriticalQuestion ? <span className='text-error'> *</span> : ''}</Typography>
                                     <Typography variant="h6" className='my-3' sx={{ fontWeight: 600 }}>{questions[currentQuestionIndex]?.content}</Typography>
                                     {questions[currentQuestionIndex]?.imageUrl && <QuestionImage src={questions[currentQuestionIndex]?.imageUrl} alt={`Question ${currentQuestionIndex + 1}`} />}
                                     <Divider sx={{ mb: 4 }} />
@@ -215,7 +231,7 @@ const ExamPractice = ({
                                             if (isCorrect) {
                                                 bg = '#4caf50'; color = '#fff'; border = '1px solid #4caf50';
                                             } else if (isSelected) {
-                                                bg = '#ffebee'; color = '#d32f2f'; border = '1px solid #d32f2f';
+                                                color = 'red'; border = '1px solid red';
                                             }
                                             return (
                                                 <Box key={answer.id} sx={{
@@ -232,9 +248,10 @@ const ExamPractice = ({
                                             );
                                         })}
                                     </div>
-                                    {currentResultAnswer?.question && (currentResultAnswer.question as { explanation?: string }).explanation && (
-                                        <Box sx={{ mt: 2, p: 2, border: '1px solid #b39ddb', borderRadius: '8px', color: '#7c4dff', background: '#f3e5f5' }}>
-                                            Giải thích: {(currentResultAnswer.question as { explanation?: string }).explanation}
+                                    <Divider sx={{ mt: 4 }} />
+                                    {currentResultAnswer?.question?.explanation && (
+                                        <Box sx={{ mt: 4, p: 2, border: '1px solid #7c4dff', borderRadius: '8px', color: '#7c4dff' }}>
+                                            Giải thích: {currentResultAnswer?.question?.explanation}
                                         </Box>
                                     )}
                                 </CardContent>
