@@ -1,10 +1,9 @@
-import React, { useEffect, useState, Dispatch, SetStateAction } from 'react'
+import type { Dispatch, SetStateAction } from 'react';
+import React, { useEffect, useState } from 'react'
 
-import Typography from '@mui/material/Typography'
 
 import { toast } from 'react-toastify'
 
-import styles from './styles.module.css'
 import GroupExamAPI from '@/libs/api/GroupExamAPI'
 import type { GetGroupExamsParams, GroupExamDto } from '@/types/groupExamTypes'
 import ExamAPI from '@/libs/api/examAPI'
@@ -15,7 +14,7 @@ import ExamPractice from './ExamPractice'
 import type { questionTypes as Question } from '@/types/questionTypes'
 import QuestionAPI from '@/libs/api/questionAPI'
 import ExamSubmissionAPI from '@/libs/api/examSubmissionAPI'
-import { GenerateRandomExamsCommand } from '@/types/exam'
+import type { GenerateRandomExamsCommand } from '@/types/exam'
 
 interface ArticlesProps {
   setIsLoading: Dispatch<SetStateAction<boolean>>
@@ -118,13 +117,16 @@ const GroupExams = ({ setIsLoading }: ArticlesProps) => {
       if (child.name === 'ĐỀ NGẪU NHIÊN') {
         setIsLoading(true)
         debugger
+
         try {
           const payload: GenerateRandomExamsCommand = {
             groupExamId: child.id,
             licenseTypeCode: selectedClass.licenseTypeCode
           }
+
           const res = await ExamAPI.GenerateRandomExam(payload)
           const examDto = res.data.data
+
           if (examDto) {
             handleStartExam(examDto)
           } else {

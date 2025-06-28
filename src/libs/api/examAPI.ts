@@ -1,4 +1,4 @@
-import { GenerateRandomExamsCommand } from '@/types/exam'
+import type { GenerateRandomExamsCommand } from '@/types/exam'
 import axiosInstance from '../axios'
 
 import { customParamsSerializer } from './commonAPI'
