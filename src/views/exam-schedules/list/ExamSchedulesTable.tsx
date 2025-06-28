@@ -4,6 +4,7 @@
 import { useEffect, useMemo, useState } from 'react'
 
 // Next Imports
+import { useRouter } from 'next/navigation'
 
 // MUI Imports
 import Card from '@mui/material/Card'
@@ -39,8 +40,6 @@ import type { ColumnDef, FilterFn } from '@tanstack/react-table'
 import type { RankingInfo } from '@tanstack/match-sorter-utils'
 
 // Type Imports
-import { LinearProgress } from '@mui/material'
-
 import { toast } from 'react-toastify'
 
 
@@ -54,14 +53,12 @@ import tableStyles from '@core/styles/table.module.css'
 import type { ExamScheduleType, GetExamSchedulesWithPaginationQueryParams, PaginatedListOfExamScheduleType } from '@/types/examScheduleTypes'
 import ExamScheduleAPI from '@/libs/api/examScheduleAPI'
 import TableFilters from '@/views/exam-schedules/list/TableFilters'
-import AddExasmScheduleDrawer from '@/views/exam-schedules/list/AddExasmScheduleDrawer'
 import type { ExamAddressType, PaginatedListOfExamAddressType } from '@/types/examAddressTypes'
 import ExamAddressAPI from '@/libs/api/examAddressAPI'
 import OptionMenu from '@/@core/components/option-menu'
-import ViewLicenseRegistrationsDrawer from '@/views/exam-schedules/list/assign-license-registrations/ViewLicenseRegistrationsDrawer'
 import LicenseTypeAPI from '@/libs/api/licenseTypeApi'
 import type { LicenseTypeDto } from '@/types/LicensesRegistrations'
-import ResultLicenseRegistrationsDrawer from '@/views/exam-schedules/list/update-result-license-registrations/ResultLicenseRegistrationsDrawer'
+import AddExamScheduleDialog from '@/views/exam-schedules/list/AddExamScheduleDialog'
 
 
 declare module '@tanstack/table-core' {
@@ -75,11 +72,6 @@ declare module '@tanstack/table-core' {
 
 type ProductWithActionsType = ExamScheduleType & {
   actions?: string
-}
-
-enum LimitType {
-  Unlimited,
-  Limited
 }
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
@@ -101,13 +93,13 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
 // - 60-79%: primary (xanh dương) - tỷ lệ đỗ khá
 // - 30-59%: warning (cam) - tỷ lệ đỗ trung bình
 // - < 30%: error (đỏ) - tỷ lệ đỗ thấp
-const getProgressColor = (percentage: number): 'error' | 'warning' | 'primary' | 'success' => {
-  if (percentage >= 80) return 'success'  // >= 80%: green
-  if (percentage >= 60) return 'primary'  // 60-79%: blue
-  if (percentage >= 30) return 'warning'  // 30-59%: orange
+// const getProgressColor = (percentage: number): 'error' | 'warning' | 'primary' | 'success' => {
+//   if (percentage >= 80) return 'success'  // >= 80%: green
+//   if (percentage >= 60) return 'primary'  // 60-79%: blue
+//   if (percentage >= 30) return 'warning'  // 30-59%: orange
 
-  return 'error'                          // < 30%: red
-}
+//   return 'error'                          // < 30%: red
+// }
 
 const DebouncedInput = ({
   value: initialValue,
@@ -145,15 +137,16 @@ const DebouncedInput = ({
 const columnHelper = createColumnHelper<ProductWithActionsType>()
 
 const ProductListTable = () => {
+  // Hooks
+  const router = useRouter()
+
   // States
   const [params, setParams] = useState<GetExamSchedulesWithPaginationQueryParams>({ pageNumber: 1, pageSize: 10, search: '' })
   const [rowSelection, setRowSelection] = useState({})
   const [data, setData] = useState<ExamScheduleType[]>([])
   const [globalFilter, setGlobalFilter] = useState('')
 
-  const [openAddDrawer, setOpenAddDrawer] = useState(false)
-  const [openAssignDrawer, setOpenAssignDrawer] = useState(false)
-  const [openResultDrawer, setOpenResultDrawer] = useState(false)
+  const [openUpsertDialog, setOpenUpsertDialog] = useState(false)
 
   const [reloadFlag, setReloadFlag] = useState(false)
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false)
@@ -168,9 +161,6 @@ const ProductListTable = () => {
   // const [examSchedules, setExamSchedules] = useState<ExamScheduleType[]>([])
   const [totalCount, setTotalCount] = useState(0)
 
-  // const [pageSize, setPageSize] = useState(1)s
-  // const [loading, setLoading] = useState(false)
-
   // Function to reload data
   const reloadData = () => {
     setReloadFlag(prev => !prev)
@@ -180,15 +170,15 @@ const ProductListTable = () => {
 
   const columns = useMemo<ColumnDef<ProductWithActionsType, any>[]>(
     () => [
-      columnHelper.accessor('id', {
-        id: 'stt',
-        header: 'STT',
-        cell: ({ row, table }) => (
-          <Typography>
-            {table.getRowModel().rows.indexOf(row) + 1}
-          </Typography>
-        )
-      }),
+      // columnHelper.accessor('id', {
+      //   id: 'stt',
+      //   header: 'STT',
+      //   cell: ({ row, table }) => (
+      //     <Typography>
+      //       {table.getRowModel().rows.indexOf(row) + 1}
+      //     </Typography>
+      //   )
+      // }),
       columnHelper.accessor('examAddress.fullAddress', {
         header: 'Địa điểm',
         cell: ({ row }) => <Typography>{row.original.examAddress?.fullAddress}</Typography>,
@@ -216,99 +206,150 @@ const ProductListTable = () => {
         enableSorting: false
       }),
 
-      columnHelper.accessor('registrationLimit', {
-        header: 'Suất thi',
-        cell: ({ row }) => <Typography>{(row.original.limitType === LimitType.Unlimited) ? 'Không giới hạn' : row.original.registrationLimit}</Typography>,
-        enableSorting: false
-      }),
+      // columnHelper.accessor('registrationLimit', {
+      //   header: 'Suất thi',
+      //   cell: ({ row }) => <Typography>{(row.original.limitType === LimitType.Unlimited) ? 'Không giới hạn' : row.original.registrationLimit}</Typography>,
+      //   enableSorting: false
+      // }),
       columnHelper.accessor('registeredStudents', {
-        header: 'Đã xếp',
-        cell: ({ row }) => <Typography>{`${row.original?.registeredStudents}/${row.original?.registrationLimit}`}</Typography>,
-        enableSorting: false
-      }),
-      columnHelper.accessor('passedStudents', {
-        header: 'Tỷ lệ đỗ',
+        header: 'Suất thi',
         cell: ({ row }) => {
-          const examDate = row.original?.dateTime ? new Date(row.original.dateTime) : new Date();
-          const currentDate = new Date();
-          const isExamPassed = examDate < currentDate;
+          const registrationLimit = row.original?.registrationLimit;
+          const registeredStudents = row.original?.registeredStudents || 0;
 
-          const passedStudents = row.original?.passedStudents;
-          const registeredStudents = row.original?.registeredStudents;
+          // Helper function for common badge style
+          const getBadgeStyle = (color: string) => ({
+            width: '80px',
+            height: '24px',
+            borderRadius: '16px',
+            paddingTop: '3px',
+            paddingRight: '4px',
+            paddingBottom: '3px',
+            paddingLeft: '4px',
+            border: `1px solid ${color}`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          })
 
-          const hasValidResults = passedStudents != null &&
-            passedStudents !== undefined &&
-            registeredStudents != null &&
-            registeredStudents !== undefined;
+          const getTextStyle = (color: string) => ({
+            color: color,
+            fontSize: '14px',
+            fontWeight: 400
+          })
 
-          const calculatePassRate = () => {
-            if (!hasValidResults) return 0;
+          if (registrationLimit === null) {
+            // Unlimited case
+            const color = '#9155FD';
 
-            return Math.floor((passedStudents / registeredStudents) * 100);
-          };
+            
+return (
+              <div style={getBadgeStyle(color)}>
+                <Typography style={getTextStyle(color)}>
+                  Unlimited
+                </Typography>
+              </div>
+            );
+          } else {
+            // Limited case - calculate percentage
+            const percentage = (registrationLimit && registrationLimit > 0) ? (registeredStudents / registrationLimit) * 100 : 0;
+            const color = percentage < 50 ? '#56CA00' : '#FF4C51';
 
-          const passRate = calculatePassRate();
-          const progressColor = getProgressColor(passRate);
-
-          return (
-            <>
-              {isExamPassed ? (
-                hasValidResults ? (
-                  <>
-                    <div className='flex flex-col gap-2 min-w-[120px]'>
-                      <div className='flex items-center justify-between'>
-                        <Typography
-                          className='font-semibold text-sm'
-                          color='text.primary'
-                        >
-                          {`${passRate}%`}
-                        </Typography>
-                        <Typography
-                          variant='caption'
-                          className='text-textSecondary font-medium'
-                        >
-                          {`${passedStudents}/${registeredStudents}`}
-                        </Typography>
-                      </div>
-                      <LinearProgress
-                        color={progressColor}
-                        value={passRate}
-                        variant='determinate'
-                        className='is-full bs-2'
-                      />
-
-                    </div>
-                  </>
-                ) : (
-                  <div className='flex items-center gap-4 min-is-48'><Typography
-                    className='font-medium'
-                    color='text.primary'
-                  >
-                    Chưa có kết quả thi
-                  </Typography></div>
-
-                )
-              ) : (
-                <div className='flex items-center gap-4 min-is-48'>
-
-                  <Typography
-                    className='font-medium'
-                    color='text.primary'
-                  >
-                    Chưa thi
-                  </Typography></div>
-
-              )}
-            </>
-          );
+            return (
+              <div style={getBadgeStyle(color)}>
+                <Typography style={getTextStyle(color)}>
+                  {`${registeredStudents}/${registrationLimit}`}
+                </Typography>
+              </div>
+            );
+          }
         },
         enableSorting: false
       }),
+
+      // columnHelper.accessor('passedStudents', {
+      //   header: 'Tỷ lệ đỗ',
+      //   cell: ({ row }) => {
+      //     const examDate = row.original?.dateTime ? new Date(row.original.dateTime) : new Date();
+      //     const currentDate = new Date();
+      //     const isExamPassed = examDate < currentDate;
+
+      //     const passedStudents = row.original?.passedStudents;
+      //     const registeredStudents = row.original?.registeredStudents;
+
+      //     const hasValidResults = passedStudents != null &&
+      //       passedStudents !== undefined &&
+      //       registeredStudents != null &&
+      //       registeredStudents !== undefined;
+
+      //     const calculatePassRate = () => {
+      //       if (!hasValidResults) return 0;
+
+      //       return Math.floor((passedStudents / registeredStudents) * 100);
+      //     };
+
+      //     const passRate = calculatePassRate();
+      //     const progressColor = getProgressColor(passRate);
+
+      //     return (
+      //       <>
+      //         {isExamPassed ? (
+      //           hasValidResults ? (
+      //             <>
+      //               <div className='flex flex-col gap-2 min-w-[120px]'>
+      //                 <div className='flex items-center justify-between'>
+      //                   <Typography
+      //                     className='font-semibold text-sm'
+      //                     color='text.primary'
+      //                   >
+      //                     {`${passRate}%`}
+      //                   </Typography>
+      //                   <Typography
+      //                     variant='caption'
+      //                     className='text-textSecondary font-medium'
+      //                   >
+      //                     {`${passedStudents}/${registeredStudents}`}
+      //                   </Typography>
+      //                 </div>
+      //                 <LinearProgress
+      //                   color={progressColor}
+      //                   value={passRate}
+      //                   variant='determinate'
+      //                   className='is-full bs-2'
+      //                 />
+
+      //               </div>
+      //             </>
+      //           ) : (
+      //             <div className='flex items-center gap-4 min-is-48'><Typography
+      //               className='font-medium'
+      //               color='text.primary'
+      //             >
+      //               Chưa có kết quả thi
+      //             </Typography></div>
+
+      //           )
+      //         ) : (
+      //           <div className='flex items-center gap-4 min-is-48'>
+
+      //             <Typography
+      //               className='font-medium'
+      //               color='text.primary'
+      //             >
+      //               Chưa thi
+      //             </Typography></div>
+
+      //         )}
+      //       </>
+      //     );
+      //   },
+      //   enableSorting: false
+      // }),
       columnHelper.accessor('actions', {
         header: 'Actions',
         cell: ({ row }) => (
           <div className='flex items-center'>
-            <IconButton size='small' onClick={() => handleOpenEditDrawer(row.original)}>
+            <IconButton size='small' onClick={() => handleOpenEditDialog(row.original)}>
               <i className='ri-edit-box-line text-[22px] text-textSecondary' />
             </IconButton>
             <IconButton size='small' onClick={() => handleOpenDeleteDialog(row.original.id)}>
@@ -414,23 +455,25 @@ const ProductListTable = () => {
     }
   }
 
-  const handleOpenEditDrawer = (examSchedule: ExamScheduleType) => {
+  const handleOpenEditDialog = (examSchedule: ExamScheduleType) => {
     setSelectedExamScheduleId(examSchedule.id)
-    setOpenAddDrawer(true)
+    setOpenUpsertDialog(true)
   }
 
-  const handleOpenAddDrawer = () => {
-    setOpenAddDrawer(true)
+  const handleOpenAddDialog = () => {
+    setOpenUpsertDialog(true)
   }
 
   const handleOpenAssignDrawer = (examSchedule: ExamScheduleType) => {
-    setSelectedExamScheduleId(examSchedule.id)
-    setOpenAssignDrawer(true)
+    // Navigate to exam schedule detail page with assign tab focused
+    router.push(`/exam-schedules/${examSchedule.id}?tab=assign`)
   }
 
   const handleOpenResultDrawer = (examSchedule: ExamScheduleType) => {
-    setSelectedExamScheduleId(examSchedule.id)
-    setOpenResultDrawer(true)
+    // setSelectedExamScheduleId(examSchedule.id)
+    // setOpenResultDrawer(true)
+    // Navigate to exam schedule detail page with assign tab focused
+    router.push(`/exam-schedules/${examSchedule.id}?tab=result`)
   }
 
   useEffect(() => {
@@ -478,7 +521,7 @@ const ProductListTable = () => {
   return (
     <>
       <Card>
-        <CardHeader title='Filters' className='pbe-4' />
+        <CardHeader title='Lọc lịch thi' className='pbe-4' />
         <TableFilters examAddresses={examAddresses} licenseTypes={licenseTypes} setParams={setParams} />
         <Divider />
         <div className='flex justify-between flex-col items-start sm:flex-row sm:items-center gap-y-4 p-5'>
@@ -494,9 +537,9 @@ const ProductListTable = () => {
               variant='contained'
               startIcon={<i className='ri-add-line' />}
               className='max-sm:is-full is-auto'
-              onClick={handleOpenAddDrawer}
+              onClick={handleOpenAddDialog}
             >
-              Thêm
+              Thêm mới
             </Button>
           </div>
         </div>
@@ -568,36 +611,16 @@ const ProductListTable = () => {
           onRowsPerPageChange={e => setParams((prev) => ({ ...prev, pageSize: Number(e.target.value) }))}
         />
       </Card>
-      <AddExasmScheduleDrawer
+      
+      <AddExamScheduleDialog
         examAddresses={examAddresses}
         licenseTypes={licenseTypes}
-        open={openAddDrawer}
+        open={openUpsertDialog}
         handleClose={() => {
           {
             setSelectedExamScheduleId(undefined)
-            setOpenAddDrawer(false)
+            setOpenUpsertDialog(false)
           }
-        }
-        }
-        examScheduleId={selectedExamScheduleId}
-        onSuccess={reloadData}
-      />
-      <ViewLicenseRegistrationsDrawer
-        open={openAssignDrawer}
-        handleClose={() => {
-          setSelectedExamScheduleId(undefined)
-          setOpenAssignDrawer(false)
-        }
-        }
-        examScheduleId={selectedExamScheduleId}
-        onSuccess={reloadData}
-      />
-
-      <ResultLicenseRegistrationsDrawer
-        open={openResultDrawer}
-        handleClose={() => {
-          setSelectedExamScheduleId(undefined)
-          setOpenResultDrawer(false)
         }
         }
         examScheduleId={selectedExamScheduleId}

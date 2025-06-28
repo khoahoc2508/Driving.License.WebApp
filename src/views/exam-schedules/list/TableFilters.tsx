@@ -25,8 +25,7 @@ import type { LicenseTypeDto } from '@/types/LicensesRegistrations'
 // Types
 type CustomInputProps = TextFieldProps & {
   label: string
-  end: Date | number
-  start: Date | number
+  value?: string
 }
 
 type TableFiltersProps = {
@@ -45,41 +44,38 @@ const TableFilters = ({ examAddresses, setParams }: TableFiltersProps) => {
   const [startDate, setStartDate] = useState<Date | null | undefined>(null)
   const [endDate, setEndDate] = useState<Date | null | undefined>(null)
 
-  const handleOnChange = (dates: any) => {
-    const [start, end] = dates
+  const handleStartDateChange = (date: Date | null) => {
+    setStartDate(date)
 
-    setStartDate(start)
-    setEndDate(end)
-
-    // Update params with new date range
+    // Update params when both dates are available
     setParams((prev: any) => ({
       ...prev,
-      fromDate: start ? start.toISOString() : undefined,
-      toDate: end ? end.toISOString() : undefined
+      fromDate: date ? date.toISOString() : undefined,
+      toDate: endDate ? endDate.toISOString() : prev.toDate
+    }))
+  }
+
+  const handleEndDateChange = (date: Date | null) => {
+    setEndDate(date)
+
+    // Update params when both dates are available
+    setParams((prev: any) => ({
+      ...prev,
+      fromDate: startDate ? startDate.toISOString() : prev.fromDate,
+      toDate: date ? date.toISOString() : undefined
     }))
   }
 
   const CustomInput = forwardRef((props: CustomInputProps, ref) => {
-    const { label, start, end, ...rest } = props
+    const { label, value, ...rest } = props
 
-    // Only format dates if they are valid and not null/undefined
-    let value = ''
-
-    if (start && !isNaN(new Date(start).getTime())) {
-      value = format(start, 'dd/MM/yyyy HH:mm')
-
-      if (end && !isNaN(new Date(end).getTime())) {
-        value += ` - ${format(end, 'dd/MM/yyyy HH:mm')}`
-      }
-    }
-
-    return <TextField fullWidth inputRef={ref} {...rest} label={label} value={value} />
+    return <TextField fullWidth inputRef={ref} {...rest} label={label} value={value || ''} />
   })
 
   return (
     <CardContent>
       <Grid container spacing={6}>
-        <Grid size={{ xs: 12, sm: 4 }}>
+        <Grid size={{ xs: 12, sm: 3 }}>
           <FormControl fullWidth>
             <InputLabel id='select-addresses'>Địa điểm</InputLabel>
             <Select
@@ -110,24 +106,40 @@ const TableFilters = ({ examAddresses, setParams }: TableFiltersProps) => {
             </Select>
           </FormControl>
         </Grid>
-        <Grid size={{ xs: 12, sm: 5 }}>
+        <Grid size={{ xs: 12, sm: 3 }}>
           <FormControl fullWidth>
-
             <AppReactDatepicker
-              selectsRange
-              endDate={endDate as Date}
               selected={startDate}
-              startDate={startDate as Date}
-              id='date-range-picker'
-              onChange={handleOnChange}
-              shouldCloseOnSelect={false}
-              showTimeSelect
+              onChange={handleStartDateChange}
               isClearable={true}
-              timeFormat="HH:mm"
               timeIntervals={1}
-              dateFormat="dd/MM/yyyy HH:mm"
+              dateFormat="dd/MM/yyyy"
+              placeholderText="Chọn thời gian bắt đầu"
+              maxDate={endDate || undefined}
               customInput={
-                <CustomInput label='Thời gian' start={startDate as Date | number} end={endDate as Date | number} />
+                <CustomInput
+                  label='Từ ngày'
+                  value={startDate ? format(startDate, 'dd/MM/yyyy') : ''}
+                />
+              }
+            />
+          </FormControl>
+        </Grid>
+        <Grid size={{ xs: 12, sm: 3 }}>
+          <FormControl fullWidth>
+            <AppReactDatepicker
+              selected={endDate}
+              onChange={handleEndDateChange}
+              isClearable={true}
+              timeIntervals={1}
+              dateFormat="dd/MM/yyyy"
+              placeholderText="Chọn thời gian kết thúc"
+              minDate={startDate || undefined}
+              customInput={
+                <CustomInput
+                  label='Đến ngày'
+                  value={endDate ? format(endDate, 'dd/MM/yyyy') : ''}
+                />
               }
             />
           </FormControl>
