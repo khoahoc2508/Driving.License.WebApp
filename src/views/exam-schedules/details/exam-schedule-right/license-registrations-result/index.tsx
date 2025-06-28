@@ -1,13 +1,25 @@
-import React from 'react'
+import React, { } from 'react'
+
+// MUI Imports
+import Grid from '@mui/material/Grid2'
+
+import LicenseRegistrationCard from './LicenseRegistrationCard'
 
 type Props = {
   examScheduleId: string
 }
 
-const UpdatelicenseResultTab = ({ }: Props) => {
+const UpdatelicenseResultTab = ({ examScheduleId }: Props) => {
   return (
-    <h1>UpdatelicenseResultForLicenseRegistrations</h1>
+
+    <Grid container spacing={6}>
+      <Grid size={{ xs: 12 }}>
+        <LicenseRegistrationCard examScheduleId={examScheduleId} />
+      </Grid>
+
+    </Grid>
   )
+
 }
 
 export default UpdatelicenseResultTab
