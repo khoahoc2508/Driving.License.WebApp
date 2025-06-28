@@ -180,6 +180,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/exams/generate-random-exam": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Exams_GenerateExam2"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/examsubmissions/{id}": {
         parameters: {
             query?: never;
@@ -764,6 +780,10 @@ export interface components {
             /** Format: int32 */
             durationMinutes?: number;
         };
+        GenerateRandomExamsCommand: {
+            groupExamId?: string;
+            licenseTypeCode?: string;
+        };
         BaseResponseOfExamSubmissionResultDto: components["schemas"]["BaseResponse"] & {
             data?: components["schemas"]["ExamSubmissionResultDto"] | null;
         };
@@ -818,7 +838,7 @@ export interface components {
             examSubmissionId?: string;
         };
         CreateExamSubmissionCommand: {
-            examSubmissionId?: string;
+            examId?: string;
         };
         SubmitExamCommand: {
             examSubmissionId?: string;
@@ -1187,9 +1207,6 @@ export interface components {
             /** Format: float */
             increasePercentageRevenue?: number;
 
-            /** Format: int32 */
-            totalPaid?: number;
-
             /** Format: float */
             percentagePaid?: number;
 
@@ -1259,14 +1276,13 @@ export interface components {
             data?: components["schemas"]["GetVehicleTypeQuantityByTimeRangeResponse"] | null;
         };
         GetVehicleTypeQuantityByTimeRangeResponse: {
-            dataFollowExamSchedule?: components["schemas"]["DataFollowExamScheduleResponse3"][] | null;
+            dataFollowDay?: components["schemas"]["DataFollowDayResponse"][] | null;
             dataFollowMonth?: components["schemas"]["DataFollowMonthResponse3"][] | null;
         };
-        DataFollowExamScheduleResponse3: {
-            name?: string;
+        DataFollowDayResponse: {
 
-            /** Format: date-time */
-            dateTime?: string;
+            /** Format: date */
+            date?: string;
 
             /** Format: int32 */
             motorbikeQuantity?: number;
@@ -1275,7 +1291,9 @@ export interface components {
             carQuantity?: number;
         };
         DataFollowMonthResponse3: {
-            monthOfYear?: components["schemas"]["MonthOfYearType"];
+
+            /** Format: int32 */
+            month?: number;
 
             /** Format: int32 */
             motorbikeQuantity?: number;
@@ -1687,6 +1705,29 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    Exams_GenerateExam2: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GenerateRandomExamsCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfString"];
                 };
             };
         };
@@ -2105,8 +2146,8 @@ export interface operations {
     Statistics_GetStatisticOverviewByTimeRange: {
         parameters: {
             query?: {
-                StartDate?: string;
-                EndDate?: string;
+                StartDate?: string | null;
+                EndDate?: string | null;
             };
             header?: never;
             path?: never;
@@ -2171,8 +2212,8 @@ export interface operations {
     Statistics_GetVehicleTypeQuantityByTimeRange: {
         parameters: {
             query?: {
-                StartDate?: string;
-                EndDate?: string;
+                StartDate?: string | null;
+                EndDate?: string | null;
             };
             header?: never;
             path?: never;
