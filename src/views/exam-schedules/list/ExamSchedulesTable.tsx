@@ -4,6 +4,7 @@
 import { useEffect, useMemo, useState } from 'react'
 
 // Next Imports
+import { useRouter } from 'next/navigation'
 
 // MUI Imports
 import Card from '@mui/material/Card'
@@ -58,7 +59,6 @@ import AddExasmScheduleDrawer from '@/views/exam-schedules/list/AddExasmSchedule
 import type { ExamAddressType, PaginatedListOfExamAddressType } from '@/types/examAddressTypes'
 import ExamAddressAPI from '@/libs/api/examAddressAPI'
 import OptionMenu from '@/@core/components/option-menu'
-import ViewLicenseRegistrationsDrawer from '@/views/exam-schedules/list/assign-license-registrations/ViewLicenseRegistrationsDrawer'
 import LicenseTypeAPI from '@/libs/api/licenseTypeApi'
 import type { LicenseTypeDto } from '@/types/LicensesRegistrations'
 import ResultLicenseRegistrationsDrawer from '@/views/exam-schedules/list/update-result-license-registrations/ResultLicenseRegistrationsDrawer'
@@ -146,15 +146,16 @@ const DebouncedInput = ({
 const columnHelper = createColumnHelper<ProductWithActionsType>()
 
 const ProductListTable = () => {
+  // Hooks
+  const router = useRouter()
+
   // States
   const [params, setParams] = useState<GetExamSchedulesWithPaginationQueryParams>({ pageNumber: 1, pageSize: 10, search: '' })
   const [rowSelection, setRowSelection] = useState({})
   const [data, setData] = useState<ExamScheduleType[]>([])
   const [globalFilter, setGlobalFilter] = useState('')
 
-  const [openAddDrawer, setOpenAddDrawer] = useState(false)
-  const [openAssignDrawer, setOpenAssignDrawer] = useState(false)
-  const [openResultDrawer, setOpenResultDrawer] = useState(false)
+  const [openUpsertDialog, setOpenUpsertDialog] = useState(false)
 
   const [reloadFlag, setReloadFlag] = useState(false)
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false)
@@ -168,9 +169,6 @@ const ProductListTable = () => {
   // States for data
   // const [examSchedules, setExamSchedules] = useState<ExamScheduleType[]>([])
   const [totalCount, setTotalCount] = useState(0)
-
-  // const [pageSize, setPageSize] = useState(1)s
-  // const [loading, setLoading] = useState(false)
 
   // Function to reload data
   const reloadData = () => {
@@ -357,7 +355,7 @@ const ProductListTable = () => {
         header: 'Actions',
         cell: ({ row }) => (
           <div className='flex items-center'>
-            <IconButton size='small' onClick={() => handleOpenEditDrawer(row.original)}>
+            <IconButton size='small' onClick={() => handleOpenEditDialog(row.original)}>
               <i className='ri-edit-box-line text-[22px] text-textSecondary' />
             </IconButton>
             <IconButton size='small' onClick={() => handleOpenDeleteDialog(row.original.id)}>
@@ -463,23 +461,25 @@ const ProductListTable = () => {
     }
   }
 
-  const handleOpenEditDrawer = (examSchedule: ExamScheduleType) => {
+  const handleOpenEditDialog = (examSchedule: ExamScheduleType) => {
     setSelectedExamScheduleId(examSchedule.id)
-    setOpenAddDrawer(true)
+    setOpenUpsertDialog(true)
   }
 
-  const handleOpenAddDrawer = () => {
-    setOpenAddDrawer(true)
+  const handleOpenAddDialog = () => {
+    setOpenUpsertDialog(true)
   }
 
   const handleOpenAssignDrawer = (examSchedule: ExamScheduleType) => {
-    setSelectedExamScheduleId(examSchedule.id)
-    setOpenAssignDrawer(true)
+    // Navigate to exam schedule detail page with assign tab focused
+    router.push(`/exam-schedules/${examSchedule.id}?tab=assign`)
   }
 
   const handleOpenResultDrawer = (examSchedule: ExamScheduleType) => {
-    setSelectedExamScheduleId(examSchedule.id)
-    setOpenResultDrawer(true)
+    // setSelectedExamScheduleId(examSchedule.id)
+    // setOpenResultDrawer(true)
+    // Navigate to exam schedule detail page with assign tab focused
+    router.push(`/exam-schedules/${examSchedule.id}?tab=result`)
   }
 
   useEffect(() => {
@@ -543,7 +543,7 @@ const ProductListTable = () => {
               variant='contained'
               startIcon={<i className='ri-add-line' />}
               className='max-sm:is-full is-auto'
-              onClick={handleOpenAddDrawer}
+              onClick={handleOpenAddDialog}
             >
               Thêm mới
             </Button>
@@ -617,50 +617,16 @@ const ProductListTable = () => {
           onRowsPerPageChange={e => setParams((prev) => ({ ...prev, pageSize: Number(e.target.value) }))}
         />
       </Card>
-      {/* <AddExasmScheduleDrawer
-        examAddresses={examAddresses}
-        licenseTypes={licenseTypes}
-        open={openAddDrawer}
-        handleClose={() => {
-          {
-            setSelectedExamScheduleId(undefined)
-            setOpenAddDrawer(false)
-          }
-        }
-        }
-        examScheduleId={selectedExamScheduleId}
-        onSuccess={reloadData}
-      /> */}
+      
       <AddExamScheduleDialog
         examAddresses={examAddresses}
         licenseTypes={licenseTypes}
-        open={openAddDrawer}
+        open={openUpsertDialog}
         handleClose={() => {
           {
             setSelectedExamScheduleId(undefined)
-            setOpenAddDrawer(false)
+            setOpenUpsertDialog(false)
           }
-        }
-        }
-        examScheduleId={selectedExamScheduleId}
-        onSuccess={reloadData}
-      />
-      <ViewLicenseRegistrationsDrawer
-        open={openAssignDrawer}
-        handleClose={() => {
-          setSelectedExamScheduleId(undefined)
-          setOpenAssignDrawer(false)
-        }
-        }
-        examScheduleId={selectedExamScheduleId}
-        onSuccess={reloadData}
-      />
-
-      <ResultLicenseRegistrationsDrawer
-        open={openResultDrawer}
-        handleClose={() => {
-          setSelectedExamScheduleId(undefined)
-          setOpenResultDrawer(false)
         }
         }
         examScheduleId={selectedExamScheduleId}
