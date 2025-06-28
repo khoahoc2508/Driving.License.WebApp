@@ -17,12 +17,12 @@ import CardHeader from '@mui/material/CardHeader'
 import { toast } from 'react-toastify'
 
 
+import { Button, CardActions, Typography } from '@mui/material'
+
 import DebouncedInput from '@/components/common/DebouncedInput'
 import type { GetLicensesRegistrationsParams, LicenseRegistrationType } from '@/types/LicensesRegistrations'
 import LicenseRegistrationAPI from '@/libs/api/licenseRegistrationAPI'
 import LicenseRegistrationTable from './LicenseRegistrationTable'
-import CONFIG from '@/configs/config'
-import { Button, CardActions, Typography, Chip } from '@mui/material'
 import ExamScheduleAPI from '@/libs/api/examScheduleAPI'
 import type { UpdateLicenseRegistrationResultsType } from '@/types/examScheduleTypes'
 
@@ -39,6 +39,7 @@ const LicenseRegistrationCard = ({ examScheduleId }: Props) => {
 
   // Track result changes - Map to store licenseRegistrationId -> passed status
   const [resultChanges, setResultChanges] = useState<Map<string, boolean>>(new Map())
+
   // Track which IDs have been updated for UI feedback
   const [updatedIds, setUpdatedIds] = useState<Set<string>>(new Set())
   const [saving, setSaving] = useState(false)
@@ -66,14 +67,18 @@ const LicenseRegistrationCard = ({ examScheduleId }: Props) => {
     // Track the change in results
     setResultChanges(prev => {
       const newChanges = new Map(prev)
+
       newChanges.set(licenseRegistrationId, passed)
+
       return newChanges
     })
 
     // Track which IDs have been updated for UI feedback
     setUpdatedIds(prev => {
       const newUpdatedIds = new Set(prev)
+
       newUpdatedIds.add(licenseRegistrationId)
+
       return newUpdatedIds
     })
   }
@@ -81,6 +86,7 @@ const LicenseRegistrationCard = ({ examScheduleId }: Props) => {
   const handleSaveResults = async () => {
     if (resultChanges.size === 0) {
       toast.info('Không có thay đổi nào để lưu')
+
       return
     }
 
@@ -99,9 +105,11 @@ const LicenseRegistrationCard = ({ examScheduleId }: Props) => {
 
       if (response.data?.success) {
         toast.success('Lưu kết quả thi thành công')
+
         // Clear changes and updated IDs after successful save
         setResultChanges(new Map())
         setUpdatedIds(new Set())
+
         // Reload data to ensure consistency
         await fetchLicensesRegistrationsByExamScheduleId(licenseRegistrationParams)
       } else {
@@ -118,6 +126,7 @@ const LicenseRegistrationCard = ({ examScheduleId }: Props) => {
     // Reset changes and updated IDs
     setResultChanges(new Map())
     setUpdatedIds(new Set())
+
     // Reload original data to reset any UI changes
     fetchLicensesRegistrationsByExamScheduleId(licenseRegistrationParams)
   }
@@ -172,7 +181,9 @@ const LicenseRegistrationCard = ({ examScheduleId }: Props) => {
         <div className='flex items-end max-sm:flex-col gap-4 max-sm:is-full is-auto'>
           {/* Pass Rate Display */}
           {(() => {
-            const { passedCount, totalCount, percentage } = calculatePassRate()
+            const { passedCount, totalCount } = calculatePassRate()
+
+
             return (
               <div className='flex items-center gap-2'>
                 <Typography variant='body2' color='text.secondary'>

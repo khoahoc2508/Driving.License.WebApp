@@ -6,7 +6,6 @@ import { useMemo, useState } from 'react'
 
 // MUI Imports
 
-import TablePagination from '@mui/material/TablePagination'
 
 // Next Imports
 
@@ -37,7 +36,7 @@ import ChevronRight from '@menu/svg/ChevronRight'
 
 // Style Imports
 import CustomAvatar from '@/@core/components/mui/Avatar'
-import type { GetLicensesRegistrationsParams, LicenseRegistrationType, LicenseRegistrationTypeVm, LicenseTypeDto } from "@/types/LicensesRegistrations"
+import type { LicenseRegistrationType, LicenseRegistrationTypeVm } from "@/types/LicensesRegistrations"
 import { getInitials } from '@/utils/getInitials'
 import styles from '@core/styles/table.module.css'
 
@@ -144,6 +143,7 @@ const LicenseRegistrationTable = ({
           <Typography>{row.original?.person?.phoneNumber}</Typography>
         )
       }),
+
       // columnHelper.accessor('licenseType', {
       //   header: 'BẰNG',
       //   cell: ({ row }) => {
@@ -183,12 +183,11 @@ const LicenseRegistrationTable = ({
         header: 'Thi đỗ',
         cell: ({ row }) => {
           const licenseRegistrationId = row.original.id
+
           // Use the changed value if it exists, otherwise use original value
           const currentValue = licenseRegistrationId && resultChanges.has(licenseRegistrationId)
             ? resultChanges.get(licenseRegistrationId)
             : row.original.passed ?? false
-
-          const isUpdated = licenseRegistrationId ? updatedIds.has(licenseRegistrationId) : false
 
           return (
             <Switch
