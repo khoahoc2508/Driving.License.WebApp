@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, Dispatch, SetStateAction } from 'react'
 
 import Typography from '@mui/material/Typography'
 
@@ -15,14 +15,17 @@ import ExamPractice from './ExamPractice'
 import type { questionTypes as Question } from '@/types/questionTypes'
 import QuestionAPI from '@/libs/api/questionAPI'
 import ExamSubmissionAPI from '@/libs/api/examSubmissionAPI'
+import { GenerateRandomExamsCommand } from '@/types/exam'
 
-const Articles = () => {
+interface ArticlesProps {
+  setIsLoading: Dispatch<SetStateAction<boolean>>
+}
+
+const GroupExams = ({ setIsLoading }: ArticlesProps) => {
   const [groups, setGroups] = useState<GroupExamDto[]>([])
-  const [loading, setLoading] = useState(true)
   const [params, setParams] = useState<GetGroupExamsParams>({})
   const [selectedClass, setSelectedClass] = useState<GroupExamDto | null>(null)
   const [examList, setExamList] = useState<any[] | null>(null)
-  const [examLoading, setExamLoading] = useState(false)
   const [selectedExam, setSelectedExam] = useState<any | null>(null)
   const [examQuestions, setExamQuestions] = useState<Question[] | null>(null)
   const [selectedExamType, setSelectedExamType] = useState<GroupExamDto | null>(null)
@@ -34,7 +37,7 @@ const Articles = () => {
 
   useEffect(() => {
     const fetchGroups = async () => {
-      setLoading(true)
+      setIsLoading(true)
 
       try {
         const res = await GroupExamAPI.getGroupExams(params)
@@ -43,7 +46,7 @@ const Articles = () => {
       } catch (err: any) {
         toast.error('Không thể tải dữ liệu. Vui lòng thử lại sau.')
       } finally {
-        setLoading(false)
+        setIsLoading(false)
       }
     }
 
@@ -51,7 +54,7 @@ const Articles = () => {
   }, [])
 
   const handleStartExam = async (exam: any) => {
-    setExamLoading(true)
+    setIsLoading(true)
 
     try {
       const submissionRes = await ExamSubmissionAPI.startExam(exam.id)
@@ -69,16 +72,13 @@ const Articles = () => {
     } catch (err) {
       toast.error('Không thể tải câu hỏi thi.')
     } finally {
-      setExamLoading(false)
+      setIsLoading(false)
     }
   }
 
-  if (loading || examLoading) {
-    return <Typography className='text-center'>Đang tải...</Typography>
-  }
 
   if (selectedExam && examQuestions && examSubmissionId) {
-    return <ExamPractice
+    return <div className='w-full bg-backgroundPaper'><ExamPractice
       exam={selectedExam}
       questions={examQuestions}
       onBack={() => {
@@ -90,7 +90,7 @@ const Articles = () => {
       selectedExamType={selectedExamType}
       examSubmissionId={examSubmissionId}
       onStartExam={handleStartExam}
-    />
+    /></div>
   }
 
   if (examList) {
@@ -102,7 +102,7 @@ const Articles = () => {
       setSelectedExamType(child)
 
       if (child.name === 'THI THEO BỘ ĐỀ') {
-        setExamLoading(true)
+        setIsLoading(true)
 
         try {
           const res = await ExamAPI.GetExamsByGroups(child.id)
@@ -111,21 +111,41 @@ const Articles = () => {
         } catch (err) {
           toast.error('Không thể tải danh sách đề thi.')
         } finally {
-          setExamLoading(false)
+          setIsLoading(false)
+        }
+      }
+
+      if (child.name === 'ĐỀ NGẪU NHIÊN') {
+        setIsLoading(true)
+        debugger
+        try {
+          const payload: GenerateRandomExamsCommand = {
+            groupExamId: child.id,
+            licenseTypeCode: selectedClass.licenseTypeCode
+          }
+          const res = await ExamAPI.GenerateRandomExam(payload)
+          const examDto = res.data.data
+          if (examDto) {
+            handleStartExam(examDto)
+          } else {
+            toast.error('Không tìm thấy đề thi ngẫu nhiên.')
+          }
+        } catch (err) {
+          toast.error('Không thể tải đề thi ngẫu nhiên.')
+        } finally {
+          setIsLoading(false)
         }
       }
     }} />
   }
 
   return (
-    <div className='bg-backgroundPaper'>
-      <div className={styles.layoutSpacing}>
-        {groups.map((group) => (
-          <GroupSection key={group.id} group={group} onSelect={setSelectedClass} />
-        ))}
-      </div>
+    <div className='min-h-[100vh]'>
+      {groups.map((group, index) => (
+        <div className={`${index % 2 == 0 ? 'bg-backgroundPaper' : ''}`} key={group.id} ><GroupSection group={group} onSelect={setSelectedClass} /></div>
+      ))}
     </div>
   )
 }
 
-export default Articles
+export default GroupExams

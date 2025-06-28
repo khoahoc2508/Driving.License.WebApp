@@ -12,7 +12,7 @@ interface GroupSectionProps {
 }
 
 const GroupSection = ({ group, onSelect }: GroupSectionProps) => (
-    <section key={group.id} className={`py-10`}>
+    <section key={group.id} className={`py-10 w-[82%] m-auto`}>
         <Typography variant='h4' className='text-center mbe-6 flex items-center justify-center gap-2'>
             {group.name}
         </Typography>

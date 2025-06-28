@@ -10,5 +10,6 @@ export interface GroupExamDto {
   iconUrl?: string
   order?: number
   parentId?: string | null
+  licenseTypeCode: string
   children?: GroupExamDto[]
 }

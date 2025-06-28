@@ -133,17 +133,26 @@ const ExamPractice = ({
         const mins = Math.floor(seconds / 60)
         const secs = seconds % 60
 
-        
-return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
+
+        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
     }
 
     const formatResultDuration = (duration?: string) => {
         if (!duration) return '-';
         const [hms] = duration.split('.');
 
-        
-return hms;
+
+        return hms;
     };
+
+    const handleResartExam = () => {
+        setIsSubmitting(false)
+        setResult(null);
+        setAnswers({});
+        setCurrentQuestionIndex(0);
+        setTimeLeft(exam.durationMinutes * 60);
+        onStartExam(exam)
+    }
 
 
     if (result) {
@@ -152,9 +161,9 @@ return hms;
         const hasCriticalMistake = result.hasCriticalMistake;
         const currentResultAnswer: ExamSubmissionAnswerDto | undefined = result.userAnswers?.find((a: ExamSubmissionAnswerDto) => a.question?.id === questions[currentQuestionIndex]?.id);
 
-        
-return (
-            <Container maxWidth="lg">
+
+        return (
+            <Container className='max-w-[87%]'>
                 <Box sx={{ p: { xs: 2, md: 6 } }}>
                     <Grid container spacing={2}>
                         <Grid item xs={12} md={4}>
@@ -189,7 +198,7 @@ return (
                                             </Box>
                                         )}
                                     </Box>
-                                    <Button variant="contained" fullWidth sx={{ mt: 3, background: '#8B5CF6', color: '#fff', fontWeight: 700, fontSize: 15, py: 1.5, boxShadow: 'none', ':hover': { background: '#7C3AED' } }} onClick={() => onStartExam(exam)}>
+                                    <Button variant="contained" fullWidth sx={{ mt: 3, background: '#8B5CF6', color: '#fff', fontWeight: 700, fontSize: 15, py: 1.5, boxShadow: 'none', ':hover': { background: '#7C3AED' } }} onClick={handleResartExam}>
                                         THI LẠI
                                     </Button>
                                 </CardContent>
@@ -197,7 +206,16 @@ return (
                             <Card className='mt-2'>
                                 <CardContent>
                                     <Typography variant="h5" mb={2} fontWeight={500}>Danh sách câu hỏi</Typography>
-                                    <Grid container spacing={1} className='border rounded-sm px-8 py-4 mt-5'>
+                                    <Box
+                                        sx={{
+                                            display: 'grid',
+                                            gridTemplateColumns: 'repeat(5, 1fr)',
+                                            gap: 2,
+                                            justifyItems: 'center',
+                                            alignItems: 'center',
+                                        }}
+                                        className="rounded-sm py-4 mt-5"
+                                    >
                                         {questions.map((q, index) => {
                                             const userAnswer: ExamSubmissionAnswerDto | undefined = result.userAnswers?.find((a: ExamSubmissionAnswerDto) => a.question?.id === q.id);
                                             let color: 'success' | 'error' | 'inherit' = 'inherit';
@@ -210,24 +228,23 @@ return (
 
                                             const isCritical = userAnswer?.question?.isCriticalQuestion || q.isCriticalQuestion;
 
-                                            
-return (
-                                                <Grid item xs={3} key={q.id || index} sx={{ position: 'relative' }}>
-                                                    <Button
-                                                        variant={index + 1 === currentQuestionIndex + 1 ? 'contained' : 'outlined'}
-                                                        color={color}
-                                                        onClick={() => setCurrentQuestionIndex(index)}
-                                                        sx={{ position: 'relative', width: 50, height: 45, fontSize: 15, p: 0 }}
-                                                    >
-                                                        {index + 1}
-                                                        {isCritical && (
-                                                            <Box component="span" sx={{ position: 'absolute', top: 4, right: 6, color: 'red', fontSize: 18, fontWeight: 700 }}>*</Box>
-                                                        )}
-                                                    </Button>
-                                                </Grid>
+
+                                            return (
+                                                <Button
+                                                    variant={index + 1 === currentQuestionIndex + 1 ? 'contained' : 'outlined'}
+                                                    color={color}
+                                                    key={q.id || index}
+                                                    onClick={() => setCurrentQuestionIndex(index)}
+                                                    sx={{ position: 'relative', width: 50, height: 45, fontSize: 15, p: 0 }}
+                                                >
+                                                    {index + 1}
+                                                    {isCritical && (
+                                                        <Box component="span" sx={{ position: 'absolute', top: 4, right: 6, color: 'red', fontSize: 18, fontWeight: 700 }}>*</Box>
+                                                    )}
+                                                </Button>
                                             );
                                         })}
-                                    </Grid>
+                                    </Box>
                                 </CardContent>
                             </Card>
                         </Grid>
@@ -251,8 +268,8 @@ return (
                                                 color = 'red'; border = '1px solid red';
                                             }
 
-                                            
-return (
+
+                                            return (
                                                 <Box key={answer.id} sx={{
                                                     background: bg,
                                                     color,
@@ -298,7 +315,7 @@ return (
                                     <Button
                                         variant="contained"
                                         color="primary"
-                                        onClick={() => onStartExam(exam)}
+                                        onClick={handleResartExam}
                                     >
                                         THI LẠI
                                     </Button>
@@ -328,7 +345,7 @@ return (
     }
 
     return (
-        <Container className='max-w-[85%]'>
+        <Container className='max-w-[87%]'>
             <Box sx={{ p: { xs: 2, md: 6 } }}>
                 <Typography variant="h4" gutterBottom align="center">
                     {selectedClass?.name?.toUpperCase()} - {selectedExamType?.name?.toUpperCase()}
@@ -343,7 +360,7 @@ return (
                                 <Card>
                                     <CardContent>
                                         <Box display="flex" justifyContent="space-between" alignItems="center">
-                                            <Typography variant="h6">Thời gian:</Typography>
+                                            <Typography variant="h5">Thời gian:</Typography>
                                             <Box sx={{ display: 'flex', alignItems: 'center', color: timeLeft <= exam.durationMinutes * 60 * 0.05 ? 'error.main' : 'primary.main' }}>
                                                 <i className='ri-time-line' style={{ fontSize: '1.25rem', marginRight: '4px' }} />
                                                 <Typography variant='h6' component='span' sx={{ fontWeight: 'medium' }} className={timeLeft <= exam.durationMinutes * 60 * 0.05 ? 'text-error' : 'text-primary'}>
@@ -357,20 +374,29 @@ return (
                             <Grid item xs={12}>
                                 <Card>
                                     <CardContent>
-                                        <Typography variant="h6" mb={2}>Danh sách câu hỏi:</Typography>
-                                        <Grid container spacing={1} className='border rounded-sm px-8 py-4 mt-5'>
+                                        <Typography variant="h5" mb={2}>Danh sách câu hỏi:</Typography>
+                                        <Box
+                                            sx={{
+                                                display: 'grid',
+                                                gridTemplateColumns: 'repeat(5, 1fr)',
+                                                gap: 2,
+                                                justifyItems: 'center',
+                                                alignItems: 'center'
+                                            }}
+                                            className="rounded-sm py-4 mt-5"
+                                        >
                                             {questions.map((q, index) => (
-                                                <Grid item xs={3} key={q.id || index}>
-                                                    <Button
-                                                        variant={index === currentQuestionIndex ? 'contained' : 'outlined'}
-                                                        color={(index === currentQuestionIndex || (q.id && answers[q.id])) ? 'primary' : 'inherit'}
-                                                        onClick={() => setCurrentQuestionIndex(index)}
-                                                    >
-                                                        {index + 1}
-                                                    </Button>
-                                                </Grid>
+                                                <Button
+                                                    key={q.id || index}
+                                                    variant={index === currentQuestionIndex ? 'contained' : 'outlined'}
+                                                    color={(index === currentQuestionIndex || (q.id && answers[q.id])) ? 'primary' : 'inherit'}
+                                                    onClick={() => setCurrentQuestionIndex(index)}
+                                                    sx={{ width: 50, height: 45, fontSize: 15, p: 0 }}
+                                                >
+                                                    {index + 1}
+                                                </Button>
                                             ))}
-                                        </Grid>
+                                        </Box>
                                     </CardContent>
                                 </Card>
                             </Grid>

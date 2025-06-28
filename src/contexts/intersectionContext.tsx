@@ -5,7 +5,7 @@ import { createContext, useState } from 'react'
 import type { ReactNode } from 'react'
 
 export const initialIntersections: Record<string, boolean> = {
-  features: false,
+  drivingLicensePractice: false,
   team: false,
   faq: false,
   'contact-us': false

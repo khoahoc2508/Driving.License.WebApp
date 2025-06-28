@@ -90,73 +90,28 @@ const FrontMenu = (props: Props) => {
     <Wrapper isBelowLgScreen={isBelowLgScreen} isDrawerOpen={isDrawerOpen} setIsDrawerOpen={setIsDrawerOpen}>
       <Typography
         component={Link}
-        href='/front-pages/landing-page'
-        className={classnames('font-medium plb-3 pli-1.5 hover:text-primary', {
+        href='/front-pages/home'
+        className={classnames('font-bold  plb-3 pli-1.5 hover:text-primary', {
           'text-primary':
             !intersections.features &&
             !intersections.team &&
             !intersections.faq &&
             !intersections['contact-us'] &&
-            pathname === '/front-pages/landing-page'
+            pathname === '/front-pages/home'
         })}
         color='text.primary'
       >
-        Home
+        Trang chủ
       </Typography>
       <Typography
         component={Link}
-        href='/front-pages/landing-page#features'
-        className={classnames('font-medium plb-3 pli-1.5 hover:text-primary', {
-          'text-primary': intersections.features
+        href='/front-pages/on-thi-bang-lai-xe'
+        className={classnames('font-bold  plb-3 pli-1.5 hover:text-primary', {
+          'text-primary': intersections.drivingLicensePractice
         })}
         color='text.primary'
       >
-        Features
-      </Typography>
-      <Typography
-        component={Link}
-        href='/front-pages/landing-page#team'
-        className={classnames('font-medium plb-3 pli-1.5 hover:text-primary', {
-          'text-primary': intersections.team
-        })}
-        color='text.primary'
-      >
-        Team
-      </Typography>
-      <Typography
-        component={Link}
-        href='/front-pages/landing-page#faq'
-        className={classnames('font-medium plb-3 pli-1.5 hover:text-primary', {
-          'text-primary': intersections.faq
-        })}
-        color='text.primary'
-      >
-        FAQ
-      </Typography>
-      <Typography
-        component={Link}
-        href='/front-pages/landing-page#contact-us'
-        className={classnames('font-medium plb-3 pli-1.5 hover:text-primary', {
-          'text-primary': intersections['contact-us']
-        })}
-        color='text.primary'
-      >
-        Contact us
-      </Typography>
-      <DropdownMenu
-        mode={mode}
-        isBelowLgScreen={isBelowLgScreen}
-        isDrawerOpen={isDrawerOpen}
-        setIsDrawerOpen={setIsDrawerOpen}
-      />
-      <Typography
-        component={Link}
-        href='/'
-        target='_blank'
-        className='font-medium plb-3 pli-1.5 hover:text-primary'
-        color='text.primary'
-      >
-        Admin
+        Ôn thi GPLX
       </Typography>
     </Wrapper>
   )
