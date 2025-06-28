@@ -1,21 +1,17 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+
 // MUI Imports
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
 import Chip from '@mui/material/Chip'
 import Divider from '@mui/material/Divider'
-import Button from '@mui/material/Button'
-import type { ButtonProps } from '@mui/material/Button'
-
-// Type Imports
-import type { ThemeColor } from '@core/types'
 
 // Component Imports
 import CustomAvatar from '@core/components/mui/Avatar'
-import { ExamScheduleByIdType, ExamScheduleType } from '@/types/examScheduleTypes'
-import { useEffect, useState } from 'react'
+import type { ExamScheduleByIdType} from '@/types/examScheduleTypes';
 import ExamScheduleAPI from '@/libs/api/examScheduleAPI'
 
 type Props = {

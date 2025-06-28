@@ -5,14 +5,11 @@ import { useMemo, useState } from 'react'
 
 
 // MUI Imports
-
 import Button from '@mui/material/Button'
-import Chip from '@mui/material/Chip'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
-import TablePagination from '@mui/material/TablePagination'
 
 // Next Imports
 
@@ -44,7 +41,7 @@ import ChevronRight from '@menu/svg/ChevronRight'
 
 // Style Imports
 import CustomAvatar from '@/@core/components/mui/Avatar'
-import type { GetLicensesRegistrationsParams, LicenseRegistrationType, LicenseRegistrationTypeVm, LicenseTypeDto } from "@/types/LicensesRegistrations"
+import type { GetLicensesRegistrationsParams, LicenseRegistrationType, LicenseRegistrationTypeVm } from "@/types/LicensesRegistrations"
 import { getInitials } from '@/utils/getInitials'
 import styles from '@core/styles/table.module.css'
 
@@ -93,27 +90,6 @@ const getAvatar = (params: { avatar?: string | null; customer?: string | null })
   }
 }
 
-const getLicenseTypeString = (licenseType: LicenseTypeDto | undefined) => {
-  if (!licenseType) return 'N/A';
-
-  return licenseType.name;
-};
-
-const getStatusTextAndColor = (status: boolean | undefined) => {
-  let text = 'N/A';
-  let color: 'success' | 'error' | 'warning' = 'warning';
-
-  if (status) {
-    text = 'Đã duyệt';
-    color = 'success';
-  } else {
-    text = 'Chưa duyệt';
-    color = 'error';
-  }
-
-  return { text, color };
-};
-
 type Props = {
   tableAction: string,
   data?: LicenseRegistrationType,
@@ -129,9 +105,6 @@ type Props = {
 const LicenseRegistrationTable = ({
   data = [],
   setData,
-  params,
-  setParams,
-  totalItems,
   reloadDataTable,
   isLoading,
   examScheduleId
@@ -174,6 +147,7 @@ const LicenseRegistrationTable = ({
           <Typography>{row.original?.person?.phoneNumber}</Typography>
         )
       }),
+
       // columnHelper.accessor('licenseType', {
       //   header: 'BẰNG',
       //   cell: ({ row }) => {

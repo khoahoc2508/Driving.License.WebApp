@@ -5,34 +5,24 @@ import { forwardRef, useEffect, useState, useCallback, useMemo, useRef } from 'r
 import type { ReactElement, Ref } from 'react'
 
 // MUI Imports
-import { Divider, Drawer, FormHelperText, IconButton, Typography } from "@mui/material"
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
 import DialogActions from '@mui/material/DialogActions'
-import DialogContentText from '@mui/material/DialogContentText'
 import Slide from '@mui/material/Slide'
 import type { SlideProps } from '@mui/material/Slide'
-import { ExamAddressType } from '@/types/examAddressTypes'
-import { GetLicensesRegistrationsParams, LicenseRegistrationType, LicenseTypeDto } from '@/types/LicensesRegistrations'
-import ExamScheduleAPI from '@/libs/api/examScheduleAPI'
-import { CreateExamScheduleCommandType, ExamScheduleByIdType, UpdateExamScheduleCommandType } from '@/types/examScheduleTypes'
-import Grid from '@mui/material/Grid2'
-import TextField from '@mui/material/TextField'
-import Select from '@mui/material/Select'
+
 import Button from '@mui/material/Button'
-import MenuItem from '@mui/material/MenuItem'
-import InputLabel from '@mui/material/InputLabel'
-import FormControl from '@mui/material/FormControl'
 
 // Third-party Imports
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import { toast } from 'react-toastify'
-import { Controller, useForm } from 'react-hook-form'
+
+import type { GetLicensesRegistrationsParams, LicenseRegistrationType } from '@/types/LicensesRegistrations';
+import ExamScheduleAPI from '@/libs/api/examScheduleAPI'
 
 // Styled Component Imports
 
-import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
 import DebouncedInput from '@/components/common/DebouncedInput'
 import LicenseRegistrationAPI from '@/libs/api/licenseRegistrationAPI'
 import LicenseRegistrationTable from './LicenseRegistrationTable'
@@ -81,6 +71,7 @@ const AssignLicenseRegistrationsDialog = (props: Props) => {
   const handleAssignToExamSchedule = async () => {
     if (selectedLicenseRegistrationIds.length === 0) {
       toast.error('Vui lòng chọn ít nhất một đăng ký');
+
       return;
     }
 
@@ -156,11 +147,8 @@ const AssignLicenseRegistrationsDialog = (props: Props) => {
     }
 
     prevDataRef.current = dataTable
-    return dataTable
-  }, [dataTable])
 
-  useEffect(() => {
-    console.log(dataTable)
+    return dataTable
   }, [dataTable])
 
   return (

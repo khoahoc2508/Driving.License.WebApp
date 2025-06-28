@@ -1,20 +1,16 @@
 // React Imports
-import { forwardRef, useEffect, useState } from 'react'
+import { forwardRef, useEffect } from 'react'
 import type { ReactElement, Ref } from 'react'
 
 // MUI Imports
-import { Divider, Drawer, FormHelperText, IconButton, Typography } from "@mui/material"
+import { FormHelperText } from "@mui/material"
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
 import DialogContent from '@mui/material/DialogContent'
 import DialogActions from '@mui/material/DialogActions'
-import DialogContentText from '@mui/material/DialogContentText'
 import Slide from '@mui/material/Slide'
 import type { SlideProps } from '@mui/material/Slide'
-import { ExamAddressType } from '@/types/examAddressTypes'
-import { LicenseTypeDto } from '@/types/LicensesRegistrations'
-import ExamScheduleAPI from '@/libs/api/examScheduleAPI'
-import { CreateExamScheduleCommandType, ExamScheduleByIdType, UpdateExamScheduleCommandType } from '@/types/examScheduleTypes'
+
 import Grid from '@mui/material/Grid2'
 import TextField from '@mui/material/TextField'
 import Select from '@mui/material/Select'
@@ -27,6 +23,11 @@ import FormControl from '@mui/material/FormControl'
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import { toast } from 'react-toastify'
 import { Controller, useForm } from 'react-hook-form'
+
+import type { CreateExamScheduleCommandType, ExamScheduleByIdType, UpdateExamScheduleCommandType } from '@/types/examScheduleTypes'
+import ExamScheduleAPI from '@/libs/api/examScheduleAPI'
+import type { LicenseTypeDto } from '@/types/LicensesRegistrations'
+import type { ExamAddressType } from '@/types/examAddressTypes'
 
 // Styled Component Imports
 
@@ -192,11 +193,6 @@ const AddExamScheduleDialog = (props: Props) => {
     } finally {
     }
   }
-
-  const handleReset = () => {
-    handleClose()
-  }
-
 
   useEffect(() => {
     if (examScheduleId && open) {

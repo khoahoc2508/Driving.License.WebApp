@@ -1,7 +1,7 @@
 'use client'
 
 // React Imports
-import { useMemo, useState, useEffect, useCallback } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 
 
 // MUI Imports
@@ -41,9 +41,6 @@ import CustomAvatar from '@/@core/components/mui/Avatar'
 import type { GetLicensesRegistrationsParams, LicenseRegistrationType, LicenseRegistrationTypeVm, LicenseTypeDto } from "@/types/LicensesRegistrations"
 import { getInitials } from '@/utils/getInitials'
 import styles from '@core/styles/table.module.css'
-
-
-import SkeletonTableRowsLoader from '@/components/common/SkeletonTableRowsLoader'
 
 // Data Imports
 
@@ -123,7 +120,6 @@ const LicenseRegistrationTable = ({
   params,
   setParams,
   totalItems,
-  isLoading,
   onSelectionChange,
   openDialog
 }: Props) => {

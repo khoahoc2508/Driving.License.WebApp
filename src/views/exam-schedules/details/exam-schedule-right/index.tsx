@@ -26,6 +26,7 @@ const ExamScheduleRight = ({ tabContentList }: { tabContentList: { [key: string]
   // Effect to handle tab from URL
   useEffect(() => {
     const tabFromUrl = searchParams.get('tab')
+
     if (tabFromUrl && (tabFromUrl === 'assign' || tabFromUrl === 'result')) {
       setActiveTab(tabFromUrl)
     }

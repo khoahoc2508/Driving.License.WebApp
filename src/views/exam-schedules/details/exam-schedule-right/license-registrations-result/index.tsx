@@ -4,7 +4,7 @@ type Props = {
   examScheduleId: string
 }
 
-const UpdatelicenseResultTab = ({ examScheduleId }: Props) => {
+const UpdatelicenseResultTab = ({ }: Props) => {
   return (
     <h1>UpdatelicenseResultForLicenseRegistrations</h1>
   )

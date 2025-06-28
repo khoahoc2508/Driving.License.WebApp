@@ -40,8 +40,6 @@ import type { ColumnDef, FilterFn } from '@tanstack/react-table'
 import type { RankingInfo } from '@tanstack/match-sorter-utils'
 
 // Type Imports
-import { LinearProgress } from '@mui/material'
-
 import { toast } from 'react-toastify'
 
 
@@ -55,13 +53,11 @@ import tableStyles from '@core/styles/table.module.css'
 import type { ExamScheduleType, GetExamSchedulesWithPaginationQueryParams, PaginatedListOfExamScheduleType } from '@/types/examScheduleTypes'
 import ExamScheduleAPI from '@/libs/api/examScheduleAPI'
 import TableFilters from '@/views/exam-schedules/list/TableFilters'
-import AddExasmScheduleDrawer from '@/views/exam-schedules/list/AddExasmScheduleDrawer'
 import type { ExamAddressType, PaginatedListOfExamAddressType } from '@/types/examAddressTypes'
 import ExamAddressAPI from '@/libs/api/examAddressAPI'
 import OptionMenu from '@/@core/components/option-menu'
 import LicenseTypeAPI from '@/libs/api/licenseTypeApi'
 import type { LicenseTypeDto } from '@/types/LicensesRegistrations'
-import ResultLicenseRegistrationsDrawer from '@/views/exam-schedules/list/update-result-license-registrations/ResultLicenseRegistrationsDrawer'
 import AddExamScheduleDialog from '@/views/exam-schedules/list/AddExamScheduleDialog'
 
 
@@ -76,11 +72,6 @@ declare module '@tanstack/table-core' {
 
 type ProductWithActionsType = ExamScheduleType & {
   actions?: string
-}
-
-enum LimitType {
-  Unlimited,
-  Limited
 }
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
@@ -102,13 +93,13 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
 // - 60-79%: primary (xanh dương) - tỷ lệ đỗ khá
 // - 30-59%: warning (cam) - tỷ lệ đỗ trung bình
 // - < 30%: error (đỏ) - tỷ lệ đỗ thấp
-const getProgressColor = (percentage: number): 'error' | 'warning' | 'primary' | 'success' => {
-  if (percentage >= 80) return 'success'  // >= 80%: green
-  if (percentage >= 60) return 'primary'  // 60-79%: blue
-  if (percentage >= 30) return 'warning'  // 30-59%: orange
+// const getProgressColor = (percentage: number): 'error' | 'warning' | 'primary' | 'success' => {
+//   if (percentage >= 80) return 'success'  // >= 80%: green
+//   if (percentage >= 60) return 'primary'  // 60-79%: blue
+//   if (percentage >= 30) return 'warning'  // 30-59%: orange
 
-  return 'error'                          // < 30%: red
-}
+//   return 'error'                          // < 30%: red
+// }
 
 const DebouncedInput = ({
   value: initialValue,
@@ -250,7 +241,9 @@ const ProductListTable = () => {
           if (registrationLimit === null) {
             // Unlimited case
             const color = '#9155FD';
-            return (
+
+            
+return (
               <div style={getBadgeStyle(color)}>
                 <Typography style={getTextStyle(color)}>
                   Unlimited
@@ -273,6 +266,7 @@ const ProductListTable = () => {
         },
         enableSorting: false
       }),
+
       // columnHelper.accessor('passedStudents', {
       //   header: 'Tỷ lệ đỗ',
       //   cell: ({ row }) => {
