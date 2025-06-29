@@ -6,7 +6,6 @@ import { useMemo, useState, useEffect } from 'react'
 
 // MUI Imports
 
-import Chip from '@mui/material/Chip'
 import TablePagination from '@mui/material/TablePagination'
 
 // Next Imports
@@ -38,7 +37,7 @@ import ChevronRight from '@menu/svg/ChevronRight'
 
 // Style Imports
 import CustomAvatar from '@/@core/components/mui/Avatar'
-import type { GetLicensesRegistrationsParams, LicenseRegistrationType, LicenseRegistrationTypeVm, LicenseTypeDto } from "@/types/LicensesRegistrations"
+import type { GetLicensesRegistrationsParams, LicenseRegistrationType, LicenseRegistrationTypeVm } from "@/types/LicensesRegistrations"
 import { getInitials } from '@/utils/getInitials'
 import styles from '@core/styles/table.module.css'
 
@@ -83,26 +82,26 @@ const getAvatar = (params: { avatar?: string | null; customer?: string | null })
   }
 }
 
-const getLicenseTypeString = (licenseType: LicenseTypeDto | undefined) => {
-  if (!licenseType) return 'N/A';
+// const getLicenseTypeString = (licenseType: LicenseTypeDto | undefined) => {
+//   if (!licenseType) return 'N/A';
 
-  return licenseType.name;
-};
+//   return licenseType.name;
+// };
 
-const getStatusTextAndColor = (status: boolean | undefined) => {
-  let text = 'N/A';
-  let color: 'success' | 'error' | 'warning' = 'warning';
+// const getStatusTextAndColor = (status: boolean | undefined) => {
+//   let text = 'N/A';
+//   let color: 'success' | 'error' | 'warning' = 'warning';
 
-  if (status) {
-    text = 'Đã duyệt';
-    color = 'success';
-  } else {
-    text = 'Chưa duyệt';
-    color = 'error';
-  }
+//   if (status) {
+//     text = 'Đã duyệt';
+//     color = 'success';
+//   } else {
+//     text = 'Chưa duyệt';
+//     color = 'error';
+//   }
 
-  return { text, color };
-};
+//   return { text, color };
+// };
 
 type Props = {
   data?: LicenseRegistrationType,
@@ -156,15 +155,16 @@ const LicenseRegistrationTable = ({
           />
         )
       },
-      columnHelper.accessor('id', {
-        id: 'stt',
-        header: 'STT',
-        cell: ({ row, table }) => (
-          <Typography>
-            {table.getRowModel().rows.indexOf(row) + 1}
-          </Typography>
-        )
-      }),
+
+      // columnHelper.accessor('id', {
+      //   id: 'stt',
+      //   header: 'STT',
+      //   cell: ({ row, table }) => (
+      //     <Typography>
+      //       {table.getRowModel().rows.indexOf(row) + 1}
+      //     </Typography>
+      //   )
+      // }),
       columnHelper.accessor('person.fullName', {
         header: 'HỌ TÊN',
         cell: ({ row }) => (
@@ -174,7 +174,7 @@ const LicenseRegistrationTable = ({
               <Typography color='text.primary' className='font-medium'>
                 {row.original?.person?.fullName}
               </Typography>
-              <Typography variant='body2'>{row.original?.person?.email}</Typography>
+              {/* <Typography variant='body2'>{row.original?.person?.email}</Typography> */}
             </div>
           </div>
         )
@@ -185,56 +185,57 @@ const LicenseRegistrationTable = ({
           <Typography>{row.original?.person?.phoneNumber}</Typography>
         )
       }),
-      columnHelper.accessor('licenseType', {
-        header: 'BẰNG',
-        cell: ({ row }) => {
-          return <Typography>{getLicenseTypeString(row.original?.licenseType)}</Typography>;
-        }
-      }),
-      columnHelper.accessor('hasCompletedHealthCheck', {
-        header: 'SỨC KHỎE',
-        cell: ({ row }) => (
-          <Chip
-            label={row.original?.hasCompletedHealthCheck ? 'Đã khám' : 'Chưa khám'}
-            color={row.original?.hasCompletedHealthCheck ? 'success' : 'error'}
-            variant='tonal'
-            size='small'
-          />
-        )
-      }),
-      columnHelper.accessor('amount', {
-        header: 'TỔNG THANH TOÁN',
-        cell: ({ row }) => (
-          <Typography>{row.original?.amount?.toLocaleString('vi-VN') || '0'}</Typography>
-        )
-      }),
-      columnHelper.accessor('isPaid', {
-        header: 'THANH TOÁN',
-        cell: ({ row }) => (
-          <Chip
-            label={row.original?.isPaid ? 'Đã thanh toán' : 'Chưa thanh toán'}
-            color={row.original?.isPaid ? 'success' : 'error'}
-            variant='tonal'
-            size='small'
-          />
-        )
-      }),
-      columnHelper.accessor('hasApproved', {
-        header: 'Trạng thái',
-        cell: ({ row }) => {
-          const { text, color } = getStatusTextAndColor(row.original?.hasApproved);
+
+      // columnHelper.accessor('licenseType', {
+      //   header: 'BẰNG',
+      //   cell: ({ row }) => {
+      //     return <Typography>{getLicenseTypeString(row.original?.licenseType)}</Typography>;
+      //   }
+      // }),
+      // columnHelper.accessor('hasCompletedHealthCheck', {
+      //   header: 'SỨC KHỎE',
+      //   cell: ({ row }) => (
+      //     <Chip
+      //       label={row.original?.hasCompletedHealthCheck ? 'Đã khám' : 'Chưa khám'}
+      //       color={row.original?.hasCompletedHealthCheck ? 'success' : 'error'}
+      //       variant='tonal'
+      //       size='small'
+      //     />
+      //   )
+      // }),
+      // columnHelper.accessor('amount', {
+      //   header: 'TỔNG THANH TOÁN',
+      //   cell: ({ row }) => (
+      //     <Typography>{row.original?.amount?.toLocaleString('vi-VN') || '0'}</Typography>
+      //   )
+      // }),
+      // columnHelper.accessor('isPaid', {
+      //   header: 'THANH TOÁN',
+      //   cell: ({ row }) => (
+      //     <Chip
+      //       label={row.original?.isPaid ? 'Đã thanh toán' : 'Chưa thanh toán'}
+      //       color={row.original?.isPaid ? 'success' : 'error'}
+      //       variant='tonal'
+      //       size='small'
+      //     />
+      //   )
+      // }),
+      // columnHelper.accessor('hasApproved', {
+      //   header: 'Trạng thái',
+      //   cell: ({ row }) => {
+      //     const { text, color } = getStatusTextAndColor(row.original?.hasApproved);
 
 
-          return (
-            <Chip
-              label={text}
-              color={color}
-              variant='tonal'
-              size='small'
-            />
-          );
-        }
-      })
+      //     return (
+      //       <Chip
+      //         label={text}
+      //         color={color}
+      //         variant='tonal'
+      //         size='small'
+      //       />
+      //     );
+      //   }
+      // })
     ],
     []
   )

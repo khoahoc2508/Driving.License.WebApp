@@ -17,7 +17,7 @@ import CardHeader from '@mui/material/CardHeader'
 import { toast } from 'react-toastify'
 
 
-import { Button, CardActions, Typography } from '@mui/material'
+import { Button, CardActions, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material'
 
 import DebouncedInput from '@/components/common/DebouncedInput'
 import type { GetLicensesRegistrationsParams, LicenseRegistrationType } from '@/types/LicensesRegistrations'
@@ -36,6 +36,9 @@ const LicenseRegistrationCard = ({ examScheduleId }: Props) => {
   const [dataTable, setDataTable] = useState<LicenseRegistrationType>()
   const [totalCount, setTotalCount] = useState(0)
   const [loading, setLoading] = useState(false)
+
+  const [openDialog, setOpenDialog] = useState(false)
+  const [dialogAction, setDialogAction] = useState<'save' | 'cancel'>('save')
 
   // Track result changes - Map to store licenseRegistrationId -> passed status
   const [resultChanges, setResultChanges] = useState<Map<string, boolean>>(new Map())
@@ -165,7 +168,7 @@ const LicenseRegistrationCard = ({ examScheduleId }: Props) => {
   }, [JSON.stringify(licenseRegistrationParams)])
 
   return (
-    <Card>
+    <Card className='md:h-full md:flex md:flex-col'>
       <CardHeader
         title={`Danh sách học viên thi (${totalCount})`}
         className='flex flex-wrap pb-0'
@@ -196,32 +199,70 @@ const LicenseRegistrationCard = ({ examScheduleId }: Props) => {
         </div>
       </div>
 
-      <LicenseRegistrationTable
-        data={dataTable}
-        totalItems={totalCount}
-        isLoading={loading}
-        examScheduleId={examScheduleId}
-        onResultChange={handleResultChange}
-        updatedIds={updatedIds}
-        resultChanges={resultChanges} />
+      <div className='md:flex-1 md:overflow-hidden'>
+        <LicenseRegistrationTable
+          data={dataTable}
+          totalItems={totalCount}
+          isLoading={loading}
+          examScheduleId={examScheduleId}
+          onResultChange={handleResultChange}
+          updatedIds={updatedIds}
+          resultChanges={resultChanges} />
+      </div>
       <CardActions>
         <Button
           variant='contained'
-          onClick={handleSaveResults}
-          disabled={saving || resultChanges.size === 0}
+          onClick={() => {
+            setDialogAction('save')
+            setOpenDialog(true)
+          }}
+          disabled={saving}
         >
-          {saving ? 'Đang lưu...' : 'Lưu thay đổi'}
+          {saving ? 'ĐANG LƯU...' : 'LƯU THAY ĐỔI'}
         </Button>
         <Button
           variant='outlined'
           color='secondary'
-          onClick={handleCancel}
+          onClick={() => {
+            setDialogAction('cancel')
+            setOpenDialog(true)
+          }}
           disabled={saving}
           className='mis-4'
         >
-          Hủy
+          HỦY
         </Button>
       </CardActions>
+      <Dialog
+        open={openDialog}
+        onClose={() => { }}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {dialogAction === 'save' ? "Lưu thay đổi" : "Hủy thay đổi"}
+        </DialogTitle>
+        <DialogContent>
+          <div className='md:w-[400px]'>
+            <Typography id="alert-dialog-description">
+              {dialogAction === 'save' ? "Bạn xác nhận lưu thay đổi?" : "Bạn xác nhận hủy thay đổi?"}
+            </Typography></div>
+        </DialogContent>
+        <DialogActions>
+          <Button color="error" variant='outlined' onClick={() => { setOpenDialog(false) }} >Hủy</Button>
+          <Button variant='contained' onClick={() => {
+            if (dialogAction === 'save') {
+              handleSaveResults()
+            } else {
+              handleCancel()
+            }
+
+            setOpenDialog(false)
+          }} autoFocus >
+            Xác nhận
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Card>
   )
 }

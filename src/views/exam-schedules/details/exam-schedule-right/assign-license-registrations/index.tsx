@@ -11,11 +11,10 @@ type Props = {
 
 const AssignLicenseRegistrationsTab = ({ examScheduleId }: Props) => {
   return (
-    <Grid container spacing={6}>
-      <Grid size={{ xs: 12 }}>
+    <Grid container spacing={6} className='md:h-full'>
+      <Grid size={{ xs: 12 }} className='md:h-full'>
         <LicenseRegistrationCard examScheduleId={examScheduleId} />
       </Grid>
-
     </Grid>
   )
 }

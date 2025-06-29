@@ -31,11 +31,11 @@ const ExamScheduleDetail = async ({ params }: { params: Promise<{ id: string }> 
   const { id: examScheduleId } = await params
 
   return (
-    <Grid container spacing={6}>
-      <Grid size={{ xs: 12, lg: 4, md: 5 }}>
+    <Grid container spacing={6} className='xs:w-[auto] md:h-full'>
+      <Grid size={{ xs: 12, lg: 4, md: 5 }} className='md:h-full'>
         <ExamScheduleLeftOverview examScheduleId={examScheduleId} />
       </Grid>
-      <Grid size={{ xs: 12, lg: 8, md: 7 }}>
+      <Grid size={{ xs: 12, lg: 8, md: 7 }} className='md:h-full'>
         <ExamScheduleRight tabContentList={tabContentList(examScheduleId)} />
       </Grid>
     </Grid>

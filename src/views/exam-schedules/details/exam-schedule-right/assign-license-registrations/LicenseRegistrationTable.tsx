@@ -118,15 +118,15 @@ const LicenseRegistrationTable = ({
   // Hooks
   const columns = useMemo<ColumnDef<LicenseRegistrationTypeVm, any>[]>(
     () => [
-      columnHelper.accessor('id', {
-        id: 'stt',
-        header: 'STT',
-        cell: ({ row, table }) => (
-          <Typography>
-            {table.getRowModel().rows.indexOf(row) + 1}
-          </Typography>
-        )
-      }),
+      // columnHelper.accessor('id', {
+      //   id: 'stt',
+      //   header: 'STT',
+      //   cell: ({ row, table }) => (
+      //     <Typography>
+      //       {table.getRowModel().rows.indexOf(row) + 1}
+      //     </Typography>
+      //   )
+      // }),
       columnHelper.accessor('person.fullName', {
         header: 'HỌ TÊN',
         cell: ({ row }) => (
@@ -136,7 +136,7 @@ const LicenseRegistrationTable = ({
               <Typography color='text.primary' className='font-medium'>
                 {row.original?.person?.fullName}
               </Typography>
-              <Typography variant='body2'>{row.original?.person?.email}</Typography>
+              {/* <Typography variant='body2'>{row.original?.person?.email}</Typography> */}
             </div>
           </div>
         )
@@ -295,7 +295,7 @@ const LicenseRegistrationTable = ({
           return (
             <tr key={`${row.id}-${index}`}>
               {row.getVisibleCells().map((cell, cellIndex) => {
-                return <td key={`${cell.id}-${cellIndex}`}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
+                return <td key={`${cell.id}-${cellIndex}`} style={cell.column.id === 'actions' ? { width: '100px' } : {}}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
               })}
             </tr>
           )
@@ -316,7 +316,7 @@ const LicenseRegistrationTable = ({
                 <tr key={headerGroup.id} className="h-9">
                   {headerGroup.headers.map(header => {
                     return (
-                      <th key={header.id}>
+                      <th key={header.id} style={header.id === 'actions' ? { width: '100px', minWidth: '100px', maxWidth: '100px' } : {}}>
                         {header.isPlaceholder ? null : (
                           <>
                             <div
