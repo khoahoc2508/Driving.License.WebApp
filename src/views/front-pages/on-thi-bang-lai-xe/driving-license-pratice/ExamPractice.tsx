@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useCallback, useRef } from 'react'
+
 import { useRouter, useSearchParams } from 'next/navigation'
 
 import { Box, Button, Card, CardContent, Grid, Typography, Container, Divider, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material'
@@ -10,7 +11,7 @@ import { toast } from 'react-toastify'
 import type { questionTypes } from '@/types/questionTypes'
 import type { GroupExamDto } from '@/types/groupExamTypes'
 import ExamSubmissionAPI from '@/libs/api/examSubmissionAPI'
-import { AnswerSubmissionRequestDto } from '@/types/examSubmissionTypes'
+import type { AnswerSubmissionRequestDto } from '@/types/examSubmissionTypes'
 
 
 const QuestionImage = styled('img')({
@@ -43,16 +44,14 @@ const ExamPractice = ({
     onBack,
     selectedClass,
     selectedExamType,
-    examSubmissionId,
-    onStartExam
+    examSubmissionId
 }: {
     exam: any,
     questions: questionTypes[],
     onBack: () => void,
     selectedClass: GroupExamDto | null,
     selectedExamType: GroupExamDto | null,
-    examSubmissionId: string,
-    onStartExam: (exam: any) => void
+    examSubmissionId: string
 }) => {
     const router = useRouter()
     const searchParams = useSearchParams()
@@ -76,6 +75,7 @@ const ExamPractice = ({
                 questionId: q.id,
                 selectedAnswerId: q.id ? answers[q.id] ?? undefined : undefined
             }));
+
             await ExamSubmissionAPI.submitExam({
                 examSubmissionId,
                 answers: answerPayload
@@ -144,6 +144,7 @@ const ExamPractice = ({
 
     useEffect(() => {
         const examSubmissionId = searchParams.get('examSubmissionId')
+
         if (examSubmissionId) {
             router.push(`/front-pages/on-thi-bang-lai-xe/result?examSubmissionId=${examSubmissionId}`)
         }

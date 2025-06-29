@@ -1,7 +1,8 @@
 'use client'
+import React from 'react'
+
 import Header from './Header'
 import AppLoading from '@/@core/components/AppLoading'
-import React from 'react'
 
 const ExamLayoutWrapper = ({
     isLoading,

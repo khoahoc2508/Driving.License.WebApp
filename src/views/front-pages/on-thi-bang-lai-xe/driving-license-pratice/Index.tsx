@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import { useRouter, useSearchParams } from 'next/navigation'
 
 import GroupExam from './GroupExam'
@@ -13,6 +14,7 @@ const DrivingLicensePractice = () => {
 
     useEffect(() => {
         const examSubmissionId = searchParams.get('examSubmissionId')
+
         if (examSubmissionId) {
             router.push(`/front-pages/on-thi-bang-lai-xe?examSubmissionId=${examSubmissionId}`)
         }

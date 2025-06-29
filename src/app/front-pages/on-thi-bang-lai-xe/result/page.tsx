@@ -1,6 +1,7 @@
 'use client'
 
 import { useSearchParams } from 'next/navigation'
+
 import ExamResult from '@/views/front-pages/on-thi-bang-lai-xe/driving-license-pratice/ExamResult'
 
 const Page = () => {

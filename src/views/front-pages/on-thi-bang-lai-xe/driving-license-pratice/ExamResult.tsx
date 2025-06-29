@@ -1,7 +1,9 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+
 import { useRouter } from 'next/navigation'
+
 import { Box, Button, Card, CardContent, Grid, Typography, Container, Divider } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { toast } from 'react-toastify'
@@ -10,8 +12,6 @@ import type { questionTypes } from '@/types/questionTypes'
 import type { GroupExamDto } from '@/types/groupExamTypes'
 import ExamSubmissionAPI from '@/libs/api/examSubmissionAPI'
 import type { ExamSubmissionResultDto, ExamSubmissionAnswerDto } from '@/types/examSubmissionTypes'
-import AppLoading from '@/@core/components/AppLoading'
-import Header from './Header'
 import ExamLayoutWrapper from './ExamLayoutWrapper'
 
 const QuestionImage = styled('img')({
@@ -46,6 +46,7 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
                 if (res.data?.data) {
                     setResult(res.data.data)
                     const questionList = res.data.data.userAnswers?.map((answer: ExamSubmissionAnswerDto) => answer.question).filter(Boolean) || []
+
                     setQuestions(questionList)
                     setSelectedClass(res.data.data.licenseTypeDto)
                 } else {
@@ -68,6 +69,8 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
     const formatResultDuration = (duration?: string) => {
         if (!duration) return '-';
         const [hms] = duration.split('.');
+
+
         return hms;
     };
 
@@ -145,6 +148,7 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
 
                                                 if (userAnswer?.selectedAnswerId) {
                                                     const isCorrect = userAnswer.question?.answers?.find((ans) => ans.id === userAnswer.selectedAnswerId)?.isCorrect;
+
                                                     color = isCorrect ? 'success' : 'error';
                                                 }
 

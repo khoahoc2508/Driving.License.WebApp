@@ -87,7 +87,6 @@ const GroupExams = ({ setIsLoading }: ArticlesProps) => {
       selectedClass={selectedClass}
       selectedExamType={selectedExamType}
       examSubmissionId={examSubmissionId}
-      onStartExam={handleStartExam}
     /></div>
   }
 
