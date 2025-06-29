@@ -11,12 +11,7 @@ import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
 import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
-import CircularProgress from '@mui/material/CircularProgress'
-import Box from '@mui/material/Box'
-import IconButton from '@mui/material/IconButton'
 import { useTheme } from '@mui/material/styles'
-
-
 
 // Component Imports
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, LabelList } from '@/libs/Recharts'
@@ -73,8 +68,6 @@ export interface RechartsLineChartProps {
 
 const RechartsLineChart = ({
   data: externalData,
-  loading: externalLoading = false,
-  onRefresh
 }: RechartsLineChartProps = {}) => {
   // Hooks
   const theme = useTheme()
@@ -127,6 +120,7 @@ const RechartsLineChart = ({
   useEffect(() => {
     if (externalData) {
       const processedData = processApiData(externalData)
+
       setChartData(processedData)
     } else {
       setChartData([])

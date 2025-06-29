@@ -57,8 +57,12 @@ const LicenseRegistrationColumnChart = ({ statistics }: Props) => {
       const dayCategories = statistics.dataFollowDay.map(item => {
         if (item.date) {
           const date = new Date(item.date)
+
+
           return `${date.getDate()}/${date.getMonth() + 1}`
         }
+
+
         return ''
       }).filter(Boolean)
 
@@ -79,12 +83,15 @@ const LicenseRegistrationColumnChart = ({ statistics }: Props) => {
         }
       ])
     }
+
     // Nếu không có dataFollowDay nhưng có dataFollowMonth, sử dụng dữ liệu theo tháng
     else if (statistics.dataFollowMonth && statistics.dataFollowMonth.length > 0) {
       const monthCategories = statistics.dataFollowMonth.map(item => {
         if (item.month) {
           return `Tháng ${item.month}`
         }
+
+
         return ''
       }).filter(Boolean)
 
@@ -105,6 +112,7 @@ const LicenseRegistrationColumnChart = ({ statistics }: Props) => {
         }
       ])
     }
+
     // Nếu không có dữ liệu nào, reset về trạng thái ban đầu
     else {
       setCategories(['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'])
