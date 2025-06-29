@@ -165,7 +165,7 @@ const LicenseRegistrationCard = ({ examScheduleId }: Props) => {
   }, [JSON.stringify(licenseRegistrationParams)])
 
   return (
-    <Card>
+    <Card className='md:h-full md:flex md:flex-col'>
       <CardHeader
         title={`Danh sách học viên thi (${totalCount})`}
         className='flex flex-wrap pb-0'
@@ -196,14 +196,16 @@ const LicenseRegistrationCard = ({ examScheduleId }: Props) => {
         </div>
       </div>
 
-      <LicenseRegistrationTable
-        data={dataTable}
-        totalItems={totalCount}
-        isLoading={loading}
-        examScheduleId={examScheduleId}
-        onResultChange={handleResultChange}
-        updatedIds={updatedIds}
-        resultChanges={resultChanges} />
+      <div className='md:flex-1 md:overflow-hidden'>
+        <LicenseRegistrationTable
+          data={dataTable}
+          totalItems={totalCount}
+          isLoading={loading}
+          examScheduleId={examScheduleId}
+          onResultChange={handleResultChange}
+          updatedIds={updatedIds}
+          resultChanges={resultChanges} />
+      </div>
       <CardActions>
         <Button
           variant='contained'

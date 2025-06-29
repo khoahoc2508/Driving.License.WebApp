@@ -11,7 +11,7 @@ import Divider from '@mui/material/Divider'
 
 // Component Imports
 import CustomAvatar from '@core/components/mui/Avatar'
-import type { ExamScheduleByIdType} from '@/types/examScheduleTypes';
+import type { ExamScheduleByIdType } from '@/types/examScheduleTypes';
 import ExamScheduleAPI from '@/libs/api/examScheduleAPI'
 
 type Props = {
@@ -45,7 +45,7 @@ const ExamScheduleDetails = ({ examScheduleId }: Props) => {
 
   return (
     <>
-      <Card>
+      <Card className='md:h-full'>
         <CardContent className='flex flex-col pbs-6 gap-6'>
           <div className='flex flex-col gap-6'>
             <div className='flex items-center justify-center flex-col gap-4'>

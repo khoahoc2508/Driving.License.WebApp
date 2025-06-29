@@ -11,7 +11,6 @@ import { useSearchParams } from 'next/navigation'
 import Tab from '@mui/material/Tab'
 import TabContext from '@mui/lab/TabContext'
 import TabPanel from '@mui/lab/TabPanel'
-import Grid from '@mui/material/Grid2'
 
 // Component Imports
 import CustomTabList from '@core/components/mui/TabList'
@@ -39,19 +38,19 @@ const ExamScheduleRight = ({ tabContentList }: { tabContentList: { [key: string]
   return (
     <>
       <TabContext value={activeTab}>
-        <Grid container spacing={6}>
-          <Grid size={{ xs: 12 }}>
+        <div className='md:h-full md:flex md:flex-col'>
+          <div className='mb-6'>
             <CustomTabList onChange={handleChange} variant='scrollable' pill='true'>
               <Tab icon={<i className='ri-calendar-check-line' />} value='assign' label='Xếp Thi' iconPosition='start' />
               <Tab icon={<i className='ri-repeat-line' />} value='result' label='Cập Nhật Kết Quả' iconPosition='start' />
             </CustomTabList>
-          </Grid>
-          <Grid size={{ xs: 12 }}>
-            <TabPanel value={activeTab} className='p-0'>
+          </div>
+          <div className='md:flex-1'>
+            <TabPanel value={activeTab} className='p-0 md:h-full'>
               {tabContentList[activeTab]}
             </TabPanel>
-          </Grid>
-        </Grid>
+          </div>
+        </div>
       </TabContext>
     </>
   )

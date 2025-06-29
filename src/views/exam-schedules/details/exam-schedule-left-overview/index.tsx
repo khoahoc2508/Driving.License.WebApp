@@ -10,9 +10,9 @@ type Props = {
 
 const ExamScheduleLeftOverview = ({ examScheduleId }: Props) => {
   return (
-    <Grid container spacing={6}>
-      <Grid size={{ xs: 12 }}>
-        <ExamScheduleDetails examScheduleId={examScheduleId}  />
+    <Grid container spacing={6} className='md:h-full'>
+      <Grid size={{ xs: 12 }} className='md:h-full'>
+        <ExamScheduleDetails examScheduleId={examScheduleId} />
       </Grid>
     </Grid>
   )

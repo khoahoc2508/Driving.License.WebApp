@@ -85,7 +85,7 @@ const LicenseRegistrationCard = ({ examScheduleId }: Props) => {
   }, [JSON.stringify(licenseRegistrationParams), reloadFlag])
 
   return (
-    <Card>
+    <Card className='md:h-full md:flex md:flex-col'>
       <CardHeader
         title={`Danh sách học viên thi (${totalCount})`}
         className='flex flex-wrap pb-0'
@@ -111,15 +111,17 @@ const LicenseRegistrationCard = ({ examScheduleId }: Props) => {
         </div>
       </div>
 
-      <LicenseRegistrationTable
-        tableAction={CONFIG.TableAction.View}
-        data={dataTable} setData={setDataTable}
-        params={licenseRegistrationParams}
-        setParams={setLicenseRegistrationParams}
-        totalItems={totalCount}
-        reloadDataTable={reloadData}
-        isLoading={loading}
-        examScheduleId={examScheduleId} />
+      <div className='md:flex-1 md:overflow-hidden'>
+        <LicenseRegistrationTable
+          tableAction={CONFIG.TableAction.View}
+          data={dataTable} setData={setDataTable}
+          params={licenseRegistrationParams}
+          setParams={setLicenseRegistrationParams}
+          totalItems={totalCount}
+          reloadDataTable={reloadData}
+          isLoading={loading}
+          examScheduleId={examScheduleId} />
+      </div>
 
       <AssignLicenseRegistrationsDialog
         open={openAssignLicenseRegistrationsDialog ?? false}
