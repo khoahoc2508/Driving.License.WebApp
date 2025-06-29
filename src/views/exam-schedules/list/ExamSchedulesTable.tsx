@@ -59,6 +59,8 @@ import OptionMenu from '@/@core/components/option-menu'
 import LicenseTypeAPI from '@/libs/api/licenseTypeApi'
 import type { LicenseTypeDto } from '@/types/LicensesRegistrations'
 import AddExamScheduleDialog from '@/views/exam-schedules/list/AddExamScheduleDialog'
+import { Chip } from '@mui/material'
+import { error } from 'console'
 
 
 declare module '@tanstack/table-core' {
@@ -217,50 +219,18 @@ const ProductListTable = () => {
           const registrationLimit = row.original?.registrationLimit;
           const registeredStudents = row.original?.registeredStudents || 0;
 
-          // Helper function for common badge style
-          const getBadgeStyle = (color: string) => ({
-            width: '80px',
-            height: '24px',
-            borderRadius: '16px',
-            paddingTop: '3px',
-            paddingRight: '4px',
-            paddingBottom: '3px',
-            paddingLeft: '4px',
-            border: `1px solid ${color}`,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          })
-
-          const getTextStyle = (color: string) => ({
-            color: color,
-            fontSize: '14px',
-            fontWeight: 400
-          })
-
           if (registrationLimit === null) {
             // Unlimited case
-            const color = '#9155FD';
-
-            
-return (
-              <div style={getBadgeStyle(color)}>
-                <Typography style={getTextStyle(color)}>
-                  Unlimited
-                </Typography>
-              </div>
+            return (
+              <Chip label={"Unlimited"} color={'primary'} size='small' variant='tonal' />
             );
           } else {
             // Limited case - calculate percentage
             const percentage = (registrationLimit && registrationLimit > 0) ? (registeredStudents / registrationLimit) * 100 : 0;
-            const color = percentage < 50 ? '#56CA00' : '#FF4C51';
+            const color = percentage < 50 ? 'error' : 'success';
 
             return (
-              <div style={getBadgeStyle(color)}>
-                <Typography style={getTextStyle(color)}>
-                  {`${registeredStudents}/${registrationLimit}`}
-                </Typography>
-              </div>
+              <Chip label={`${registeredStudents}/${registrationLimit}`} color={color} size='small' variant='tonal' />
             );
           }
         },
@@ -611,7 +581,7 @@ return (
           onRowsPerPageChange={e => setParams((prev) => ({ ...prev, pageSize: Number(e.target.value) }))}
         />
       </Card>
-      
+
       <AddExamScheduleDialog
         examAddresses={examAddresses}
         licenseTypes={licenseTypes}
@@ -633,16 +603,18 @@ return (
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Xác nhận xóa"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{"Xóa lịch thi"}</DialogTitle>
         <DialogContent>
-          <Typography id="alert-dialog-description">
-            Bạn có chắc chắn muốn xóa lịch thi này không?
-          </Typography>
+          <div className='md:w-[400px]'>
+            <Typography id="alert-dialog-description">
+              Xóa lịch thi sẽ mất dữ liệu liên quan đến lịch thi này. Bạn chắc chắn chứ?
+            </Typography></div>
+
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDeleteDialog}>Hủy</Button>
-          <Button onClick={handleDeleteConfirmed} autoFocus color="error">
-            Xóa
+          <Button variant='outlined' color="error" onClick={handleCloseDeleteDialog}>HỦY</Button>
+          <Button variant='contained' onClick={handleDeleteConfirmed} autoFocus >
+            XÁC NHẬN
           </Button>
         </DialogActions>
       </Dialog>

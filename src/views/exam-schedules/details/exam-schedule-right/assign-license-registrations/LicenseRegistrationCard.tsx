@@ -101,7 +101,7 @@ const LicenseRegistrationCard = ({ examScheduleId }: Props) => {
         <div className='flex items-center max-sm:flex-col gap-4 max-sm:is-full is-auto'>
 
           <Button
-            variant='contained'
+            variant='outlined'
             startIcon={<i className='ri-add-line' />}
             className='max-sm:is-full is-auto'
             onClick={handleOpenAssignLicenseRegistrationsDialog}

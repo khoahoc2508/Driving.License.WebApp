@@ -156,15 +156,15 @@ const LicenseRegistrationTable = ({
           />
         )
       },
-      columnHelper.accessor('id', {
-        id: 'stt',
-        header: 'STT',
-        cell: ({ row, table }) => (
-          <Typography>
-            {table.getRowModel().rows.indexOf(row) + 1}
-          </Typography>
-        )
-      }),
+      // columnHelper.accessor('id', {
+      //   id: 'stt',
+      //   header: 'STT',
+      //   cell: ({ row, table }) => (
+      //     <Typography>
+      //       {table.getRowModel().rows.indexOf(row) + 1}
+      //     </Typography>
+      //   )
+      // }),
       columnHelper.accessor('person.fullName', {
         header: 'HỌ TÊN',
         cell: ({ row }) => (
@@ -174,7 +174,7 @@ const LicenseRegistrationTable = ({
               <Typography color='text.primary' className='font-medium'>
                 {row.original?.person?.fullName}
               </Typography>
-              <Typography variant='body2'>{row.original?.person?.email}</Typography>
+              {/* <Typography variant='body2'>{row.original?.person?.email}</Typography> */}
             </div>
           </div>
         )
@@ -185,56 +185,56 @@ const LicenseRegistrationTable = ({
           <Typography>{row.original?.person?.phoneNumber}</Typography>
         )
       }),
-      columnHelper.accessor('licenseType', {
-        header: 'BẰNG',
-        cell: ({ row }) => {
-          return <Typography>{getLicenseTypeString(row.original?.licenseType)}</Typography>;
-        }
-      }),
-      columnHelper.accessor('hasCompletedHealthCheck', {
-        header: 'SỨC KHỎE',
-        cell: ({ row }) => (
-          <Chip
-            label={row.original?.hasCompletedHealthCheck ? 'Đã khám' : 'Chưa khám'}
-            color={row.original?.hasCompletedHealthCheck ? 'success' : 'error'}
-            variant='tonal'
-            size='small'
-          />
-        )
-      }),
-      columnHelper.accessor('amount', {
-        header: 'TỔNG THANH TOÁN',
-        cell: ({ row }) => (
-          <Typography>{row.original?.amount?.toLocaleString('vi-VN') || '0'}</Typography>
-        )
-      }),
-      columnHelper.accessor('isPaid', {
-        header: 'THANH TOÁN',
-        cell: ({ row }) => (
-          <Chip
-            label={row.original?.isPaid ? 'Đã thanh toán' : 'Chưa thanh toán'}
-            color={row.original?.isPaid ? 'success' : 'error'}
-            variant='tonal'
-            size='small'
-          />
-        )
-      }),
-      columnHelper.accessor('hasApproved', {
-        header: 'Trạng thái',
-        cell: ({ row }) => {
-          const { text, color } = getStatusTextAndColor(row.original?.hasApproved);
+      // columnHelper.accessor('licenseType', {
+      //   header: 'BẰNG',
+      //   cell: ({ row }) => {
+      //     return <Typography>{getLicenseTypeString(row.original?.licenseType)}</Typography>;
+      //   }
+      // }),
+      // columnHelper.accessor('hasCompletedHealthCheck', {
+      //   header: 'SỨC KHỎE',
+      //   cell: ({ row }) => (
+      //     <Chip
+      //       label={row.original?.hasCompletedHealthCheck ? 'Đã khám' : 'Chưa khám'}
+      //       color={row.original?.hasCompletedHealthCheck ? 'success' : 'error'}
+      //       variant='tonal'
+      //       size='small'
+      //     />
+      //   )
+      // }),
+      // columnHelper.accessor('amount', {
+      //   header: 'TỔNG THANH TOÁN',
+      //   cell: ({ row }) => (
+      //     <Typography>{row.original?.amount?.toLocaleString('vi-VN') || '0'}</Typography>
+      //   )
+      // }),
+      // columnHelper.accessor('isPaid', {
+      //   header: 'THANH TOÁN',
+      //   cell: ({ row }) => (
+      //     <Chip
+      //       label={row.original?.isPaid ? 'Đã thanh toán' : 'Chưa thanh toán'}
+      //       color={row.original?.isPaid ? 'success' : 'error'}
+      //       variant='tonal'
+      //       size='small'
+      //     />
+      //   )
+      // }),
+      // columnHelper.accessor('hasApproved', {
+      //   header: 'Trạng thái',
+      //   cell: ({ row }) => {
+      //     const { text, color } = getStatusTextAndColor(row.original?.hasApproved);
 
 
-          return (
-            <Chip
-              label={text}
-              color={color}
-              variant='tonal'
-              size='small'
-            />
-          );
-        }
-      })
+      //     return (
+      //       <Chip
+      //         label={text}
+      //         color={color}
+      //         variant='tonal'
+      //         size='small'
+      //       />
+      //     );
+      //   }
+      // })
     ],
     []
   )
