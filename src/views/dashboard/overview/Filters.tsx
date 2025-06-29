@@ -35,8 +35,8 @@ const Filters = ({ setParams, onRefresh }: FiltersProps) => {
     // Cập nhật params khi có thay đổi
     if (date && endDate) {
       setParams({
-        startDate: date.toISOString(),
-        endDate: endDate.toISOString()
+        startDate: date.toDateString(),
+        endDate: endDate.toDateString()
       })
     } else if (date && !endDate) {
       // Nếu chỉ có startDate, có thể set endDate = startDate hoặc để trống
@@ -50,8 +50,8 @@ const Filters = ({ setParams, onRefresh }: FiltersProps) => {
     // Cập nhật params khi có thay đổi
     if (startDate && date) {
       setParams({
-        startDate: startDate.toISOString(),
-        endDate: date.toISOString()
+        startDate: startDate.toDateString(),
+        endDate: date.toDateString()
       })
     }
   }

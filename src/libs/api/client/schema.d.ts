@@ -36,6 +36,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/brandsettings/by-user": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["BrandSettings_GetBrandSettingByUserId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/brandsettings/create": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["BrandSettings_CreateBrandSetting"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/exam/addresses": {
         parameters: {
             query?: never;
@@ -584,6 +616,40 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        BaseResponseOfBrandSettingDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["BrandSettingDto"] | null;
+        };
+        BrandSettingDto: {
+            avatarUrl?: string;
+            name?: string;
+            shortDescription?: string | null;
+            description?: string | null;
+            email?: string | null;
+            phoneNumber?: string | null;
+            address?: string | null;
+            images?: string[] | null;
+        };
+        BaseResponse: {
+            success?: boolean;
+            message?: string | null;
+            statusCode?: components["schemas"]["HttpStatusCode"];
+        };
+
+        /** @enum {integer} */
+        HttpStatusCode: 100 | 101 | 102 | 103 | 200 | 201 | 202 | 203 | 204 | 205 | 206 | 207 | 208 | 226 | 300 | 300 | 301 | 301 | 302 | 302 | 303 | 303 | 304 | 305 | 306 | 307 | 307 | 308 | 400 | 401 | 402 | 403 | 404 | 405 | 406 | 407 | 408 | 409 | 410 | 411 | 412 | 413 | 414 | 415 | 416 | 417 | 421 | 422 | 422 | 423 | 424 | 426 | 428 | 429 | 431 | 451 | 500 | 501 | 502 | 503 | 504 | 505 | 506 | 507 | 508 | 510 | 511;
+        BaseResponseOfBoolean: components["schemas"]["BaseResponse"] & {
+            data?: boolean;
+        };
+        CreateBrandSettingCommand: {
+            avatarUrl?: string;
+            name?: string;
+            shortDescription?: string | null;
+            description?: string | null;
+            email?: string | null;
+            phoneNumber?: string | null;
+            address?: string | null;
+            images?: string[] | null;
+        };
         PaginatedListOfExamAddressVm: {
             data?: components["schemas"]["ExamAddressVm"][];
 
@@ -661,14 +727,6 @@ export interface components {
             licenseTypeCode?: string;
             examAddress?: components["schemas"]["ExamAddressVm"];
         };
-        BaseResponse: {
-            success?: boolean;
-            message?: string | null;
-            statusCode?: components["schemas"]["HttpStatusCode"];
-        };
-
-        /** @enum {integer} */
-        HttpStatusCode: 100 | 101 | 102 | 103 | 200 | 201 | 202 | 203 | 204 | 205 | 206 | 207 | 208 | 226 | 300 | 300 | 301 | 301 | 302 | 302 | 303 | 303 | 304 | 305 | 306 | 307 | 307 | 308 | 400 | 401 | 402 | 403 | 404 | 405 | 406 | 407 | 408 | 409 | 410 | 411 | 412 | 413 | 414 | 415 | 416 | 417 | 421 | 422 | 422 | 423 | 424 | 426 | 428 | 429 | 431 | 451 | 500 | 501 | 502 | 503 | 504 | 505 | 506 | 507 | 508 | 510 | 511;
         BaseResponseOfString: components["schemas"]["BaseResponse"] & {
             data?: string | null;
         };
@@ -738,6 +796,9 @@ export interface components {
 
             /** Format: int32 */
             durationMinutes?: number;
+
+            /** Format: int32 */
+            order?: number;
             examType?: components["schemas"]["ExamType"];
             licenseTypeCode?: string;
             groupExamId?: string;
@@ -745,9 +806,6 @@ export interface components {
 
         /** @enum {integer} */
         ExamType: 1 | 2;
-        BaseResponseOfBoolean: components["schemas"]["BaseResponse"] & {
-            data?: boolean;
-        };
         GenerateExamsCommand: {
             groupExamId?: string;
             licenseTypeCode?: string;
@@ -779,6 +837,9 @@ export interface components {
 
             /** Format: int32 */
             durationMinutes?: number;
+        };
+        BaseResponseOfExamDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["ExamDto"] | null;
         };
         GenerateRandomExamsCommand: {
             groupExamId?: string;
@@ -859,6 +920,7 @@ export interface components {
 
             /** Format: int32 */
             order?: number;
+            licenseTypeCode?: string | null;
             parentId?: string | null;
             children?: components["schemas"]["GroupExamDto"][];
         };
@@ -1388,6 +1450,48 @@ export interface operations {
             };
         };
     };
+    BrandSettings_GetBrandSettingByUserId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBrandSettingDto"];
+                };
+            };
+        };
+    };
+    BrandSettings_CreateBrandSetting: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateBrandSettingCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
     Exam_GetExamAddressesWithPaginationQuery: {
         parameters: {
             query?: {
@@ -1727,7 +1831,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BaseResponseOfString"];
+                    "application/json": components["schemas"]["BaseResponseOfExamDto"];
                 };
             };
         };

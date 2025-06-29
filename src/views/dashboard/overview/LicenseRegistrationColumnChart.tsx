@@ -1,7 +1,7 @@
 'use client'
 
 // React Imports
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 // Next Imports
 import dynamic from 'next/dynamic'
@@ -15,10 +15,11 @@ import { useTheme } from '@mui/material/styles'
 // Third Party Imports
 import type { ApexOptions } from 'apexcharts'
 
+// Type Imports
+import type { VehicleTypeQuantityResponse } from '@/types/statisticTypes'
+
 // Styled Component Imports
 const AppReactApexCharts = dynamic(() => import('@/libs/styles/AppReactApexCharts'))
-
-// API Imports
 
 // Style Imports
 import './styles.css'
@@ -28,21 +29,96 @@ const initialSeries = [
   {
     name: 'Xe máy',
     type: 'column',
-    data: [null, null, null, null, null, null, null, null, null, null, null, null]
+    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
   },
   {
     name: 'Ô tô',
     type: 'column',
-    data: [null, null, null, null, null, null, null, null, null, null, null, null]
+    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
   }
 ]
 
+type Props = {
+  statistics?: VehicleTypeQuantityResponse | null
+}
 
-const LicenseRegistrationColumnChart = () => {
+const LicenseRegistrationColumnChart = ({ statistics }: Props) => {
   // Hooks
   const theme = useTheme()
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [series, setSeries] = useState(initialSeries)
+  const [categories, setCategories] = useState<string[]>(['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'])
+
+  // Process data when statistics change
+  useEffect(() => {
+    if (!statistics) return
+
+    // Nếu có dataFollowDay, ưu tiên sử dụng dữ liệu theo ngày
+    if (statistics.dataFollowDay && statistics.dataFollowDay.length > 0) {
+      const dayCategories = statistics.dataFollowDay.map(item => {
+        if (item.date) {
+          const date = new Date(item.date)
+
+
+          return `${date.getDate()}/${date.getMonth() + 1}`
+        }
+
+
+        return ''
+      }).filter(Boolean)
+
+      const motorbikeData = statistics.dataFollowDay.map(item => item.motorbikeQuantity || 0)
+      const carData = statistics.dataFollowDay.map(item => item.carQuantity || 0)
+
+      setCategories(dayCategories)
+      setSeries([
+        {
+          name: 'Xe máy',
+          type: 'column',
+          data: motorbikeData
+        },
+        {
+          name: 'Ô tô',
+          type: 'column',
+          data: carData
+        }
+      ])
+    }
+
+    // Nếu không có dataFollowDay nhưng có dataFollowMonth, sử dụng dữ liệu theo tháng
+    else if (statistics.dataFollowMonth && statistics.dataFollowMonth.length > 0) {
+      const monthCategories = statistics.dataFollowMonth.map(item => {
+        if (item.month) {
+          return `Tháng ${item.month}`
+        }
+
+
+        return ''
+      }).filter(Boolean)
+
+      const motorbikeData = statistics.dataFollowMonth.map(item => item.motorbikeQuantity || 0)
+      const carData = statistics.dataFollowMonth.map(item => item.carQuantity || 0)
+
+      setCategories(monthCategories)
+      setSeries([
+        {
+          name: 'Xe máy',
+          type: 'column',
+          data: motorbikeData
+        },
+        {
+          name: 'Ô tô',
+          type: 'column',
+          data: carData
+        }
+      ])
+    }
+
+    // Nếu không có dữ liệu nào, reset về trạng thái ban đầu
+    else {
+      setCategories(['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'])
+      setSeries(initialSeries)
+    }
+  }, [statistics])
 
 
 
@@ -113,8 +189,8 @@ const LicenseRegistrationColumnChart = () => {
       enabled: false
     },
     xaxis: {
-      tickAmount: 12,
-      categories: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
+      tickAmount: categories.length,
+      categories: categories,
       labels: {
         style: {
           colors: 'var(--mui-palette-text-disabled)',

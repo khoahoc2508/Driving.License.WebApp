@@ -21,36 +21,38 @@ import type { TooltipProps } from '@/libs/Recharts'
 const AppRecharts = dynamic(() => import('@/libs/styles/AppRecharts'))
 
 // API Imports
-import StatisticAPI from '@/libs/api/statisticAPI'
 import type { ExamPassFailPercentageResponse } from '@/types/statisticTypes'
 
-// Vars
-const initialData = [
-  { pass: 75, fail: 25, name: 'Jan' },
-  { pass: 68, fail: 32, name: 'Feb' },
-  { pass: 82, fail: 18, name: 'Mar' },
-  { pass: 79, fail: 21, name: 'Apr' },
-  { pass: 85, fail: 15, name: 'May' },
-  { pass: 76, fail: 24, name: 'Jun' },
-  { pass: 80, fail: 20, name: 'Jul' },
-  { pass: 72, fail: 28, name: 'Aug' },
-  { pass: 78, fail: 22, name: 'Sep' },
-  { pass: 83, fail: 17, name: 'Oct' },
-  { pass: 70, fail: 30, name: 'Nov' },
-  { pass: 75, fail: 25, name: 'Dec' }
-]
+// Types
+interface ChartDataItem {
+  pass: number
+  fail: number
+  name: string
+  date?: string
+}
+
+
 
 const CustomTooltip = (props: TooltipProps<any, any>) => {
   // Props
-  const { active, payload } = props
+  const { active, payload, label } = props
 
   if (active && payload && payload.length) {
     return (
       <div className='recharts-custom-tooltip'>
-        <Typography fontSize='0.875rem' color='text.primary'>{payload[0].name}: {payload[0].value}%</Typography>
-        {payload.length > 1 && (
-          <Typography fontSize='0.875rem' color='text.primary'>{payload[1].name}: {payload[1].value}%</Typography>
-        )}
+        <Typography fontSize='0.875rem' color='text.primary' fontWeight='bold'>
+          Tháng {label}
+        </Typography>
+        {payload.map((entry, index) => (
+          <Typography
+            key={index}
+            fontSize='0.875rem'
+            color='text.primary'
+            style={{ color: entry.color }}
+          >
+            {entry.name}: {entry.value}%
+          </Typography>
+        ))}
       </div>
     )
   }
@@ -58,69 +60,77 @@ const CustomTooltip = (props: TooltipProps<any, any>) => {
   return null
 }
 
-const RechartsLineChart = () => {
+export interface RechartsLineChartProps {
+  data?: ExamPassFailPercentageResponse | null
+  loading?: boolean
+  onRefresh?: () => void
+}
+
+const RechartsLineChart = ({
+  data: externalData,
+}: RechartsLineChartProps = {}) => {
   // Hooks
   const theme = useTheme()
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [loading, setLoading] = useState(true)
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [chartData, setChartData] = useState(initialData)
+  const [chartData, setChartData] = useState<ChartDataItem[]>([])
 
-  // Fetch exam pass/fail percentage data
-  const fetchExamPassFailData = async () => {
-    try {
-      setLoading(true)
+  // Function to process API data into chart format
+  const processApiData = (data: ExamPassFailPercentageResponse): ChartDataItem[] => {
+    // Ưu tiên dataFollowExamSchedule nếu có dữ liệu
+    if (data.dataFollowExamSchedule && data.dataFollowExamSchedule.length > 0) {
+      return data.dataFollowExamSchedule.map(item => ({
+        pass: Math.round(item.passPercentage || 0),
+        fail: Math.round(item.failPercentage || 0),
+        name: item.name || 'Unknown',
+        date: item.dateTime
+      }))
+    }
 
-      // Lấy dữ liệu thống kê cho 12 tháng gần nhất
-      const endDate = new Date().toISOString()
-      const startDate = new Date(new Date().setFullYear(new Date().getFullYear() - 1)).toISOString()
+    // Nếu không có dataFollowExamSchedule, sử dụng dataFollowMonth
+    if (data.dataFollowMonth && data.dataFollowMonth.length > 0) {
+      const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
-      const response = await StatisticAPI.getExamPassFailPercentage({
-        startDate,
-        endDate
+      // Tạo array rỗng cho 12 tháng
+      const newChartData: ChartDataItem[] = monthNames.map(name => ({
+        pass: 0,
+        fail: 0,
+        name
+      }))
+
+      data.dataFollowMonth.forEach(item => {
+        if (item.monthOfYear !== undefined && item.monthOfYear >= 1 && item.monthOfYear <= 12) {
+          const passPercentage = Math.round(item.passPercentage || 0)
+          const failPercentage = Math.round(item.failPercentage || 0)
+
+          newChartData[item.monthOfYear - 1] = {
+            pass: passPercentage,
+            fail: failPercentage,
+            name: monthNames[item.monthOfYear - 1]
+          }
+        }
       })
 
-      if (response.data?.success && response.data?.data) {
-        const data: ExamPassFailPercentageResponse = response.data.data
-
-        // Chuyển đổi dữ liệu từ API thành định dạng cho biểu đồ
-        if (data.dataFollowMonth && data.dataFollowMonth.length > 0) {
-          const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-
-          // Tạo bản sao của initialData
-          const newChartData = [...initialData]
-
-          // Cập nhật dữ liệu cho các tháng có trong response
-          data.dataFollowMonth.forEach(item => {
-            if (item.monthOfYear !== undefined && item.monthOfYear >= 1 && item.monthOfYear <= 12) {
-              newChartData[item.monthOfYear - 1] = {
-                pass: item.passPercentage || 0,
-                fail: item.failPercentage || 0,
-                name: monthNames[item.monthOfYear - 1]
-              }
-            }
-          })
-
-          // setChartData(newChartData)
-        }
-      }
-    } catch (error) {
-      console.error('Error fetching exam pass/fail data:', error)
-    } finally {
-      setLoading(false)
+      return newChartData
     }
+
+    // Nếu không có dữ liệu nào, trả về array rỗng
+    return []
   }
 
+  // Effect to handle external data
   useEffect(() => {
-    fetchExamPassFailData()
-  }, [])
+    if (externalData) {
+      const processedData = processApiData(externalData)
+
+      setChartData(processedData)
+    } else {
+      setChartData([])
+    }
+  }, [externalData])
 
   return (
     <Card>
       <CardHeader
         title='Tỷ lệ thi'
-
-        // subheader='Theo tháng'
         sx={{
           flexDirection: ['column', 'row'],
           alignItems: ['flex-start', 'center'],
@@ -129,6 +139,7 @@ const RechartsLineChart = () => {
         }}
       />
       <CardContent>
+
         <AppRecharts>
           <div className='bs-[350px]'>
             <ResponsiveContainer>
@@ -139,10 +150,10 @@ const RechartsLineChart = () => {
                 <Tooltip content={CustomTooltip} />
                 <Legend />
                 <Line name='Đậu' dataKey='pass' stroke='#4caf50' strokeWidth={3}>
-                  <LabelList dataKey='pass' position='top' formatter={(value: number) => `${value}`} style={{ fill: '#4caf50', fontSize: '0.75rem' }} />
+                  <LabelList dataKey='pass' position='top' formatter={(value: number) => `${value}%`} style={{ fill: '#4caf50', fontSize: '0.75rem' }} />
                 </Line>
                 <Line name='Rớt' dataKey='fail' stroke='#f44336' strokeWidth={3}>
-                  <LabelList dataKey='fail' position='bottom' formatter={(value: number) => `${value}`} style={{ fill: '#f44336', fontSize: '0.75rem' }} />
+                  <LabelList dataKey='fail' position='bottom' formatter={(value: number) => `${value}%`} style={{ fill: '#f44336', fontSize: '0.75rem' }} />
                 </Line>
               </LineChart>
             </ResponsiveContainer>
