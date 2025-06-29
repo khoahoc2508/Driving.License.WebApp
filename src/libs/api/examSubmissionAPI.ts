@@ -21,10 +21,15 @@ const submitExam = async (payload: SubmitExamPayload) => {
   return await axiosInstance.post('/api/examsubmissions/submit', payload)
 }
 
+const getExamResult = async (examSubmissionId: string) => {
+  return await axiosInstance.get(`/api/examsubmissions/${examSubmissionId}`)
+}
+
 const ExamSubmissionAPI = {
   GetExamsByGroups,
   startExam,
-  submitExam
+  submitExam,
+  getExamResult
 }
 
 export default ExamSubmissionAPI

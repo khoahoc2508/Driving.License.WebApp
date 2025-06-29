@@ -75,7 +75,6 @@ const GroupExams = ({ setIsLoading }: ArticlesProps) => {
     }
   }
 
-
   if (selectedExam && examQuestions && examSubmissionId) {
     return <div className='w-full bg-backgroundPaper'><ExamPractice
       exam={selectedExam}
@@ -116,7 +115,6 @@ const GroupExams = ({ setIsLoading }: ArticlesProps) => {
 
       if (child.name === 'ĐỀ NGẪU NHIÊN') {
         setIsLoading(true)
-        debugger
 
         try {
           const payload: GenerateRandomExamsCommand = {

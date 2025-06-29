@@ -8,6 +8,7 @@ import { useEffect } from 'react'
 import { useSettings } from '@core/hooks/useSettings'
 import DrivingLicensePractice from './driving-license-pratice/Index'
 
+
 const LandingPageWrapper = () => {
   // Hooks
   const { updatePageSettings } = useSettings()

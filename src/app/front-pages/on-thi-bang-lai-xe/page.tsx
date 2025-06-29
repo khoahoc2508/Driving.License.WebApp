@@ -1,7 +1,7 @@
 import LandingPageWrapper from '@/views/front-pages/on-thi-bang-lai-xe'
 
-const DrivingLicensePractice = async () => {
+const Page = async () => {
   return <LandingPageWrapper />
 }
 
-export default DrivingLicensePractice
+export default Page
