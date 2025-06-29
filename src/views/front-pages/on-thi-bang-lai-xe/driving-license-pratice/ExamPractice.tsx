@@ -16,8 +16,11 @@ const QuestionImage = styled('img')({
     maxWidth: '100%',
     maxHeight: '300px',
     objectFit: 'contain',
-    margin: '12px 0',
-    borderRadius: '8px'
+    margin: '12px auto',
+    borderRadius: '8px',
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center"
 })
 
 const AnswerLabel = styled('div')<{ selected: boolean }>(({ theme, selected }) => ({
@@ -218,13 +221,15 @@ const ExamPractice = ({
                                     >
                                         {questions.map((q, index) => {
                                             const userAnswer: ExamSubmissionAnswerDto | undefined = result.userAnswers?.find((a: ExamSubmissionAnswerDto) => a.question?.id === q.id);
-                                            let color: 'success' | 'error' | 'inherit' = 'inherit';
+                                            let color: 'success' | 'error' | 'inherit' | 'primary' = 'inherit';
 
                                             if (userAnswer?.selectedAnswerId) {
                                                 const isCorrect = userAnswer.question?.answers?.find((ans) => ans.id === userAnswer.selectedAnswerId)?.isCorrect;
 
                                                 color = isCorrect ? 'success' : 'error';
                                             }
+
+                                            color = index === currentQuestionIndex ? 'primary' : color
 
                                             const isCritical = userAnswer?.question?.isCriticalQuestion || q.isCriticalQuestion;
 
@@ -233,6 +238,7 @@ const ExamPractice = ({
                                                 <Button
                                                     variant={index + 1 === currentQuestionIndex + 1 ? 'contained' : 'outlined'}
                                                     color={color}
+
                                                     key={q.id || index}
                                                     onClick={() => setCurrentQuestionIndex(index)}
                                                     sx={{ position: 'relative', width: 50, height: 45, fontSize: 15, p: 0 }}
