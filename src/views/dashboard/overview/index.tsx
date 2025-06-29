@@ -49,11 +49,11 @@ const OverViewTab = () => {
 
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
-          <LicenseRegistrationColumnChart />
+          <LicenseRegistrationColumnChart statistics={data.vehicleTypeQuantity} />
         </Grid>
       </Grid>
       <Grid size={{ xs: 12, md: 12 }}>
-        <RechartsLineChart />
+        <RechartsLineChart data={data.examPassFail} />
       </Grid>
     </Grid>
   )

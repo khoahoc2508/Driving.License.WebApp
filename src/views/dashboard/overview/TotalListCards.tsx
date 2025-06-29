@@ -37,7 +37,7 @@ const TotalListCards = ({ statistics }: Props) => {
       stats: statistics ? statistics.totalLicenseRegistration?.toString() || '0' : '...',
       avatarIcon: 'ri-article-line',
       avatarColor: 'primary',
-      subtitle: 'So với tháng trước',
+      subtitle: 'So với kì trước',
       trendNumber: statistics ? `${statistics.increasePercentageLicenseRegistration?.toFixed(1) || '0'}%` : '...',
       trend: statistics && statistics.increasePercentageLicenseRegistration && statistics.increasePercentageLicenseRegistration > 0 ? 'positive' : 'negative'
     },
@@ -46,7 +46,7 @@ const TotalListCards = ({ statistics }: Props) => {
       stats: statistics ? statistics.totalMotorbike?.toString() || '0' : '...',
       avatarIcon: 'ri-motorbike-line',
       avatarColor: 'info',
-      subtitle: 'So với tháng trước',
+      subtitle: 'So với kì trước',
       trendNumber: statistics ? `${statistics.increasePercentageMotorbike?.toFixed(1) || '0'}%` : '...',
       trend: statistics && statistics.increasePercentageMotorbike && statistics.increasePercentageMotorbike > 0 ? 'positive' : 'negative'
     },
@@ -55,7 +55,7 @@ const TotalListCards = ({ statistics }: Props) => {
       stats: statistics ? formatCurrency(statistics.totalRevenue || 0) : '...',
       avatarIcon: 'ri-money-dollar-circle-line',
       avatarColor: 'success',
-      subtitle: 'So với tháng trước',
+      subtitle: 'So với kì trước',
       trendNumber: statistics ? `${statistics.increasePercentageRevenue?.toFixed(1) || '0'}%` : '...',
       trend: statistics && statistics.increasePercentageRevenue && statistics.increasePercentageRevenue > 0 ? 'positive' : 'negative'
     },
@@ -64,7 +64,7 @@ const TotalListCards = ({ statistics }: Props) => {
       stats: statistics ? statistics.totalCar?.toString() || '0' : '...',
       avatarIcon: 'ri-car-line',
       avatarColor: 'warning',
-      subtitle: 'So với tháng trước',
+      subtitle: 'So với kì trước',
       trendNumber: statistics ? `${statistics.increasePercentageCar?.toFixed(1) || '0'}%` : '...',
       trend: statistics && statistics.increasePercentageCar && statistics.increasePercentageCar > 0 ? 'positive' : 'negative'
     }
