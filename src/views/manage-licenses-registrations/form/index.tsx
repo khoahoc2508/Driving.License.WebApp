@@ -335,8 +335,6 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
     const uploadedFrontPhotoUrl = await uploadFile(data.frontPhoto?.[0]);
     const uploadedBackPhotoUrl = await uploadFile(data.backPhoto?.[0]);
 
-    debugger
-
     try {
       const payload: LicenseRegistrationCreateResquest | LicenseRegistrationUpdateResquest = {
         vehicleTypeCode: data.vehicleType,

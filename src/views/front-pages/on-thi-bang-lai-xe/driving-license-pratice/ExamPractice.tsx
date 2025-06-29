@@ -10,6 +10,7 @@ import { toast } from 'react-toastify'
 import type { questionTypes } from '@/types/questionTypes'
 import type { GroupExamDto } from '@/types/groupExamTypes'
 import ExamSubmissionAPI from '@/libs/api/examSubmissionAPI'
+import { AnswerSubmissionRequestDto } from '@/types/examSubmissionTypes'
 
 
 const QuestionImage = styled('img')({
@@ -70,12 +71,12 @@ const ExamPractice = ({
         }
 
         try {
-            const answerPayload = Object.entries(answers).map(([questionId, selectedAnswerId]) => ({
-                questionId,
-                selectedAnswerId
-            }));
 
-            const res = await ExamSubmissionAPI.submitExam({
+            const answerPayload: AnswerSubmissionRequestDto = questions.map(q => ({
+                questionId: q.id,
+                selectedAnswerId: q.id ? answers[q.id] ?? undefined : undefined
+            }));
+            await ExamSubmissionAPI.submitExam({
                 examSubmissionId,
                 answers: answerPayload
             });

@@ -31,7 +31,6 @@ const FileUploaderSingle = ({
     if (field.value && typeof field.value[0] === 'string') {
       setPreviewUrl(process.env.NEXT_PUBLIC_STORAGE_BASE_URL + field.value[0])
     } else if (field.value && field.value[0] instanceof File) {
-      debugger
       setPreviewUrl(URL.createObjectURL(field.value[0]))
     } else {
       setPreviewUrl(null)

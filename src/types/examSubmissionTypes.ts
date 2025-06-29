@@ -1,5 +1,6 @@
 import type { components } from '@/libs/api/client/schema'
 
+export type AnswerSubmissionRequestDto = components['schemas']['AnswerSubmissionRequestDto'][]
 export type SubmitExamPayload = components['schemas']['SubmitExamCommand']
 export type CreateExamSubmissionCommand = components['schemas']['CreateExamSubmissionCommand']
 export type ExamSubmissionResultDto = components['schemas']['ExamSubmissionResultDto']
