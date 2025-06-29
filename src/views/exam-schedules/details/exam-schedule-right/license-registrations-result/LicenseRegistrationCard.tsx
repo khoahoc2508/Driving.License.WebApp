@@ -256,6 +256,7 @@ const LicenseRegistrationCard = ({ examScheduleId }: Props) => {
             } else {
               handleCancel()
             }
+
             setOpenDialog(false)
           }} autoFocus >
             Xác nhận

@@ -1,6 +1,7 @@
 'use client'
 
 // React Imports
+
 import { useEffect, useMemo, useState } from 'react'
 
 // Next Imports
@@ -49,6 +50,8 @@ import { toast } from 'react-toastify'
 // import { getLocalizedUrl } from '@/utils/i18n'
 
 // Style Imports
+import { Chip } from '@mui/material'
+
 import tableStyles from '@core/styles/table.module.css'
 import type { ExamScheduleType, GetExamSchedulesWithPaginationQueryParams, PaginatedListOfExamScheduleType } from '@/types/examScheduleTypes'
 import ExamScheduleAPI from '@/libs/api/examScheduleAPI'
@@ -59,8 +62,6 @@ import OptionMenu from '@/@core/components/option-menu'
 import LicenseTypeAPI from '@/libs/api/licenseTypeApi'
 import type { LicenseTypeDto } from '@/types/LicensesRegistrations'
 import AddExamScheduleDialog from '@/views/exam-schedules/list/AddExamScheduleDialog'
-import { Chip } from '@mui/material'
-import { error } from 'console'
 
 
 declare module '@tanstack/table-core' {
