@@ -89,14 +89,14 @@ const FrontMenu = (props: Props) => {
     <Wrapper isBelowLgScreen={isBelowLgScreen} isDrawerOpen={isDrawerOpen} setIsDrawerOpen={setIsDrawerOpen}>
       <Typography
         component={Link}
-        href='/front-pages/home'
+        href='/'
         className={classnames('font-bold  plb-3 pli-1.5 hover:text-primary', {
           'text-primary':
             !intersections.features &&
             !intersections.team &&
             !intersections.faq &&
             !intersections['contact-us'] &&
-            pathname === '/front-pages/home'
+            pathname === '/'
         })}
         color='text.primary'
       >
@@ -104,7 +104,7 @@ const FrontMenu = (props: Props) => {
       </Typography>
       <Typography
         component={Link}
-        href='/front-pages/on-thi-bang-lai-xe'
+        href='/on-thi-bang-lai-xe'
         className={classnames('font-bold  plb-3 pli-1.5 hover:text-primary', {
           'text-primary': intersections.drivingLicensePractice
         })}

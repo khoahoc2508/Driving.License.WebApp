@@ -51,11 +51,11 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
                     setSelectedClass(res.data.data.licenseTypeDto)
                 } else {
                     toast.error('Không tìm thấy kết quả thi')
-                    router.push('/front-pages/on-thi-bang-lai-xe')
+                    router.push('/on-thi-bang-lai-xe')
                 }
             } catch (error) {
                 toast.error('Không thể tải kết quả thi')
-                router.push('/front-pages/on-thi-bang-lai-xe')
+                router.push('/on-thi-bang-lai-xe')
             } finally {
                 setIsLoading(false)
             }
@@ -75,11 +75,11 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
     };
 
     const handleBackToList = () => {
-        router.push('/front-pages/on-thi-bang-lai-xe')
+        router.push('/on-thi-bang-lai-xe')
     }
 
     const handleRestartExam = () => {
-        router.push('/front-pages/on-thi-bang-lai-xe')
+        router.push('/on-thi-bang-lai-xe')
     }
 
     const isPassed = result?.isPassed;

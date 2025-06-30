@@ -16,7 +16,7 @@ const DrivingLicensePractice = () => {
         const examSubmissionId = searchParams.get('examSubmissionId')
 
         if (examSubmissionId) {
-            router.push(`/front-pages/on-thi-bang-lai-xe?examSubmissionId=${examSubmissionId}`)
+            router.push(`/on-thi-bang-lai-xe?examSubmissionId=${examSubmissionId}`)
         }
     }, [searchParams, router])
 

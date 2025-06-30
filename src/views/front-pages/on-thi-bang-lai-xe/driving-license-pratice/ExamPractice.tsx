@@ -83,7 +83,7 @@ const ExamPractice = ({
 
             toast.success('Nộp bài thành công!');
 
-            router.push(`/front-pages/on-thi-bang-lai-xe/result?examSubmissionId=${examSubmissionId}`);
+            router.push(`/on-thi-bang-lai-xe/result?examSubmissionId=${examSubmissionId}`);
         } catch (error) {
             toast.error('Nộp bài thất bại. Vui lòng thử lại.');
             setIsSubmitting(false);
@@ -146,7 +146,7 @@ const ExamPractice = ({
         const examSubmissionId = searchParams.get('examSubmissionId')
 
         if (examSubmissionId) {
-            router.push(`/front-pages/on-thi-bang-lai-xe/result?examSubmissionId=${examSubmissionId}`)
+            router.push(`/on-thi-bang-lai-xe/result?examSubmissionId=${examSubmissionId}`)
         }
     }, [searchParams, router])
 
