@@ -2,7 +2,7 @@
 
 import { useSearchParams } from 'next/navigation'
 
-import ExamResult from '@/views/front-pages/on-thi-bang-lai-xe/driving-license-pratice/ExamResult'
+import ExamResult from '@/views/on-thi-bang-lai-xe/driving-license-pratice/ExamResult'
 
 const Page = () => {
     const searchParams = useSearchParams()

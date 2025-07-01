@@ -1,4 +1,4 @@
-import LandingPageWrapper from '@/views/front-pages/on-thi-bang-lai-xe'
+import LandingPageWrapper from '@/views/on-thi-bang-lai-xe'
 
 const Page = async () => {
   return <LandingPageWrapper />
