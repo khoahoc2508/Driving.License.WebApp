@@ -46,7 +46,7 @@ const AssignLicenseRegistrationsDialog = (props: Props) => {
   const { open, handleClose, onSuccess, examScheduleId } = props
 
   // Initial states
-  const initialParams = { pageNumber: 1, pageSize: 10, search: '', isExamScheduled: false, isPaid: true }
+  const initialParams = { pageNumber: 1, pageSize: 10, search: '', isExamScheduled: false, isPaid: true, hasCompletedHealthCheck: [true], hasApproved: [true] }
 
   // table
   const [licenseRegistrationParams, setLicenseRegistrationParams] = useState<GetLicensesRegistrationsParams>(initialParams)
