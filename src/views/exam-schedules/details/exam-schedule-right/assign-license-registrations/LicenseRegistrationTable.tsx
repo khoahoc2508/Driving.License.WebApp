@@ -308,9 +308,9 @@ const LicenseRegistrationTable = ({
 
   return (
     <>
-      <Card>
-        <div className='overflow-x-auto'>
-          <table className={styles.table}>
+      <Card className='shadow-none'>
+        <div className='overflow-x-auto' >
+          <table className={styles.table} >
             <thead>
               {table.getHeaderGroups().map(headerGroup => (
                 <tr key={headerGroup.id} className="h-9">

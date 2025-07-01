@@ -41,7 +41,7 @@ const CustomTooltip = (props: TooltipProps<any, any>) => {
     return (
       <div className='recharts-custom-tooltip'>
         <Typography fontSize='0.875rem' color='text.primary' fontWeight='bold'>
-          Tháng {label}
+          {label}
         </Typography>
         {payload.map((entry, index) => (
           <Typography
@@ -87,27 +87,17 @@ const RechartsLineChart = ({
 
     // Nếu không có dataFollowExamSchedule, sử dụng dataFollowMonth
     if (data.dataFollowMonth && data.dataFollowMonth.length > 0) {
-      const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+      const monthNames = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
 
-      // Tạo array rỗng cho 12 tháng
-      const newChartData: ChartDataItem[] = monthNames.map(name => ({
-        pass: 0,
-        fail: 0,
-        name
-      }))
-
-      data.dataFollowMonth.forEach(item => {
-        if (item.monthOfYear !== undefined && item.monthOfYear >= 1 && item.monthOfYear <= 12) {
-          const passPercentage = Math.round(item.passPercentage || 0)
-          const failPercentage = Math.round(item.failPercentage || 0)
-
-          newChartData[item.monthOfYear - 1] = {
-            pass: passPercentage,
-            fail: failPercentage,
-            name: monthNames[item.monthOfYear - 1]
-          }
-        }
-      })
+      // Chỉ tạo dữ liệu cho những tháng có trong API response
+      const newChartData: ChartDataItem[] = data.dataFollowMonth
+        .filter(item => item.monthOfYear !== undefined && item.monthOfYear >= 1 && item.monthOfYear <= 12)
+        .map(item => ({
+          pass: Math.round(item.passPercentage || 0),
+          fail: Math.round(item.failPercentage || 0),
+          name: `Tháng ${monthNames[item.monthOfYear! - 1]}`
+        }))
+        .sort((a, b) => parseInt(a.name) - parseInt(b.name)) // Sắp xếp theo thứ tự tháng
 
       return newChartData
     }
@@ -145,7 +135,15 @@ const RechartsLineChart = ({
             <ResponsiveContainer>
               <LineChart height={350} data={chartData} style={{ direction: theme.direction }} margin={{ left: -20, right: 20, top: 20, bottom: 10 }}>
                 <CartesianGrid />
-                <XAxis dataKey='name' reversed={theme.direction === 'rtl'} />
+                <XAxis
+                  dataKey='name'
+                  reversed={theme.direction === 'rtl'}
+                  tick={{
+                    fontWeight: 'bold',
+                    fontSize: '0.875rem'
+                  }}
+                  tickMargin={14}
+                />
                 <YAxis orientation={theme.direction === 'rtl' ? 'right' : 'left'} />
                 <Tooltip content={CustomTooltip} />
                 <Legend />

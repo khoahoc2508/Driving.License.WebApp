@@ -284,7 +284,7 @@ const LicenseRegistrationTable = ({
 
   return (
     <>
-      <Card>
+      <Card className='shadow-none'>
         <div className='overflow-x-auto'>
           <table className={styles.table}>
             <thead>
