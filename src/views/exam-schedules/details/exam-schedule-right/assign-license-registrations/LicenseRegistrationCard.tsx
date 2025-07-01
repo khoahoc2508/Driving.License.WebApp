@@ -20,6 +20,7 @@ import { Button } from '@mui/material'
 
 import DebouncedInput from '@/components/common/DebouncedInput'
 import type { GetLicensesRegistrationsParams, LicenseRegistrationType } from '@/types/LicensesRegistrations'
+import type { ExamScheduleByIdType } from '@/types/examScheduleTypes'
 import LicenseRegistrationAPI from '@/libs/api/licenseRegistrationAPI'
 import LicenseRegistrationTable from '@/views/exam-schedules/details/exam-schedule-right/assign-license-registrations/LicenseRegistrationTable'
 import CONFIG from '@/configs/config'
@@ -29,9 +30,10 @@ import AssignLicenseRegistrationsDialog from '@/views/exam-schedules/details/exa
 
 type Props = {
   examScheduleId: string
+  examSchedule?: ExamScheduleByIdType
 }
 
-const LicenseRegistrationCard = ({ examScheduleId }: Props) => {
+const LicenseRegistrationCard = ({ examScheduleId, examSchedule }: Props) => {
   const [openAssignLicenseRegistrationsDialog, setOpenAssignLicenseRegistrationsDialog] = useState(false)
 
   // table
@@ -130,6 +132,7 @@ const LicenseRegistrationCard = ({ examScheduleId }: Props) => {
         }
         examScheduleId={examScheduleId}
         onSuccess={reloadData}
+        examSchedule={examSchedule}
       />
     </Card>
   )
