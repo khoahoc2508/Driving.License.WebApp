@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 
 // MUI Imports
 import Card from '@mui/material/Card'
@@ -18,7 +17,7 @@ type Props = {
   examSchedule?: ExamScheduleByIdType
 }
 
-const ExamScheduleDetails = ({ examScheduleId, examSchedule }: Props) => {
+const ExamScheduleDetails = ({ examSchedule }: Props) => {
   // No need to fetch data anymore since it's passed from parent
 
   return (

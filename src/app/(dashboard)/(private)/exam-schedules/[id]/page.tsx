@@ -56,6 +56,7 @@ const ExamScheduleDetail = ({ params }: { params: Promise<{ id: string }> }) => 
   useEffect(() => {
     const getParams = async () => {
       const { id } = await params
+
       setExamScheduleId(id)
       fetchExamScheduleById(id)
     }

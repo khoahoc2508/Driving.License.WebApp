@@ -26,7 +26,7 @@ import ExamScheduleAPI from '@/libs/api/examScheduleAPI'
 import DebouncedInput from '@/components/common/DebouncedInput'
 import LicenseRegistrationAPI from '@/libs/api/licenseRegistrationAPI'
 import LicenseRegistrationTable from './LicenseRegistrationTable'
-import { ExamScheduleByIdType } from '@/types/examScheduleTypes'
+import type { ExamScheduleByIdType } from '@/types/examScheduleTypes'
 
 const Transition = forwardRef(function Transition(
   props: SlideProps & { children?: ReactElement<any, any> },
