@@ -26,6 +26,7 @@ import ExamScheduleAPI from '@/libs/api/examScheduleAPI'
 import DebouncedInput from '@/components/common/DebouncedInput'
 import LicenseRegistrationAPI from '@/libs/api/licenseRegistrationAPI'
 import LicenseRegistrationTable from './LicenseRegistrationTable'
+import type { ExamScheduleByIdType } from '@/types/examScheduleTypes'
 
 const Transition = forwardRef(function Transition(
   props: SlideProps & { children?: ReactElement<any, any> },
@@ -39,14 +40,15 @@ type Props = {
   handleClose: () => void
   onSuccess?: () => void
   examScheduleId?: string
+  examSchedule?: ExamScheduleByIdType
 }
 
 const AssignLicenseRegistrationsDialog = (props: Props) => {
   // Props
-  const { open, handleClose, onSuccess, examScheduleId } = props
+  const { open, handleClose, onSuccess, examScheduleId, examSchedule } = props
 
   // Initial states
-  const initialParams = { pageNumber: 1, pageSize: 10, search: '', isExamScheduled: false, isPaid: true }
+  const initialParams = { pageNumber: 1, pageSize: 10, search: '', isExamScheduled: false, isPaid: true, hasCompletedHealthCheck: [true], hasApproved: [true] }
 
   // table
   const [licenseRegistrationParams, setLicenseRegistrationParams] = useState<GetLicensesRegistrationsParams>(initialParams)
@@ -162,7 +164,7 @@ const AssignLicenseRegistrationsDialog = (props: Props) => {
         aria-describedby='alert-dialog-slide-description'
         closeAfterTransition={true}
       >
-        <DialogTitle id='alert-dialog-slide-title'> - Danh sách học viên</DialogTitle>
+        <DialogTitle id='alert-dialog-slide-title'>Hạng {examSchedule?.licenseTypeCode?.toUpperCase()} - Danh sách học viên</DialogTitle>
         <DialogContent>
           <PerfectScrollbar options={{ wheelPropagation: false, suppressScrollX: true }}>
             <div className='p-2 flex flex-col gap-4'>

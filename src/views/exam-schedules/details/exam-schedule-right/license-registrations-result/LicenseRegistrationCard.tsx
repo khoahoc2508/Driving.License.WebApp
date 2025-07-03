@@ -246,10 +246,13 @@ const LicenseRegistrationCard = ({ examScheduleId }: Props) => {
           <div className='md:w-[400px]'>
             <Typography id="alert-dialog-description">
               {dialogAction === 'save' ? "Bạn xác nhận lưu thay đổi?" : "Bạn xác nhận hủy thay đổi?"}
-            </Typography></div>
+            </Typography>
+          </div>
         </DialogContent>
         <DialogActions>
-          <Button color="error" variant='outlined' onClick={() => { setOpenDialog(false) }} >Hủy</Button>
+          <Button color="error" variant='outlined' onClick={() => { setOpenDialog(false) }} >
+            Hủy
+          </Button>
           <Button variant='contained' onClick={() => {
             if (dialogAction === 'save') {
               handleSaveResults()

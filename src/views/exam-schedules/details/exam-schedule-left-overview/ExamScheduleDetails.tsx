@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 
 // MUI Imports
 import Card from '@mui/material/Card'
@@ -12,36 +11,14 @@ import Divider from '@mui/material/Divider'
 // Component Imports
 import CustomAvatar from '@core/components/mui/Avatar'
 import type { ExamScheduleByIdType } from '@/types/examScheduleTypes';
-import ExamScheduleAPI from '@/libs/api/examScheduleAPI'
 
 type Props = {
   examScheduleId: string
+  examSchedule?: ExamScheduleByIdType
 }
 
-const ExamScheduleDetails = ({ examScheduleId }: Props) => {
-  const [examSchedule, setExamSchedule] = useState<ExamScheduleByIdType>()
-
-  // Fetch data
-  const fetchExamScheduleById = async (id: string) => {
-    try {
-
-      const response = await ExamScheduleAPI.getExamScheduleById(id)
-
-      const examScheduleRes = response.data.data as ExamScheduleByIdType
-
-      if (examScheduleRes) {
-        setExamSchedule(examScheduleRes)
-      }
-    } catch (error) {
-      console.error('Error fetching exam schedule by id:', error)
-    }
-  }
-
-  useEffect(() => {
-    if (examScheduleId) {
-      fetchExamScheduleById(examScheduleId)
-    }
-  }, [examScheduleId])
+const ExamScheduleDetails = ({ examSchedule }: Props) => {
+  // No need to fetch data anymore since it's passed from parent
 
   return (
     <>
