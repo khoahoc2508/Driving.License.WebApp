@@ -226,7 +226,7 @@ const ExamPractice = ({
                             <CardContent sx={{ flexGrow: 1 }}>
                                 <Typography variant="h5" className='text-[#98999e]'>Câu {currentQuestionIndex + 1}</Typography>
                                 <Typography variant="h6" className='my-3' sx={{ fontWeight: 600 }}>{currentQuestion.content}</Typography>
-                                {currentQuestion.imageUrl && <QuestionImage src={currentQuestion.imageUrl} alt={`Question ${currentQuestionIndex + 1}`} />}
+                                {currentQuestion.imageUrl && <QuestionImage src={process.env.NEXT_PUBLIC_STORAGE_BASE_URL + currentQuestion.imageUrl} alt={`Question ${currentQuestionIndex + 1}`} />}
                                 <Divider sx={{ mb: 4 }} />
                                 <div>
                                     {currentQuestion.answers?.map(answer => (

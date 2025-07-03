@@ -180,7 +180,7 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
                                     <CardContent sx={{ flexGrow: 1 }}>
                                         <Typography variant="h5" className='text-[#98999e]'>Câu {currentQuestionIndex + 1}{questions[currentQuestionIndex]?.isCriticalQuestion ? <span className='text-error'> *</span> : ''}</Typography>
                                         <Typography variant="h6" className='my-3' sx={{ fontWeight: 600 }}>{questions[currentQuestionIndex]?.content}</Typography>
-                                        {questions[currentQuestionIndex]?.imageUrl && <QuestionImage src={questions[currentQuestionIndex]?.imageUrl} alt={`Question ${currentQuestionIndex + 1}`} />}
+                                        {questions[currentQuestionIndex]?.imageUrl && <QuestionImage src={process.env.NEXT_PUBLIC_STORAGE_BASE_URL + questions[currentQuestionIndex]?.imageUrl} alt={`Question ${currentQuestionIndex + 1}`} />}
                                         <Divider sx={{ mb: 4 }} />
                                         <div>
                                             {(currentResultAnswer?.question?.answers || questions[currentQuestionIndex]?.answers)?.map(ans => {
