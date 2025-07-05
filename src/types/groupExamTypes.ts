@@ -12,4 +12,5 @@ export interface GroupExamDto {
   parentId?: string | null
   licenseTypeCode: string
   children?: GroupExamDto[]
+  slug: string
 }

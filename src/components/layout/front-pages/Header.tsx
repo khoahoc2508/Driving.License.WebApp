@@ -45,8 +45,8 @@ const Header = ({ mode }: { mode: Mode }) => {
   })
 
   return (
-    <header className={classnames(frontLayoutClasses.header, styles.header)}>
-      <div className={classnames(frontLayoutClasses.navbar, styles.navbar, { [styles.headerScrolled]: trigger })}>
+    <header className={classnames(frontLayoutClasses.header, styles.header)} style={{ background: 'white' }}>
+      <div className={classnames(frontLayoutClasses.navbar, styles.navbar, { [styles.headerScrolled]: trigger })} style={{ boxShadow: '0 0 10px 4px rgba(0, 0, 0, 0.1)', marginBottom: '20px' }}>
         <div className={classnames(frontLayoutClasses.navbarContent, styles.navbarContent)}>
           {isBelowLgScreen ? (
             <div className='flex items-center gap-2 sm:gap-4'>

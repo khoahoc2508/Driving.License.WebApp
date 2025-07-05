@@ -1,6 +1,6 @@
 import type { Dispatch, SetStateAction } from 'react';
 import React, { useEffect, useState } from 'react'
-
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 
 import { toast } from 'react-toastify'
 
@@ -18,9 +18,10 @@ import type { GenerateRandomExamsCommand } from '@/types/exam'
 
 interface ArticlesProps {
   setIsLoading: Dispatch<SetStateAction<boolean>>
+  onGroupsLoaded?: (groups: GroupExamDto[]) => void
 }
 
-const GroupExams = ({ setIsLoading }: ArticlesProps) => {
+const GroupExams = ({ setIsLoading, onGroupsLoaded }: ArticlesProps) => {
   const [groups, setGroups] = useState<GroupExamDto[]>([])
   const [params, setParams] = useState<GetGroupExamsParams>({})
   const [selectedClass, setSelectedClass] = useState<GroupExamDto | null>(null)
@@ -29,6 +30,9 @@ const GroupExams = ({ setIsLoading }: ArticlesProps) => {
   const [examQuestions, setExamQuestions] = useState<Question[] | null>(null)
   const [selectedExamType, setSelectedExamType] = useState<GroupExamDto | null>(null)
   const [examSubmissionId, setExamSubmissionId] = useState<string | null>(null)
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
 
   useEffect(() => {
     setParams({})
@@ -42,6 +46,7 @@ const GroupExams = ({ setIsLoading }: ArticlesProps) => {
         const res = await GroupExamAPI.getGroupExams(params)
 
         setGroups(res.data.data || [])
+        if (onGroupsLoaded) onGroupsLoaded(res.data.data || [])
       } catch (err: any) {
         toast.error('Không thể tải dữ liệu. Vui lòng thử lại sau.')
       } finally {
@@ -73,6 +78,13 @@ const GroupExams = ({ setIsLoading }: ArticlesProps) => {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  const handleSelectClass = (child: GroupExamDto) => {
+    const params = new URLSearchParams(searchParams.toString())
+    params.set('licenseType', child.licenseTypeCode)
+    router.push(`${pathname}?${params.toString()}`)
+    setSelectedClass(child)
   }
 
   if (selectedExam && examQuestions && examSubmissionId) {
@@ -141,7 +153,9 @@ const GroupExams = ({ setIsLoading }: ArticlesProps) => {
   return (
     <div className='min-h-[100vh]'>
       {groups.map((group, index) => (
-        <div className={`${index % 2 == 0 ? 'bg-backgroundPaper' : ''}`} key={group.id} ><GroupSection group={group} onSelect={setSelectedClass} /></div>
+        <div className={`${index % 2 == 0 ? 'bg-backgroundPaper' : ''}`} key={group.id}>
+          <GroupSection group={group} onSelect={handleSelectClass} />
+        </div>
       ))}
     </div>
   )
