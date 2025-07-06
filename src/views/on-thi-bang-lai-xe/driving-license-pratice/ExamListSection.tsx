@@ -18,9 +18,6 @@ interface ExamListSectionProps {
 const ExamListSection = ({ selectedClass, examList, onBack, onStartExam }: ExamListSectionProps) => (
     <div className='bg-backgroundPaper py-10'>
         <div className={styles.layoutSpacing}>
-            <Button variant='outlined' onClick={onBack} style={{ marginBottom: 32 }}>
-                Quay lại
-            </Button>
             <Typography variant='h4' className='text-center mbe-8 flex items-center justify-center gap-2'>
                 {selectedClass?.name} - THI THEO BỘ ĐỀ
             </Typography>
