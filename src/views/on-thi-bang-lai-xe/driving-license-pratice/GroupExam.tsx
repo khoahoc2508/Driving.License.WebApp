@@ -49,36 +49,32 @@ const GroupExams = ({ setIsLoading, onGroupsLoaded }: ArticlesProps) => {
   const parentSlug = searchParams.get('parentSlug');
   const childSlug = searchParams.get('childSlug');
   const examSlug = searchParams.get('examSlug');
+  const examname = searchParams.get('examname');
 
   // Đồng bộ state với param trên URL
   useEffect(() => {
     if (groups.length === 0) return;
 
-    const slug = examSlug || childSlug || parentSlug;
+    const slug = examname || examSlug || childSlug || parentSlug;
     const nodes = slug ? findNodeAndAncestors(groups, slug) : [];
 
     // Reset state trước khi set mới, nhưng KHÔNG reset examList nếu đang ở cấp examSlug
     setSelectedClass(null);
     setSelectedExamType(null);
-    setSelectedExam(null);
-    setExamQuestions(null);
-    setExamSubmissionId(null);
+
+    if (!examname) {
+      setSelectedExam(null);
+      setExamSubmissionId(null);
+      setExamQuestions(null);
+      setExamSubmissionId(null);
+      if (nodes[1]) setSelectedClass(nodes[1]);
+    } else {
+      setExamList(null);
+    }
 
     if (!examSlug) setExamList(null);
 
-    if (nodes.length > 0) {
-      if (nodes[1]) setSelectedClass(nodes[1]);
-      debugger
-      // if (nodes[nodes.length - 1]?.name === 'THI THEO BỘ ĐỀ' && examSlug) {
-      //   setIsLoading(true);
-      //   ExamAPI.GetExamsByGroups(nodes[nodes.length - 1].id)
-      //     .then(res => setExamList(res.data.data || []))
-      //     .catch(() => toast.error('Không thể tải danh sách đề thi.'))
-      //     .finally(() => setIsLoading(false));
-      // }
-      // ... các state khác
-    }
-  }, [parentSlug, childSlug, examSlug, groups]);
+  }, [parentSlug, childSlug, examSlug, groups, examname]);
 
   useEffect(() => {
     setParams({})
@@ -165,18 +161,12 @@ const GroupExams = ({ setIsLoading, onGroupsLoaded }: ArticlesProps) => {
 
   if (selectedClass) {
     return <ExamTypeSection selectedClass={selectedClass} onBack={() => setSelectedClass(null)} onSelectType={async (child) => {
-      // Lấy param hiện tại
       const params = new URLSearchParams(searchParams.toString());
-      // Thêm examSlug cho loại đề
       params.set('examSlug', child.slug);
       router.push(`${pathname}?${params.toString()}`);
-
       setSelectedExamType(child);
-
-
       if (child.name === 'THI THEO BỘ ĐỀ') {
         setIsLoading(true)
-
         try {
           const res = await ExamAPI.GetExamsByGroups(child.id)
 

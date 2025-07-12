@@ -150,18 +150,18 @@ const ExamPractice = ({
         }
     }, [searchParams, router])
 
-    if (!currentQuestion) {
-        return (
-            <Container maxWidth="lg">
-                <Box sx={{ p: { xs: 2, md: 6 }, textAlign: 'center' }}>
-                    <Typography variant="h5">Đề thi này không có câu hỏi.</Typography>
-                    <Button variant="text" onClick={onBack} sx={{ mt: 2 }}>
-                        Quay lại danh sách đề
-                    </Button>
-                </Box>
-            </Container>
-        )
-    }
+    // if (!currentQuestion) {
+    //     return (
+    //         <Container maxWidth="lg">
+    //             <Box sx={{ p: { xs: 2, md: 6 }, textAlign: 'center' }}>
+    //                 <Typography variant="h5">Đề thi này không có câu hỏi.</Typography>
+    //                 <Button variant="text" onClick={onBack} sx={{ mt: 2 }}>
+    //                     Quay lại danh sách đề
+    //                 </Button>
+    //             </Box>
+    //         </Container>
+    //     )
+    // }
 
     return (
         <Container className='max-w-[87%]'>

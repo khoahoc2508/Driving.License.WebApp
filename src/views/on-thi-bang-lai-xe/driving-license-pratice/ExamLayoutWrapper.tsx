@@ -28,13 +28,14 @@ const ExamLayoutWrapper = ({
                                     key={idx}
                                     style={{ color: '#888', textDecoration: 'none', cursor: 'pointer' }}
                                     onClick={() => {
-                                        debugger
                                         if (!item.href) return;
-                                        const params = new URLSearchParams(item.href.replace('?', ''));
+                                        const queryString = item.href.split('?')[1] || '';
+                                        const params = new URLSearchParams(queryString);
                                         const slugArr = [
                                             params.get('parentSlug'),
                                             params.get('childSlug'),
-                                            params.get('examSlug')
+                                            params.get('examSlug'),
+                                            params.get('examname')
                                         ].filter(Boolean) as string[];
                                         onBreadcrumbClick?.(slugArr);
                                     }}

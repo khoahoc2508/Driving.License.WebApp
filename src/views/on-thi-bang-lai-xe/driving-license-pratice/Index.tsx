@@ -27,15 +27,16 @@ function getBreadcrumbsFromParams(searchParams: URLSearchParams, groups: GroupEx
         let href = '';
         if (nodes.length) {
             nodes.forEach((node, idx) => {
-                const isSecondLast = idx === nodes.length - 1 && searchParams.get('examname');
-                if (isSecondLast) {
-                    href += (href ? '&' : '?') + `parentSlug=${node.slug}`;
+                let paramName = '';
+                if (idx === 0) paramName = 'parentSlug';
+                else if (idx === 1) paramName = 'childSlug';
+                else if (idx === 2) paramName = 'examSlug';
+
+                if (paramName) {
+                    href += (href ? '&' : '?') + `${paramName}=${node.slug}`;
                     breadcrumbs.push({ label: node.name, href });
-                } else if (idx === nodes.length - 1) {
-                    breadcrumbs.push({ label: node.name });
                 } else {
-                    href += (href ? '&' : '?') + `parentSlug=${node.slug}`;
-                    breadcrumbs.push({ label: node.name, href });
+                    breadcrumbs.push({ label: node.name });
                 }
             });
         }
@@ -63,7 +64,7 @@ const DrivingLicensePractice = () => {
         if (slugArr[0]) params.set('parentSlug', slugArr[0]);
         if (slugArr[1]) params.set('childSlug', slugArr[1]);
         if (slugArr[2]) params.set('examSlug', slugArr[2]);
-        if (slugArr[3]) params.set('examId', slugArr[3]);
+        if (slugArr[3]) params.set('examname', slugArr[3]);
         router.push(`${pathname}?${params.toString()}`);
     };
 
