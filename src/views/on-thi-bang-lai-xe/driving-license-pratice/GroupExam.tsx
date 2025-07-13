@@ -15,6 +15,7 @@ import type { questionTypes as Question } from '@/types/questionTypes'
 import QuestionAPI from '@/libs/api/questionAPI'
 import ExamSubmissionAPI from '@/libs/api/examSubmissionAPI'
 import type { GenerateRandomExamsCommand } from '@/types/exam'
+import CONFIG from '@/configs/config';
 
 interface ArticlesProps {
   setIsLoading: Dispatch<SetStateAction<boolean>>
@@ -152,6 +153,7 @@ const GroupExams = ({ setIsLoading, onGroupsLoaded }: ArticlesProps) => {
       selectedClass={selectedClass}
       selectedExamType={selectedExamType}
       examSubmissionId={examSubmissionId}
+      isPractice={selectedExamType?.type === CONFIG.GroupExamType.Practice}
     /></div>
   }
 
@@ -165,7 +167,7 @@ const GroupExams = ({ setIsLoading, onGroupsLoaded }: ArticlesProps) => {
       params.set('examSlug', child.slug);
       router.push(`${pathname}?${params.toString()}`);
       setSelectedExamType(child);
-      if (child.name === 'THI THEO BỘ ĐỀ') {
+      if (child.type === CONFIG.GroupExamType.Detail) {
         setIsLoading(true)
         try {
           const res = await ExamAPI.GetExamsByGroups(child.id)
@@ -179,9 +181,8 @@ const GroupExams = ({ setIsLoading, onGroupsLoaded }: ArticlesProps) => {
       }
 
 
-      if (child.name === 'ĐỀ NGẪU NHIÊN') {
+      if (child.type === CONFIG.GroupExamType.Exam) {
         setIsLoading(true)
-
         try {
           const payload: GenerateRandomExamsCommand = {
             groupExamId: child.id,
@@ -198,6 +199,23 @@ const GroupExams = ({ setIsLoading, onGroupsLoaded }: ArticlesProps) => {
           }
         } catch (err) {
           toast.error('Không thể tải đề thi ngẫu nhiên.')
+        } finally {
+          setIsLoading(false)
+        }
+      }
+
+      if (child.type === CONFIG.GroupExamType.Practice) {
+        setIsLoading(true)
+        try {
+          const res = await ExamAPI.GetExamsByGroups(child.id)
+          const examDto = res.data.data[0]
+          if (examDto) {
+            handleStartExam(examDto)
+          } else {
+            toast.error('Không tìm thấy đề ôn luyện')
+          }
+        } catch (err) {
+          toast.error('Không thể tải đề ôn luyện')
         } finally {
           setIsLoading(false)
         }

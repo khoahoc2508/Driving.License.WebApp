@@ -25,7 +25,7 @@ const ExamLayoutWrapper = ({
                         {breadcrumbs.map((item, idx) =>
                             item.href ? (
                                 <span
-                                    key={idx}
+                                    key={`${item.href}-${idx}`}
                                     style={{ color: '#888', textDecoration: 'none', cursor: 'pointer' }}
                                     onClick={() => {
                                         if (!item.href) return;
@@ -43,7 +43,7 @@ const ExamLayoutWrapper = ({
                                     {item.label}
                                 </span>
                             ) : (
-                                <span key={idx} style={{ color: '#222', fontWeight: 500 }}>{item.label}</span>
+                                <span key={item.href} style={{ color: '#222', fontWeight: 500 }}>{item.label}</span>
                             )
                         )}
                     </Breadcrumbs>

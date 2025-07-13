@@ -7,6 +7,7 @@ import Grid from '@mui/material/Grid'
 import PracticeCard from './PracticeCard'
 import styles from './styles.module.css'
 import type { GroupExamDto } from '@/types/groupExamTypes'
+import CONFIG from '@/configs/config'
 
 interface ExamTypeSectionProps {
     selectedClass: GroupExamDto
@@ -27,7 +28,9 @@ const ExamTypeSection = ({ selectedClass, onBack, onSelectType }: ExamTypeSectio
                             icon={'ri-file-list-2-line'}
                             title={child.name}
                             description={child.description}
-                            buttonText={child.name === 'THI THEO BỘ ĐỀ' ? 'Chi tiết' : 'Bắt đầu thi'}
+                            buttonText={child.type === CONFIG.GroupExamType.Detail ? 'Chi tiết' :
+                                child.type === CONFIG.GroupExamType.Exam ? 'Bắt đầu thi' : 'Ôn luyện'
+                            }
                             onButtonClick={() => onSelectType(child)}
                         />
                     </Grid>

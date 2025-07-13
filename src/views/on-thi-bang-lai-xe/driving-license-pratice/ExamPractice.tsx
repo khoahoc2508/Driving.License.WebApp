@@ -12,6 +12,8 @@ import type { questionTypes } from '@/types/questionTypes'
 import type { GroupExamDto } from '@/types/groupExamTypes'
 import ExamSubmissionAPI from '@/libs/api/examSubmissionAPI'
 import type { AnswerSubmissionRequestDto } from '@/types/examSubmissionTypes'
+import { Console } from 'console'
+import CONFIG from '@/configs/config'
 
 
 const QuestionImage = styled('img')({
@@ -44,14 +46,16 @@ const ExamPractice = ({
     onBack,
     selectedClass,
     selectedExamType,
-    examSubmissionId
+    examSubmissionId,
+    isPractice
 }: {
     exam: any,
     questions: questionTypes[],
     onBack: () => void,
     selectedClass: GroupExamDto | null,
     selectedExamType: GroupExamDto | null,
-    examSubmissionId: string
+    examSubmissionId: string,
+    isPractice: Boolean
 }) => {
     const router = useRouter()
     const searchParams = useSearchParams()
@@ -64,7 +68,6 @@ const ExamPractice = ({
     const handleSubmit = useCallback(async (isAutoSubmit = false) => {
         if (isSubmitting) return;
         setIsSubmitting(true);
-
         if (isAutoSubmit) {
             toast.info('Hết giờ! Tự động nộp bài...');
         }
@@ -96,23 +99,25 @@ const ExamPractice = ({
         handleSubmitRef.current = handleSubmit;
     }, [handleSubmit]);
 
+    // Bỏ timer nếu là Practice
     useEffect(() => {
-        if (timeLeft <= 0) {
+        if (isPractice || timeLeft <= 0) {
             return;
         }
-
         const timerId = setInterval(() => {
             setTimeLeft(prev => prev - 1);
         }, 1000);
-
         return () => clearInterval(timerId);
-    }, [timeLeft]);
+    }, [timeLeft, isPractice]);
 
+    // Không tự động nộp bài nếu là Practice
     useEffect(() => {
-        if (timeLeft === 0) {
+        if (!exam?.type) return;
+
+        if (!isPractice && timeLeft === 0) {
             handleSubmitRef.current(true);
         }
-    }, [timeLeft]);
+    }, [timeLeft, isPractice, exam]);
 
     const handleOpenConfirmDialog = () => {
         setOpenConfirmDialog(true);
@@ -175,21 +180,24 @@ const ExamPractice = ({
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={4}>
                         <Grid container spacing={2}>
-                            <Grid item xs={12}>
-                                <Card>
-                                    <CardContent>
-                                        <Box display="flex" justifyContent="space-between" alignItems="center">
-                                            <Typography variant="h5">Thời gian:</Typography>
-                                            <Box sx={{ display: 'flex', alignItems: 'center', color: timeLeft <= exam.durationMinutes * 60 * 0.05 ? 'error.main' : 'primary.main' }}>
-                                                <i className='ri-time-line' style={{ fontSize: '1.25rem', marginRight: '4px' }} />
-                                                <Typography variant='h6' component='span' sx={{ fontWeight: 'medium' }} className={timeLeft <= exam.durationMinutes * 60 * 0.05 ? 'text-error' : 'text-primary'}>
-                                                    {formatTime(timeLeft)}
-                                                </Typography>
+                            {/* Ẩn đồng hồ nếu là Practice */}
+                            {!isPractice && (
+                                <Grid item xs={12}>
+                                    <Card>
+                                        <CardContent>
+                                            <Box display="flex" justifyContent="space-between" alignItems="center">
+                                                <Typography variant="h5">Thời gian:</Typography>
+                                                <Box sx={{ display: 'flex', alignItems: 'center', color: timeLeft <= exam.durationMinutes * 60 * 0.05 ? 'error.main' : 'primary.main' }}>
+                                                    <i className='ri-time-line' style={{ fontSize: '1.25rem', marginRight: '4px' }} />
+                                                    <Typography variant='h6' component='span' sx={{ fontWeight: 'medium' }} className={timeLeft <= exam.durationMinutes * 60 * 0.05 ? 'text-error' : 'text-primary'}>
+                                                        {formatTime(timeLeft)}
+                                                    </Typography>
+                                                </Box>
                                             </Box>
-                                        </Box>
-                                    </CardContent>
-                                </Card>
-                            </Grid>
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+                            )}
                             <Grid item xs={12}>
                                 <Card>
                                     <CardContent>

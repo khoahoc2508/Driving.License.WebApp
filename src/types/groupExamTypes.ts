@@ -13,4 +13,5 @@ export interface GroupExamDto {
   licenseTypeCode: string
   children?: GroupExamDto[]
   slug: string
+  type: number
 }

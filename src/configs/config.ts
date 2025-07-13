@@ -178,12 +178,17 @@ const LimitType = {
 const TableAction = {
   View: 'VIEW',
   Assign: 'ASSIGN'
-
 }
 
 const VehicleTypeCode = {
   Motorbike: 'motorbike',
   Car: 'car'
+}
+
+const GroupExamType = {
+  Practice: 0, // Ôn luyện
+  Exam: 1, // Thi thử
+  Detail: 2 // Xem chi tiết
 }
 
 const CONFIG = {
@@ -214,7 +219,8 @@ const CONFIG = {
   Action,
   LimitType,
   TableAction,
-  VehicleTypeCode
+  VehicleTypeCode,
+  GroupExamType
 }
 
 export default CONFIG

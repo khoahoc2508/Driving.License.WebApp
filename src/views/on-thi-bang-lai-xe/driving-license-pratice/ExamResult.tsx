@@ -13,6 +13,7 @@ import type { GroupExamDto } from '@/types/groupExamTypes'
 import ExamSubmissionAPI from '@/libs/api/examSubmissionAPI'
 import type { ExamSubmissionResultDto, ExamSubmissionAnswerDto } from '@/types/examSubmissionTypes'
 import ExamLayoutWrapper from './ExamLayoutWrapper'
+import CONFIG from '@/configs/config'
 
 const QuestionImage = styled('img')({
     maxWidth: '100%',
@@ -109,10 +110,10 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
                                                 <Typography>Hạng xe:&nbsp;</Typography>
                                                 <Typography fontWeight={600}>{selectedClass?.name || '-'}</Typography>
                                             </Box>
-                                            <Box display="flex" alignItems="center" mb={4}>
+                                            {selectedClass?.type !== CONFIG.GroupExamType.Practice && <Box display="flex" alignItems="center" mb={4}>
                                                 <Typography>Thời gian làm bài:&nbsp;</Typography>
                                                 <Typography fontWeight={600}>{formatResultDuration(result?.duration)}</Typography>
-                                            </Box>
+                                            </Box>}
                                             <Box display="flex" alignItems="center" mb={4}>
                                                 <Typography>Tổng câu đúng:&nbsp;</Typography>
                                                 <Typography fontWeight={600}>{result?.correctAnswerCount}/{result?.totalQuestions}</Typography>
@@ -183,7 +184,7 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
                                         {questions[currentQuestionIndex]?.imageUrl && <QuestionImage src={process.env.NEXT_PUBLIC_STORAGE_BASE_URL + questions[currentQuestionIndex]?.imageUrl} alt={`Question ${currentQuestionIndex + 1}`} />}
                                         <Divider sx={{ mb: 4 }} />
                                         <div>
-                                            {(currentResultAnswer?.question?.answers || questions[currentQuestionIndex]?.answers)?.map(ans => {
+                                            {(currentResultAnswer?.question?.answers || questions[currentQuestionIndex]?.answers)?.map((ans, index) => {
                                                 const answer = ans as { id?: string; order?: number; content?: string; isCorrect?: boolean };
                                                 const isCorrect = answer.isCorrect;
                                                 const isSelected = currentResultAnswer?.selectedAnswerId === answer.id;
@@ -196,15 +197,18 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
                                                 }
 
                                                 return (
-                                                    <Box key={answer.id} sx={{
-                                                        background: bg,
-                                                        color,
-                                                        border,
-                                                        borderRadius: '8px',
-                                                        p: '12px 16px',
-                                                        mb: '8px',
-                                                        fontWeight: isCorrect ? 600 : 400
-                                                    }}>
+                                                    <Box
+                                                        key={answer.id
+                                                            || index
+                                                        } sx={{
+                                                            background: bg,
+                                                            color,
+                                                            border,
+                                                            borderRadius: '8px',
+                                                            p: '12px 16px',
+                                                            mb: '8px',
+                                                            fontWeight: isCorrect ? 600 : 400,
+                                                        }}>
                                                         {`${answer.order}. ${answer.content}`}
                                                     </Box>
                                                 );
