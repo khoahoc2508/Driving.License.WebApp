@@ -43,7 +43,7 @@ const ExamLayoutWrapper = ({
                                     {item.label}
                                 </span>
                             ) : (
-                                <span key={item.href} style={{ color: '#222', fontWeight: 500 }}>{item.label}</span>
+                                <span key={`${item.href}-${idx}`} style={{ color: '#222', fontWeight: 500 }}>{item.label}</span>
                             )
                         )}
                     </Breadcrumbs>

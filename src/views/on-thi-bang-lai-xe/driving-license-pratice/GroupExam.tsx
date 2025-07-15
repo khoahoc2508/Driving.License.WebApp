@@ -142,19 +142,20 @@ const GroupExams = ({ setIsLoading, onGroupsLoaded }: ArticlesProps) => {
   }
 
   if (selectedExam && examQuestions && examSubmissionId) {
-    return <div className='w-full bg-backgroundPaper'><ExamPractice
-      exam={selectedExam}
-      questions={examQuestions}
-      onBack={() => {
-        setSelectedExam(null)
-        setExamQuestions(null)
-        setExamSubmissionId(null)
-      }}
-      selectedClass={selectedClass}
-      selectedExamType={selectedExamType}
-      examSubmissionId={examSubmissionId}
-      isPractice={selectedExamType?.type === CONFIG.GroupExamType.Practice}
-    /></div>
+    return <div className='w-full bg-backgroundPaper'>
+      <ExamPractice
+        exam={selectedExam}
+        questions={examQuestions}
+        onBack={() => {
+          setSelectedExam(null)
+          setExamQuestions(null)
+          setExamSubmissionId(null)
+        }}
+        selectedClass={selectedClass}
+        selectedExamType={selectedExamType}
+        examSubmissionId={examSubmissionId}
+      />
+    </div>
   }
 
   if (examList) {
@@ -166,6 +167,7 @@ const GroupExams = ({ setIsLoading, onGroupsLoaded }: ArticlesProps) => {
       const params = new URLSearchParams(searchParams.toString());
       params.set('examSlug', child.slug);
       router.push(`${pathname}?${params.toString()}`);
+      debugger
       setSelectedExamType(child);
       if (child.type === CONFIG.GroupExamType.Detail) {
         setIsLoading(true)

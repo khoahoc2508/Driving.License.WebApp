@@ -46,16 +46,14 @@ const ExamPractice = ({
     onBack,
     selectedClass,
     selectedExamType,
-    examSubmissionId,
-    isPractice
+    examSubmissionId
 }: {
     exam: any,
     questions: questionTypes[],
     onBack: () => void,
     selectedClass: GroupExamDto | null,
     selectedExamType: GroupExamDto | null,
-    examSubmissionId: string,
-    isPractice: Boolean
+    examSubmissionId: string
 }) => {
     const router = useRouter()
     const searchParams = useSearchParams()
@@ -64,6 +62,9 @@ const ExamPractice = ({
     const [timeLeft, setTimeLeft] = useState(exam.durationMinutes * 60)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+
+    // Xác định isPractice trực tiếp từ exam.type
+    const isPractice = exam?.groupExamType === CONFIG.GroupExamType.Practice;
 
     const handleSubmit = useCallback(async (isAutoSubmit = false) => {
         if (isSubmitting) return;
@@ -172,7 +173,7 @@ const ExamPractice = ({
         <Container className='max-w-[87%]'>
             <Box sx={{ p: { xs: 2, md: 6 } }}>
                 <Typography variant="h4" gutterBottom align="center">
-                    {selectedClass?.name?.toUpperCase()} - {selectedExamType?.name?.toUpperCase()}
+                    {selectedClass?.name ? `${selectedClass.name.toUpperCase()} - ` : ''}{selectedExamType?.name?.toUpperCase()}
                 </Typography>
                 <Typography variant="h5" gutterBottom align="center" sx={{ color: 'text.secondary', mb: 4 }}>
                     {exam.name}
@@ -269,14 +270,24 @@ const ExamPractice = ({
                                         SAU
                                     </Button>
                                 </div>
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={handleOpenConfirmDialog}
-                                    disabled={isSubmitting}
-                                >
-                                    KẾT THÚC THI
-                                </Button>
+                                <Box display="flex" gap={2}>
+                                    {isPractice && (
+                                        <Button
+                                            variant="outlined"
+                                            onClick={() => toast.info('Chức năng xem đáp án sẽ được phát triển!')}
+                                        >
+                                            XEM ĐÁP ÁN
+                                        </Button>
+                                    )}
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={handleOpenConfirmDialog}
+                                        disabled={isSubmitting}
+                                    >
+                                        KẾT THÚC THI
+                                    </Button>
+                                </Box>
                             </Box>
                         </Card>
                     </Grid>
