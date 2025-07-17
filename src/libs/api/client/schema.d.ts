@@ -205,7 +205,23 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["Exams_ExportCitizenInfoToPdf"];
+        post: operations["Exams_GenerationExamFullCritical"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/exams/full": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Exams_GenerationExamFull"];
         delete?: never;
         options?: never;
         head?: never;
@@ -462,6 +478,22 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["Questions_ChangeQuestionImageUrl"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/questions/detail": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Questions_GetQuestionDetailById"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -792,16 +824,19 @@ export interface components {
             /** Format: int32 */
             order?: number;
             examType?: components["schemas"]["ExamType"];
+            groupExamType?: components["schemas"]["GroupExamType"] | null;
             licenseTypeCode?: string;
             groupExamId?: string;
         };
         /** @enum {integer} */
         ExamType: 1 | 2;
+        /** @enum {integer} */
+        GroupExamType: 0 | 1 | 2;
         GenerateExamsCommand: {
             groupExamId?: string;
             licenseTypeCode?: string;
-            selectedQuestionNumbers?: number[];
-            selectedCriticalQuestionNumbers?: number[];
+            questionNumbers?: number[];
+            criticalQuestionNumbers?: number[];
             /** Format: int32 */
             numberOfExams?: number;
             /** Format: int32 */
@@ -817,10 +852,12 @@ export interface components {
             groupExamId?: string;
             licenseTypeCode?: string;
             criticalQuestionNumbers?: number[];
-            /** Format: int32 */
-            order?: number;
-            /** Format: int32 */
-            durationMinutes?: number;
+        };
+        GenerationExamFullCommand: {
+            groupExamId?: string;
+            licenseTypeCode?: string;
+            questionNumbers?: number[];
+            criticalQuestionNumbers?: number[];
         };
         BaseResponseOfExamDto: components["schemas"]["BaseResponse"] & {
             data?: components["schemas"]["ExamDto"] | null;
@@ -843,6 +880,7 @@ export interface components {
             correctAnswerCount?: number;
             hasCriticalMistake?: boolean;
             isPassed?: boolean;
+            groupExamType?: components["schemas"]["GroupExamType"];
             userAnswers?: components["schemas"]["ExamSubmissionAnswerDto"][];
         };
         LicenseTypeDto: {
@@ -900,6 +938,8 @@ export interface components {
             order?: number;
             licenseTypeCode?: string | null;
             parentId?: string | null;
+            slug?: string;
+            type?: components["schemas"]["GroupExamType"] | null;
             children?: components["schemas"]["GroupExamDto"][];
         };
         GetAllGroupExamQuery: Record<string, never>;
@@ -1191,6 +1231,26 @@ export interface components {
             content?: string;
         };
         ChangeQuestionImageUrlCommand: Record<string, never>;
+        BaseResponseOfQuestionDetailDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["QuestionDetailDto"] | null;
+        };
+        QuestionDetailDto: {
+            id?: string;
+            /** Format: int32 */
+            order?: number;
+            content?: string;
+            imageUrl?: string | null;
+            answers?: components["schemas"]["AnswerDto2"][];
+            explanation?: string | null;
+            isCritical?: boolean;
+        };
+        AnswerDto2: {
+            id?: string;
+            /** Format: int32 */
+            order?: number;
+            isCorrect?: boolean;
+            content?: string;
+        };
         BaseResponseOfGetStatisticOverviewByTimeRangeResponse: components["schemas"]["BaseResponse"] & {
             data?: components["schemas"]["GetStatisticOverviewByTimeRangeResponse"] | null;
         };
@@ -1714,7 +1774,7 @@ export interface operations {
             };
         };
     };
-    Exams_ExportCitizenInfoToPdf: {
+    Exams_GenerationExamFullCritical: {
         parameters: {
             query?: never;
             header?: never;
@@ -1724,6 +1784,29 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["GenerationExamFullCriticalCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    Exams_GenerationExamFull: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GenerationExamFullCommand"];
             };
         };
         responses: {
@@ -2172,6 +2255,28 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    Questions_GetQuestionDetailById: {
+        parameters: {
+            query?: {
+                QuestionId?: string;
+                ExamId?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfQuestionDetailDto"];
                 };
             };
         };

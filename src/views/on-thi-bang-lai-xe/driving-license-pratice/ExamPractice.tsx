@@ -12,8 +12,8 @@ import type { questionTypes } from '@/types/questionTypes'
 import type { GroupExamDto } from '@/types/groupExamTypes'
 import ExamSubmissionAPI from '@/libs/api/examSubmissionAPI'
 import type { AnswerSubmissionRequestDto } from '@/types/examSubmissionTypes'
-import { Console } from 'console'
 import CONFIG from '@/configs/config'
+import QuestionAPI from '@/libs/api/questionAPI'
 
 
 const QuestionImage = styled('img')({
@@ -62,6 +62,9 @@ const ExamPractice = ({
     const [timeLeft, setTimeLeft] = useState(exam.durationMinutes * 60)
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
+    const [showAnswer, setShowAnswer] = useState(false);
+    const [answerDetail, setAnswerDetail] = useState<any>(null);
+    const [loadingAnswer, setLoadingAnswer] = useState(false);
 
     // Xác định isPractice trực tiếp từ exam.type
     const isPractice = exam?.groupExamType === CONFIG.GroupExamType.Practice;
@@ -139,6 +142,29 @@ const ExamPractice = ({
         }
     }
 
+    useEffect(() => {
+        setShowAnswer(false);
+        setAnswerDetail(null);
+    }, [currentQuestionIndex]);
+
+    const handleShowAnswer = async () => {
+        if (!currentQuestion?.id) return;
+        setLoadingAnswer(true);
+        try {
+            const res = await QuestionAPI.getQuestionDetail(currentQuestion.id as string, exam.id);
+            setAnswerDetail(res.data.data);
+            setShowAnswer(true);
+        } catch (e) {
+            toast.error('Không thể tải đáp án.');
+        } finally {
+            setLoadingAnswer(false);
+        }
+    };
+    const handleCloseAnswer = () => {
+        setShowAnswer(false);
+        setAnswerDetail(null);
+    };
+
     const currentQuestion = questions[currentQuestionIndex]
 
     const formatTime = (seconds: number) => {
@@ -155,19 +181,6 @@ const ExamPractice = ({
             router.push(`/on-thi-bang-lai-xe/result?examSubmissionId=${examSubmissionId}`)
         }
     }, [searchParams, router])
-
-    // if (!currentQuestion) {
-    //     return (
-    //         <Container maxWidth="lg">
-    //             <Box sx={{ p: { xs: 2, md: 6 }, textAlign: 'center' }}>
-    //                 <Typography variant="h5">Đề thi này không có câu hỏi.</Typography>
-    //                 <Button variant="text" onClick={onBack} sx={{ mt: 2 }}>
-    //                     Quay lại danh sách đề
-    //                 </Button>
-    //             </Box>
-    //         </Container>
-    //     )
-    // }
 
     return (
         <Container className='max-w-[87%]'>
@@ -231,23 +244,60 @@ const ExamPractice = ({
                         </Grid>
                     </Grid>
                     <Grid item xs={12} md={8}>
-                        <Card sx={{ height: '100%' }} className='flex flex-col justify-between'>
+                        <Card sx={{ height: 'auto' }} className='flex flex-col justify-start'>
                             <CardContent sx={{ flexGrow: 1 }}>
                                 <Typography variant="h5" className='text-[#98999e]'>Câu {currentQuestionIndex + 1}</Typography>
                                 <Typography variant="h6" className='my-3' sx={{ fontWeight: 600 }}>{currentQuestion.content}</Typography>
                                 {currentQuestion.imageUrl && <QuestionImage src={process.env.NEXT_PUBLIC_STORAGE_BASE_URL + currentQuestion.imageUrl} alt={`Question ${currentQuestionIndex + 1}`} />}
                                 <Divider sx={{ mb: 4 }} />
                                 <div>
-                                    {currentQuestion.answers?.map(answer => (
-                                        <AnswerLabel
-                                            key={answer.id}
-                                            selected={!!(currentQuestion.id && answer.id && answers[currentQuestion.id] === answer.id)}
-                                            onClick={() => handleAnswerChange(currentQuestion.id, answer.id || '')}
-                                        >
-                                            {`${answer.order}. ${answer.content}`}
-                                        </AnswerLabel>
-                                    ))}
+                                    {showAnswer && answerDetail
+                                        ? answerDetail.answers?.map((ans: any) => {
+                                            const isCorrect = ans.isCorrect;
+                                            const isSelected = answers[currentQuestion.id as string] === ans.id;
+                                            let bg = 'transparent', color = 'inherit', border = '1px solid #e0e0e0';
+                                            if (isCorrect) {
+                                                bg = '#4caf50'; color = '#fff'; border = '1px solid #4caf50';
+                                            } else if (isSelected) {
+                                                color = '#f55156'; border = '1px solid #f55156';
+                                            }
+                                            return (
+                                                <Box
+                                                    key={ans.id}
+                                                    sx={{
+                                                        background: bg,
+                                                        color,
+                                                        border,
+                                                        borderRadius: '8px',
+                                                        p: '12px 16px',
+                                                        mb: '8px',
+                                                        fontWeight: isCorrect ? 600 : 400,
+                                                        cursor: 'default',
+                                                    }}
+                                                >
+                                                    {`${ans.order}. ${ans.content}`}
+                                                </Box>
+                                            );
+                                        })
+                                        : currentQuestion.answers?.map(answer => (
+                                            <AnswerLabel
+                                                key={answer.id}
+                                                selected={!!(currentQuestion.id && answer.id && answers[currentQuestion.id] === answer.id)}
+                                                onClick={() => handleAnswerChange(currentQuestion.id, answer.id || '')}
+                                            >
+                                                {`${answer.order}. ${answer.content}`}
+                                            </AnswerLabel>
+                                        ))}
                                 </div>
+                                {/* Hiển thị giải thích nếu có và showAnswer */}
+                                {showAnswer && answerDetail?.explanation && (
+                                    <Box sx={{ mt: 4, p: 2, border: '1px solid #7c4dff', borderRadius: '8px', color: '#7c4dff' }}>
+                                        Giải thích: {answerDetail.explanation}
+                                    </Box>
+                                )}
+                                {showAnswer && (
+                                    <Button variant="outlined" sx={{ mt: 2 }} onClick={handleCloseAnswer}>Đóng đáp án</Button>
+                                )}
                             </CardContent>
                             <Divider />
                             <Box display="flex" justifyContent="space-between" alignItems="center" paddingX={6} paddingY={3}>
@@ -271,12 +321,13 @@ const ExamPractice = ({
                                     </Button>
                                 </div>
                                 <Box display="flex" gap={2}>
-                                    {isPractice && (
+                                    {isPractice && !showAnswer && (
                                         <Button
                                             variant="outlined"
-                                            onClick={() => toast.info('Chức năng xem đáp án sẽ được phát triển!')}
+                                            onClick={handleShowAnswer}
+                                            disabled={loadingAnswer}
                                         >
-                                            XEM ĐÁP ÁN
+                                            {loadingAnswer ? 'Đang tải...' : 'XEM ĐÁP ÁN'}
                                         </Button>
                                     )}
                                     <Button
@@ -285,16 +336,16 @@ const ExamPractice = ({
                                         onClick={handleOpenConfirmDialog}
                                         disabled={isSubmitting}
                                     >
-                                        KẾT THÚC THI
+                                        {isPractice ? 'KẾT THÚC ÔN' : 'KẾT THÚC THI'}
                                     </Button>
                                 </Box>
                             </Box>
                         </Card>
                     </Grid>
                 </Grid>
-                <Box mt={4} display="flex" justifyContent="center">
+                {/* <Box mt={4} display="flex" justifyContent="center">
                     <Button variant="text" onClick={onBack}>Quay lại danh sách đề</Button>
-                </Box>
+                </Box> */}
             </Box>
             <Dialog
                 open={openConfirmDialog}
@@ -302,10 +353,10 @@ const ExamPractice = ({
                 fullWidth
                 maxWidth="xs"
             >
-                <DialogTitle>Kết thúc bài thi?</DialogTitle>
+                <DialogTitle>{isPractice ? 'Kết thúc ôn tập?' : 'Kết thúc bài thi?'}</DialogTitle>
                 <DialogContent>
                     <Typography>
-                        Bạn chắc chắn muốn kết thúc bài thi?
+                        {isPractice ? 'Bạn chắc chắn muốn kết thúc bài ôn tập?' : 'Bạn chắc chắn muốn kết thúc bài thi?'}
                     </Typography>
                 </DialogContent>
                 <DialogActions className='p-4'>

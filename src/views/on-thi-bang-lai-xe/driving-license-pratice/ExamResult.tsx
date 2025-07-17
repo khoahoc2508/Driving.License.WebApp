@@ -86,6 +86,7 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
     const isPassed = result?.isPassed;
     const hasCriticalMistake = result?.hasCriticalMistake;
     const currentResultAnswer: ExamSubmissionAnswerDto | undefined = result?.userAnswers?.find((a: ExamSubmissionAnswerDto) => a.question?.id === questions[currentQuestionIndex]?.id);
+    const isPractice = result?.groupExamType === CONFIG.GroupExamType.Practice;
 
     return (
         <ExamLayoutWrapper isLoading={isLoading}>
@@ -97,7 +98,7 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
                                 <Card>
                                     <CardContent>
                                         <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
-                                            <Typography variant="h5" fontWeight={500}>Kết quả thi</Typography>
+                                            <Typography variant="h5" fontWeight={500}>{isPractice ? 'Kết quả ôn' : 'Kết quả thi'}</Typography>
                                             <Box sx={{ background: isPassed ? '#F3F7FF' : '#FFEFF0', borderRadius: '16px', px: 2, py: 0.5 }}>
                                                 <Typography fontWeight={500} color={isPassed ? 'primary.main' : '#f55156'} fontSize={14}>
                                                     {isPassed ? 'ĐẠT' : 'KHÔNG ĐẠT'}
@@ -110,7 +111,8 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
                                                 <Typography>Hạng xe:&nbsp;</Typography>
                                                 <Typography fontWeight={600}>{selectedClass?.name || '-'}</Typography>
                                             </Box>
-                                            {selectedClass?.type !== CONFIG.GroupExamType.Practice && <Box display="flex" alignItems="center" mb={4}>
+                                            {/* Ẩn thời gian nếu là ôn luyện */}
+                                            {!isPractice && selectedClass?.type !== CONFIG.GroupExamType.Practice && <Box display="flex" alignItems="center" mb={4}>
                                                 <Typography>Thời gian làm bài:&nbsp;</Typography>
                                                 <Typography fontWeight={600}>{formatResultDuration(result?.duration)}</Typography>
                                             </Box>}
@@ -126,7 +128,7 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
                                             )}
                                         </Box>
                                         <Button variant="contained" fullWidth sx={{ mt: 3, background: '#8B5CF6', color: '#fff', fontWeight: 700, fontSize: 15, py: 1.5, boxShadow: 'none', ':hover': { background: '#7C3AED' } }} onClick={handleRestartExam}>
-                                            THI LẠI
+                                            {isPractice ? 'ÔN LẠI' : 'THI LẠI'}
                                         </Button>
                                     </CardContent>
                                 </Card>
@@ -247,7 +249,7 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
                                             color="primary"
                                             onClick={handleRestartExam}
                                         >
-                                            THI LẠI
+                                            {isPractice ? 'ÔN LẠI' : 'THI LẠI'}
                                         </Button>
                                     </Box>
                                 </Card>
