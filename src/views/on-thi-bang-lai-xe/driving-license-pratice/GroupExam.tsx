@@ -1,5 +1,6 @@
 import type { Dispatch, SetStateAction } from 'react';
 import React, { useEffect, useState } from 'react'
+
 import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 
 import { toast } from 'react-toastify'
@@ -25,11 +26,15 @@ interface ArticlesProps {
 function findNodeAndAncestors(groups: GroupExamDto[], slug: string): GroupExamDto[] {
   for (const group of groups) {
     if (group.slug === slug) return [group];
+
     if (group.children) {
       const path = findNodeAndAncestors(group.children, slug);
+
       if (path.length) return [group, ...path];
     }
   }
+
+
   return [];
 }
 
@@ -116,6 +121,7 @@ const GroupExams = ({ setIsLoading, onGroupsLoaded }: ArticlesProps) => {
 
         // Thêm param examId vào URL
         const params = new URLSearchParams(searchParams.toString());
+
         params.set('examname', exam.name); // hoặc exam.slug nếu bạn muốn đẹp
         router.push(`${pathname}?${params.toString()}`);
       } else {
@@ -130,6 +136,7 @@ const GroupExams = ({ setIsLoading, onGroupsLoaded }: ArticlesProps) => {
 
   const handleSelectClass = (child: GroupExamDto) => {
     const params = new URLSearchParams(searchParams.toString())
+
     if (!params.get('parentSlug')) {
       params.set('parentSlug', child.slug)
     } else if (!params.get('childSlug')) {
@@ -137,6 +144,7 @@ const GroupExams = ({ setIsLoading, onGroupsLoaded }: ArticlesProps) => {
     } else {
       params.set('examSlug', child.slug)
     }
+
     router.push(`${pathname}?${params.toString()}`)
     setSelectedClass(child)
   }
@@ -146,11 +154,6 @@ const GroupExams = ({ setIsLoading, onGroupsLoaded }: ArticlesProps) => {
       <ExamPractice
         exam={selectedExam}
         questions={examQuestions}
-        onBack={() => {
-          setSelectedExam(null)
-          setExamQuestions(null)
-          setExamSubmissionId(null)
-        }}
         selectedClass={selectedClass}
         selectedExamType={selectedExamType}
         examSubmissionId={examSubmissionId}
@@ -159,17 +162,20 @@ const GroupExams = ({ setIsLoading, onGroupsLoaded }: ArticlesProps) => {
   }
 
   if (examList) {
-    return <ExamListSection selectedClass={selectedClass} examList={examList} onBack={() => setExamList(null)} onStartExam={handleStartExam} />
+    return <ExamListSection selectedClass={selectedClass} examList={examList} onStartExam={handleStartExam} />
   }
 
   if (selectedClass) {
-    return <ExamTypeSection selectedClass={selectedClass} onBack={() => setSelectedClass(null)} onSelectType={async (child) => {
+    return <ExamTypeSection selectedClass={selectedClass} onSelectType={async (child) => {
       const params = new URLSearchParams(searchParams.toString());
+
       params.set('examSlug', child.slug);
       router.push(`${pathname}?${params.toString()}`);
       setSelectedExamType(child);
+
       if (child.type === CONFIG.GroupExamType.Detail) {
         setIsLoading(true)
+
         try {
           const res = await ExamAPI.GetExamsByGroups(child.id)
 
@@ -184,6 +190,7 @@ const GroupExams = ({ setIsLoading, onGroupsLoaded }: ArticlesProps) => {
 
       if (child.type === CONFIG.GroupExamType.Exam) {
         setIsLoading(true)
+
         try {
           const payload: GenerateRandomExamsCommand = {
             groupExamId: child.id,
@@ -207,9 +214,11 @@ const GroupExams = ({ setIsLoading, onGroupsLoaded }: ArticlesProps) => {
 
       if (child.type === CONFIG.GroupExamType.Practice) {
         setIsLoading(true)
+
         try {
           const res = await ExamAPI.GetExamsByGroups(child.id)
           const examDto = res.data.data[0]
+
           if (examDto) {
             handleStartExam(examDto)
           } else {

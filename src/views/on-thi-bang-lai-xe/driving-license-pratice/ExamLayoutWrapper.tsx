@@ -1,14 +1,13 @@
 'use client'
 import React, { useState } from 'react'
+
 import Breadcrumbs from '@mui/material/Breadcrumbs'
-import Link from 'next/link'
 import { Box, Button, Collapse, List, ListItem, ListItemButton, ListItemText, useMediaQuery, useTheme } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
-import Header from './Header'
 import AppLoading from '@/@core/components/AppLoading'
 
-const StyledBreadcrumbs = styled(Breadcrumbs)(({ theme }) => ({
+const StyledBreadcrumbs = styled(Breadcrumbs)(({ }) => ({
     '& .MuiBreadcrumbs-ol': {
         flexWrap: 'nowrap',
         overflow: 'hidden'
@@ -43,12 +42,14 @@ const ExamLayoutWrapper = ({
         if (!item.href) return
         const queryString = item.href.split('?')[1] || ''
         const params = new URLSearchParams(queryString)
+
         const slugArr = [
             params.get('parentSlug'),
             params.get('childSlug'),
             params.get('examSlug'),
             params.get('examname')
         ].filter(Boolean) as string[]
+
         onBreadcrumbClick?.(slugArr)
     }
 

@@ -1,7 +1,6 @@
 import React from 'react'
 
 import Typography from '@mui/material/Typography'
-import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 
 import PracticeCard from './PracticeCard'
@@ -11,11 +10,10 @@ import CONFIG from '@/configs/config'
 
 interface ExamTypeSectionProps {
     selectedClass: GroupExamDto
-    onBack: () => void
     onSelectType: (child: GroupExamDto) => void
 }
 
-const ExamTypeSection = ({ selectedClass, onBack, onSelectType }: ExamTypeSectionProps) => (
+const ExamTypeSection = ({ selectedClass, onSelectType }: ExamTypeSectionProps) => (
     <div className='bg-backgroundPaper py-10'>
         <div className={styles.layoutSpacing}>
             <Typography variant='h4' className='text-center mbe-8 flex items-center justify-center gap-2'>

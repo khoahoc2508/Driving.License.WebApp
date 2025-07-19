@@ -44,11 +44,13 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.key === 'ArrowLeft') {
                 event.preventDefault()
+
                 if (currentQuestionIndex > 0) {
                     setCurrentQuestionIndex(prev => prev - 1)
                 }
             } else if (event.key === 'ArrowRight') {
                 event.preventDefault()
+
                 if (currentQuestionIndex < questions.length - 1) {
                     setCurrentQuestionIndex(prev => prev + 1)
                 }

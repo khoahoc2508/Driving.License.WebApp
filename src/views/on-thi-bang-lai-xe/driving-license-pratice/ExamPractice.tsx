@@ -43,14 +43,12 @@ const AnswerLabel = styled('div')<{ selected: boolean }>(({ theme, selected }) =
 const ExamPractice = ({
     exam,
     questions,
-    onBack,
     selectedClass,
     selectedExamType,
     examSubmissionId
 }: {
     exam: any,
     questions: questionTypes[],
-    onBack: () => void,
     selectedClass: GroupExamDto | null,
     selectedExamType: GroupExamDto | null,
     examSubmissionId: string
@@ -72,6 +70,7 @@ const ExamPractice = ({
     const handleSubmit = useCallback(async (isAutoSubmit = false) => {
         if (isSubmitting) return;
         setIsSubmitting(true);
+
         if (isAutoSubmit) {
             toast.info('Hết giờ! Tự động nộp bài...');
         }
@@ -108,9 +107,12 @@ const ExamPractice = ({
         if (isPractice || timeLeft <= 0) {
             return;
         }
+
         const timerId = setInterval(() => {
             setTimeLeft(prev => prev - 1);
         }, 1000);
+
+
         return () => clearInterval(timerId);
     }, [timeLeft, isPractice]);
 
@@ -150,8 +152,10 @@ const ExamPractice = ({
     const handleShowAnswer = async () => {
         if (!currentQuestion?.id) return;
         setLoadingAnswer(true);
+
         try {
             const res = await QuestionAPI.getQuestionDetail(currentQuestion.id as string, exam.id);
+
             setAnswerDetail(res.data.data);
             setShowAnswer(true);
         } catch (e) {
@@ -160,6 +164,7 @@ const ExamPractice = ({
             setLoadingAnswer(false);
         }
     };
+
     const handleCloseAnswer = () => {
         setShowAnswer(false);
         setAnswerDetail(null);
@@ -187,11 +192,13 @@ const ExamPractice = ({
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.key === 'ArrowLeft') {
                 event.preventDefault()
+
                 if (currentQuestionIndex > 0) {
                     setCurrentQuestionIndex(prev => prev - 1)
                 }
             } else if (event.key === 'ArrowRight') {
                 event.preventDefault()
+
                 if (currentQuestionIndex < questions.length - 1) {
                     setCurrentQuestionIndex(prev => prev + 1)
                 }
@@ -297,11 +304,14 @@ const ExamPractice = ({
                                             const isCorrect = ans.isCorrect;
                                             const isSelected = answers[currentQuestion.id as string] === ans.id;
                                             let bg = 'transparent', color = 'inherit', border = '1px solid #e0e0e0';
+
                                             if (isCorrect) {
                                                 bg = '#4caf50'; color = '#fff'; border = '1px solid #4caf50';
                                             } else if (isSelected) {
                                                 color = '#f55156'; border = '1px solid #f55156';
                                             }
+
+
                                             return (
                                                 <Box
                                                     key={ans.id}
