@@ -142,6 +142,22 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
                                                 gap: 2,
                                                 justifyItems: 'center',
                                                 alignItems: 'center',
+                                                maxHeight: '400px',
+                                                overflowY: 'auto',
+                                                '&::-webkit-scrollbar': {
+                                                    width: '8px',
+                                                },
+                                                '&::-webkit-scrollbar-track': {
+                                                    background: '#f1f1f1',
+                                                    borderRadius: '4px',
+                                                },
+                                                '&::-webkit-scrollbar-thumb': {
+                                                    background: '#c1c1c1',
+                                                    borderRadius: '4px',
+                                                    '&:hover': {
+                                                        background: '#a8a8a8',
+                                                    },
+                                                },
                                             }}
                                             className="rounded-sm py-4 mt-5"
                                         >
@@ -179,7 +195,7 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
                                 </Card>
                             </Grid>
                             <Grid item xs={12} md={8}>
-                                <Card sx={{ height: '100%' }} className='flex flex-col justify-between'>
+                                <Card sx={{ height: 'auto' }} className='flex flex-col justify-between'>
                                     <CardContent sx={{ flexGrow: 1 }}>
                                         <Typography variant="h5" className='text-[#98999e]'>Câu {currentQuestionIndex + 1}{questions[currentQuestionIndex]?.isCriticalQuestion ? <span className='text-error'> *</span> : ''}</Typography>
                                         <Typography variant="h6" className='my-3' sx={{ fontWeight: 600 }}>{questions[currentQuestionIndex]?.content}</Typography>

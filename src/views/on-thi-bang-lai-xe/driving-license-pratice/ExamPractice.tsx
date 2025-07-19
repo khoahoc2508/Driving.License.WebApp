@@ -222,7 +222,23 @@ const ExamPractice = ({
                                                 gridTemplateColumns: 'repeat(5, 1fr)',
                                                 gap: 2,
                                                 justifyItems: 'center',
-                                                alignItems: 'center'
+                                                alignItems: 'center',
+                                                maxHeight: '400px',
+                                                overflowY: 'auto',
+                                                '&::-webkit-scrollbar': {
+                                                    width: '8px',
+                                                },
+                                                '&::-webkit-scrollbar-track': {
+                                                    background: '#f1f1f1',
+                                                    borderRadius: '4px',
+                                                },
+                                                '&::-webkit-scrollbar-thumb': {
+                                                    background: '#c1c1c1',
+                                                    borderRadius: '4px',
+                                                    '&:hover': {
+                                                        background: '#a8a8a8',
+                                                    },
+                                                },
                                             }}
                                             className="rounded-sm py-4 mt-5"
                                         >

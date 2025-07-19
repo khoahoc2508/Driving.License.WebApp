@@ -167,7 +167,6 @@ const GroupExams = ({ setIsLoading, onGroupsLoaded }: ArticlesProps) => {
       const params = new URLSearchParams(searchParams.toString());
       params.set('examSlug', child.slug);
       router.push(`${pathname}?${params.toString()}`);
-      debugger
       setSelectedExamType(child);
       if (child.type === CONFIG.GroupExamType.Detail) {
         setIsLoading(true)
