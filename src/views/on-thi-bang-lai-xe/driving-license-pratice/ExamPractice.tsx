@@ -182,6 +182,31 @@ const ExamPractice = ({
         }
     }, [searchParams, router])
 
+    // Thêm event listener cho phím mũi tên
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'ArrowLeft') {
+                event.preventDefault()
+                if (currentQuestionIndex > 0) {
+                    setCurrentQuestionIndex(prev => prev - 1)
+                }
+            } else if (event.key === 'ArrowRight') {
+                event.preventDefault()
+                if (currentQuestionIndex < questions.length - 1) {
+                    setCurrentQuestionIndex(prev => prev + 1)
+                }
+            }
+        }
+
+        // Thêm event listener
+        window.addEventListener('keydown', handleKeyDown)
+
+        // Cleanup event listener khi component unmount
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown)
+        }
+    }, [currentQuestionIndex, questions.length])
+
     return (
         <Container className='max-w-[87%]'>
             <Box sx={{ p: { xs: 2, md: 6 } }}>
