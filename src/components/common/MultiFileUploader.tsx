@@ -33,7 +33,6 @@ type FileProp = {
 interface ImageDropzoneProps {
   title?: string
   subtitle?: string
-  maxFiles?: number
   accept?: Record<string, string[]>
   onFilesChange?: (files: File[]) => void
   onUpload?: (response: { data: string[] }) => void
@@ -59,9 +58,8 @@ const Dropzone = styled(AppReactDropzone)<BoxProps>(({ theme }) => ({
 }))
 
 const MultiFileUploader = ({
-  title = 'Drag and Drop Your Image Here.',
-  subtitle = 'or',
-  maxFiles = 1,
+  title = 'Thả tệp vào đây hoặc click để tải lên',
+  subtitle = 'Bạn có thể kéo nhiều file đồng thời',
   accept = {
     'image/*': ['.png', '.jpg', '.jpeg', '.gif']
   },
@@ -71,7 +69,7 @@ const MultiFileUploader = ({
   required = false,
   error = false,
   helperText,
-  multiple = false
+  multiple = true
 }: ImageDropzoneProps) => {
   // States
   const [files, setFiles] = useState<File[]>([])
@@ -80,11 +78,9 @@ const MultiFileUploader = ({
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles: File[]) => {
       const newFiles = acceptedFiles.map((file: File) => Object.assign(file))
-
       setFiles(newFiles)
       onFilesChange?.(newFiles)
     },
-    maxFiles: multiple ? maxFiles : 1,
     accept,
     multiple
   })
