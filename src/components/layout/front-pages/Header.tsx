@@ -23,7 +23,8 @@ import type { Mode } from '@core/types'
 import Logo from '@components/layout/shared/Logo'
 import ModeDropdown from '@components/layout/shared/ModeDropdown'
 import FrontMenu from './FrontMenu'
-import CustomIconButton from '@core/components/mui/IconButton'
+// import CustomIconButton from '@core/components/mui/IconButton'
+import RegisterLicenseDialog from '@components/RegisterLicenseDialog'
 
 // Util Imports
 import { frontLayoutClasses } from '@layouts/utils/layoutClasses'
@@ -34,6 +35,7 @@ import styles from './styles.module.css'
 const Header = ({ mode }: { mode: Mode }) => {
   // States
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [openDialog, setOpenDialog] = useState(false)
 
   // Hooks
   const isBelowLgScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down('lg'))
@@ -68,7 +70,7 @@ const Header = ({ mode }: { mode: Mode }) => {
           )}
           <div className='flex items-center gap-2 sm:gap-4'>
             <ModeDropdown />
-            {isBelowLgScreen ? (
+            {/* {isBelowLgScreen ? (
               <CustomIconButton
                 component={Link}
                 variant='contained'
@@ -89,10 +91,18 @@ const Header = ({ mode }: { mode: Mode }) => {
               >
                 Purchase Now
               </Button>
-            )}
+            )} */}
+            {/* <Button
+              variant='contained'
+              className='whitespace-nowrap'
+              onClick={() => setOpenDialog(true)}
+            >
+              ĐĂNG KÝ THI GPLX
+            </Button> */}
           </div>
         </div>
       </div>
+      <RegisterLicenseDialog open={openDialog} onClose={() => setOpenDialog(false)} />
     </header>
   )
 }
