@@ -208,8 +208,8 @@ const ExamPractice = ({
     }, [currentQuestionIndex, questions.length])
 
     return (
-        <Container className='max-w-[87%]'>
-            <Box sx={{ p: { xs: 2, md: 6 } }}>
+        <Container sx={{ maxWidth: { xs: '100%', md: '87%' } }}>
+            <Box sx={{ p: { xs: 1, md: 6 } }}>
                 <Typography variant="h4" gutterBottom align="center">
                     {selectedClass?.name ? `${selectedClass.name.toUpperCase()} - ` : ''}{selectedExamType?.name?.toUpperCase()}
                 </Typography>
@@ -341,13 +341,34 @@ const ExamPractice = ({
                                 )}
                             </CardContent>
                             <Divider />
-                            <Box display="flex" justifyContent="space-between" alignItems="center" paddingX={6} paddingY={3}>
-                                <div>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: { xs: 'column', md: 'row' },
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                    paddingX: { xs: 2, md: 6 },
+                                    paddingY: 3,
+                                    gap: { xs: 2, md: 0 }
+                                }}
+                            >
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        flexDirection: { xs: 'row', md: 'row' },
+                                        gap: { xs: 1, md: 2 },
+                                        width: { xs: '100%', md: 'auto' }
+                                    }}
+                                >
                                     <Button
                                         variant="outlined"
                                         disabled={currentQuestionIndex === 0}
                                         onClick={() => setCurrentQuestionIndex(prev => prev - 1)}
                                         startIcon={<i className='ri-arrow-left-line' />}
+                                        sx={{
+                                            flex: { xs: 1, md: 'none' },
+                                            minWidth: { xs: 'auto', md: 'auto' }
+                                        }}
                                     >
                                         TRƯỚC
                                     </Button>
@@ -355,18 +376,32 @@ const ExamPractice = ({
                                         variant="outlined"
                                         disabled={currentQuestionIndex === questions.length - 1}
                                         onClick={() => setCurrentQuestionIndex(prev => prev + 1)}
-                                        sx={{ ml: 2 }}
                                         endIcon={<i className='ri-arrow-right-line' />}
+                                        sx={{
+                                            flex: { xs: 1, md: 'none' },
+                                            minWidth: { xs: 'auto', md: 'auto' }
+                                        }}
                                     >
                                         SAU
                                     </Button>
-                                </div>
-                                <Box display="flex" gap={2}>
+                                </Box>
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        flexDirection: { xs: 'row', md: 'row' },
+                                        gap: { xs: 1, md: 2 },
+                                        width: { xs: '100%', md: 'auto' }
+                                    }}
+                                >
                                     {isPractice && !showAnswer && (
                                         <Button
                                             variant="outlined"
                                             onClick={handleShowAnswer}
                                             disabled={loadingAnswer}
+                                            sx={{
+                                                flex: { xs: 1, md: 'none' },
+                                                minWidth: { xs: 'auto', md: 'auto' }
+                                            }}
                                         >
                                             {loadingAnswer ? 'Đang tải...' : 'XEM ĐÁP ÁN'}
                                         </Button>
@@ -376,6 +411,10 @@ const ExamPractice = ({
                                         color="primary"
                                         onClick={handleOpenConfirmDialog}
                                         disabled={isSubmitting}
+                                        sx={{
+                                            flex: { xs: 1, md: 'none' },
+                                            minWidth: { xs: 'auto', md: 'auto' }
+                                        }}
                                     >
                                         {isPractice ? 'KẾT THÚC ÔN' : 'KẾT THÚC THI'}
                                     </Button>
