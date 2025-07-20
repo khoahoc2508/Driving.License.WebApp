@@ -2,7 +2,7 @@
 
 // React Imports
 import type { ReactNode } from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useSearchParams } from 'next/navigation';
 
@@ -29,7 +29,7 @@ import { valibotResolver } from '@hookform/resolvers/valibot';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { array, boolean, email, instance, minLength, nonEmpty, number, object, pipe, string, union, null_, custom, undefined_, nan } from 'valibot';
-
+import { FormValues as formBrandSetting } from '../account-settings/brand-setting/left-side/index'
 // Component Imports
 import Grid2 from '@mui/material/Grid2';
 
@@ -54,6 +54,9 @@ import LicenseRegistrationAPI from '@/libs/api/licenseRegistrationAPI';
 import UploadAPI from '@/libs/api/uploadAPI';
 import type { LicenseRegistrationCustomerResquest } from '@/types/LicensesRegistrations';
 import CitizendCard from './CitizenCard';
+import BrandSettingPreview from '../account-settings/brand-setting/right-side/BrandSettingPreview';
+import brandSettingAPI from '@/libs/api/brandSettingAPI';
+import { GetBrandSettingByOwnerIdQueryParams } from '@/types/brandSettingTypes';
 
 // Define a consistent Step type used across components
 export type Step = {
@@ -228,10 +231,25 @@ type Props = {
   vehicleTypePage: string
 }
 
+const defaultForm: formBrandSetting = {
+  avatarUrl: '/images/avatars/1.png',
+  name: '',
+  shortDescription: '',
+  description: '',
+  email: '',
+  phoneNumber: '',
+  address: '',
+  images: []
+};
+
 // Main Component
 const Page = ({ titlePage, vehicleTypePage }: Props) => {
   const searchParams = useSearchParams()
-  const urlOwnerId = searchParams.get('ownerId')
+  const urlOwnerId = searchParams.get('ownerid')
+
+  const [form, setForm] = useState(defaultForm);
+  const [imgSrc, setImgSrc] = React.useState<string>('/images/avatars/1.png');
+
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
   const [openSuccessDialog, setOpenSuccessDialog] = useState(false)
   const [formDataToSubmit, setFormDataToSubmit] = useState<FormValues | null>(null)
@@ -297,6 +315,26 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
       linkedIn: ''
     }
   })
+
+  console.log(urlOwnerId)
+  React.useEffect(() => {
+    const fetchBrandSetting = async () => {
+      try {
+        const params: GetBrandSettingByOwnerIdQueryParams = {
+          ownerId: urlOwnerId
+        }
+        const res = await brandSettingAPI.GetBrandsettingByOwnerId(params);
+        if (res.data?.success && res.data?.data) {
+          setForm(prev => ({ ...prev, ...res.data.data }));
+          setImgSrc(res.data.data?.avatarUrl ? `${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}${res.data.data?.avatarUrl}` : imgSrc)
+        }
+      } catch (error) {
+      }
+    };
+    if (urlOwnerId) {
+      fetchBrandSetting();
+    }
+  }, [urlOwnerId]);
 
   // Set default values based on vehicle type
   useEffect(() => {
@@ -555,11 +593,7 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
           <Grid size={{ xs: 0, md: 5 }}>
             {/* Cột trái */}
             <CardContent className='h-full hidden md:block pr-0'>
-              <div className='right h-full w-full flex bg-[#2289E61A]'>
-                <div className='intro__container mt-auto mb-auto h-[48px] w-full flex justify-start items-center bg-[#ffffff] p-3 gap-2'>
-                  <div className='intro__name font-normal text-2xl text-[#425566]'>{titlePage}</div>
-                </div>
-              </div>
+              <BrandSettingPreview form={form} imgSrc={imgSrc} />
             </CardContent>
           </Grid>
 

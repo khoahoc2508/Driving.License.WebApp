@@ -52,6 +52,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/brandsettings/by-owner": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["BrandSettings_GetBrandSettingByOwnerId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/brandsettings/upsert": {
         parameters: {
             query?: never;
@@ -1437,6 +1453,27 @@ export interface operations {
     BrandSettings_GetBrandSettingByUserId: {
         parameters: {
             query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBrandSettingDto"];
+                };
+            };
+        };
+    };
+    BrandSettings_GetBrandSettingByOwnerId: {
+        parameters: {
+            query?: {
+                OwnerId?: string;
+            };
             header?: never;
             path?: never;
             cookie?: never;
