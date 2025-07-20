@@ -588,6 +588,20 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
 
   return (
     <>
+      <Typography
+        variant="h5"
+        align="center"
+        sx={{
+          fontWeight: 600,
+          color: '#7C3AED',
+          mb: 3,
+          mt: 3,
+          letterSpacing: 1,
+          textTransform: 'uppercase'
+        }}
+      >
+        {titlePage}
+      </Typography>
       <Card className='h-full flex w-full justify-center'>
         <Grid2 container width={{ xs: '100%', md: '60%' }}>
           <Grid size={{ xs: 0, md: 5 }}>

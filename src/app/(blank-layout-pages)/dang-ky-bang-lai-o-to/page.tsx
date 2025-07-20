@@ -9,7 +9,7 @@ const Page = () => {
     const Search = () => {
         return (
             <CustomerRegisterForm
-                titlePage='Đăng ký bằng lái ô tô'
+                titlePage='Đăng ký thi GPLX ô tô'
                 vehicleTypePage={CONFIG.VehicleTypeCode.Car}
             />
         )
