@@ -16,14 +16,15 @@ const defaultForm: FormValues = {
 
 const BrandSetting = () => {
     const [form, setForm] = useState(defaultForm);
+    const [imgSrc, setImgSrc] = React.useState<string>(form.avatarUrl || '/images/avatars/1.png');
 
     return (
         <Grid container spacing={5}>
             <Grid item xs={12} md={8}>
-                <LeftSide form={form} setForm={setForm} />
+                <LeftSide form={form} setForm={setForm} imgSrc={imgSrc} setImgSrc={setImgSrc} />
             </Grid>
             <Grid item xs={12} md={4}>
-                <RightSide form={form} />
+                <RightSide form={form} imgSrc={imgSrc} />
             </Grid>
         </Grid>
     );

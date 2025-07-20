@@ -41,6 +41,7 @@ interface ImageDropzoneProps {
   error?: boolean
   helperText?: string
   multiple?: boolean
+  defaultImages?: string[];
 }
 
 // Styled Dropzone Component
@@ -69,7 +70,8 @@ const MultiFileUploader = ({
   required = false,
   error = false,
   helperText,
-  multiple = true
+  multiple = true,
+  defaultImages = []
 }: ImageDropzoneProps) => {
   // States
   const [files, setFiles] = useState<File[]>([])
@@ -147,6 +149,26 @@ const MultiFileUploader = ({
   //   }
   // }
 
+  // Render ảnh từ defaultImages
+  const renderDefaultImages = () => (
+    <List>
+      {defaultImages.map((url, idx) => (
+        <ListItem key={url + idx} className='pis-4 plb-3'>
+          <div className='file-details'>
+            <div className='file-preview'>
+              <img width={38} height={38} alt={`default-img-${idx}`} src={url} />
+            </div>
+            <div>
+              <Typography className='file-name font-medium' color='text.primary'>
+                Ảnh đã lưu
+              </Typography>
+            </div>
+          </div>
+        </ListItem>
+      ))}
+    </List>
+  );
+
   return (
     <Dropzone className={className}>
       <div {...getRootProps({ className: 'dropzone' })}>
@@ -167,6 +189,7 @@ const MultiFileUploader = ({
           {helperText}
         </Typography>
       )}
+      {defaultImages.length > 0 && renderDefaultImages()}
       {files.length ? (
         <>
           <List>{fileList}</List>

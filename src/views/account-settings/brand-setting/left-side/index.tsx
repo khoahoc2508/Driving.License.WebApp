@@ -24,6 +24,8 @@ export type FormValues = {
 type LeftSideProps = {
     form: FormValues;
     setForm: React.Dispatch<React.SetStateAction<FormValues>>;
+    imgSrc: string;
+    setImgSrc: React.Dispatch<React.SetStateAction<string>>;
 };
 
 // Utility to convert base64 dataURL to File
@@ -47,8 +49,7 @@ async function blobUrlToFile(blobUrl: string, filename: string): Promise<File> {
     return new File([blob], filename, { type: blob.type });
 }
 
-const LeftSide: React.FC<LeftSideProps> = ({ form, setForm }) => {
-    const [imgSrc, setImgSrc] = React.useState<string>(form.avatarUrl || '/images/avatars/1.png');
+const LeftSide: React.FC<LeftSideProps> = ({ form, setForm, imgSrc, setImgSrc }) => {
     const [fileInput, setFileInput] = React.useState<string>('');
 
     const { control, handleSubmit, setValue, formState: { errors }, reset } = useForm<FormValues>({
@@ -63,6 +64,7 @@ const LeftSide: React.FC<LeftSideProps> = ({ form, setForm }) => {
                 if (res.data?.success && res.data?.data) {
                     setForm(prev => ({ ...prev, ...res.data.data }));
                     reset(res.data.data);
+                    setImgSrc(res.data.data?.avatarUrl ? `${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}${res.data.data?.avatarUrl}` : imgSrc)
                 }
             } catch (error) {
             }
@@ -109,6 +111,7 @@ const LeftSide: React.FC<LeftSideProps> = ({ form, setForm }) => {
 
             const res = await brandSettingAPI.UpsertBrandSetting(payload);
             if (res.data?.success) {
+                setImgSrc(form.avatarUrl ? `${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}${payload.avatarUrl}` : imgSrc)
                 toast.success('Lưu thay đổi thành công!');
             } else {
                 toast.error(res.data?.message || 'Lưu thay đổi thất bại!');
@@ -151,7 +154,7 @@ const LeftSide: React.FC<LeftSideProps> = ({ form, setForm }) => {
                 </CardContent>
                 <CardContent className='mbe-5'>
                     <div className='flex max-sm:flex-col items-center gap-6'>
-                        <img height={100} width={100} className='rounded' src={form.avatarUrl ? `${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}${form.avatarUrl}` : imgSrc} alt='Profile' />
+                        <img height={100} width={100} className='rounded' src={imgSrc} alt='Profile' />
                         <div className='flex flex-grow flex-col gap-4'>
                             <div className='flex flex-col sm:flex-row gap-4'>
                                 <Button component='label' size='small' variant='contained' htmlFor='account-settings-upload-image'>
@@ -319,6 +322,7 @@ const LeftSide: React.FC<LeftSideProps> = ({ form, setForm }) => {
                             ...prev,
                             images: files.map(file => URL.createObjectURL(file))
                         }))}
+                        defaultImages={form.images.map(img => img && !img.startsWith('blob:') ? `${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}${img}` : undefined).filter(Boolean) as string[]}
                     />
                 </CardContent>
                 <CardContent>

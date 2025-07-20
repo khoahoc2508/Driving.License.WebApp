@@ -9,9 +9,10 @@ import { useSession } from 'next-auth/react';
 
 type RightSideProps = {
     form: FormValues;
+    imgSrc: string
 };
 
-const RightSide: React.FC<RightSideProps> = ({ form }) => {
+const RightSide: React.FC<RightSideProps> = ({ form, imgSrc }) => {
 
     const { data } = useSession()
 
@@ -24,7 +25,7 @@ const RightSide: React.FC<RightSideProps> = ({ form }) => {
                 <Divider />
                 <CardContent>
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-                        <img src={form.avatarUrl ? `${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}${form.avatarUrl}` : '/images/avatars/1.png'} alt="avatar" width={80} height={80} style={{ borderRadius: '50%' }} />
+                        <img src={imgSrc} alt="avatar" width={80} height={80} style={{ borderRadius: '50%' }} />
                         <Typography variant="h6" fontWeight={600}>{form.name ? String(form.name) : 'Tên thương hiệu'}</Typography>
                         <Typography color="text.secondary">{form.shortDescription || 'Mô tả ngắn'}</Typography>
                     </div>
