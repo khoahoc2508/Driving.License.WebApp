@@ -136,16 +136,16 @@ const MultiFileUploader = ({
     onFilesChange?.([])
   }
 
-  const handleUpload = async () => {
-    try {
-      const response = await UploadAPI.uploadFiles(files)
+  // const handleUpload = async () => {
+  //   try {
+  //     const response = await UploadAPI.uploadFiles(files)
 
-      toast.success("Tải file thành công")
-      onUpload?.({ data: response.data.map((file: { relativeUrl: string | null }) => file.relativeUrl || '') })
-    } catch (error) {
-      toast.error("Tải file thất bại")
-    }
-  }
+  //     toast.success("Tải file thành công")
+  //     onUpload?.({ data: response.data.map((file: { relativeUrl: string | null }) => file.relativeUrl || '') })
+  //   } catch (error) {
+  //     toast.error("Tải file thất bại")
+  //   }
+  // }
 
   return (
     <Dropzone className={className}>
@@ -174,7 +174,7 @@ const MultiFileUploader = ({
             <Button color='error' variant='outlined' onClick={handleRemoveAllFiles}>
               Remove All
             </Button>
-            <Button variant='contained' onClick={handleUpload}>Upload Files</Button>
+            {/* <Button variant='contained' onClick={handleUpload}>Upload Files</Button> */}
           </div>
         </>
       ) : null}

@@ -40,6 +40,13 @@ function dataURLtoFile(dataurl: string, filename: string) {
     return new File([u8arr], filename, { type: mime });
 }
 
+async function blobUrlToFile(blobUrl: string, filename: string): Promise<File> {
+    const res = await fetch(blobUrl);
+    const blob = await res.blob();
+    // Lấy mime type từ blob nếu cần
+    return new File([blob], filename, { type: blob.type });
+}
+
 const LeftSide: React.FC<LeftSideProps> = ({ form, setForm }) => {
     const [imgSrc, setImgSrc] = React.useState<string>(form.avatarUrl || '/images/avatars/1.png');
     const [fileInput, setFileInput] = React.useState<string>('');
@@ -49,7 +56,6 @@ const LeftSide: React.FC<LeftSideProps> = ({ form, setForm }) => {
         mode: 'onChange'
     });
 
-    // Fetch brand setting on mount
     React.useEffect(() => {
         const fetchBrandSetting = async () => {
             try {
@@ -59,36 +65,35 @@ const LeftSide: React.FC<LeftSideProps> = ({ form, setForm }) => {
                     reset(res.data.data);
                 }
             } catch (error) {
-                // Không mapping nếu lỗi
             }
         };
         fetchBrandSetting();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const onSubmit = async (data: FormValues) => {
-        setForm(prev => ({ ...prev, ...data }));
+        // setForm(prev => ({ ...prev, ...data }));
         try {
-            // Handle avatar upload if needed
             let avatarUrl = data.avatarUrl;
-            debugger
             if (typeof avatarUrl === 'string' && avatarUrl.startsWith('data:image/')) {
                 // Convert base64 to File
                 const file = dataURLtoFile(avatarUrl, 'avatar.jpg');
                 const avatarRes = await UploadAPI.uploadFiles([file]);
                 avatarUrl = avatarRes?.data?.[0]?.relativeUrl || avatarUrl;
             }
-            debugger
-            // Handle images upload if needed
-            let images = data.images;
-            const filesToUpload = images.filter(img => typeof img === 'object' && (img as any) instanceof File);
+            let images = form.images;
+            const blobUrls = images.filter(img => typeof img === 'string' && img.startsWith('blob:'));
+            let filesToUpload: File[] = [];
+
+            for (let i = 0; i < blobUrls.length; i++) {
+                const file = await blobUrlToFile(blobUrls[i], `image_${i}.jpg`);
+                filesToUpload.push(file);
+            }
+
             if (filesToUpload.length > 0) {
                 const imagesRes = await UploadAPI.uploadFiles(filesToUpload);
-                // Replace only File objects with uploaded URLs, keep string URLs as is
                 let uploadedIdx = 0;
-                debugger
                 images = images.map(img => {
-                    if (typeof img === 'object' && (img as any) instanceof File) {
+                    if (typeof img === 'string' && img.startsWith('blob:')) {
                         const url = imagesRes?.data?.[uploadedIdx]?.relativeUrl;
                         uploadedIdx++;
                         return url || '';
@@ -96,10 +101,10 @@ const LeftSide: React.FC<LeftSideProps> = ({ form, setForm }) => {
                     return img;
                 });
             }
-            debugger
             const payload = {
                 ...data,
-                avatarUrl
+                avatarUrl,
+                images
             };
 
             const res = await brandSettingAPI.UpsertBrandSetting(payload);
@@ -314,7 +319,6 @@ const LeftSide: React.FC<LeftSideProps> = ({ form, setForm }) => {
                             ...prev,
                             images: files.map(file => URL.createObjectURL(file))
                         }))}
-                        onUpload={({ data }) => setForm(prev => ({ ...prev, images: data }))}
                     />
                 </CardContent>
                 <CardContent>
