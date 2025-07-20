@@ -1,8 +1,5 @@
-import {
-  BrandSettingDto,
-  GetBrandSettingByOwnerIdQueryParams,
-  UpsertBrandSettingCommand
-} from '@/types/brandSettingTypes'
+import type { GetBrandSettingByOwnerIdQueryParams, UpsertBrandSettingCommand } from '@/types/brandSettingTypes'
+
 import axiosInstance from '../axios'
 import { customParamsSerializer } from './commonAPI'
 

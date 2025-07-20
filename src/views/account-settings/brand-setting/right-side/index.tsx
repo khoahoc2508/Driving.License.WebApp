@@ -1,11 +1,14 @@
 import React from 'react';
+
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import { FormValues } from '../left-side';
+
 import { TextField } from '@mui/material';
 import { useSession } from 'next-auth/react';
+
+import type { FormValues } from '../left-side';
 import BrandSettingPreview from './BrandSettingPreview';
 
 type RightSideProps = {

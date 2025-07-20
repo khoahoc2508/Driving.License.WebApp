@@ -1,13 +1,17 @@
 import React from 'react';
+
+import type { ChangeEvent } from 'react';
+
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { Button, Divider, TextField, Box } from '@mui/material';
-import type { ChangeEvent } from 'react';
 import { useForm, Controller } from 'react-hook-form';
+
+import { toast } from 'react-toastify';
+
 import MultiFileUploader from '@/components/common/MultiFileUploader';
 import brandSettingAPI from '@/libs/api/brandSettingAPI';
-import { toast } from 'react-toastify';
 import UploadAPI from '@/libs/api/uploadAPI';
 
 export type FormValues = {
@@ -36,15 +40,20 @@ function dataURLtoFile(dataurl: string, filename: string) {
     const bstr = atob(arr[1]);
     const n = bstr.length;
     const u8arr = new Uint8Array(n);
+
     for (let i = 0; i < n; i++) {
         u8arr[i] = bstr.charCodeAt(i);
     }
-    return new File([u8arr], filename, { type: mime });
+
+    
+return new File([u8arr], filename, { type: mime });
 }
 
 async function blobUrlToFile(blobUrl: string, filename: string): Promise<File> {
     const res = await fetch(blobUrl);
     const blob = await res.blob();
+
+
     // Lấy mime type từ blob nếu cần
     return new File([blob], filename, { type: blob.type });
 }
@@ -61,6 +70,7 @@ const LeftSide: React.FC<LeftSideProps> = ({ form, setForm, imgSrc, setImgSrc })
         const fetchBrandSetting = async () => {
             try {
                 const res = await brandSettingAPI.GetBrandsetting();
+
                 if (res.data?.success && res.data?.data) {
                     setForm(prev => ({ ...prev, ...res.data.data }));
                     reset(res.data.data);
@@ -69,6 +79,7 @@ const LeftSide: React.FC<LeftSideProps> = ({ form, setForm, imgSrc, setImgSrc })
             } catch (error) {
             }
         };
+
         fetchBrandSetting();
     }, []);
 
@@ -76,33 +87,43 @@ const LeftSide: React.FC<LeftSideProps> = ({ form, setForm, imgSrc, setImgSrc })
         // setForm(prev => ({ ...prev, ...data }));
         try {
             let avatarUrl = data.avatarUrl;
+
             if (typeof avatarUrl === 'string' && avatarUrl.startsWith('data:image/')) {
                 // Convert base64 to File
                 const file = dataURLtoFile(avatarUrl, 'avatar.jpg');
                 const avatarRes = await UploadAPI.uploadFiles([file]);
+
                 avatarUrl = avatarRes?.data?.[0]?.relativeUrl || avatarUrl;
             }
+
             let images = form.images;
             const blobUrls = images.filter(img => typeof img === 'string' && img.startsWith('blob:'));
-            let filesToUpload: File[] = [];
+            const filesToUpload: File[] = [];
 
             for (let i = 0; i < blobUrls.length; i++) {
                 const file = await blobUrlToFile(blobUrls[i], `image_${i}.jpg`);
+
                 filesToUpload.push(file);
             }
 
             if (filesToUpload.length > 0) {
                 const imagesRes = await UploadAPI.uploadFiles(filesToUpload);
                 let uploadedIdx = 0;
+
                 images = images.map(img => {
                     if (typeof img === 'string' && img.startsWith('blob:')) {
                         const url = imagesRes?.data?.[uploadedIdx]?.relativeUrl;
+
                         uploadedIdx++;
-                        return url || '';
+                        
+return url || '';
                     }
-                    return img;
+
+                    
+return img;
                 });
             }
+
             const payload = {
                 ...data,
                 avatarUrl,
@@ -110,6 +131,7 @@ const LeftSide: React.FC<LeftSideProps> = ({ form, setForm, imgSrc, setImgSrc })
             };
 
             const res = await brandSettingAPI.UpsertBrandSetting(payload);
+
             if (res.data?.success) {
                 setImgSrc(form.avatarUrl ? `${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}${payload.avatarUrl}` : imgSrc)
                 toast.success('Lưu thay đổi thành công!');
@@ -124,12 +146,14 @@ const LeftSide: React.FC<LeftSideProps> = ({ form, setForm, imgSrc, setImgSrc })
     const handleFileInputChange = (file: ChangeEvent) => {
         const reader = new FileReader();
         const { files } = file.target as HTMLInputElement;
+
         if (files && files.length !== 0) {
             reader.onload = () => {
                 setImgSrc(reader.result as string);
                 setValue('avatarUrl', reader.result as string, { shouldValidate: true });
                 setForm(prev => ({ ...prev, avatarUrl: reader.result as string })); // Thêm dòng này
             };
+
             reader.readAsDataURL(files[0]);
             setFileInput('');
         }

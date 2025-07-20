@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
-import LeftSide, { FormValues } from './left-side';
-import RightSide from './right-side';
+
 import Grid from '@mui/material/Grid';
+
+import type { FormValues } from './left-side';
+import LeftSide from './left-side';
+import RightSide from './right-side';
+
 
 const defaultForm: FormValues = {
     avatarUrl: '/images/avatars/1.png',

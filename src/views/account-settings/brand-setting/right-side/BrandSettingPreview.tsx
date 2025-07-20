@@ -1,5 +1,6 @@
 import { Typography } from '@mui/material';
-import { FormValues } from '../left-side';
+
+import type { FormValues } from '../left-side';
 
 
 const BrandSettingPreview = ({ form, imgSrc }: { form: FormValues, imgSrc: string }) => (

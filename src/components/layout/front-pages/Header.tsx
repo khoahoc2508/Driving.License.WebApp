@@ -7,7 +7,6 @@ import { useState } from 'react'
 import Link from 'next/link'
 
 // MUI Imports
-import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import useScrollTrigger from '@mui/material/useScrollTrigger'
@@ -23,6 +22,7 @@ import type { Mode } from '@core/types'
 import Logo from '@components/layout/shared/Logo'
 import ModeDropdown from '@components/layout/shared/ModeDropdown'
 import FrontMenu from './FrontMenu'
+
 // import CustomIconButton from '@core/components/mui/IconButton'
 import RegisterLicenseDialog from '@components/RegisterLicenseDialog'
 

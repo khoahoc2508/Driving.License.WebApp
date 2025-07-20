@@ -16,7 +16,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Divider from '@mui/material/Divider';
-import Grid from '@mui/material/Grid2';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import type { StepperProps } from '@mui/material/Stepper';
@@ -29,7 +28,7 @@ import { valibotResolver } from '@hookform/resolvers/valibot';
 import { FormProvider, useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import { array, boolean, email, instance, minLength, nonEmpty, number, object, pipe, string, union, null_, custom, undefined_, nan } from 'valibot';
-import { FormValues as formBrandSetting } from '../account-settings/brand-setting/left-side/index'
+
 // Component Imports
 import Grid2 from '@mui/material/Grid2';
 
@@ -39,6 +38,8 @@ import {
   IconCreditCardPay,
   IconUserEdit
 } from '@tabler/icons-react';
+
+import type { FormValues as formBrandSetting } from '../account-settings/brand-setting/left-side/index'
 
 import StepperCustomDot from '@components/stepper-dot';
 import StepperWrapper from '@core/styles/stepper';
@@ -56,7 +57,7 @@ import type { LicenseRegistrationCustomerResquest } from '@/types/LicensesRegist
 import CitizendCard from './CitizenCard';
 import BrandSettingPreview from '../account-settings/brand-setting/right-side/BrandSettingPreview';
 import brandSettingAPI from '@/libs/api/brandSettingAPI';
-import { GetBrandSettingByOwnerIdQueryParams } from '@/types/brandSettingTypes';
+import type { GetBrandSettingByOwnerIdQueryParams } from '@/types/brandSettingTypes';
 
 // Define a consistent Step type used across components
 export type Step = {
@@ -323,7 +324,9 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
         const params: GetBrandSettingByOwnerIdQueryParams = {
           ownerId: urlOwnerId
         }
+
         const res = await brandSettingAPI.GetBrandsettingByOwnerId(params);
+
         if (res.data?.success && res.data?.data) {
           setForm(prev => ({ ...prev, ...res.data.data }));
           setImgSrc(res.data.data?.avatarUrl ? `${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}${res.data.data?.avatarUrl}` : imgSrc)
@@ -331,6 +334,7 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
       } catch (error) {
       }
     };
+
     if (urlOwnerId) {
       fetchBrandSetting();
     }

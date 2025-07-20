@@ -16,12 +16,10 @@ import { styled } from '@mui/material/styles'
 import { useDropzone } from 'react-dropzone'
 
 // Component Imports
-import { toast } from 'react-toastify'
 
 import CustomAvatar from '@core/components/mui/Avatar'
 
 // Styled Component Imports
-import UploadAPI from '@/libs/api/uploadAPI'
 import AppReactDropzone from '@/libs/styles/AppReactDropzone'
 
 type FileProp = {
@@ -65,7 +63,6 @@ const MultiFileUploader = ({
     'image/*': ['.png', '.jpg', '.jpeg', '.gif']
   },
   onFilesChange,
-  onUpload,
   className,
   required = false,
   error = false,
@@ -80,6 +77,7 @@ const MultiFileUploader = ({
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles: File[]) => {
       const newFiles = acceptedFiles.map((file: File) => Object.assign(file))
+
       setFiles(newFiles)
       onFilesChange?.(newFiles)
     },
