@@ -6,6 +6,9 @@ import { Button, Divider, TextField, Box } from '@mui/material';
 import type { ChangeEvent } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import MultiFileUploader from '@/components/common/MultiFileUploader';
+import brandSettingAPI from '@/libs/api/brandSettingAPI';
+import { toast } from 'react-toastify';
+import UploadAPI from '@/libs/api/uploadAPI';
 
 export type FormValues = {
     avatarUrl: string;
@@ -23,17 +26,91 @@ type LeftSideProps = {
     setForm: React.Dispatch<React.SetStateAction<FormValues>>;
 };
 
+// Utility to convert base64 dataURL to File
+function dataURLtoFile(dataurl: string, filename: string) {
+    const arr = dataurl.split(',');
+    const match = arr[0].match(/:(.*?);/);
+    const mime = match ? match[1] : '';
+    const bstr = atob(arr[1]);
+    const n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    for (let i = 0; i < n; i++) {
+        u8arr[i] = bstr.charCodeAt(i);
+    }
+    return new File([u8arr], filename, { type: mime });
+}
+
 const LeftSide: React.FC<LeftSideProps> = ({ form, setForm }) => {
     const [imgSrc, setImgSrc] = React.useState<string>(form.avatarUrl || '/images/avatars/1.png');
     const [fileInput, setFileInput] = React.useState<string>('');
 
-    const { control, handleSubmit, setValue, formState: { errors } } = useForm<FormValues>({
+    const { control, handleSubmit, setValue, formState: { errors }, reset } = useForm<FormValues>({
         defaultValues: form,
         mode: 'onChange'
     });
 
-    const onSubmit = (data: FormValues) => {
+    // Fetch brand setting on mount
+    React.useEffect(() => {
+        const fetchBrandSetting = async () => {
+            try {
+                const res = await brandSettingAPI.GetBrandsetting();
+                if (res.data?.success && res.data?.data) {
+                    setForm(prev => ({ ...prev, ...res.data.data }));
+                    reset(res.data.data);
+                }
+            } catch (error) {
+                // Không mapping nếu lỗi
+            }
+        };
+        fetchBrandSetting();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const onSubmit = async (data: FormValues) => {
         setForm(prev => ({ ...prev, ...data }));
+        try {
+            // Handle avatar upload if needed
+            let avatarUrl = data.avatarUrl;
+            debugger
+            if (typeof avatarUrl === 'string' && avatarUrl.startsWith('data:image/')) {
+                // Convert base64 to File
+                const file = dataURLtoFile(avatarUrl, 'avatar.jpg');
+                const avatarRes = await UploadAPI.uploadFiles([file]);
+                avatarUrl = avatarRes?.data?.[0]?.relativeUrl || avatarUrl;
+            }
+            debugger
+            // Handle images upload if needed
+            let images = data.images;
+            const filesToUpload = images.filter(img => typeof img === 'object' && (img as any) instanceof File);
+            if (filesToUpload.length > 0) {
+                const imagesRes = await UploadAPI.uploadFiles(filesToUpload);
+                // Replace only File objects with uploaded URLs, keep string URLs as is
+                let uploadedIdx = 0;
+                debugger
+                images = images.map(img => {
+                    if (typeof img === 'object' && (img as any) instanceof File) {
+                        const url = imagesRes?.data?.[uploadedIdx]?.relativeUrl;
+                        uploadedIdx++;
+                        return url || '';
+                    }
+                    return img;
+                });
+            }
+            debugger
+            const payload = {
+                ...data,
+                avatarUrl
+            };
+
+            const res = await brandSettingAPI.UpsertBrandSetting(payload);
+            if (res.data?.success) {
+                toast.success('Lưu thay đổi thành công!');
+            } else {
+                toast.error(res.data?.message || 'Lưu thay đổi thất bại!');
+            }
+        } catch (error: any) {
+            toast.error(error?.response?.data?.message || 'Đã xảy ra lỗi khi lưu thay đổi!');
+        }
     };
 
     const handleFileInputChange = (file: ChangeEvent) => {
@@ -69,7 +146,7 @@ const LeftSide: React.FC<LeftSideProps> = ({ form, setForm }) => {
                 </CardContent>
                 <CardContent className='mbe-5'>
                     <div className='flex max-sm:flex-col items-center gap-6'>
-                        <img height={100} width={100} className='rounded' src={imgSrc} alt='Profile' />
+                        <img height={100} width={100} className='rounded' src={form.avatarUrl ? `${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}${form.avatarUrl}` : imgSrc} alt='Profile' />
                         <div className='flex flex-grow flex-col gap-4'>
                             <div className='flex flex-col sm:flex-row gap-4'>
                                 <Button component='label' size='small' variant='contained' htmlFor='account-settings-upload-image'>
