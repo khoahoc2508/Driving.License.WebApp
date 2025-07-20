@@ -602,18 +602,21 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
       >
         {titlePage}
       </Typography>
-      <Card className='h-full flex w-full justify-center'>
-        <Grid2 container width={{ xs: '100%', md: '60%' }}>
-          <Grid size={{ xs: 0, md: 5 }}>
-            {/* Cột trái */}
-            <CardContent className='h-full hidden md:block pr-0'>
+
+      <Grid2 container spacing={2} justifyContent="center" alignItems="stretch" sx={{ maxWidth: 1100, margin: '0 auto' }}>
+        {/* Card bên trái: Thông tin trung tâm */}
+        <Grid2 size={{ xs: 12, md: 4 }}>
+          <Card sx={{ height: '100%' }}>
+            <CardContent>
               <BrandSettingPreview form={form} imgSrc={imgSrc} />
             </CardContent>
-          </Grid>
+          </Card>
+        </Grid2>
 
-          <Grid size={{ xs: 12, md: 7 }}>
-            {/* Cột phải */}
-            <CardContent className='flex-1 w-full pl-0'> {/* Removed padding classes here */}
+        {/* Card bên phải: Form đăng ký */}
+        <Grid2 size={{ xs: 12, md: 8 }}>
+          <Card sx={{ height: '100%' }}>
+            <CardContent sx={{ p: 0 }}>
               <StepperWrapper>
                 <Stepper activeStep={activeStep} orientation="horizontal" className='p-4'>
                   {steps.map((label, index) => {
@@ -690,7 +693,6 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
                   })}
                 </Stepper>
               </StepperWrapper>
-
               <Divider />
               <CardContent className='h-full'>
                 {activeStep === steps.length ? (
@@ -715,10 +717,11 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
                 )}
               </CardContent>
             </CardContent>
-          </Grid>
+          </Card>
         </Grid2>
-      </Card>
+      </Grid2>
 
+      {/* Dialogs giữ nguyên */}
       <Dialog
         open={openConfirmDialog}
         onClose={handleCancelSubmit}
