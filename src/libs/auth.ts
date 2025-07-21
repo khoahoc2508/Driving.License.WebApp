@@ -69,7 +69,8 @@ export const authOptions: NextAuthOptions = {
             return {
               access_token: data?.access_token,
               name: userInfo?.role,
-              email: userInfo?.email
+              email: userInfo?.email,
+              id: userInfo?.sub
             } as any
           }
 
@@ -132,6 +133,7 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         // ** Add custom params to user in session which are added in `jwt()` callback via `token` parameter
         session.user.name = token.name
+        session.user.id = token.sub
       }
 
       return session
