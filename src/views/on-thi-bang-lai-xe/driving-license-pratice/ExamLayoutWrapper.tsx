@@ -57,7 +57,7 @@ const ExamLayoutWrapper = ({
         <>
             <div className='bg-white w-full'>
                 {breadcrumbs.length > 0 && (
-                    <div style={{ background: '#f7f7f7', padding: '12px 20px', fontSize: 14, color: '#888', maxWidth: 1150, margin: '0 auto', borderRadius: '2px' }}>
+                    <div style={{ background: '#f7f7f7', padding: '12px 20px', fontSize: 14, color: '#888', width: '76%', margin: '0 auto', borderRadius: '2px' }}>
                         {isMobile ? (
                             <Box>
                                 <StyledBreadcrumbs aria-label="breadcrumb" maxItems={2} itemsAfterCollapse={1}>
