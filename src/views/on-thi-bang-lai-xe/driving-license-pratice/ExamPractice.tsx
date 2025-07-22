@@ -280,7 +280,7 @@ const ExamPractice = ({
                                                     variant={index === currentQuestionIndex ? 'contained' : 'outlined'}
                                                     color={(index === currentQuestionIndex || (q.id && answers[q.id])) ? 'primary' : 'inherit'}
                                                     onClick={() => setCurrentQuestionIndex(index)}
-                                                    sx={{ width: 50, height: 45, fontSize: 15, p: 0 }}
+                                                    sx={{ minWidth: 57, minHeight: 45, padding: 0 }}
                                                 >
                                                     {index + 1}
                                                 </Button>
@@ -458,7 +458,7 @@ const ExamPractice = ({
                     </Button>
                 </DialogActions>
             </Dialog>
-        </Container>
+        </Container >
     )
 }
 

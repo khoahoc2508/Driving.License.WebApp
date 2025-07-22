@@ -209,7 +209,7 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
                                                         color={color}
                                                         key={q.id || index}
                                                         onClick={() => setCurrentQuestionIndex(index)}
-                                                        sx={{ position: 'relative', width: 50, height: 45, fontSize: 15, p: 0 }}
+                                                        sx={{ position: 'relative', minWidth: 57, minHeight: 45, padding: 0 }}
                                                     >
                                                         {index + 1}
                                                         {isCritical && (
@@ -299,9 +299,6 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
                                 </Card>
                             </Grid>
                         </Grid>
-                        <Box mt={4} display="flex" justifyContent="center">
-                            <Button variant="text" onClick={handleBackToList}>Quay lại danh sách đề</Button>
-                        </Box>
                     </Box>
                 </Container>
             }

@@ -24,6 +24,8 @@
 .body {
   inline-size: 100%;
   background-color: var(--mui-palette-background-paper);
+  padding-bottom: 20px;
+
   .content {
     inline-size: calc(100% - 48px);
     /* padding-block: 0.475rem;
