@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 
 import { useRouter } from 'next/navigation'
-
+import styles from './styles.module.css'
 import { Box, Button, Card, CardContent, Grid, Typography, Container, Divider } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { toast } from 'react-toastify'
@@ -119,8 +119,8 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
     return (
         <ExamLayoutWrapper isLoading={isLoading}>
             {
-                isLoading ? <div className='h-screen'></div> : <Container className='max-w-[87%]'>
-                    <Box sx={{ p: { xs: 2, md: 6 } }}>
+                isLoading ? <div className='h-screen'></div> : <Container className={styles.content} style={{ padding: 0 }}>
+                    <Box sx={{ p: { xs: 0 } }}>
                         <Grid container spacing={2}>
                             <Grid item xs={12} md={4}>
                                 <Card>

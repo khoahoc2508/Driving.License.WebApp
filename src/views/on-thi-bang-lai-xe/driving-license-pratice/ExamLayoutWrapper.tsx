@@ -6,6 +6,7 @@ import { Box, Button, Collapse, List, ListItem, ListItemButton, ListItemText, us
 import { styled } from '@mui/material/styles'
 
 import AppLoading from '@/@core/components/AppLoading'
+import styles from './styles.module.css'
 
 const StyledBreadcrumbs = styled(Breadcrumbs)(({ }) => ({
     '& .MuiBreadcrumbs-ol': {
@@ -54,10 +55,10 @@ const ExamLayoutWrapper = ({
     }
 
     return (
-        <>
-            <div className='bg-white w-full'>
+        <div className={styles.body}>
+            <div className={styles.content}>
                 {breadcrumbs.length > 0 && (
-                    <div style={{ background: '#f7f7f7', padding: '12px 20px', fontSize: 14, color: '#888', width: '76%', margin: '0 auto', borderRadius: '2px' }}>
+                    <div style={{ background: '#f7f7f7', padding: '12px 20px', fontSize: 14, color: '#888', width: '100%', margin: '0 auto', borderRadius: '2px' }}>
                         {isMobile ? (
                             <Box>
                                 <StyledBreadcrumbs aria-label="breadcrumb" maxItems={2} itemsAfterCollapse={1}>
@@ -148,7 +149,7 @@ const ExamLayoutWrapper = ({
             </div>
             {isLoading && <AppLoading />}
             {children}
-        </>
+        </div>
     )
 }
 

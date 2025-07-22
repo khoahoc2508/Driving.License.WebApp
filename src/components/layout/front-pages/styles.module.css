@@ -7,6 +7,7 @@
   justify-content: center;
   inline-size: 100%;
   pointer-events: none;
+  background-color: var(--mui-palette-background-paper);
 
   .navbar {
     inline-size: calc(100% - 48px);
@@ -45,6 +46,16 @@
       justify-content: space-between;
       gap: 1.5rem;
     }
+  }
+}
+
+.inputBorder {
+  fieldset {
+    border-color: rgb(var(--mui-mainColorChannels-dark) / 0.22) !important;
+  }
+  label,
+  input {
+    color: rgb(var(--mui-mainColorChannels-dark) / 0.9) !important;
   }
 }
 

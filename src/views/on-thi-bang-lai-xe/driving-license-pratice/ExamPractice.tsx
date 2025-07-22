@@ -7,7 +7,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { Box, Button, Card, CardContent, Grid, Typography, Container, Divider, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { toast } from 'react-toastify'
-
+import styles from './styles.module.css'
 import type { questionTypes } from '@/types/questionTypes'
 import type { GroupExamDto } from '@/types/groupExamTypes'
 import ExamSubmissionAPI from '@/libs/api/examSubmissionAPI'
@@ -215,8 +215,8 @@ const ExamPractice = ({
     }, [currentQuestionIndex, questions.length])
 
     return (
-        <Container sx={{ maxWidth: { xs: '100%', md: '87%' } }}>
-            <Box sx={{ p: { xs: 1, md: 6 } }}>
+        <Container className={styles.content} style={{ padding: 0 }}>
+            <Box sx={{ p: { xs: 0 } }}>
                 <Typography variant="h4" gutterBottom align="center">
                     {selectedClass?.name ? `${selectedClass.name.toUpperCase()} - ` : ''}{selectedExamType?.name?.toUpperCase()}
                 </Typography>
