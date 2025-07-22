@@ -317,7 +317,6 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
     }
   })
 
-  console.log(urlOwnerId)
   React.useEffect(() => {
     const fetchBrandSetting = async () => {
       try {

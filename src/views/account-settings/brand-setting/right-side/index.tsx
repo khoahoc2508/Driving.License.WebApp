@@ -44,7 +44,7 @@ const RightSide: React.FC<RightSideProps> = ({ form, imgSrc }) => {
                             label='Đăng ký xe máy'
                             multiline
                             minRows={2}
-                            value={(process.env.NEXT_PUBLIC_WEB_DANG_KY_BANG_LAI_XE_MAY ?? '').replace('{0}', data?.user?.email ?? '')}
+                            value={(process.env.NEXT_PUBLIC_WEB_DANG_KY_BANG_LAI_XE_MAY ?? '').replace('{0}', data?.user?.id ?? '')}
                             InputProps={{ readOnly: true }}
                             sx={{ mb: 3, '& .MuiInputBase-input': { whiteSpace: 'pre-line' } }}
                         />
@@ -55,7 +55,7 @@ const RightSide: React.FC<RightSideProps> = ({ form, imgSrc }) => {
                             label='Đăng ký ô tô'
                             multiline
                             minRows={2}
-                            value={(process.env.NEXT_PUBLIC_WEB_DANG_KY_BANG_LAI_OTO ?? '').replace('{0}', data?.user?.email ?? '')}
+                            value={(process.env.NEXT_PUBLIC_WEB_DANG_KY_BANG_LAI_OTO ?? '').replace('{0}', data?.user?.id ?? '')}
                             InputProps={{ readOnly: true }}
                             sx={{ mb: 3, '& .MuiInputBase-input': { whiteSpace: 'pre-line' } }}
                         />
