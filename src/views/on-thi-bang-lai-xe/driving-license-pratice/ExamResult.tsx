@@ -3,10 +3,12 @@
 import React, { useState, useEffect } from 'react'
 
 import { useRouter } from 'next/navigation'
-import styles from './styles.module.css'
+
 import { Box, Button, Card, CardContent, Grid, Typography, Container, Divider } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { toast } from 'react-toastify'
+
+import styles from './styles.module.css'
 
 import type { questionTypes } from '@/types/questionTypes'
 import type { GroupExamDto } from '@/types/groupExamTypes'
@@ -102,10 +104,6 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
 
         return hms;
     };
-
-    const handleBackToList = () => {
-        router.push('/on-thi-bang-lai-xe')
-    }
 
     const handleRestartExam = () => {
         router.push('/on-thi-bang-lai-xe')
