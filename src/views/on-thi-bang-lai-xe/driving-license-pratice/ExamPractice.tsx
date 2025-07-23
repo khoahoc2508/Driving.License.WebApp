@@ -235,8 +235,8 @@ const ExamPractice = ({
                       <Box display="flex" justifyContent="space-between" alignItems="center">
                         <Typography variant="h5">Thời gian:</Typography>
                         <Box sx={{ display: 'flex', alignItems: 'center', color: timeLeft <= exam.durationMinutes * 60 * 0.05 ? 'error.main' : 'primary.main' }}>
-                          <i className='ri-time-line' style={{ fontSize: '1.25rem', marginRight: '4px' }} />
-                          <Typography variant='h6' component='span' sx={{ fontWeight: 'medium' }} className={timeLeft <= exam.durationMinutes * 60 * 0.05 ? 'text-error' : 'text-primary'}>
+                          <i className='ri-time-line ' style={{ fontSize: '1.25rem', marginRight: '4px' }} />
+                          <Typography variant='h6' component='span' sx={{ fontWeight: 'medium' }} className={timeLeft <= exam.durationMinutes * 60 * 0.05 ? 'text-error w-8' : 'text-primary w-8'}>
                             {formatTime(timeLeft)}
                           </Typography>
                         </Box>
