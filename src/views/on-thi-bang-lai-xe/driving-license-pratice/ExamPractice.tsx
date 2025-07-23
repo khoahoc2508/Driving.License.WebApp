@@ -284,7 +284,7 @@ const ExamPractice = ({
                         >
                           {index + 1}
                           {isPractice && q?.isCriticalQuestion && (
-                            <Box component="span" sx={{ position: 'absolute', top: 4, right: 6, color: 'red', fontSize: 18, fontWeight: 700 }}>*</Box>
+                            <Box component="span" sx={{ position: 'absolute', top: 1, right: 6, color: 'red' }}>*</Box>
                           )}
                         </Button>
                       ))}
