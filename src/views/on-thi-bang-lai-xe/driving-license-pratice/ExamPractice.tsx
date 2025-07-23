@@ -351,9 +351,9 @@ const ExamPractice = ({
                                         Giải thích: {answerDetail.explanation}
                                     </Box>
                                 )}
-                                {showAnswer && (
+                                {/* {showAnswer && (
                                     <Button variant="outlined" sx={{ mt: 2 }} onClick={handleCloseAnswer}>Đóng đáp án</Button>
-                                )}
+                                )} */}
                             </CardContent>
                             <Divider />
                             <Box
@@ -408,11 +408,11 @@ const ExamPractice = ({
                                         width: { xs: '100%', md: 'auto' }
                                     }}
                                 >
-                                    {isPractice && !showAnswer && (
+                                    {isPractice && (
                                         <Button
                                             variant="outlined"
                                             onClick={handleShowAnswer}
-                                            disabled={loadingAnswer}
+                                            disabled={loadingAnswer || !answers[currentQuestion.id as string] || showAnswer}
                                             sx={{
                                                 flex: { xs: 1, md: 'none' },
                                                 minWidth: { xs: 'auto', md: 'auto' }
