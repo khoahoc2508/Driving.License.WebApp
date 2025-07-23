@@ -221,8 +221,11 @@ const ExamPractice = ({
                 <Typography variant="h4" gutterBottom align="center">
                     {selectedClass?.name ? `${selectedClass.name.toUpperCase()} - ` : ''}{selectedExamType?.name?.toUpperCase()}
                 </Typography>
-                <Typography variant="h5" gutterBottom align="center" sx={{ color: 'text.secondary', mb: 4 }}>
-                    {exam.name}
+                {/* <Typography variant="h4" gutterBottom align="center" sx={{ color: 'text.secondary', my: '32px' }}>
+                    {exam.name.toUpperCase()}
+                </Typography> */}
+                <Typography variant='h4' className='text-center my-8 flex items-center justify-center gap-2'>
+                    {exam.name.toUpperCase()}
                 </Typography>
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={4}>
@@ -281,9 +284,12 @@ const ExamPractice = ({
                                                     variant={index === currentQuestionIndex ? 'contained' : 'outlined'}
                                                     color={(index === currentQuestionIndex || (q.id && answers[q.id])) ? 'primary' : 'inherit'}
                                                     onClick={() => setCurrentQuestionIndex(index)}
-                                                    sx={{ minWidth: 57, minHeight: 45, padding: 0 }}
+                                                    sx={isPractice ? { minWidth: 57, minHeight: 45, padding: 0 } : { position: 'relative', minWidth: 57, minHeight: 45, padding: 0 }}
                                                 >
                                                     {index + 1}
+                                                    {isPractice && q?.isCriticalQuestion && (
+                                                        <Box component="span" sx={{ position: 'absolute', top: 4, right: 6, color: 'red', fontSize: 18, fontWeight: 700 }}>*</Box>
+                                                    )}
                                                 </Button>
                                             ))}
                                         </Box>
@@ -295,7 +301,7 @@ const ExamPractice = ({
                     <Grid item xs={12} md={8}>
                         <Card sx={{ height: 'auto' }} className='flex flex-col justify-start'>
                             <CardContent sx={{ flexGrow: 1 }}>
-                                <Typography variant="h5" className='text-[#98999e]'>Câu {currentQuestionIndex + 1}</Typography>
+                                <Typography variant="h5" className='text-[#98999e]'>Câu {currentQuestionIndex + 1}{isPractice && questions[currentQuestionIndex]?.isCriticalQuestion ? <span className='text-error'> *</span> : ''}</Typography>
                                 <Typography variant="h6" className='my-3' sx={{ fontWeight: 600 }}>{currentQuestion.content}</Typography>
                                 {currentQuestion.imageUrl && <QuestionImage src={process.env.NEXT_PUBLIC_STORAGE_BASE_URL + currentQuestion.imageUrl} alt={`Question ${currentQuestionIndex + 1}`} />}
                                 <Divider sx={{ mb: 4 }} />
@@ -311,8 +317,6 @@ const ExamPractice = ({
                                             } else if (isSelected) {
                                                 color = '#f55156'; border = '1px solid #f55156';
                                             }
-
-
                                             return (
                                                 <Box
                                                     key={ans.id}

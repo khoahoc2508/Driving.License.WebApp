@@ -106,7 +106,7 @@ const FrontMenu = (props: Props) => {
         component={Link}
         href='/on-thi-bang-lai-xe'
         className={classnames('font-bold  plb-3 pli-1.5 hover:text-primary', {
-          'text-primary': intersections.drivingLicensePractice
+          'text-primary': pathname.startsWith('/on-thi-bang-lai-xe')
         })}
         color='text.primary'
       >

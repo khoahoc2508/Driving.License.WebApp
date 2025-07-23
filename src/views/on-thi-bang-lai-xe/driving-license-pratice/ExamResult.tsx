@@ -258,7 +258,7 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
                                                 );
                                             })}
                                         </div>
-                                        <Divider sx={{ mt: 4 }} />
+                                        {currentResultAnswer?.question?.explanation && <Divider sx={{ mt: 4 }} />}
                                         {currentResultAnswer?.question?.explanation && (
                                             <Box sx={{ mt: 4, p: 2, border: '1px solid #7c4dff', borderRadius: '8px', color: '#7c4dff' }}>
                                                 Giải thích: {currentResultAnswer?.question?.explanation}

@@ -7,6 +7,7 @@ import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 import GroupExam from './GroupExam'
 import ExamLayoutWrapper from './ExamLayoutWrapper'
 import type { GroupExamDto } from '@/types/groupExamTypes'
+import { toPascalCase } from '@/utils/string'
 
 function findNodeAndAncestors(groups: GroupExamDto[], slug: string): GroupExamDto[] {
     for (const group of groups) {
@@ -24,7 +25,7 @@ function findNodeAndAncestors(groups: GroupExamDto[], slug: string): GroupExamDt
 }
 
 function getBreadcrumbsFromParams(searchParams: URLSearchParams, groups: GroupExamDto[]) {
-    const breadcrumbs: { label: string; href?: string }[] = [{ label: 'Ôn thi GPLX', href: '/on-thi-bang-lai-xe' }];
+    const breadcrumbs: { label: string; href?: string }[] = [{ label: 'Ôn Thi GPLX', href: '/on-thi-bang-lai-xe' }];
     const slug = searchParams.get('examSlug') || searchParams.get('childSlug') || searchParams.get('parentSlug');
 
     if (slug) {
@@ -34,16 +35,16 @@ function getBreadcrumbsFromParams(searchParams: URLSearchParams, groups: GroupEx
         if (nodes.length) {
             nodes.forEach((node, idx) => {
                 let paramName = '';
-
                 if (idx === 0) paramName = 'parentSlug';
                 else if (idx === 1) paramName = 'childSlug';
                 else if (idx === 2) paramName = 'examSlug';
 
+                const label = toPascalCase(node.name);
                 if (paramName) {
                     href += (href ? '&' : '?') + `${paramName}=${node.slug}`;
-                    breadcrumbs.push({ label: node.name, href });
+                    breadcrumbs.push({ label: label, href });
                 } else {
-                    breadcrumbs.push({ label: node.name });
+                    breadcrumbs.push({ label: label });
                 }
             });
         }
@@ -52,7 +53,7 @@ function getBreadcrumbsFromParams(searchParams: URLSearchParams, groups: GroupEx
     const examname = searchParams.get('examname');
 
     if (examname) {
-        breadcrumbs.push({ label: examname });
+        breadcrumbs.push({ label: toPascalCase(examname) });
     }
 
 
@@ -67,10 +68,19 @@ const DrivingLicensePractice = () => {
     const searchParams = useSearchParams()
 
     const breadcrumbs = useMemo(() => {
-        if (groups.length === 0) return [{ label: 'Ôn thi GPLX', href: '/on-thi-bang-lai-xe' }]
+        const parentSlug = searchParams.get('parentSlug');
+        const isOnlyParentSlug =
+            searchParams.size === 1 &&
+            searchParams.has('parentSlug') &&
+            (parentSlug === 'xe-may' || parentSlug === 'o-to');
 
-        return getBreadcrumbsFromParams(searchParams, groups)
-    }, [searchParams, groups])
+        if (searchParams.size < 1 || isOnlyParentSlug) return [];
+
+        if (groups.length === 0)
+            return [{ label: 'Ôn Thi GPLX', href: '/on-thi-bang-lai-xe' }];
+
+        return getBreadcrumbsFromParams(searchParams, groups);
+    }, [searchParams, groups]);
 
     const handleBreadcrumbClick = (slugArr: string[]) => {
         const params = new URLSearchParams();
