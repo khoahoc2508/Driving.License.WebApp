@@ -166,10 +166,6 @@ const ExamPractice = ({
         }
     };
 
-    const handleCloseAnswer = () => {
-        setShowAnswer(false);
-        setAnswerDetail(null);
-    };
 
     const currentQuestion = questions[currentQuestionIndex]
 
@@ -317,6 +313,8 @@ const ExamPractice = ({
                                             } else if (isSelected) {
                                                 color = '#f55156'; border = '1px solid #f55156';
                                             }
+
+
                                             return (
                                                 <Box
                                                     key={ans.id}
@@ -351,9 +349,6 @@ const ExamPractice = ({
                                         Giải thích: {answerDetail.explanation}
                                     </Box>
                                 )}
-                                {/* {showAnswer && (
-                                    <Button variant="outlined" sx={{ mt: 2 }} onClick={handleCloseAnswer}>Đóng đáp án</Button>
-                                )} */}
                             </CardContent>
                             <Divider />
                             <Box

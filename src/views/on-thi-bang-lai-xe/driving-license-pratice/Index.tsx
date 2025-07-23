@@ -35,11 +35,13 @@ function getBreadcrumbsFromParams(searchParams: URLSearchParams, groups: GroupEx
         if (nodes.length) {
             nodes.forEach((node, idx) => {
                 let paramName = '';
+
                 if (idx === 0) paramName = 'parentSlug';
                 else if (idx === 1) paramName = 'childSlug';
                 else if (idx === 2) paramName = 'examSlug';
 
                 const label = toPascalCase(node.name);
+
                 if (paramName) {
                     href += (href ? '&' : '?') + `${paramName}=${node.slug}`;
                     breadcrumbs.push({ label: label, href });
@@ -69,6 +71,7 @@ const DrivingLicensePractice = () => {
 
     const breadcrumbs = useMemo(() => {
         const parentSlug = searchParams.get('parentSlug');
+
         const isOnlyParentSlug =
             searchParams.size === 1 &&
             searchParams.has('parentSlug') &&
