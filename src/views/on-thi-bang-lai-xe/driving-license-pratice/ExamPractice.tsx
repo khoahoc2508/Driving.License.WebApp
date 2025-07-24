@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react'
 
 import { useRouter, useSearchParams } from 'next/navigation'
 
-import { Box, Button, Card, CardContent, Grid, Typography, Container, Divider, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material'
+import { Box, Button, Card, useTheme, CardContent, Grid, Typography, Container, Divider, Dialog, DialogTitle, DialogContent, DialogActions, useMediaQuery } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { toast } from 'react-toastify'
 
@@ -19,7 +19,7 @@ import QuestionAPI from '@/libs/api/questionAPI'
 
 const QuestionImage = styled('img')({
   maxWidth: '100%',
-  maxHeight: '300px',
+  maxHeight: '200px',
   objectFit: 'contain',
   margin: '12px auto',
   borderRadius: '8px',
@@ -41,6 +41,14 @@ const AnswerLabel = styled('div')<{ selected: boolean }>(({ theme, selected }) =
   },
 }))
 
+const ButtonQuestionIndex = styled(Button)(({ theme }) => ({
+  borderRadius: '8px',
+  cursor: 'pointer',
+  '&:hover': {
+    borderColor: theme.palette.primary.main,
+  },
+}));
+
 const ExamPractice = ({
   exam,
   questions,
@@ -56,6 +64,12 @@ const ExamPractice = ({
 }) => {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const leftColumnRef = useRef<HTMLDivElement>(null);
+  const [leftHeight, setLeftHeight] = useState<number | undefined>(undefined);
+
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [answers, setAnswers] = useState<Record<string, string>>({})
   const [timeLeft, setTimeLeft] = useState(exam.durationMinutes * 60)
@@ -148,6 +162,11 @@ const ExamPractice = ({
   useEffect(() => {
     setShowAnswer(false);
     setAnswerDetail(null);
+
+    debugger
+    if (leftColumnRef.current) {
+      setLeftHeight(leftColumnRef.current.offsetHeight);
+    }
   }, [currentQuestionIndex]);
 
   const handleShowAnswer = async () => {
@@ -202,6 +221,8 @@ const ExamPractice = ({
       }
     }
 
+
+
     // Thêm event listener
     window.addEventListener('keydown', handleKeyDown)
 
@@ -217,16 +238,12 @@ const ExamPractice = ({
         <Typography variant="h4" gutterBottom align="center">
           {selectedClass?.name ? `${selectedClass.name.toUpperCase()} - ` : ''}{selectedExamType?.name?.toUpperCase()}
         </Typography>
-        {/* <Typography variant="h4" gutterBottom align="center" sx={{ color: 'text.secondary', my: '32px' }}>
-                    {exam.name.toUpperCase()}
-                </Typography> */}
         <Typography variant='h4' className='text-center my-8 flex items-center justify-center gap-2'>
           {exam.name.toUpperCase()}
         </Typography>
         <Grid container spacing={2}>
           <Grid item xs={12} md={4}>
-            <Grid container spacing={2}>
-              {/* Ẩn đồng hồ nếu là Practice */}
+            <Grid container spacing={2} ref={leftColumnRef}>
               {!isPractice && (
                 <Grid item xs={12}>
                   <Card>
@@ -275,18 +292,23 @@ const ExamPractice = ({
                       className="rounded-sm py-4 mt-5"
                     >
                       {questions.map((q, index) => (
-                        <Button
+                        <ButtonQuestionIndex
                           key={q.id || index}
                           variant={index === currentQuestionIndex ? 'contained' : 'outlined'}
                           color={(index === currentQuestionIndex || (q.id && answers[q.id])) ? 'primary' : 'inherit'}
                           onClick={() => setCurrentQuestionIndex(index)}
-                          sx={isPractice ? { minWidth: 57, minHeight: 45, padding: 0 } : { position: 'relative', minWidth: 57, minHeight: 45, padding: 0 }}
+                          sx={{
+                            minWidth: isMobile ? 50 : 57,
+                            minHeight: 45,
+                            padding: 0,
+                            ...(isPractice ? {} : { position: 'relative' }),
+                          }}
                         >
                           {index + 1}
                           {isPractice && q?.isCriticalQuestion && (
                             <Box component="span" sx={{ position: 'absolute', top: 1, right: 6, color: 'red' }}>*</Box>
                           )}
-                        </Button>
+                        </ButtonQuestionIndex>
                       ))}
                     </Box>
                   </CardContent>
@@ -294,9 +316,10 @@ const ExamPractice = ({
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={12} md={8}>
-            <Card sx={{ height: 'auto' }} className='flex flex-col justify-start'>
+          <Grid item xs={12} md={8} sx={{ minHeight: leftHeight }}>
+            <Card sx={{ height: '100%' }} className='flex flex-col justify-start'>
               <CardContent sx={{ flexGrow: 1 }}>
+                {leftHeight}
                 <Typography variant="h5" className='text-[#98999e]'>Câu {currentQuestionIndex + 1}{isPractice && questions[currentQuestionIndex]?.isCriticalQuestion ? <span className='text-error'> *</span> : ''}</Typography>
                 <Typography variant="h6" className='my-3' sx={{ fontWeight: 600 }}>{currentQuestion.content}</Typography>
                 {currentQuestion.imageUrl && <QuestionImage src={process.env.NEXT_PUBLIC_STORAGE_BASE_URL + currentQuestion.imageUrl} alt={`Question ${currentQuestionIndex + 1}`} />}
@@ -313,8 +336,6 @@ const ExamPractice = ({
                       } else if (isSelected) {
                         color = '#f55156'; border = '1px solid #f55156';
                       }
-
-
                       return (
                         <Box
                           key={ans.id}
@@ -343,7 +364,7 @@ const ExamPractice = ({
                       </AnswerLabel>
                     ))}
                 </div>
-                {/* Hiển thị giải thích nếu có và showAnswer */}
+                {showAnswer && answerDetail?.explanation && <Divider sx={{ mt: 4 }} />}
                 {showAnswer && answerDetail?.explanation && (
                   <Box sx={{ mt: 4, p: 2, border: '1px solid #7c4dff', borderRadius: '8px', color: '#7c4dff' }}>
                     Giải thích: {answerDetail.explanation}
@@ -366,8 +387,9 @@ const ExamPractice = ({
                   sx={{
                     display: 'flex',
                     flexDirection: { xs: 'row', md: 'row' },
-                    gap: { xs: 1, md: 2 },
-                    width: { xs: '100%', md: 'auto' }
+                    gap: { xs: 15, md: 3 },
+                    width: { xs: '100%', md: 'auto' },
+                    marginTop: { xs: '10px', md: '0' }
                   }}
                 >
                   <Button
@@ -389,7 +411,7 @@ const ExamPractice = ({
                     endIcon={<i className='ri-arrow-right-line' />}
                     sx={{
                       flex: { xs: 1, md: 'none' },
-                      minWidth: { xs: 'auto', md: 'auto' }
+                      minWidth: { xs: 'auto', md: 'auto' },
                     }}
                   >
                     SAU
@@ -398,9 +420,9 @@ const ExamPractice = ({
                 <Box
                   sx={{
                     display: 'flex',
-                    flexDirection: { xs: 'row', md: 'row' },
+                    flexDirection: { xs: 'column', md: 'row' },
                     gap: { xs: 1, md: 2 },
-                    width: { xs: '100%', md: 'auto' }
+                    width: { xs: '100%', md: 'auto' },
                   }}
                 >
                   {isPractice && (
@@ -410,7 +432,8 @@ const ExamPractice = ({
                       disabled={loadingAnswer || !answers[currentQuestion.id as string] || showAnswer}
                       sx={{
                         flex: { xs: 1, md: 'none' },
-                        minWidth: { xs: 'auto', md: 'auto' }
+                        minWidth: { xs: '100%', md: 'auto' },
+                        margin: { xs: '10px 0', md: '0' }
                       }}
                     >
                       {loadingAnswer ? 'Đang tải...' : 'XEM ĐÁP ÁN'}
@@ -423,7 +446,8 @@ const ExamPractice = ({
                     disabled={isSubmitting}
                     sx={{
                       flex: { xs: 1, md: 'none' },
-                      minWidth: { xs: 'auto', md: 'auto' }
+                      minWidth: { xs: 'auto', md: 'auto' },
+                      marginTop: isPractice ? {} : { xs: '10px', md: '0' }
                     }}
                   >
                     {isPractice ? 'KẾT THÚC ÔN' : 'KẾT THÚC THI'}
@@ -433,9 +457,7 @@ const ExamPractice = ({
             </Card>
           </Grid>
         </Grid>
-        {/* <Box mt={4} display="flex" justifyContent="center">
-                    <Button variant="text" onClick={onBack}>Quay lại danh sách đề</Button>
-                </Box> */}
+
       </Box>
       <Dialog
         open={openConfirmDialog}

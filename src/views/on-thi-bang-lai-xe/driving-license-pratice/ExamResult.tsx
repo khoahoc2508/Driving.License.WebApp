@@ -1,10 +1,10 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 import { useRouter } from 'next/navigation'
 
-import { Box, Button, Card, CardContent, Grid, Typography, Container, Divider } from '@mui/material'
+import { Box, Button, Card, CardContent, Grid, Typography, Container, Divider, useTheme, useMediaQuery } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { toast } from 'react-toastify'
 
@@ -16,10 +16,11 @@ import ExamSubmissionAPI from '@/libs/api/examSubmissionAPI'
 import type { ExamSubmissionResultDto, ExamSubmissionAnswerDto } from '@/types/examSubmissionTypes'
 import ExamLayoutWrapper from './ExamLayoutWrapper'
 import CONFIG from '@/configs/config'
+import { wrap } from 'module'
 
 const QuestionImage = styled('img')({
   maxWidth: '100%',
-  maxHeight: '300px',
+  maxHeight: '200px',
   objectFit: 'contain',
   margin: '12px auto',
   borderRadius: '8px',
@@ -28,18 +29,36 @@ const QuestionImage = styled('img')({
   justifyContent: "center"
 })
 
+const ButtonQuestionIndex = styled(Button)(({ theme }) => ({
+  borderRadius: '8px',
+  cursor: 'pointer',
+  '&:hover': {
+    borderColor: theme.palette.primary.main,
+  },
+}));
+
 interface ExamResultProps {
   examSubmissionId: string
 }
 
 const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
   const router = useRouter()
+  const leftColumnRef = useRef<HTMLDivElement>(null);
+  const [leftHeight, setLeftHeight] = useState<number | undefined>(undefined);
   const [result, setResult] = useState<ExamSubmissionResultDto | null>(null)
   const [questions, setQuestions] = useState<questionTypes[]>([])
   const [selectedClass, setSelectedClass] = useState<GroupExamDto | null>(null)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
 
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
+  useEffect(() => {
+    if (leftColumnRef.current) {
+      setLeftHeight(leftColumnRef.current.offsetHeight);
+    }
+  }, [currentQuestionIndex]);
 
   // Thêm event listener cho phím mũi tên
   useEffect(() => {
@@ -120,8 +139,8 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
         isLoading ? <div className='h-screen'></div> : <Container className={styles.content} style={{ padding: 0 }}>
           <Box sx={{ p: { xs: 0 } }}>
             <Grid container spacing={2}>
-              <Grid item xs={12} md={4}>
-                <Card>
+              <Grid item xs={12} md={4} >
+                <Card ref={leftColumnRef}>
                   <CardContent>
                     <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
                       <Typography variant="h5" fontWeight={500}>{isPractice ? 'Kết quả ôn' : 'Kết quả thi'}</Typography>
@@ -202,26 +221,32 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
                         const isCritical = userAnswer?.question?.isCriticalQuestion || q.isCriticalQuestion;
 
                         return (
-                          <Button
+                          <ButtonQuestionIndex
                             variant={index + 1 === currentQuestionIndex + 1 ? 'contained' : 'outlined'}
                             color={color}
                             key={q.id || index}
                             onClick={() => setCurrentQuestionIndex(index)}
-                            sx={{ position: 'relative', minWidth: 57, minHeight: 45, padding: 0 }}
+                            // sx={{ position: 'relative', minWidth: 57, minHeight: 45, padding: 0 }}
+                            sx={{
+                              minWidth: isMobile ? 50 : 57,
+                              minHeight: 45,
+                              padding: 0,
+                              position: 'relative',
+                            }}
                           >
                             {index + 1}
                             {isCritical && (
                               <Box component="span" sx={{ position: 'absolute', top: 1, right: 6, color: 'red' }}>*</Box>
                             )}
-                          </Button>
+                          </ButtonQuestionIndex>
                         );
                       })}
                     </Box>
                   </CardContent>
                 </Card>
               </Grid>
-              <Grid item xs={12} md={8}>
-                <Card sx={{ height: 'auto' }} className='flex flex-col justify-between'>
+              <Grid item xs={12} md={8} sx={{ minHeight: leftHeight }}>
+                <Card sx={{ height: '100%' }} className='flex flex-col justify-between'>
                   <CardContent sx={{ flexGrow: 1 }}>
                     <Typography variant="h5" className='text-[#98999e]'>Câu {currentQuestionIndex + 1}{questions[currentQuestionIndex]?.isCriticalQuestion ? <span className='text-error'> *</span> : ''}</Typography>
                     <Typography variant="h6" className='my-3' sx={{ fontWeight: 600 }}>{questions[currentQuestionIndex]?.content}</Typography>
@@ -266,13 +291,30 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
                     )}
                   </CardContent>
                   <Divider />
-                  <Box display="flex" justifyContent="space-between" alignItems="center" paddingX={6} paddingY={3}>
-                    <div>
+                  <Box sx={{
+                    display: 'flex',
+                    flexDirection: { xs: 'column', md: 'row' },
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    paddingX: { xs: 2, md: 6 },
+                    paddingY: 3,
+                    gap: { xs: 2, md: 0 }
+                  }}>
+                    <Box sx={{
+                      display: 'flex',
+                      flexDirection: { xs: 'row', md: 'row' },
+                      gap: { xs: 15, md: 3 },
+                      width: { xs: '100%', md: 'auto' }
+                    }}>
                       <Button
                         variant="outlined"
                         disabled={currentQuestionIndex === 0}
                         onClick={() => setCurrentQuestionIndex(prev => prev - 1)}
                         startIcon={<i className='ri-arrow-left-line' />}
+                        sx={{
+                          flex: { xs: 1, md: 'none' },
+                          minWidth: { xs: 'auto', md: 'auto' }
+                        }}
                       >
                         TRƯỚC
                       </Button>
@@ -280,16 +322,23 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
                         variant="outlined"
                         disabled={currentQuestionIndex === questions.length - 1}
                         onClick={() => setCurrentQuestionIndex(prev => prev + 1)}
-                        sx={{ ml: 2 }}
                         endIcon={<i className='ri-arrow-right-line' />}
+                        sx={{
+                          flex: { xs: 1, md: 'none' },
+                          minWidth: { xs: 'auto', md: 'auto' }
+                        }}
                       >
                         SAU
                       </Button>
-                    </div>
+                    </Box>
                     <Button
                       variant="contained"
                       color="primary"
                       onClick={handleRestartExam}
+                      sx={{
+                        minWidth: { xs: '100%', md: 'auto' },
+                        marginTop: { xs: '10px', md: '0' }
+                      }}
                     >
                       {isPractice ? 'ÔN LẠI' : 'THI LẠI'}
                     </Button>
