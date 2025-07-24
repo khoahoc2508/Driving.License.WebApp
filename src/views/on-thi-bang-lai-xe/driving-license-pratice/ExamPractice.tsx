@@ -164,6 +164,7 @@ const ExamPractice = ({
     setAnswerDetail(null);
 
     debugger
+
     if (leftColumnRef.current) {
       setLeftHeight(leftColumnRef.current.offsetHeight);
     }
@@ -336,7 +337,9 @@ const ExamPractice = ({
                       } else if (isSelected) {
                         color = '#f55156'; border = '1px solid #f55156';
                       }
-                      return (
+
+                      
+return (
                         <Box
                           key={ans.id}
                           sx={{

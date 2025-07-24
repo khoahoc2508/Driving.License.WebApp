@@ -16,7 +16,6 @@ import ExamSubmissionAPI from '@/libs/api/examSubmissionAPI'
 import type { ExamSubmissionResultDto, ExamSubmissionAnswerDto } from '@/types/examSubmissionTypes'
 import ExamLayoutWrapper from './ExamLayoutWrapper'
 import CONFIG from '@/configs/config'
-import { wrap } from 'module'
 
 const QuestionImage = styled('img')({
   maxWidth: '100%',
@@ -226,6 +225,7 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
                             color={color}
                             key={q.id || index}
                             onClick={() => setCurrentQuestionIndex(index)}
+
                             // sx={{ position: 'relative', minWidth: 57, minHeight: 45, padding: 0 }}
                             sx={{
                               minWidth: isMobile ? 50 : 57,
