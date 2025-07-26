@@ -33,7 +33,7 @@ const Providers = async (props: Props) => {
         <SettingsProvider settingsCookie={settingsCookie} mode={mode}>
           <ThemeProvider direction={direction} systemMode={systemMode}>
             {children}
-            <ToastContainer />
+            <ToastContainer hideProgressBar />
           </ThemeProvider>
         </SettingsProvider>
       </VerticalNavProvider>
