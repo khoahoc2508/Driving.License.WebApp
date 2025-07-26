@@ -63,25 +63,32 @@ const GroupExams = ({ setIsLoading, onGroupsLoaded }: ArticlesProps) => {
     const fetchData = async () => {
       const slug = exam || examSlug || childSlug || parentSlug;
       const nodes = slug ? findNodeAndAncestors(groups, slug) : [];
-
-      // Reset state trước khi set mới, nhưng KHÔNG reset examList nếu đang ở cấp examSlug
+      if (exam) {
+        setExamList(null)
+      }
       setSelectedClass(null);
       setSelectedExamType(null);
-      debugger
       if (!exam) {
         setSelectedExam(null);
         setExamSubmissionId(null);
         setExamQuestions(null);
         if (nodes[1]) setSelectedClass(nodes[1]);
       } else {
-        const [id, nameSlug] = exam.split('_');
         try {
-          const questionsRes = await QuestionAPI.getExamQuestions(id);
-          const data = questionsRes.data.data
-          setExamQuestions(data?.questions);
-          setExamSubmissionId(data?.examSubmissionId)
-          setSelectedExam(data?.examDto);
-          // setExamList(null);
+          if (!selectedExam) {
+            const [id, nameSlug] = exam.split('_');
+            const submissionRes = await ExamSubmissionAPI.startExam(id);
+            if (submissionRes.data.success && submissionRes.data.data?.examSubmissionId) {
+              setExamSubmissionId(submissionRes.data.data.examSubmissionId);
+
+              const questionsRes = await QuestionAPI.getExamQuestions(id);
+              const data = questionsRes.data.data
+
+              setExamQuestions(data?.questions);
+              setSelectedExam(data?.examDto);
+              // setExamList(null);
+            }
+          }
         } catch (error) {
         }
       }
@@ -126,7 +133,6 @@ const GroupExams = ({ setIsLoading, onGroupsLoaded }: ArticlesProps) => {
         setExamSubmissionId(submissionRes.data.data.examSubmissionId);
 
         const questionsRes = await QuestionAPI.getExamQuestions(exam.id);
-        debugger
         setExamQuestions(questionsRes.data.data?.questions);
         setSelectedExam(exam);
 
@@ -253,7 +259,7 @@ const GroupExams = ({ setIsLoading, onGroupsLoaded }: ArticlesProps) => {
     <div className='min-h-[100vh]'>
       {groups.map((group, index) => (
         <div className={`${index % 2 == 0 ? 'bg-backgroundPaper' : ''}`} key={group.id}>
-          <GroupSection group={group} onSelect={handleSelectClass} />
+          {!exam && <GroupSection group={group} onSelect={handleSelectClass} />}
         </div>
       ))}
     </div>
