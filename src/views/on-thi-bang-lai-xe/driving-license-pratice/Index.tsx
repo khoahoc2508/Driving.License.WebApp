@@ -56,7 +56,10 @@ function getBreadcrumbsFromParams(searchParams: URLSearchParams, groups: GroupEx
 
     if (exam) {
         const [id, nameSlug] = exam.split('_');
+
+        console.log(id)
         const examName = nameSlug.replace(/-/g, ' ');
+
         breadcrumbs.push({ label: toPascalCase(examName) });
     }
 

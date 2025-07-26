@@ -63,11 +63,14 @@ const GroupExams = ({ setIsLoading, onGroupsLoaded }: ArticlesProps) => {
     const fetchData = async () => {
       const slug = exam || examSlug || childSlug || parentSlug;
       const nodes = slug ? findNodeAndAncestors(groups, slug) : [];
+
       if (exam) {
         setExamList(null)
       }
+
       setSelectedClass(null);
       setSelectedExamType(null);
+
       if (!exam) {
         setSelectedExam(null);
         setExamSubmissionId(null);
@@ -77,7 +80,10 @@ const GroupExams = ({ setIsLoading, onGroupsLoaded }: ArticlesProps) => {
         try {
           if (!selectedExam) {
             const [id, nameSlug] = exam.split('_');
+
+            console.log(nameSlug)
             const submissionRes = await ExamSubmissionAPI.startExam(id);
+
             if (submissionRes.data.success && submissionRes.data.data?.examSubmissionId) {
               setExamSubmissionId(submissionRes.data.data.examSubmissionId);
 
@@ -86,6 +92,7 @@ const GroupExams = ({ setIsLoading, onGroupsLoaded }: ArticlesProps) => {
 
               setExamQuestions(data?.questions);
               setSelectedExam(data?.examDto);
+
               // setExamList(null);
             }
           }
@@ -133,6 +140,7 @@ const GroupExams = ({ setIsLoading, onGroupsLoaded }: ArticlesProps) => {
         setExamSubmissionId(submissionRes.data.data.examSubmissionId);
 
         const questionsRes = await QuestionAPI.getExamQuestions(exam.id);
+
         setExamQuestions(questionsRes.data.data?.questions);
         setSelectedExam(exam);
 

@@ -16,7 +16,6 @@ import ExamSubmissionAPI from '@/libs/api/examSubmissionAPI'
 import type { ExamSubmissionResultDto, ExamSubmissionAnswerDto } from '@/types/examSubmissionTypes'
 import ExamLayoutWrapper from './ExamLayoutWrapper'
 import CONFIG from '@/configs/config'
-import QuestionAPI from '@/libs/api/questionAPI'
 import GroupExamAPI from '@/libs/api/GroupExamAPI'
 
 const QuestionImage = styled('img')({
@@ -52,7 +51,6 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
   const [exam, setExam] = useState(null)
-  const [groups, setGroups] = useState<GroupExamDto[]>([])
 
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -96,6 +94,7 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
         setIsLoading(true)
         const res = await ExamSubmissionAPI.getExamResult(examSubmissionId)
         const data = res.data?.data
+
         if (data) {
           setResult(data)
           const questionList = data.userAnswers?.map((answer: ExamSubmissionAnswerDto) => answer.question).filter(Boolean) || []
@@ -135,8 +134,10 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
     const findPath = (nodes: any[], targetId: string, currentPath: any[]): boolean => {
       for (const node of nodes) {
         const newPath = [...currentPath, node];
+
         if (node.id === targetId) {
           path.push(...newPath);
+
           return true;
         }
 
@@ -152,6 +153,7 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
 
     // Tách ra slug và loại bỏ slug cuối nếu type !== 2
     const slugs = path.map(p => p.slug);
+
     if (path.length && path[path.length - 1].type !== 2) {
       slugs.pop(); // bỏ slug cuối nếu không phải type 2
     }
@@ -163,7 +165,7 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
     try {
       const res = await GroupExamAPI.getGroupExams({})
       const data = res.data.data;
-      setGroups(data || [])
+
       const slugs = getSlugAncestorsFromTree((exam as any)?.groupExamId, data);
       const [parentSlug = '', childSlug = '', examSlug = null] = slugs;
 
@@ -181,6 +183,7 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
     }
 
     console.log(exam)
+
     // call API 
     debugger
   }
