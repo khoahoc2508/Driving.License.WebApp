@@ -16,6 +16,8 @@ import ExamSubmissionAPI from '@/libs/api/examSubmissionAPI'
 import type { ExamSubmissionResultDto, ExamSubmissionAnswerDto } from '@/types/examSubmissionTypes'
 import ExamLayoutWrapper from './ExamLayoutWrapper'
 import CONFIG from '@/configs/config'
+import QuestionAPI from '@/libs/api/questionAPI'
+import GroupExamAPI from '@/libs/api/GroupExamAPI'
 
 const QuestionImage = styled('img')({
   maxWidth: '100%',
@@ -49,6 +51,8 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
   const [selectedClass, setSelectedClass] = useState<GroupExamDto | null>(null)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
+  const [exam, setExam] = useState(null)
+  const [groups, setGroups] = useState<GroupExamDto[]>([])
 
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -91,13 +95,14 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
       try {
         setIsLoading(true)
         const res = await ExamSubmissionAPI.getExamResult(examSubmissionId)
-
-        if (res.data?.data) {
-          setResult(res.data.data)
-          const questionList = res.data.data.userAnswers?.map((answer: ExamSubmissionAnswerDto) => answer.question).filter(Boolean) || []
+        const data = res.data?.data
+        if (data) {
+          setResult(data)
+          const questionList = data.userAnswers?.map((answer: ExamSubmissionAnswerDto) => answer.question).filter(Boolean) || []
 
           setQuestions(questionList)
-          setSelectedClass(res.data.data.licenseTypeDto)
+          setSelectedClass(data.licenseTypeDto)
+          setExam(data?.exam)
         } else {
           toast.error('Không tìm thấy kết quả thi')
           router.push('/on-thi-bang-lai-xe')
@@ -123,9 +128,63 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
     return hms;
   };
 
-  const handleRestartExam = () => {
-    router.push('/on-thi-bang-lai-xe')
+
+  const getSlugAncestorsFromTree = (groupId: string, groups: any[]): string[] => {
+    const path: any[] = [];
+
+    const findPath = (nodes: any[], targetId: string, currentPath: any[]): boolean => {
+      for (const node of nodes) {
+        const newPath = [...currentPath, node];
+        if (node.id === targetId) {
+          path.push(...newPath);
+          return true;
+        }
+
+        if (node.children && findPath(node.children, targetId, newPath)) {
+          return true;
+        }
+      }
+
+      return false;
+    };
+
+    findPath(groups, groupId, []);
+
+    // Tách ra slug và loại bỏ slug cuối nếu type !== 2
+    const slugs = path.map(p => p.slug);
+    if (path.length && path[path.length - 1].type !== 2) {
+      slugs.pop(); // bỏ slug cuối nếu không phải type 2
+    }
+
+    return slugs;
+  };
+
+  const handleRestartExam = async () => {
+    try {
+      const res = await GroupExamAPI.getGroupExams({})
+      const data = res.data.data;
+      setGroups(data || [])
+      const slugs = getSlugAncestorsFromTree((exam as any)?.groupExamId, data);
+      const [parentSlug = '', childSlug = '', examSlug = null] = slugs;
+
+      const examNameSlug = (exam as any).name.toLowerCase().replace(/\s+/g, '-');
+      const examPractice = `${(exam as any).id}_${examNameSlug}`; // Ví dụ: 550e8400-e29b-41d4-a716-446655440000_đề-1
+
+      if (examSlug) {
+        router.push(`/on-thi-bang-lai-xe?parentSlug=${parentSlug}&childSlug=${childSlug}&examSlug=${examSlug}&exam=${examPractice}`)
+      } else {
+        router.push(`/on-thi-bang-lai-xe?parentSlug=${parentSlug}&childSlug=${childSlug}&exam=${examPractice}`)
+
+      }
+    } catch (err: any) {
+    } finally {
+    }
+
+    console.log(exam)
+    // call API 
+    debugger
   }
+
 
   const isPassed = result?.isPassed;
   const hasCriticalMistake = result?.hasCriticalMistake;
