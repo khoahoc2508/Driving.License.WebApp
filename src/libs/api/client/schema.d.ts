@@ -920,7 +920,7 @@ export interface components {
             id?: string;
             licenseTypeDto?: components["schemas"]["LicenseTypeDto"];
 
-            /** Format: time */
+            /** Format: duration */
             duration?: string;
 
             /** Format: int32 */
@@ -931,6 +931,7 @@ export interface components {
             hasCriticalMistake?: boolean;
             isPassed?: boolean;
             groupExamType?: components["schemas"]["GroupExamType"];
+            exam?: components["schemas"]["ExamDto"];
             userAnswers?: components["schemas"]["ExamSubmissionAnswerDto"][];
         };
         LicenseTypeDto: {
