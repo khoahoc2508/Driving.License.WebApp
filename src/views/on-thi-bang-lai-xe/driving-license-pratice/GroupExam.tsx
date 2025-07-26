@@ -55,32 +55,43 @@ const GroupExams = ({ setIsLoading, onGroupsLoaded }: ArticlesProps) => {
   const parentSlug = searchParams.get('parentSlug');
   const childSlug = searchParams.get('childSlug');
   const examSlug = searchParams.get('examSlug');
-  const examname = searchParams.get('examname');
+  const exam = searchParams.get('exam');
 
-  // Đồng bộ state với param trên URL
   useEffect(() => {
     if (groups.length === 0) return;
 
-    const slug = examname || examSlug || childSlug || parentSlug;
-    const nodes = slug ? findNodeAndAncestors(groups, slug) : [];
+    const fetchData = async () => {
+      const slug = exam || examSlug || childSlug || parentSlug;
+      const nodes = slug ? findNodeAndAncestors(groups, slug) : [];
 
-    // Reset state trước khi set mới, nhưng KHÔNG reset examList nếu đang ở cấp examSlug
-    setSelectedClass(null);
-    setSelectedExamType(null);
+      // Reset state trước khi set mới, nhưng KHÔNG reset examList nếu đang ở cấp examSlug
+      setSelectedClass(null);
+      setSelectedExamType(null);
+      debugger
+      if (!exam) {
+        setSelectedExam(null);
+        setExamSubmissionId(null);
+        setExamQuestions(null);
+        if (nodes[1]) setSelectedClass(nodes[1]);
+      } else {
+        const [id, nameSlug] = exam.split('_');
+        try {
+          const questionsRes = await QuestionAPI.getExamQuestions(id);
+          const data = questionsRes.data.data
+          setExamQuestions(data?.questions);
+          setExamSubmissionId(data?.examSubmissionId)
+          setSelectedExam(data?.examDto);
+          // setExamList(null);
+        } catch (error) {
+        }
+      }
 
-    if (!examname) {
-      setSelectedExam(null);
-      setExamSubmissionId(null);
-      setExamQuestions(null);
-      setExamSubmissionId(null);
-      if (nodes[1]) setSelectedClass(nodes[1]);
-    } else {
-      setExamList(null);
-    }
+      if (!examSlug) setExamList(null);
+    };
 
-    if (!examSlug) setExamList(null);
+    fetchData();
+  }, [parentSlug, childSlug, examSlug, groups, exam]);
 
-  }, [parentSlug, childSlug, examSlug, groups, examname]);
 
   useEffect(() => {
     setParams({})
@@ -115,14 +126,19 @@ const GroupExams = ({ setIsLoading, onGroupsLoaded }: ArticlesProps) => {
         setExamSubmissionId(submissionRes.data.data.examSubmissionId);
 
         const questionsRes = await QuestionAPI.getExamQuestions(exam.id);
-
-        setExamQuestions(questionsRes.data.data);
+        debugger
+        setExamQuestions(questionsRes.data.data?.questions);
         setSelectedExam(exam);
 
         // Thêm param examId vào URL
         const params = new URLSearchParams(searchParams.toString());
 
-        params.set('examname', exam.name); // hoặc exam.slug nếu bạn muốn đẹp
+        const examNameSlug = exam.name.toLowerCase().replace(/\s+/g, '-');
+        const examnameParam = `${exam.id}_${examNameSlug}`; // Ví dụ: 550e8400-e29b-41d4-a716-446655440000_đề-1
+
+        params.set('exam', examnameParam);
+
+        // Push URL mới
         router.push(`${pathname}?${params.toString()}`);
       } else {
         toast.error('Không thể bắt đầu bài thi. Vui lòng thử lại.');

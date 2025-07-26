@@ -163,8 +163,6 @@ const ExamPractice = ({
     setShowAnswer(false);
     setAnswerDetail(null);
 
-    debugger
-
     if (leftColumnRef.current) {
       setLeftHeight(leftColumnRef.current.offsetHeight);
     }
@@ -320,7 +318,6 @@ const ExamPractice = ({
           <Grid item xs={12} md={8} sx={{ minHeight: leftHeight }}>
             <Card sx={{ height: '100%' }} className='flex flex-col justify-start'>
               <CardContent sx={{ flexGrow: 1 }}>
-                {leftHeight}
                 <Typography variant="h5" className='text-[#98999e]'>Câu {currentQuestionIndex + 1}{isPractice && questions[currentQuestionIndex]?.isCriticalQuestion ? <span className='text-error'> *</span> : ''}</Typography>
                 <Typography variant="h6" className='my-3' sx={{ fontWeight: 600 }}>{currentQuestion.content}</Typography>
                 {currentQuestion.imageUrl && <QuestionImage src={process.env.NEXT_PUBLIC_STORAGE_BASE_URL + currentQuestion.imageUrl} alt={`Question ${currentQuestionIndex + 1}`} />}
@@ -338,8 +335,8 @@ const ExamPractice = ({
                         color = '#f55156'; border = '1px solid #f55156';
                       }
 
-                      
-return (
+
+                      return (
                         <Box
                           key={ans.id}
                           sx={{

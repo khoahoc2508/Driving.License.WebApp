@@ -52,10 +52,12 @@ function getBreadcrumbsFromParams(searchParams: URLSearchParams, groups: GroupEx
         }
     }
 
-    const examname = searchParams.get('examname');
+    const exam = searchParams.get('exam');
 
-    if (examname) {
-        breadcrumbs.push({ label: toPascalCase(examname) });
+    if (exam) {
+        const [id, nameSlug] = exam.split('_');
+        const examName = nameSlug.replace(/-/g, ' ');
+        breadcrumbs.push({ label: toPascalCase(examName) });
     }
 
 
@@ -91,7 +93,7 @@ const DrivingLicensePractice = () => {
         if (slugArr[0]) params.set('parentSlug', slugArr[0]);
         if (slugArr[1]) params.set('childSlug', slugArr[1]);
         if (slugArr[2]) params.set('examSlug', slugArr[2]);
-        if (slugArr[3]) params.set('examname', slugArr[3]);
+        if (slugArr[3]) params.set('exam', slugArr[3]);
         router.push(`${pathname}?${params.toString()}`);
     };
 

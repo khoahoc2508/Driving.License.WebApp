@@ -48,7 +48,7 @@ const ExamLayoutWrapper = ({
             params.get('parentSlug'),
             params.get('childSlug'),
             params.get('examSlug'),
-            params.get('examname')
+            params.get('exam')
         ].filter(Boolean) as string[]
 
         onBreadcrumbClick?.(slugArr)
