@@ -53,6 +53,7 @@ const ButtonQuestionIndex = styled('div')<{
 
   return {
     borderRadius: '6px',
+
     // padding: '12px 16px',
     // marginBottom: '8px',
     border: `1px solid ${borderColor}`,
