@@ -53,7 +53,7 @@ const ButtonQuestionIndex = styled('div')<{
 
   return {
     borderRadius: '8px',
-    padding: '12px 16px',
+    // padding: '12px 16px',
     marginBottom: '8px',
     border: `1px solid ${borderColor}`,
     backgroundColor: bgColor,
@@ -66,6 +66,8 @@ const ButtonQuestionIndex = styled('div')<{
     '&:hover': {
       borderColor: theme.palette.primary.main,
     },
+    width: "100%",
+    height: "100%",
   };
 });
 
@@ -277,7 +279,7 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
                       sx={{
                         display: 'grid',
                         gridTemplateColumns: 'repeat(5, 1fr)',
-                        gap: 2,
+                        gap: 4,
                         justifyItems: 'center',
                         alignItems: 'center',
                         maxHeight: '400px',
@@ -296,8 +298,9 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
                             background: '#a8a8a8',
                           },
                         },
+                        margin: "1rem auto"
                       }}
-                      className="rounded-sm py-4 mt-5"
+                      className="rounded-sm py-4 max-w-[350px]"
                     >
                       {questions.map((q, index) => {
                         const userAnswer: ExamSubmissionAnswerDto | undefined = result?.userAnswers?.find(
@@ -325,8 +328,8 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
                             isActive={isActive}
                             onClick={() => setCurrentQuestionIndex(index)}
                             sx={{
-                              minWidth: isMobile ? 50 : 57,
-                              minHeight: 45,
+                              minWidth: isMobile ? 45 : 50,
+                              minHeight: isMobile ? 37 : 40,
                             }}
                           >
                             {index + 1}

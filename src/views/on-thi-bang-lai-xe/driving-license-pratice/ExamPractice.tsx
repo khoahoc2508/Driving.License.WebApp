@@ -59,7 +59,7 @@ const ButtonQuestionIndex = styled('div')<{
   }
 
   return {
-    padding: '12px 16px',
+    // padding: '12px 16px',
     border: `1px solid ${borderColor}`,
     borderRadius: '8px',
     marginBottom: '8px',
@@ -72,6 +72,8 @@ const ButtonQuestionIndex = styled('div')<{
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    width: "100%",
+    height: "100%",
   };
 });
 
@@ -294,7 +296,7 @@ const ExamPractice = ({
                       sx={{
                         display: 'grid',
                         gridTemplateColumns: 'repeat(5, 1fr)',
-                        gap: 2,
+                        gap: 4,
                         justifyItems: 'center',
                         alignItems: 'center',
                         maxHeight: '400px',
@@ -313,8 +315,9 @@ const ExamPractice = ({
                             background: '#a8a8a8',
                           },
                         },
+                        margin: "1rem auto"
                       }}
-                      className="rounded-sm py-4 mt-5"
+                      className="rounded-sm py-4 max-w-[350px]"
                     >
                       {questions.map((q, index) => (
                         <ButtonQuestionIndex
@@ -323,8 +326,8 @@ const ExamPractice = ({
                           selected={q.id !== undefined && !!answers[q.id]}
                           onClick={() => setCurrentQuestionIndex(index)}
                           sx={{
-                            minWidth: isMobile ? 50 : 57,
-                            minHeight: 45,
+                            minWidth: isMobile ? 45 : 50,
+                            minHeight: isMobile ? 37 : 40,
                             padding: 0,
                             ...(!isPractice ? {} : { position: 'relative' }),
                           }}
