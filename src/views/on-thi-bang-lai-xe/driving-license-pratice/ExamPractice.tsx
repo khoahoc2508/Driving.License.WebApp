@@ -41,13 +41,39 @@ const AnswerLabel = styled('div')<{ selected: boolean }>(({ theme, selected }) =
   },
 }))
 
-const ButtonQuestionIndex = styled(Button)(({ theme }) => ({
-  borderRadius: '8px',
-  cursor: 'pointer',
-  '&:hover': {
-    borderColor: theme.palette.primary.main,
-  },
-}));
+
+const ButtonQuestionIndex = styled('div')<{
+  active: boolean;
+  selected: boolean;
+}>(({ theme, active, selected }) => {
+  const borderColor = selected ? theme.palette.primary.main : theme.palette.divider;
+  const backgroundColor = active ? theme.palette.primary.main : 'transparent';
+  let textColor: string;
+
+  if (active) {
+    textColor = theme.palette.primary.contrastText;
+  } else if (selected) {
+    textColor = theme.palette.primary.main;
+  } else {
+    textColor = 'inherit';
+  }
+
+  return {
+    padding: '12px 16px',
+    border: `1px solid ${borderColor}`,
+    borderRadius: '8px',
+    marginBottom: '8px',
+    cursor: 'pointer',
+    backgroundColor,
+    color: textColor,
+    '&:hover': {
+      borderColor: theme.palette.primary.main,
+    },
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  };
+});
 
 const ExamPractice = ({
   exam,
@@ -293,14 +319,14 @@ const ExamPractice = ({
                       {questions.map((q, index) => (
                         <ButtonQuestionIndex
                           key={q.id || index}
-                          variant={index === currentQuestionIndex ? 'contained' : 'outlined'}
-                          color={(index === currentQuestionIndex || (q.id && answers[q.id])) ? 'primary' : 'inherit'}
+                          active={index === currentQuestionIndex}
+                          selected={q.id !== undefined && !!answers[q.id]}
                           onClick={() => setCurrentQuestionIndex(index)}
                           sx={{
                             minWidth: isMobile ? 50 : 57,
                             minHeight: 45,
                             padding: 0,
-                            ...(isPractice ? {} : { position: 'relative' }),
+                            ...(!isPractice ? {} : { position: 'relative' }),
                           }}
                         >
                           {index + 1}

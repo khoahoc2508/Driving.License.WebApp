@@ -29,13 +29,45 @@ const QuestionImage = styled('img')({
   justifyContent: "center"
 })
 
-const ButtonQuestionIndex = styled(Button)(({ theme }) => ({
-  borderRadius: '8px',
-  cursor: 'pointer',
-  '&:hover': {
-    borderColor: theme.palette.primary.main,
-  },
-}));
+const ButtonQuestionIndex = styled('div')<{
+  color: 'success' | 'error' | 'primary' | 'inherit';
+  isActive: boolean;
+}>(({ theme, color, isActive }) => {
+  let borderColor = theme.palette.divider;
+  let bgColor = 'transparent';
+  let textColor = theme.palette.text.primary;
+
+  if (color === 'success') {
+    borderColor = theme.palette.success.main;
+    textColor = theme.palette.success.main;
+  } else if (color === 'error') {
+    borderColor = theme.palette.error.main;
+    textColor = theme.palette.error.main;
+  }
+
+  if (isActive) {
+    bgColor = theme.palette.primary.main;
+    borderColor = theme.palette.primary.main;
+    textColor = theme.palette.primary.contrastText;
+  }
+
+  return {
+    borderRadius: '8px',
+    padding: '12px 16px',
+    marginBottom: '8px',
+    border: `1px solid ${borderColor}`,
+    backgroundColor: bgColor,
+    color: textColor,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
+    position: 'relative',
+    '&:hover': {
+      borderColor: theme.palette.primary.main,
+    },
+  };
+});
 
 interface ExamResultProps {
   examSubmissionId: string
@@ -268,32 +300,33 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
                       className="rounded-sm py-4 mt-5"
                     >
                       {questions.map((q, index) => {
-                        const userAnswer: ExamSubmissionAnswerDto | undefined = result?.userAnswers?.find((a: ExamSubmissionAnswerDto) => a.question?.id === q.id);
+                        const userAnswer: ExamSubmissionAnswerDto | undefined = result?.userAnswers?.find(
+                          (a: ExamSubmissionAnswerDto) => a.question?.id === q.id
+                        );
+
                         let color: 'success' | 'error' | 'inherit' | 'primary' = 'inherit';
 
                         if (userAnswer?.selectedAnswerId) {
                           const isCorrect = userAnswer.question?.answers?.find((ans) => ans.id === userAnswer.selectedAnswerId)?.isCorrect;
-
                           color = isCorrect ? 'success' : 'error';
                         }
 
-                        color = index === currentQuestionIndex ? 'primary' : color
+                        const isActive = index === currentQuestionIndex;
+                        if (isActive) {
+                          color = 'primary';
+                        }
 
                         const isCritical = userAnswer?.question?.isCriticalQuestion || q.isCriticalQuestion;
 
                         return (
                           <ButtonQuestionIndex
-                            variant={index + 1 === currentQuestionIndex + 1 ? 'contained' : 'outlined'}
-                            color={color}
                             key={q.id || index}
+                            color={color}
+                            isActive={isActive}
                             onClick={() => setCurrentQuestionIndex(index)}
-
-                            // sx={{ position: 'relative', minWidth: 57, minHeight: 45, padding: 0 }}
                             sx={{
                               minWidth: isMobile ? 50 : 57,
                               minHeight: 45,
-                              padding: 0,
-                              position: 'relative',
                             }}
                           >
                             {index + 1}
