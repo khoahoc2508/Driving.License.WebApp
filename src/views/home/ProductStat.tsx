@@ -15,7 +15,7 @@ import type { ThemeColor } from '@/@core/types'
 import CustomAvatar from '@core/components/mui/Avatar'
 
 // Styles Imports
-import frontCommonStyles from '@views/front-pages/styles.module.css'
+import frontCommonStyles from '@views/home/styles.module.css'
 
 // Type
 type StatData = {

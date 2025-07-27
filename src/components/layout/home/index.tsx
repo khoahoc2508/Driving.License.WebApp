@@ -2,8 +2,8 @@
 import type { ChildrenType } from '@core/types'
 
 // Component Imports
-import Footer from '@components/layout/front-pages/Footer'
-import Header from '@components/layout/front-pages/Header'
+import Footer from '@/components/layout/home/Footer'
+import Header from '@/components/layout/home/Header'
 
 // Server Action Imports
 import { getServerMode } from '@core/utils/serverHelpers'

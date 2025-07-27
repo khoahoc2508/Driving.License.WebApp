@@ -92,10 +92,10 @@ const FrontMenu = (props: Props) => {
         href='/'
         className={classnames('font-bold  plb-3 pli-1.5 hover:text-primary', {
           'text-primary':
-            !intersections.features &&
-            !intersections.team &&
-            !intersections.faq &&
-            !intersections['contact-us'] &&
+            // !intersections.features &&
+            // !intersections.team &&
+            // !intersections.faq &&
+            // !intersections['contact-us'] &&
             pathname === '/'
         })}
         color='text.primary'

@@ -22,7 +22,7 @@ import Document from '@assets/svg/front-pages/landing-page/Document'
 
 // Styles Imports
 import styles from './styles.module.css'
-import frontCommonStyles from '@views/front-pages/styles.module.css'
+import frontCommonStyles from '@views/home/styles.module.css'
 
 // Data
 const feature = [

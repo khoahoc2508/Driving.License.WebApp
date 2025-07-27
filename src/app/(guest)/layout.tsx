@@ -13,7 +13,7 @@ import type { ChildrenType } from '@core/types'
 // Component Imports
 import Providers from '@components/Providers'
 import BlankLayout from '@layouts/BlankLayout'
-import FrontLayout from '@components/layout/front-pages'
+import FrontLayout from '@/components/layout/home'
 import ScrollToTop from '@core/components/scroll-to-top'
 
 // Util Imports

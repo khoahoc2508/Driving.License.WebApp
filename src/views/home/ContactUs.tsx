@@ -20,7 +20,7 @@ import ElementTwo from '@assets/svg/front-pages/landing-page/ElementTwo'
 import Lines from '@assets/svg/front-pages/landing-page/Lines'
 
 // Styles Imports
-import frontCommonStyles from '@views/front-pages/styles.module.css'
+import frontCommonStyles from '@views/home/styles.module.css'
 
 const ContactUs = () => {
   // Refs

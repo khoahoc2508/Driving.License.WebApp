@@ -21,7 +21,7 @@ import { useImageVariant } from '@core/hooks/useImageVariant'
 
 // Styles Imports
 import styles from './styles.module.css'
-import frontCommonStyles from '@views/front-pages/styles.module.css'
+import frontCommonStyles from '@views/home/styles.module.css'
 
 const HeroSection = ({ mode }: { mode: Mode }) => {
   // States
@@ -90,7 +90,7 @@ const HeroSection = ({ mode }: { mode: Mode }) => {
           <div className='mbs-8'>
             <Button
               component={Link}
-              href='/front-pages/landing-page#pricing-plans'
+              href='#contact-us'
               variant='contained'
               color='primary'
               size='large'

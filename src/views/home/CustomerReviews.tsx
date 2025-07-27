@@ -25,7 +25,8 @@ import Dribbble from '@assets/svg/front-pages/landing-page/Dribbble'
 import Airbnb from '@assets/svg/front-pages/landing-page/Airbnb'
 
 // Styles Imports
-import frontCommonStyles from '@views/front-pages/styles.module.css'
+import frontCommonStyles from '@views/home/styles.module.css'
+
 
 // Data
 const data = [

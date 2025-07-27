@@ -12,7 +12,7 @@ import classnames from 'classnames'
 import DirectionalIcon from '@components/DirectionalIcon'
 
 // Styles Imports
-import frontCommonStyles from '@views/front-pages/styles.module.css'
+import frontCommonStyles from '@views/home/styles.module.css'
 
 const GetStarted = () => {
   return (

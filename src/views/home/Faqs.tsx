@@ -19,7 +19,7 @@ import ElementOne from '@/assets/svg/front-pages/landing-page/ElementOne'
 import Lines from '@assets/svg/front-pages/landing-page/Lines'
 
 // Styles Imports
-import frontCommonStyles from '@views/front-pages/styles.module.css'
+import frontCommonStyles from '@views/home/styles.module.css'
 
 type FaqsDataTypes = {
   id: string
