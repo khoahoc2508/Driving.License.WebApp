@@ -252,6 +252,7 @@ const ExamPractice = ({
 
         if (currentQuestion?.answers && selectedOption >= 1 && selectedOption <= currentQuestion.answers.length) {
           const selectedAnswer = currentQuestion.answers.find(ans => ans.order === selectedOption)
+
           if (selectedAnswer?.id) {
             handleAnswerChange(currentQuestion.id, selectedAnswer.id)
           }

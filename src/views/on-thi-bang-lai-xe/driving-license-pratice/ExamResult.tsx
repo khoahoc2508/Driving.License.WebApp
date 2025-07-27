@@ -53,6 +53,7 @@ const ButtonQuestionIndex = styled('div')<{
 
   return {
     borderRadius: '8px',
+
     // padding: '12px 16px',
     marginBottom: '8px',
     border: `1px solid ${borderColor}`,
@@ -311,10 +312,12 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
 
                         if (userAnswer?.selectedAnswerId) {
                           const isCorrect = userAnswer.question?.answers?.find((ans) => ans.id === userAnswer.selectedAnswerId)?.isCorrect;
+
                           color = isCorrect ? 'success' : 'error';
                         }
 
                         const isActive = index === currentQuestionIndex;
+
                         if (isActive) {
                           color = 'primary';
                         }
