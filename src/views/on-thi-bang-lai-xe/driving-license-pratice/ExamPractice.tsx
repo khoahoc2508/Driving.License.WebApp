@@ -61,8 +61,7 @@ const ButtonQuestionIndex = styled('div')<{
   return {
     // padding: '12px 16px',
     border: `1px solid ${borderColor}`,
-    borderRadius: '8px',
-    marginBottom: '8px',
+    borderRadius: '6px',
     cursor: 'pointer',
     backgroundColor,
     color: textColor,
@@ -302,53 +301,42 @@ const ExamPractice = ({
                 <Card>
                   <CardContent>
                     <Typography variant="h5" mb={2}>Danh sách câu hỏi:</Typography>
-                    <Box
-                      sx={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(5, 1fr)',
-                        gap: 4,
-                        justifyItems: 'center',
-                        alignItems: 'center',
-                        maxHeight: '400px',
-                        overflowY: 'auto',
-                        '&::-webkit-scrollbar': {
-                          width: '8px',
-                        },
-                        '&::-webkit-scrollbar-track': {
-                          background: '#f1f1f1',
-                          borderRadius: '4px',
-                        },
-                        '&::-webkit-scrollbar-thumb': {
-                          background: '#c1c1c1',
-                          borderRadius: '4px',
-                          '&:hover': {
-                            background: '#a8a8a8',
-                          },
-                        },
-                        margin: "1rem auto"
-                      }}
-                      className="rounded-sm py-4 max-w-[350px]"
+                    <div
+                      className='border py-3 px-3 rounded-md mt-6 max-h-[400px] overflow-y-auto custom-scrollbar'
                     >
-                      {questions.map((q, index) => (
-                        <ButtonQuestionIndex
-                          key={q.id || index}
-                          active={index === currentQuestionIndex}
-                          selected={q.id !== undefined && !!answers[q.id]}
-                          onClick={() => setCurrentQuestionIndex(index)}
-                          sx={{
-                            minWidth: isMobile ? 45 : 50,
-                            minHeight: isMobile ? 37 : 40,
-                            padding: 0,
-                            ...(!isPractice ? {} : { position: 'relative' }),
-                          }}
-                        >
-                          {index + 1}
-                          {isPractice && q?.isCriticalQuestion && (
-                            <Box component="span" sx={{ position: 'absolute', top: 1, right: 6, color: 'red' }}>*</Box>
-                          )}
-                        </ButtonQuestionIndex>
-                      ))}
-                    </Box>
+                      <Box
+                        sx={{
+                          display: 'grid',
+                          gridTemplateColumns: 'repeat(5, 1fr)',
+                          gap: 3,
+                          justifyItems: 'center',
+                          alignItems: 'center',
+                          margin: '0 auto',
+                        }}
+                        className="max-w-[350px]"
+                      >
+                        {questions.map((q, index) => (
+                          <ButtonQuestionIndex
+                            key={q.id || index}
+                            active={index === currentQuestionIndex}
+                            selected={q.id !== undefined && !!answers[q.id]}
+                            onClick={() => setCurrentQuestionIndex(index)}
+                            sx={{
+                              minWidth: isMobile ? 45 : 50,
+                              minHeight: isMobile ? 45 : 45,
+                              padding: 0,
+                              ...(!isPractice ? {} : { position: 'relative' }),
+                            }}
+                          >
+                            {index + 1}
+                            {isPractice && q?.isCriticalQuestion && (
+                              <Box component="span" sx={{ position: 'absolute', top: 1, right: 6, color: 'red' }}>*</Box>
+                            )}
+                          </ButtonQuestionIndex>
+                        ))}
+                      </Box>
+                    </div>
+
                   </CardContent>
                 </Card>
               </Grid>
