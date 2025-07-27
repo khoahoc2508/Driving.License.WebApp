@@ -386,7 +386,7 @@ const LicenseRegistrationFormDrawer = ({ id, open, handleClose }: LicenseRegistr
 
       if (response.data.success) {
         toast.success(id ? 'Cập nhật thành công' : 'Thêm mới thành công')
-        router.push('/manage-licenses-registration')
+        router.push(CONFIG.Routers.ManageLicensesRegistration)
       } else {
         toast.error(response.data.message || 'Có lỗi xảy ra')
       }

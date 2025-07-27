@@ -62,6 +62,7 @@ import OptionMenu from '@/@core/components/option-menu'
 import LicenseTypeAPI from '@/libs/api/licenseTypeApi'
 import type { LicenseTypeDto } from '@/types/LicensesRegistrations'
 import AddExamScheduleDialog from '@/views/exam-schedules/list/AddExamScheduleDialog'
+import CONFIG from '@/configs/config'
 
 
 declare module '@tanstack/table-core' {
@@ -437,14 +438,14 @@ const ProductListTable = () => {
 
   const handleOpenAssignDrawer = (examSchedule: ExamScheduleType) => {
     // Navigate to exam schedule detail page with assign tab focused
-    router.push(`/exam-schedules/${examSchedule.id}?tab=assign`)
+    router.push(`${CONFIG.Routers.ExamSchedule}/${examSchedule.id}?tab=assign`)
   }
 
   const handleOpenResultDrawer = (examSchedule: ExamScheduleType) => {
     // setSelectedExamScheduleId(examSchedule.id)
     // setOpenResultDrawer(true)
     // Navigate to exam schedule detail page with assign tab focused
-    router.push(`/exam-schedules/${examSchedule.id}?tab=result`)
+    router.push(`${CONFIG.Routers.ExamSchedule}/${examSchedule.id}?tab=result`)
   }
 
   useEffect(() => {

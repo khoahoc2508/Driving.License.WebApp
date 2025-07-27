@@ -191,6 +191,12 @@ const GroupExamType = {
   Detail: 2 // Xem chi tiết
 }
 
+const Routers = {
+  ManageLicensesRegistration: '/admin/manage-licenses-registration',
+  ExamSchedule: '/admin/exam-schedules',
+  BrandSetting: '/admin/account-settings'
+}
+
 const CONFIG = {
   LicenseRegistrationStatus,
   LicenseRegistrationStatusMappingText,
@@ -220,7 +226,8 @@ const CONFIG = {
   LimitType,
   TableAction,
   VehicleTypeCode,
-  GroupExamType
+  GroupExamType,
+  Routers
 }
 
 export default CONFIG
