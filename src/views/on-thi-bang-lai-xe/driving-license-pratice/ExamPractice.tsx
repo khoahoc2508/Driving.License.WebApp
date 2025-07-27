@@ -230,7 +230,6 @@ const ExamPractice = ({
     }
   }, [searchParams, router])
 
-  // Thêm event listener cho phím mũi tên
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'ArrowLeft') {
@@ -245,10 +244,20 @@ const ExamPractice = ({
         if (currentQuestionIndex < questions.length - 1) {
           setCurrentQuestionIndex(prev => prev + 1)
         }
+      } else if (['1', '2', '3', '4'].includes(event.key)) {
+        event.preventDefault()
+
+        const selectedOption = parseInt(event.key)
+        const currentQuestion = questions[currentQuestionIndex]
+
+        if (currentQuestion?.answers && selectedOption >= 1 && selectedOption <= currentQuestion.answers.length) {
+          const selectedAnswer = currentQuestion.answers.find(ans => ans.order === selectedOption)
+          if (selectedAnswer?.id) {
+            handleAnswerChange(currentQuestion.id, selectedAnswer.id)
+          }
+        }
       }
     }
-
-
 
     // Thêm event listener
     window.addEventListener('keydown', handleKeyDown)
