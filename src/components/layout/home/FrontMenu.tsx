@@ -23,7 +23,6 @@ import type { Mode } from '@core/types'
 // Hook Imports
 
 // Component Imports
-import { useIntersection } from '@/hooks/useIntersection'
 
 type Props = {
   mode: Mode
@@ -76,7 +75,6 @@ const FrontMenu = (props: Props) => {
   // Hooks
   const pathname = usePathname()
   const isBelowLgScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down('lg'))
-  const { intersections } = useIntersection()
 
   useEffect(() => {
     if (!isBelowLgScreen && isDrawerOpen) {
@@ -92,6 +90,7 @@ const FrontMenu = (props: Props) => {
         href='/'
         className={classnames('font-bold  plb-3 pli-1.5 hover:text-primary', {
           'text-primary':
+
             // !intersections.features &&
             // !intersections.team &&
             // !intersections.faq &&

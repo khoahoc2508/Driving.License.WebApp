@@ -18,7 +18,7 @@ import Divider from '@mui/material/Divider'
 import classnames from 'classnames'
 
 // Styles Imports
-import frontCommonStyles from '@views/front-pages/styles.module.css'
+import frontCommonStyles from '@views/home/styles.module.css'
 
 // SVG Imports
 import Lines from '@assets/svg/front-pages/landing-page/Lines'

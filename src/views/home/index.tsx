@@ -42,4 +42,5 @@ const Home = ({ mode }: { mode: Mode }) => {
         </>
     )
 }
+
 export default Home

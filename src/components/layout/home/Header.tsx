@@ -7,6 +7,8 @@ import { useState } from 'react'
 import Link from 'next/link'
 
 // MUI Imports
+import { usePathname } from 'next/navigation'
+
 import IconButton from '@mui/material/IconButton'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import useScrollTrigger from '@mui/material/useScrollTrigger'
@@ -31,7 +33,6 @@ import { frontLayoutClasses } from '@layouts/utils/layoutClasses'
 
 // Styles Imports
 import styles from './styles.module.css'
-import { usePathname } from 'next/navigation'
 import CONFIG from '@/configs/config'
 
 const Header = ({ mode }: { mode: Mode }) => {

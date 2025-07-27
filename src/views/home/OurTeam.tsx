@@ -7,6 +7,8 @@ import Grid from '@mui/material/Grid2'
 import { styled } from '@mui/material/styles'
 
 // Type Imports
+import frontCommonStyles from '@views/home/styles.module.css'
+
 import type { ThemeColor } from '@core/types'
 
 // Hook Imports
@@ -17,7 +19,6 @@ import ElementOne from '@/assets/svg/front-pages/landing-page/ElementOne'
 import Lines from '@assets/svg/front-pages/landing-page/Lines'
 
 // Styles Imports
-import frontCommonStyles from '@views/front-pages/styles.module.css'
 
 // Data
 const team = [

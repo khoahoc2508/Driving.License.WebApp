@@ -11,6 +11,8 @@ import classnames from 'classnames'
 // Hook Imports
 
 // SVG Imports
+import frontCommonStyles from '@views/home/styles.module.css'
+
 import Lines from '@assets/svg/front-pages/landing-page/Lines'
 import LaptopCharging from '@assets/svg/front-pages/landing-page/LaptopCharging'
 import TransitionUp from '@assets/svg/front-pages/landing-page/TransitionUp'
@@ -21,7 +23,6 @@ import Document from '@assets/svg/front-pages/landing-page/Document'
 
 // Styles Imports
 import styles from './styles.module.css'
-import frontCommonStyles from '@views/front-pages/styles.module.css'
 import { useIntersection } from '@/hooks/useIntersection'
 
 // Data
