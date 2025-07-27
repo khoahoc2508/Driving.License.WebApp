@@ -1,10 +1,6 @@
 // MUI Imports
 import Grid from '@mui/material/Grid2'
 import Typography from '@mui/material/Typography'
-import Button from '@mui/material/Button'
-import Chip from '@mui/material/Chip'
-import TextField from '@mui/material/TextField'
-import IconButton from '@mui/material/IconButton'
 
 // Third-party Imports
 import classnames from 'classnames'
@@ -17,7 +13,6 @@ import Logo from '@components/layout/shared/Logo'
 import { frontLayoutClasses } from '@layouts/utils/layoutClasses'
 
 // Styles Imports
-import styles from './styles.module.css'
 import frontCommonStyles from '@views/front-pages/styles.module.css'
 
 const Footer = () => {
@@ -31,16 +26,18 @@ const Footer = () => {
         />
         <div className={classnames('plb-12 text-white', frontCommonStyles.layoutSpacing)}>
           <Grid container rowSpacing={10} columnSpacing={12}>
-            <Grid size={{ xs: 12, lg: 5 }}>
+            <Grid size={{ xs: 12, lg: 6 }}>
               <div className='flex flex-col items-start gap-6'>
-                <Link href='/front-pages/landing-page'>
+                <Link href='/'>
                   <Logo color='var(--mui-palette-common-white)' />
                 </Link>
                 <Typography color='white' className='lg:max-is-[390px] opacity-[0.78]'>
-                  Most Powerful & Comprehensive 🤩 React NextJS Admin Template with Elegant Material Design & Unique
-                  Layouts.
+                  Giải pháp số hóa việc thu hồ sơ GPLX ô tô & xe máy cho trung tâm đào tạo và cơ quan hành chính.
                 </Typography>
-                <div className='flex gap-4'>
+                <Typography color='white' className='lg:max-is-[390px] opacity-[0.78]'>
+                  Đơn giản – Chính xác – Tiết kiệm thời gian.
+                </Typography>
+                {/* <div className='flex gap-4'>
                   <TextField
                     size='small'
                     className={styles.inputBorder}
@@ -61,56 +58,52 @@ const Footer = () => {
                   <Button variant='contained' color='primary'>
                     Subscribe
                   </Button>
-                </div>
+                </div> */}
               </div>
             </Grid>
-            <Grid size={{ xs: 12, sm: 3, lg: 2 }}>
+            <Grid size={{ xs: 12, sm: 3, lg: 3 }}>
               <Typography color='white' className='font-medium mbe-6 opacity-[0.92]'>
-                Pages
+                Trang
               </Typography>
               <div className='flex flex-col gap-4'>
-                <Typography component={Link} href='/front-pages/pricing' color='white' className='opacity-[0.78]'>
-                  Pricing
+                <Typography color='white' className='opacity-[0.78]'>
+                  Giới thiệu
                 </Typography>
-                <Link href='/front-pages/payment' className='flex items-center gap-[10px]'>
-                  <Typography color='white' className='opacity-[0.78]'>
-                    Payment
-                  </Typography>
-                  <Chip label='New' color='primary' size='small' />
-                </Link>
+                <Typography color='white' className='opacity-[0.78]'>
+                  Bảng giá
+                </Typography>
                 <Typography
-                  component={Link}
-                  href='/pages/misc/under-maintenance'
+
                   color='white'
                   className='opacity-[0.78]'
                 >
-                  Maintenance
+                  Câu hỏi thường gặp
                 </Typography>
-                <Typography component={Link} href='/pages/misc/coming-soon' color='white' className='opacity-[0.78]'>
-                  Coming Soon
+                <Typography color='white' className='opacity-[0.78]'>
+                  Liên hệ
                 </Typography>
               </div>
             </Grid>
-            <Grid size={{ xs: 12, sm: 3, lg: 2 }}>
+            <Grid size={{ xs: 12, sm: 3, lg: 3 }}>
               <Typography color='white' className='font-medium mbe-6 opacity-[0.92]'>
-                Products
+                Chức năng
               </Typography>
               <div className='flex flex-col gap-4'>
-                <Typography component={Link} href='/front-pages/landing-page' color='white' className='opacity-[0.78]'>
-                  Page builder
+                <Typography color='white' className='opacity-[0.78]'>
+                  Quản lý hồ sơ
                 </Typography>
-                <Typography component={Link} href='/front-pages/landing-page' color='white' className='opacity-[0.78]'>
-                  Admin Dashboards
+                <Typography color='white' className='opacity-[0.78]'>
+                  Thống kê
                 </Typography>
-                <Typography component={Link} href='/front-pages/landing-page' color='white' className='opacity-[0.78]'>
-                  UI Kits
+                <Typography color='white' className='opacity-[0.78]'>
+                  Phân quyền
                 </Typography>
-                <Typography component={Link} href='/front-pages/landing-page' color='white' className='opacity-[0.78]'>
-                  Illustrations
+                <Typography color='white' className='opacity-[0.78]'>
+                  Tra cứu nhanh hồ sơ
                 </Typography>
               </div>
             </Grid>
-            <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
+            {/* <Grid size={{ xs: 12, sm: 6, lg: 3 }}>
               <Typography color='white' className='font-medium mbe-6 opacity-[0.92]'>
                 Download our App
               </Typography>
@@ -142,7 +135,7 @@ const Footer = () => {
                   </div>
                 </Link>
               </div>
-            </Grid>
+            </Grid> */}
           </Grid>
         </div>
       </div>
@@ -154,14 +147,12 @@ const Footer = () => {
           )}
         >
           <Typography className='text-white opacity-[0.92]' variant='body2'>
-            <span>{`© ${new Date().getFullYear()}, Made with `}</span>
+            <span>{`© ${new Date().getFullYear()}, Bản quyền `}</span>
             <span>{`❤️`}</span>
-            <span>{` by `}</span>
-            <Link href='https://themeselection.com' target='_blank' className='font-medium text-white'>
-              ThemeSelection
-            </Link>
+            <span>{`  `}</span>
+            banglaixanh.vn
           </Typography>
-          <div className='flex gap-6 items-center'>
+          {/* <div className='flex gap-6 items-center'>
             <IconButton component={Link} size='small' href='https://github.com/themeselection' target='_blank'>
               <i className='ri-github-fill text-white text-lg' />
             </IconButton>
@@ -169,7 +160,7 @@ const Footer = () => {
               <i className='ri-facebook-fill text-white text-lg' />
             </IconButton>
             <IconButton component={Link} size='small' href='https://twitter.com/Theme_Selection' target='_blank'>
-              <i className='ri-twitter-fill text-white text-lg' />
+              <i className='ri-twitter-fill text-white text-lg' />https://next-auth.js.org
             </IconButton>
             <IconButton
               component={Link}
@@ -179,7 +170,7 @@ const Footer = () => {
             >
               <i className='ri-linkedin-fill text-white text-lg' />
             </IconButton>
-          </div>
+          </div> */}
         </div>
       </div>
     </footer>

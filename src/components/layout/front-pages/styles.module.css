@@ -7,7 +7,7 @@
   justify-content: center;
   inline-size: 100%;
   pointer-events: none;
-  background-color: var(--mui-palette-background-paper);
+  /* background-color: var(--mui-palette-background-paper); */
 
   .navbar {
     inline-size: calc(100% - 48px);

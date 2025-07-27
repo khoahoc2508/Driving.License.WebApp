@@ -197,6 +197,10 @@ const Routers = {
   BrandSetting: '/admin/account-settings'
 }
 
+const RoutersCustomer = {
+  examPratice: '/on-thi-bang-lai-xe'
+}
+
 const CONFIG = {
   LicenseRegistrationStatus,
   LicenseRegistrationStatusMappingText,
@@ -227,7 +231,8 @@ const CONFIG = {
   TableAction,
   VehicleTypeCode,
   GroupExamType,
-  Routers
+  Routers,
+  RoutersCustomer
 }
 
 export default CONFIG

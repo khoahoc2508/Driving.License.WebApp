@@ -31,6 +31,8 @@ import { frontLayoutClasses } from '@layouts/utils/layoutClasses'
 
 // Styles Imports
 import styles from './styles.module.css'
+import { usePathname } from 'next/navigation'
+import CONFIG from '@/configs/config'
 
 const Header = ({ mode }: { mode: Mode }) => {
   // States
@@ -39,6 +41,7 @@ const Header = ({ mode }: { mode: Mode }) => {
 
   // Hooks
   const isBelowLgScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down('lg'))
+  const pathName = usePathname()
 
   // Detect window scroll
   const trigger = useScrollTrigger({
@@ -47,22 +50,22 @@ const Header = ({ mode }: { mode: Mode }) => {
   })
 
   return (
-    <header className={classnames(frontLayoutClasses.header, styles.header)}>
-      <div className={classnames(frontLayoutClasses.navbar, styles.navbar, { [styles.headerScrolled]: trigger })} style={{ boxShadow: '0 0 10px 4px rgba(0, 0, 0, 0.1)' }}>
+    <header className={classnames(frontLayoutClasses.header, styles.header)} style={{ backgroundColor: pathName.startsWith(CONFIG.RoutersCustomer.examPratice) ? 'var(--mui-palette-background-paper)' : 'transparent' }}>
+      <div className={classnames(frontLayoutClasses.navbar, styles.navbar, { [styles.headerScrolled]: trigger })} style={pathName.startsWith(CONFIG.RoutersCustomer.examPratice) ? { boxShadow: '0 0 10px 4px rgba(0, 0, 0, 0.1)' } : {}}>
         <div className={classnames(frontLayoutClasses.navbarContent, styles.navbarContent)}>
           {isBelowLgScreen ? (
             <div className='flex items-center gap-2 sm:gap-4'>
               <IconButton onClick={() => setIsDrawerOpen(true)} className='-mis-2'>
                 <i className='ri-menu-line text-textPrimary' />
               </IconButton>
-              <Link href='/front-pages/landing-page'>
+              <Link href='/'>
                 <Logo />
               </Link>
               <FrontMenu mode={mode} isDrawerOpen={isDrawerOpen} setIsDrawerOpen={setIsDrawerOpen} />
             </div>
           ) : (
             <div className='flex items-center gap-10'>
-              <Link href='/front-pages/landing-page'>
+              <Link href='/'>
                 <Logo />
               </Link>
               <FrontMenu mode={mode} isDrawerOpen={isDrawerOpen} setIsDrawerOpen={setIsDrawerOpen} />
