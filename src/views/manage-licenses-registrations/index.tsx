@@ -28,7 +28,7 @@ const ManageLicensesRegistrations = () => {
 
   // Filter states
   const [hasApprovedFilter, setHasApprovedFilter] = useState<boolean[]>([])
-  const [licenseTypeFilter, setLicenseTypeFilter] = useState<number[]>([])
+  const [licenseTypeFilter, setLicenseTypeFilter] = useState<string[]>([])
   const [examScheduleId] = useState<string | undefined>(undefined)
 
   useEffect(() => {
@@ -46,7 +46,7 @@ const ManageLicensesRegistrations = () => {
           pageSize: pageSize,
           search,
           hasApproved: hasApprovedFilter.length > 0 ? hasApprovedFilter : undefined,
-          licenseType: licenseTypeFilter.length > 0 ? licenseTypeFilter : undefined,
+          licenseTypeCodes: licenseTypeFilter.length > 0 ? licenseTypeFilter : undefined,
           examScheduleId
         }
       })
@@ -74,9 +74,9 @@ const ManageLicensesRegistrations = () => {
     setSearch(String(value))
   }
 
-  const handleApplyFilters = (status: boolean[], licenseType: number[]) => {
+  const handleApplyFilters = (status: boolean[], licenseTypeCodes: string[]) => {
     setHasApprovedFilter(status)
-    setLicenseTypeFilter(licenseType)
+    setLicenseTypeFilter(licenseTypeCodes)
   }
 
   return <>

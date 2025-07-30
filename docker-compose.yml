@@ -1,0 +1,12 @@
+services:
+  web:
+    container_name: driving-license
+    image: driving-license:test
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '2000:3000'
+    environment:
+      - NODE_ENV=production
+    restart: always

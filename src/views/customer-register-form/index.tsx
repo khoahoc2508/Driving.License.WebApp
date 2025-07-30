@@ -2,7 +2,7 @@
 
 // React Imports
 import type { ReactNode } from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useSearchParams } from 'next/navigation';
 
@@ -16,7 +16,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Divider from '@mui/material/Divider';
-import Grid from '@mui/material/Grid2';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import type { StepperProps } from '@mui/material/Stepper';
@@ -40,6 +39,8 @@ import {
   IconUserEdit
 } from '@tabler/icons-react';
 
+import type { FormValues as formBrandSetting } from '../account-settings/brand-setting/left-side/index'
+
 import StepperCustomDot from '@components/stepper-dot';
 import StepperWrapper from '@core/styles/stepper';
 
@@ -54,6 +55,9 @@ import LicenseRegistrationAPI from '@/libs/api/licenseRegistrationAPI';
 import UploadAPI from '@/libs/api/uploadAPI';
 import type { LicenseRegistrationCustomerResquest } from '@/types/LicensesRegistrations';
 import CitizendCard from './CitizenCard';
+import BrandSettingPreview from '../account-settings/brand-setting/right-side/BrandSettingPreview';
+import brandSettingAPI from '@/libs/api/brandSettingAPI';
+import type { GetBrandSettingByOwnerIdQueryParams } from '@/types/brandSettingTypes';
 
 // Define a consistent Step type used across components
 export type Step = {
@@ -147,13 +151,13 @@ const personalSchema = object({
 
 
 const licenseDetailsSchema = object({
-  licenseType: pipe(number()),
+  licenseType: pipe(string(), nonEmpty('Vui lòng chọn bằng lái')),
   hasCompletedHealthCheck: pipe(boolean()),
   hasCarLicense: pipe(boolean())
 });
 
 type LicenseDetailsFormValues = {
-  licenseType: number;
+  licenseType: string;
   hasCompletedHealthCheck: boolean;
   hasCarLicense: boolean;
 };
@@ -213,7 +217,7 @@ type FormValues = {
   street: string;
 
   // License Details fields
-  licenseType: number;
+  licenseType: string;
   hasCompletedHealthCheck: boolean;
   hasCarLicense: boolean;
 
@@ -225,13 +229,28 @@ type FormValues = {
 
 type Props = {
   titlePage: ReactNode
-  vehicleTypePage: any
+  vehicleTypePage: string
 }
+
+const defaultForm: formBrandSetting = {
+  avatarUrl: '/images/avatars/1.png',
+  name: '',
+  shortDescription: '',
+  description: '',
+  email: '',
+  phoneNumber: '',
+  address: '',
+  images: []
+};
 
 // Main Component
 const Page = ({ titlePage, vehicleTypePage }: Props) => {
   const searchParams = useSearchParams()
-  const urlOwnerId = searchParams.get('ownerId')
+  const urlOwnerId = searchParams.get('ownerid')
+
+  const [form, setForm] = useState(defaultForm);
+  const [imgSrc, setImgSrc] = React.useState<string>('/images/avatars/1.png');
+
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
   const [openSuccessDialog, setOpenSuccessDialog] = useState(false)
   const [formDataToSubmit, setFormDataToSubmit] = useState<FormValues | null>(null)
@@ -273,9 +292,9 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
   const licenseDetailsFormMethods = useForm<LicenseDetailsFormValues>({
     resolver: valibotResolver(licenseDetailsSchema),
     defaultValues: {
-      licenseType: 0,
+      licenseType: '',
       hasCompletedHealthCheck: false,
-      hasCarLicense: vehicleTypePage === CONFIG.VehicleType.Car ? true : false
+      hasCarLicense: vehicleTypePage === CONFIG.VehicleTypeCode.Car ? true : false
     }
   });
 
@@ -298,9 +317,31 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
     }
   })
 
+  React.useEffect(() => {
+    const fetchBrandSetting = async () => {
+      try {
+        const params: GetBrandSettingByOwnerIdQueryParams = {
+          ownerId: urlOwnerId
+        }
+
+        const res = await brandSettingAPI.GetBrandsettingByOwnerId(params);
+
+        if (res.data?.success && res.data?.data) {
+          setForm(prev => ({ ...prev, ...res.data.data }));
+          setImgSrc(res.data.data?.avatarUrl ? `${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}${res.data.data?.avatarUrl}` : imgSrc)
+        }
+      } catch (error) {
+      }
+    };
+
+    if (urlOwnerId) {
+      fetchBrandSetting();
+    }
+  }, [urlOwnerId]);
+
   // Set default values based on vehicle type
   useEffect(() => {
-    if (vehicleTypePage === CONFIG.VehicleType.Car) {
+    if (vehicleTypePage === CONFIG.VehicleTypeCode.Car) {
       licenseDetailsFormMethods.setValue('hasCarLicense', true);
     }
   }, [vehicleTypePage]);
@@ -418,9 +459,9 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
       street: ''
     })
     licenseDetailsFormMethods.reset({
-      licenseType: 0,
+      licenseType: '',
       hasCompletedHealthCheck: false,
-      hasCarLicense: vehicleTypePage === CONFIG.VehicleType.Car ? true : false
+      hasCarLicense: vehicleTypePage === CONFIG.VehicleTypeCode.Car ? true : false
     });
     paymentInformationFormMethods.reset({
       amount: undefined,
@@ -451,10 +492,8 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
         data.citizenCardBackImgUrl?.length > 0 ? UploadAPI.uploadFiles(data.citizenCardBackImgUrl) : Promise.resolve(null)
       ]);
 
-      debugger;
-
       const apiData: LicenseRegistrationCustomerResquest = {
-        licenseType: CONFIG.LicenseTypeSelectOption.find(opt => opt.value === data.licenseType)?.value as 0 | 1 | 2 | 3 || 0,
+        licenseTypeCode: data.licenseType,
         hasCarLicense: data.hasCarLicense,
         hasCompletedHealthCheck: data.hasCompletedHealthCheck,
         hasApproved: false,
@@ -483,7 +522,7 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
         note: data.note,
         isPaid: data.isPaid,
         amount: data.amount ?? undefined,
-        vehicleType: vehicleTypePage
+        vehicleTypeCode: vehicleTypePage
       };
 
       const response = await LicenseRegistrationAPI.createLicensesRegistrationsForCustomer(apiData);
@@ -552,22 +591,35 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
 
   return (
     <>
-      <Card className='h-full flex w-full justify-center'>
-        <Grid2 container width={{ xs: '100%', md: '60%' }}>
-          <Grid size={{ xs: 0, md: 5 }}>
-            {/* Cột trái */}
-            <CardContent className='h-full hidden md:block pr-0'>
-              <div className='right h-full w-full flex bg-[#2289E61A]'>
-                <div className='intro__container mt-auto mb-auto h-[48px] w-full flex justify-start items-center bg-[#ffffff] p-3 gap-2'>
-                  <div className='intro__name font-normal text-2xl text-[#425566]'>{titlePage}</div>
-                </div>
-              </div>
-            </CardContent>
-          </Grid>
+      <Typography
+        variant="h5"
+        align="center"
+        sx={{
+          fontWeight: 600,
+          color: '#7C3AED',
+          mb: 3,
+          mt: 3,
+          letterSpacing: 1,
+          textTransform: 'uppercase'
+        }}
+      >
+        {titlePage}
+      </Typography>
 
-          <Grid size={{ xs: 12, md: 7 }}>
-            {/* Cột phải */}
-            <CardContent className='flex-1 w-full pl-0'> {/* Removed padding classes here */}
+      <Grid2 container spacing={2} justifyContent="center" alignItems="stretch" sx={{ maxWidth: 1100, margin: '0 auto' }}>
+        {/* Card bên trái: Thông tin trung tâm */}
+        <Grid2 size={{ xs: 12, md: 4 }}>
+          <Card sx={{ height: '100%' }}>
+            <CardContent>
+              <BrandSettingPreview form={form} imgSrc={imgSrc} />
+            </CardContent>
+          </Card>
+        </Grid2>
+
+        {/* Card bên phải: Form đăng ký */}
+        <Grid2 size={{ xs: 12, md: 8 }}>
+          <Card sx={{ height: '100%' }}>
+            <CardContent sx={{ p: 0 }}>
               <StepperWrapper>
                 <Stepper activeStep={activeStep} orientation="horizontal" className='p-4'>
                   {steps.map((label, index) => {
@@ -644,7 +696,6 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
                   })}
                 </Stepper>
               </StepperWrapper>
-
               <Divider />
               <CardContent className='h-full'>
                 {activeStep === steps.length ? (
@@ -669,10 +720,11 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
                 )}
               </CardContent>
             </CardContent>
-          </Grid>
+          </Card>
         </Grid2>
-      </Card>
+      </Grid2>
 
+      {/* Dialogs giữ nguyên */}
       <Dialog
         open={openConfirmDialog}
         onClose={handleCancelSubmit}

@@ -12,60 +12,6 @@ const LicenseRegistrationStatusMappingText = {
   3: 'Thành công'
 }
 
-const LicenseType = {
-  A1: 0,
-  A2: 1,
-  B1: 2,
-  B2: 3
-}
-
-const LicenseTypeMappingText = {
-  0: 'A1',
-  1: 'A2',
-  2: 'B1',
-  3: 'B2'
-}
-
-const LicenseTypeSelectOption = [
-  {
-    label: 'A1',
-    value: 0
-  },
-  {
-    label: 'A2',
-    value: 1
-  },
-  {
-    label: 'B1',
-    value: 2
-  },
-  {
-    label: 'B2',
-    value: 3
-  }
-]
-
-const VehicleType = {
-  Motorbike: 0,
-  Car: 1
-}
-
-const VehicleTypeMappingText = {
-  0: 'Xe máy',
-  1: 'Ô tô'
-}
-
-const VehicleTypeSelectOption = [
-  {
-    label: 'Xe máy',
-    value: 0
-  },
-  {
-    label: 'Ô tô',
-    value: 1
-  }
-]
-
 const PayerType = {
   Student: 0, // Học viên thanh toán
   Manager: 1 // Bạn (quản lý) thanh toán
@@ -224,15 +170,40 @@ const Action = {
   Delete: 'DELETE'
 }
 
+const LimitType = {
+  Unlimited: 0,
+  Limited: 1
+}
+
+const TableAction = {
+  View: 'VIEW',
+  Assign: 'ASSIGN'
+}
+
+const VehicleTypeCode = {
+  Motorbike: 'motorbike',
+  Car: 'car'
+}
+
+const GroupExamType = {
+  Practice: 0, // Ôn luyện
+  Exam: 1, // Thi thử
+  Detail: 2 // Xem chi tiết
+}
+
+const Routers = {
+  ManageLicensesRegistration: '/admin/manage-licenses-registration',
+  ExamSchedule: '/admin/exam-schedules',
+  BrandSetting: '/admin/account-settings'
+}
+
+const RoutersCustomer = {
+  examPratice: '/on-thi-bang-lai-xe'
+}
+
 const CONFIG = {
   LicenseRegistrationStatus,
   LicenseRegistrationStatusMappingText,
-  LicenseType,
-  LicenseTypeMappingText,
-  LicenseTypeSelectOption,
-  VehicleType,
-  VehicleTypeMappingText,
-  VehicleTypeSelectOption,
   PayerType,
   PayerTypeMappingText,
   PaymentContext,
@@ -255,7 +226,13 @@ const CONFIG = {
   IsRetakeMappingText,
   ConfigToken,
   ApprovedOption,
-  Action
+  Action,
+  LimitType,
+  TableAction,
+  VehicleTypeCode,
+  GroupExamType,
+  Routers,
+  RoutersCustomer
 }
 
 export default CONFIG

@@ -16,12 +16,10 @@ import { styled } from '@mui/material/styles'
 import { useDropzone } from 'react-dropzone'
 
 // Component Imports
-import { toast } from 'react-toastify'
 
 import CustomAvatar from '@core/components/mui/Avatar'
 
 // Styled Component Imports
-import UploadAPI from '@/libs/api/uploadAPI'
 import AppReactDropzone from '@/libs/styles/AppReactDropzone'
 
 type FileProp = {
@@ -33,7 +31,6 @@ type FileProp = {
 interface ImageDropzoneProps {
   title?: string
   subtitle?: string
-  maxFiles?: number
   accept?: Record<string, string[]>
   onFilesChange?: (files: File[]) => void
   onUpload?: (response: { data: string[] }) => void
@@ -42,6 +39,7 @@ interface ImageDropzoneProps {
   error?: boolean
   helperText?: string
   multiple?: boolean
+  defaultImages?: string[];
 }
 
 // Styled Dropzone Component
@@ -59,19 +57,18 @@ const Dropzone = styled(AppReactDropzone)<BoxProps>(({ theme }) => ({
 }))
 
 const MultiFileUploader = ({
-  title = 'Drag and Drop Your Image Here.',
-  subtitle = 'or',
-  maxFiles = 1,
+  title = 'Thả tệp vào đây hoặc click để tải lên',
+  subtitle = 'Bạn có thể kéo nhiều file đồng thời',
   accept = {
     'image/*': ['.png', '.jpg', '.jpeg', '.gif']
   },
   onFilesChange,
-  onUpload,
   className,
   required = false,
   error = false,
   helperText,
-  multiple = false
+  multiple = true,
+  defaultImages = []
 }: ImageDropzoneProps) => {
   // States
   const [files, setFiles] = useState<File[]>([])
@@ -84,7 +81,6 @@ const MultiFileUploader = ({
       setFiles(newFiles)
       onFilesChange?.(newFiles)
     },
-    maxFiles: multiple ? maxFiles : 1,
     accept,
     multiple
   })
@@ -140,16 +136,36 @@ const MultiFileUploader = ({
     onFilesChange?.([])
   }
 
-  const handleUpload = async () => {
-    try {
-      const response = await UploadAPI.uploadFiles(files)
+  // const handleUpload = async () => {
+  //   try {
+  //     const response = await UploadAPI.uploadFiles(files)
 
-      toast.success("Tải file thành công")
-      onUpload?.({ data: response.data.map((file: { relativeUrl: string | null }) => file.relativeUrl || '') })
-    } catch (error) {
-      toast.error("Tải file thất bại")
-    }
-  }
+  //     toast.success("Tải file thành công")
+  //     onUpload?.({ data: response.data.map((file: { relativeUrl: string | null }) => file.relativeUrl || '') })
+  //   } catch (error) {
+  //     toast.error("Tải file thất bại")
+  //   }
+  // }
+
+  // Render ảnh từ defaultImages
+  const renderDefaultImages = () => (
+    <List>
+      {defaultImages.map((url, idx) => (
+        <ListItem key={url + idx} className='pis-4 plb-3'>
+          <div className='file-details'>
+            <div className='file-preview'>
+              <img width={38} height={38} alt={`default-img-${idx}`} src={url} />
+            </div>
+            <div>
+              <Typography className='file-name font-medium' color='text.primary'>
+                Ảnh đã lưu
+              </Typography>
+            </div>
+          </div>
+        </ListItem>
+      ))}
+    </List>
+  );
 
   return (
     <Dropzone className={className}>
@@ -171,6 +187,7 @@ const MultiFileUploader = ({
           {helperText}
         </Typography>
       )}
+      {defaultImages.length > 0 && renderDefaultImages()}
       {files.length ? (
         <>
           <List>{fileList}</List>
@@ -178,7 +195,7 @@ const MultiFileUploader = ({
             <Button color='error' variant='outlined' onClick={handleRemoveAllFiles}>
               Remove All
             </Button>
-            <Button variant='contained' onClick={handleUpload}>Upload Files</Button>
+            {/* <Button variant='contained' onClick={handleUpload}>Upload Files</Button> */}
           </div>
         </>
       ) : null}

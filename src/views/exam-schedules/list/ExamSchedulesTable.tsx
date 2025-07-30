@@ -1,9 +1,11 @@
 'use client'
 
 // React Imports
+
 import { useEffect, useMemo, useState } from 'react'
 
 // Next Imports
+import { useRouter } from 'next/navigation'
 
 // MUI Imports
 import Card from '@mui/material/Card'
@@ -39,8 +41,6 @@ import type { ColumnDef, FilterFn } from '@tanstack/react-table'
 import type { RankingInfo } from '@tanstack/match-sorter-utils'
 
 // Type Imports
-import { LinearProgress } from '@mui/material'
-
 import { toast } from 'react-toastify'
 
 
@@ -50,11 +50,19 @@ import { toast } from 'react-toastify'
 // import { getLocalizedUrl } from '@/utils/i18n'
 
 // Style Imports
+import { Chip } from '@mui/material'
+
 import tableStyles from '@core/styles/table.module.css'
 import type { ExamScheduleType, GetExamSchedulesWithPaginationQueryParams, PaginatedListOfExamScheduleType } from '@/types/examScheduleTypes'
 import ExamScheduleAPI from '@/libs/api/examScheduleAPI'
 import TableFilters from '@/views/exam-schedules/list/TableFilters'
-import AddExasmScheduleDrawer from '@/views/exam-schedules/list/AddExasmScheduleDrawer'
+import type { ExamAddressType, PaginatedListOfExamAddressType } from '@/types/examAddressTypes'
+import ExamAddressAPI from '@/libs/api/examAddressAPI'
+import OptionMenu from '@/@core/components/option-menu'
+import LicenseTypeAPI from '@/libs/api/licenseTypeApi'
+import type { LicenseTypeDto } from '@/types/LicensesRegistrations'
+import AddExamScheduleDialog from '@/views/exam-schedules/list/AddExamScheduleDialog'
+import CONFIG from '@/configs/config'
 
 
 declare module '@tanstack/table-core' {
@@ -70,13 +78,6 @@ type ProductWithActionsType = ExamScheduleType & {
   actions?: string
 }
 
-enum LimitType {
-  Unlimited,
-  Limited
-}
-
-
-
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   // Rank the item
   const itemRank = rankItem(row.getValue(columnId), value)
@@ -89,6 +90,20 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   // Return if the item should be filtered in/out
   return itemRank.passed
 }
+
+// Function to get progress color based on percentage
+// Tính toán màu sắc dựa trên tỷ lệ đỗ:
+// - >= 80%: success (xanh lá) - tỷ lệ đỗ cao
+// - 60-79%: primary (xanh dương) - tỷ lệ đỗ khá
+// - 30-59%: warning (cam) - tỷ lệ đỗ trung bình
+// - < 30%: error (đỏ) - tỷ lệ đỗ thấp
+// const getProgressColor = (percentage: number): 'error' | 'warning' | 'primary' | 'success' => {
+//   if (percentage >= 80) return 'success'  // >= 80%: green
+//   if (percentage >= 60) return 'primary'  // 60-79%: blue
+//   if (percentage >= 30) return 'warning'  // 30-59%: orange
+
+//   return 'error'                          // < 30%: red
+// }
 
 const DebouncedInput = ({
   value: initialValue,
@@ -126,23 +141,29 @@ const DebouncedInput = ({
 const columnHelper = createColumnHelper<ProductWithActionsType>()
 
 const ProductListTable = () => {
+  // Hooks
+  const router = useRouter()
+
   // States
   const [params, setParams] = useState<GetExamSchedulesWithPaginationQueryParams>({ pageNumber: 1, pageSize: 10, search: '' })
   const [rowSelection, setRowSelection] = useState({})
   const [data, setData] = useState<ExamScheduleType[]>([])
   const [globalFilter, setGlobalFilter] = useState('')
-  const [openAddDrawer, setOpenAddDrawer] = useState(false)
+
+  const [openUpsertDialog, setOpenUpsertDialog] = useState(false)
+
   const [reloadFlag, setReloadFlag] = useState(false)
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false)
   const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null)
   const [selectedExamScheduleId, setSelectedExamScheduleId] = useState<string>()
 
+  // States of api
+  const [examAddresses, setExamAddresses] = useState<ExamAddressType[]>([])
+  const [licenseTypes, setLicenseTypes] = useState<LicenseTypeDto[]>([])
+
   // States for data
   // const [examSchedules, setExamSchedules] = useState<ExamScheduleType[]>([])
   const [totalCount, setTotalCount] = useState(0)
-
-  // const [pageSize, setPageSize] = useState(1)s
-  // const [loading, setLoading] = useState(false)
 
   // Function to reload data
   const reloadData = () => {
@@ -153,44 +174,15 @@ const ProductListTable = () => {
 
   const columns = useMemo<ColumnDef<ProductWithActionsType, any>[]>(
     () => [
-      // {
-      //   id: 'select',
-      //   header: ({ table }) => (
-      //     <Checkbox
-      //       {...{
-      //         checked: table.getIsAllRowsSelected(),
-      //         indeterminate: table.getIsSomeRowsSelected(),
-      //         onChange: table.getToggleAllRowsSelectedHandler()
-      //       }}
-      //     />
-      //   ),
-      //   cell: ({ row }) => (
-      //     <Checkbox
-      //       {...{
-      //         checked: row.getIsSelected(),
-      //         disabled: !row.getCanSelect(),
-      //         indeterminate: row.getIsSomeSelected(),
-      //         onChange: row.getToggleSelectedHandler()
-      //       }}
-      //     />
+      // columnHelper.accessor('id', {
+      //   id: 'stt',
+      //   header: 'STT',
+      //   cell: ({ row, table }) => (
+      //     <Typography>
+      //       {table.getRowModel().rows.indexOf(row) + 1}
+      //     </Typography>
       //   )
-      // },
-      // columnHelper.accessor('name', {
-      //   header: 'Tên',
-      //   cell: ({ row }) => (
-      //     <Typography>{row.original.name}</Typography>
-      //   ),
-      //   enableSorting: false
       // }),
-      columnHelper.accessor('id', {
-        id: 'stt',
-        header: 'STT',
-        cell: ({ row, table }) => (
-          <Typography>
-            {table.getRowModel().rows.indexOf(row) + 1}
-          </Typography>
-        )
-      }),
       columnHelper.accessor('examAddress.fullAddress', {
         header: 'Địa điểm',
         cell: ({ row }) => <Typography>{row.original.examAddress?.fullAddress}</Typography>,
@@ -218,89 +210,135 @@ const ProductListTable = () => {
         enableSorting: false
       }),
 
-      columnHelper.accessor('registrationLimit', {
-        header: 'Suất thi',
-        cell: ({ row }) => <Typography>{(row.original.limitType === LimitType.Unlimited) ? 'Không giới hạn' : row.original.registrationLimit}</Typography>,
-        enableSorting: false
-      }),
+      // columnHelper.accessor('registrationLimit', {
+      //   header: 'Suất thi',
+      //   cell: ({ row }) => <Typography>{(row.original.limitType === LimitType.Unlimited) ? 'Không giới hạn' : row.original.registrationLimit}</Typography>,
+      //   enableSorting: false
+      // }),
       columnHelper.accessor('registeredStudents', {
-        header: 'Đã xếp',
-        cell: ({ row }) => <Typography>{`${row.original?.registeredStudents}/${row.original?.registrationLimit}`}</Typography>,
-        enableSorting: false
-      }),
-      columnHelper.accessor('passedStudents', {
-        header: 'Tỷ lệ đỗ',
+        header: 'Suất thi',
         cell: ({ row }) => {
-          const examDate = row.original?.dateTime ? new Date(row.original.dateTime) : new Date();
-          const currentDate = new Date();
-          const isExamPassed = examDate < currentDate;
+          const registrationLimit = row.original?.registrationLimit;
+          const registeredStudents = row.original?.registeredStudents || 0;
 
-          const passedStudents = row.original?.passedStudents;
-          const registeredStudents = row.original?.registeredStudents;
+          if (registrationLimit === null) {
+            // Unlimited case
+            return (
+              <Chip label={"Unlimited"} color={'primary'} size='small' variant='tonal' />
+            );
+          } else {
+            // Limited case - calculate percentage
+            const percentage = (registrationLimit && registrationLimit > 0) ? (registeredStudents / registrationLimit) * 100 : 0;
+            const color = percentage < 50 ? 'error' : 'success';
 
-          const hasValidResults = passedStudents != null &&
-            passedStudents !== undefined &&
-            registeredStudents != null &&
-            registeredStudents !== undefined;
-
-          const calculatePassRate = () => {
-            if (!hasValidResults) return 0;
-
-            return Math.floor((passedStudents / registeredStudents) * 100);
-          };
-
-          return (
-            <div className='flex items-center gap-4 min-is-48'>
-              {isExamPassed ? (
-                hasValidResults ? (
-                  <>
-                    <Typography
-                      className='font-medium'
-                      color='text.primary'
-                    >
-                      {`${calculatePassRate()}%`}
-                    </Typography>
-                    <LinearProgress
-                      color='primary'
-                      value={calculatePassRate()}
-                      variant='determinate'
-                      className='is-full bs-2'
-                    />
-                    <Typography variant='body2'>
-                      {`${passedStudents}/${registeredStudents}`}
-                    </Typography>
-                  </>
-                ) : (
-                  <Typography
-                    className='font-medium'
-                    color='text.primary'
-                  >
-                    Chưa có kết quả thi
-                  </Typography>
-                )
-              ) : (
-                <Typography
-                  className='font-medium'
-                  color='text.primary'
-                >
-                  Chưa thi
-                </Typography>
-              )}
-            </div>
-          );
+            return (
+              <Chip label={`${registeredStudents}/${registrationLimit}`} color={color} size='small' variant='tonal' />
+            );
+          }
         },
         enableSorting: false
       }),
+
+      // columnHelper.accessor('passedStudents', {
+      //   header: 'Tỷ lệ đỗ',
+      //   cell: ({ row }) => {
+      //     const examDate = row.original?.dateTime ? new Date(row.original.dateTime) : new Date();
+      //     const currentDate = new Date();
+      //     const isExamPassed = examDate < currentDate;
+
+      //     const passedStudents = row.original?.passedStudents;
+      //     const registeredStudents = row.original?.registeredStudents;
+
+      //     const hasValidResults = passedStudents != null &&
+      //       passedStudents !== undefined &&
+      //       registeredStudents != null &&
+      //       registeredStudents !== undefined;
+
+      //     const calculatePassRate = () => {
+      //       if (!hasValidResults) return 0;
+
+      //       return Math.floor((passedStudents / registeredStudents) * 100);
+      //     };
+
+      //     const passRate = calculatePassRate();
+      //     const progressColor = getProgressColor(passRate);
+
+      //     return (
+      //       <>
+      //         {isExamPassed ? (
+      //           hasValidResults ? (
+      //             <>
+      //               <div className='flex flex-col gap-2 min-w-[120px]'>
+      //                 <div className='flex items-center justify-between'>
+      //                   <Typography
+      //                     className='font-semibold text-sm'
+      //                     color='text.primary'
+      //                   >
+      //                     {`${passRate}%`}
+      //                   </Typography>
+      //                   <Typography
+      //                     variant='caption'
+      //                     className='text-textSecondary font-medium'
+      //                   >
+      //                     {`${passedStudents}/${registeredStudents}`}
+      //                   </Typography>
+      //                 </div>
+      //                 <LinearProgress
+      //                   color={progressColor}
+      //                   value={passRate}
+      //                   variant='determinate'
+      //                   className='is-full bs-2'
+      //                 />
+
+      //               </div>
+      //             </>
+      //           ) : (
+      //             <div className='flex items-center gap-4 min-is-48'><Typography
+      //               className='font-medium'
+      //               color='text.primary'
+      //             >
+      //               Chưa có kết quả thi
+      //             </Typography></div>
+
+      //           )
+      //         ) : (
+      //           <div className='flex items-center gap-4 min-is-48'>
+
+      //             <Typography
+      //               className='font-medium'
+      //               color='text.primary'
+      //             >
+      //               Chưa thi
+      //             </Typography></div>
+
+      //         )}
+      //       </>
+      //     );
+      //   },
+      //   enableSorting: false
+      // }),
       columnHelper.accessor('actions', {
         header: 'Actions',
         cell: ({ row }) => (
           <div className='flex items-center'>
-            <IconButton size='small' onClick={() => handleOpenEditDrawer(row.original)}>
+            <IconButton size='small' onClick={() => handleOpenEditDialog(row.original)}>
               <i className='ri-edit-box-line text-[22px] text-textSecondary' />
             </IconButton>
             <IconButton size='small' onClick={() => handleOpenDeleteDialog(row.original.id)}>
               <i className='ri-delete-bin-7-line text-[22px] text-textSecondary' />
             </IconButton>
+            <OptionMenu
+              iconButtonProps={{ size: 'medium' }}
+              iconClassName='text-textSecondary text-[22px]'
+              options={[
+                { text: 'Xếp thi', icon: 'ri-id-card-line', menuItemProps: { className: 'gap-2', onClick: () => handleOpenAssignDrawer(row.original) } },
+                {
+                  text: 'Kết quả',
+                  icon: 'ri-toggle-line',
+                  menuItemProps: { className: 'gap-2', onClick: () => handleOpenResultDrawer(row.original) }
+                },
+              ]}
+            />
           </div>
         ),
         enableSorting: false
@@ -357,7 +395,6 @@ const ProductListTable = () => {
     }
   }
 
-
   const handleOpenDeleteDialog = (id: string | undefined) => {
     if (id) {
       setItemIdToDelete(id)
@@ -390,27 +427,74 @@ const ProductListTable = () => {
     }
   }
 
-  const handleOpenEditDrawer = (examSchedule: ExamScheduleType) => {
-    // setSelectedExamSchedule(examSchedule)
+  const handleOpenEditDialog = (examSchedule: ExamScheduleType) => {
     setSelectedExamScheduleId(examSchedule.id)
-
-    // console.log(examSchedule);
-    setOpenAddDrawer(true)
+    setOpenUpsertDialog(true)
   }
 
-  const handleOpenAddDrawer = () => {
-    setOpenAddDrawer(true)
+  const handleOpenAddDialog = () => {
+    setOpenUpsertDialog(true)
+  }
+
+  const handleOpenAssignDrawer = (examSchedule: ExamScheduleType) => {
+    // Navigate to exam schedule detail page with assign tab focused
+    router.push(`${CONFIG.Routers.ExamSchedule}/${examSchedule.id}?tab=assign`)
+  }
+
+  const handleOpenResultDrawer = (examSchedule: ExamScheduleType) => {
+    // setSelectedExamScheduleId(examSchedule.id)
+    // setOpenResultDrawer(true)
+    // Navigate to exam schedule detail page with assign tab focused
+    router.push(`${CONFIG.Routers.ExamSchedule}/${examSchedule.id}?tab=result`)
   }
 
   useEffect(() => {
     fetchExamSchedules()
-  }, [params, reloadFlag])
+  }, [JSON.stringify(params), reloadFlag])
+
+
+  // Fetch license types on component mount
+  useEffect(() => {
+    const fetchLicenseTypes = async () => {
+      try {
+        const response = await LicenseTypeAPI.getAllLicenseTypes({});
+
+        if (response.data.success) {
+          setLicenseTypes(response.data.data || []);
+        }
+      } catch (error) {
+        console.error('Error fetching license types:', error);
+        toast.error('Lỗi khi tải danh sách bằng lái');
+      }
+    };
+
+    const fetchExamAddresses = async () => {
+      try {
+
+        const response = await ExamAddressAPI.getExamAddresses({ pageNumber: 1, pageSize: 10 })
+
+        const paginatedData = response.data as PaginatedListOfExamAddressType
+
+        if (paginatedData.data) {
+          setExamAddresses(paginatedData.data || [])
+        }
+
+      } catch (error) {
+        console.error('Error fetching exam addesses:', error)
+        toast.error('Lỗi khi tải danh sách địa điểm thi');
+      }
+    }
+
+
+    fetchLicenseTypes()
+    fetchExamAddresses()
+  }, []);
 
   return (
     <>
       <Card>
-        <CardHeader title='Filters' className='pbe-4' />
-        <TableFilters />
+        <CardHeader title='Lọc lịch thi' className='pbe-4' />
+        <TableFilters examAddresses={examAddresses} licenseTypes={licenseTypes} setParams={setParams} />
         <Divider />
         <div className='flex justify-between flex-col items-start sm:flex-row sm:items-center gap-y-4 p-5'>
           <DebouncedInput
@@ -425,9 +509,9 @@ const ProductListTable = () => {
               variant='contained'
               startIcon={<i className='ri-add-line' />}
               className='max-sm:is-full is-auto'
-              onClick={handleOpenAddDrawer}
+              onClick={handleOpenAddDialog}
             >
-              Thêm
+              Thêm mới
             </Button>
           </div>
         </div>
@@ -499,34 +583,40 @@ const ProductListTable = () => {
           onRowsPerPageChange={e => setParams((prev) => ({ ...prev, pageSize: Number(e.target.value) }))}
         />
       </Card>
-      <AddExasmScheduleDrawer
-        open={openAddDrawer}
+
+      <AddExamScheduleDialog
+        examAddresses={examAddresses}
+        licenseTypes={licenseTypes}
+        open={openUpsertDialog}
         handleClose={() => {
           {
             setSelectedExamScheduleId(undefined)
-            setOpenAddDrawer(false)
+            setOpenUpsertDialog(false)
           }
         }
         }
         examScheduleId={selectedExamScheduleId}
         onSuccess={reloadData}
       />
+
       <Dialog
         open={openDeleteDialog}
         onClose={handleCloseDeleteDialog}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{"Xác nhận xóa"}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">{"Xóa lịch thi"}</DialogTitle>
         <DialogContent>
-          <Typography id="alert-dialog-description">
-            Bạn có chắc chắn muốn xóa lịch thi này không?
-          </Typography>
+          <div className='md:w-[400px]'>
+            <Typography id="alert-dialog-description">
+              Xóa lịch thi sẽ mất dữ liệu liên quan đến lịch thi này. Bạn chắc chắn chứ?
+            </Typography></div>
+
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDeleteDialog}>Hủy</Button>
-          <Button onClick={handleDeleteConfirmed} autoFocus color="error">
-            Xóa
+          <Button variant='outlined' color="error" onClick={handleCloseDeleteDialog}>HỦY</Button>
+          <Button variant='contained' onClick={handleDeleteConfirmed} autoFocus >
+            XÁC NHẬN
           </Button>
         </DialogActions>
       </Dialog>

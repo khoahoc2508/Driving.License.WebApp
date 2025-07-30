@@ -8,7 +8,7 @@ import PerfectScrollbar from 'react-perfect-scrollbar'
 import type { VerticalMenuContextProps } from '@menu/components/vertical-menu/Menu'
 
 // Component Imports
-import { Menu, MenuItem } from '@menu/vertical-menu'
+import { Menu, MenuItem, SubMenu } from '@menu/vertical-menu'
 
 // Hook Imports
 import useVerticalNav from '@menu/hooks/useVerticalNav'
@@ -19,6 +19,7 @@ import StyledVerticalNavExpandIcon from '@menu/styles/vertical/StyledVerticalNav
 // Style Imports
 import menuItemStyles from '@core/styles/vertical/menuItemStyles'
 import menuSectionStyles from '@core/styles/vertical/menuSectionStyles'
+import CONFIG from '@/configs/config'
 
 type RenderExpandIconProps = {
   open?: boolean
@@ -68,18 +69,24 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
         renderExpandedMenuItemIcon={{ icon: <i className='ri-circle-line' /> }}
         menuSectionStyles={menuSectionStyles(verticalNavOptions, theme)}
       >
-        <MenuItem href='/home' icon={<i className='ri-home-smile-line' />}>
+        <MenuItem href='/admin' icon={<i className='ri-home-smile-line' />}>
           Home
         </MenuItem>
-        <MenuItem href='/about' icon={<i className='ri-information-line' />}>
+        <MenuItem href='/admin/about' icon={<i className='ri-information-line' />}>
           About
         </MenuItem>
-        <MenuItem href='/manage-licenses-registration' icon={<i className='ri-user-3-line' />}>
+        <MenuItem href='/admin/dashboard' icon={<i className="ri-bar-chart-line"></i>}>
+          Dashboard
+        </MenuItem>
+        <MenuItem href={CONFIG.Routers.ManageLicensesRegistration} icon={<i className='ri-user-3-line' />}>
           Học viên
         </MenuItem>
-        <MenuItem href='/exam-schedules/list' icon={<i className="ri-calendar-line"></i>}>
+        <MenuItem href={`${CONFIG.Routers.ExamSchedule}/list`} icon={<i className="ri-calendar-line"></i>}>
           Lịch thi
         </MenuItem>
+        <SubMenu label={"Cấu hình cá nhân"} icon={<i className='ri-settings-3-line' />}>
+          <MenuItem href={`${CONFIG.Routers.BrandSetting}/brand-setting`}>{"Thương hiệu"}</MenuItem>
+        </SubMenu>
       </Menu>
       {/* <Menu
         popoutMenuOffset={{ mainAxis: 10 }}

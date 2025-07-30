@@ -18,60 +18,6 @@ interface CitizenCardProps {
 
 const CitizenCard = ({ control, errors }: CitizenCardProps) => {
 
-  // const handleGetInfoFromCitizenCard = async () => {
-  //   const frontPhoto = watch('frontPhoto');
-  //   const backPhoto = watch('backPhoto');
-
-  //   if (!frontPhoto || frontPhoto.length === 0 || !(frontPhoto[0] instanceof File)) {
-  //     toast.error('Vui lòng tải lên ảnh mặt trước CCCD.');
-
-  //     return;
-  //   }
-
-  //   if (!backPhoto || backPhoto.length === 0 || !(backPhoto[0] instanceof File)) {
-  //     toast.error('Vui lòng tải lên ảnh mặt sau CCCD.');
-
-  //     return;
-  //   }
-
-  //   const formData = new FormData();
-
-  //   formData.append('formFile', frontPhoto[0]);
-  //   formData.append('formFile', backPhoto[0]);
-
-  //   try {
-  //     const response = await PersonAPI.postCitizenByFiles(formData);
-
-  //     if (response.data?.success && response.data.data && response.data.data.length > 0) {
-
-  //       const citizenData = response.data.data[0];
-  //       const frontData = citizenData.front;
-  //       const backData = citizenData.back;
-
-  //       // Fill the form fields
-  //       setValue('cccd', citizenData.id || '');
-
-  //       if (frontData) {
-  //         setValue('fullName', frontData.fullName || '');
-  //         setValue('birthday', frontData.birthday ? new Date(frontData.birthday) : null);
-  //         setValue('gender', frontData.sex === 1 ? 'Nam' : frontData.sex === 0 ? 'Nữ' : 'Khác');
-  //       }
-
-  //       if (backData) {
-  //         setValue('citizenCardDateOfIssue', backData.issuedDate ? new Date(backData.issuedDate) : null);
-  //         setValue('citizenCardPlaceOfIssue', backData.issuedBy || '');
-  //       }
-
-  //       toast.success('Lấy thông tin CCCD thành công!');
-  //     } else {
-  //       toast.error(response.data?.message || 'Không thể nhận dạng thông tin từ ảnh CCCD.');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error recognizing citizen card:', error);
-  //     toast.error('Đã xảy ra lỗi khi lấy thông tin CCCD.');
-  //   }
-  // };
-
   return (
     <Card>
       <CardHeader title='CĂN CƯỚC CÔNG DÂN' />

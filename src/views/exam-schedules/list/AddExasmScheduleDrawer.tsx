@@ -1,8 +1,8 @@
 'use client'
 
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 
-import { Divider, Drawer, IconButton, Typography } from "@mui/material"
+import { Divider, Drawer, FormHelperText, IconButton, Typography } from "@mui/material"
 
 // MUI Imports
 import Grid from '@mui/material/Grid2'
@@ -21,12 +21,14 @@ import { Controller, useForm } from 'react-hook-form'
 // Styled Component Imports
 
 import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
-import ExamAddressAPI from "@/libs/api/examAddressAPI"
-import type { ExamAddressType, PaginatedListOfExamAddressType } from "@/types/examAddressTypes"
+import type { ExamAddressType } from "@/types/examAddressTypes"
 import ExamScheduleAPI from "@/libs/api/examScheduleAPI"
-import type { CreateExamScheduleCommandType, ExamScheduleType, UpdateExamScheduleCommandType } from "@/types/examScheduleTypes"
+import type { CreateExamScheduleCommandType, ExamScheduleByIdType, UpdateExamScheduleCommandType } from "@/types/examScheduleTypes"
+import type { LicenseTypeDto } from "@/types/LicensesRegistrations"
 
 type Props = {
+  examAddresses: ExamAddressType[]
+  licenseTypes: LicenseTypeDto[]
   open: boolean
   handleClose: () => void
   onSuccess?: () => void
@@ -46,21 +48,22 @@ type FormValues = {
   registrationLimit?: number | null;
   note?: string;
   examAddressId?: string;
+  licenseTypeCode?: string;
 }
 
 const AddExasmScheduleDrawer = (props: Props) => {
   // Props
-  const { open, handleClose, onSuccess, examScheduleId } = props
+  const { examAddresses, licenseTypes, open, handleClose, onSuccess, examScheduleId } = props
   const isEditMode = !!examScheduleId
-  const [examAddresses, setExamAddresses] = useState<ExamAddressType[]>([])
 
   const defaultValues: FormValues = {
     name: '',
     dateTime: undefined,
     limitType: LimitType.Limited,
     registrationLimit: 10,
-    note: '',
-    examAddressId: ''
+    note: undefined,
+    examAddressId: '',
+    licenseTypeCode: ''
   }
 
   // Hooks
@@ -94,7 +97,8 @@ const AddExasmScheduleDrawer = (props: Props) => {
         limitType: data.limitType,
         registrationLimit: data.registrationLimit,
         note: data.note || '',
-        examAddressId: data.examAddressId
+        examAddressId: data.examAddressId,
+        licenseTypeCode: data.licenseTypeCode
       }
 
       const response = await ExamScheduleAPI.createExamSchedule(payload)
@@ -123,10 +127,10 @@ const AddExasmScheduleDrawer = (props: Props) => {
         limitType: data.limitType,
         registrationLimit: data.registrationLimit,
         note: data.note || '',
-        examAddressId: data.examAddressId
+        examAddressId: data.examAddressId,
+        licenseTypeCode: data.licenseTypeCode
       }
 
-      console.log(payload)
       const response = await ExamScheduleAPI.updateExamSchedule(payload)
 
       if (response.data?.success) {
@@ -144,38 +148,14 @@ const AddExasmScheduleDrawer = (props: Props) => {
     }
   }
 
-
-  // Fetch data function
-  const fetchExamAddresses = async () => {
-    try {
-
-      const response = await ExamAddressAPI.getExamAddresses({ pageNumber: 1, pageSize: 10 })
-
-      const paginatedData = response.data as PaginatedListOfExamAddressType
-
-      if (paginatedData.data && paginatedData.data.length > 0) {
-        setExamAddresses(paginatedData.data || [])
-        if (!isEditMode)
-          reset({ ...defaultValues, examAddressId: paginatedData.data[0].id })
-      }
-
-    } catch (error) {
-      console.error('Error fetching exam addesses:', error)
-      setExamAddresses([])
-    } finally {
-    }
-  }
-
   const fetchExamAddressById = async (id: string) => {
     try {
 
       const response = await ExamScheduleAPI.getExamScheduleById(id)
 
-      const examSchedule = response.data.data as ExamScheduleType
+      const examSchedule = response.data.data as ExamScheduleByIdType
 
       if (examSchedule) {
-        console.log(examSchedule)
-
 
         // setExamAddresses(paginatedData.data || [])
         const examScheduleForUpdate = {
@@ -187,7 +167,8 @@ const AddExasmScheduleDrawer = (props: Props) => {
           limitType: examSchedule.limitType,
           registrationLimit: examSchedule.registrationLimit,
           note: examSchedule.note,
-          examAddressId: examSchedule.examAddress?.id
+          examAddressId: examSchedule.examAddress?.id,
+          licenseTypeCode: examSchedule.licenseTypeCode
         }
 
         reset(examScheduleForUpdate)
@@ -195,8 +176,6 @@ const AddExasmScheduleDrawer = (props: Props) => {
 
     } catch (error) {
       console.error('Error fetching exam schedule by id:', error)
-
-      // setExamAddresses([])
     } finally {
     }
   }
@@ -205,15 +184,16 @@ const AddExasmScheduleDrawer = (props: Props) => {
     handleClose()
   }
 
-  useEffect(() => {
-    fetchExamAddresses()
-  }, [])
 
   useEffect(() => {
-    if (examScheduleId) {
+    if (examScheduleId && open) {
       fetchExamAddressById(examScheduleId)
     }
-  }, [examScheduleId])
+
+    if (!open) {
+      reset(defaultValues)
+    }
+  }, [open])
 
   return (
     <Drawer
@@ -222,7 +202,7 @@ const AddExasmScheduleDrawer = (props: Props) => {
       variant='temporary'
       onClose={() => { }}
       ModalProps={{ keepMounted: true }}
-      sx={{ '& .MuiDrawer-paper': { width: { xs: 400, sm: 600 } } }}
+      sx={{ '& .MuiDrawer-paper': { width: { xs: "90%", sm: 600 } } }}
     >
 
       <div className='flex items-center justify-between pli-5 plb-4'>
@@ -238,13 +218,13 @@ const AddExasmScheduleDrawer = (props: Props) => {
             <Grid container spacing={5}>
               <Grid size={{ xs: 12, sm: 12 }}>
                 <FormControl fullWidth>
-                  <InputLabel>Địa điểm thi</InputLabel>
+                  <InputLabel error={Boolean(errors.examAddressId)}>Địa điểm thi</InputLabel>
                   <Controller
                     name='examAddressId'
                     control={control}
                     rules={{ required: true }}
                     render={({ field }) => (
-                      <Select {...field} label='Địa điểm thi'>
+                      <Select {...field} label='Địa điểm thi' error={Boolean(errors.examAddressId)}>
                         {examAddresses.map((examAddress) => (
                           <MenuItem key={examAddress.id} value={examAddress.id}>
                             {examAddress.fullAddress}
@@ -254,6 +234,7 @@ const AddExasmScheduleDrawer = (props: Props) => {
                       </Select>
                     )}
                   />
+                  {errors.examAddressId && <FormHelperText error>This field is required.</FormHelperText>}
 
                 </FormControl>
 
@@ -342,6 +323,28 @@ const AddExasmScheduleDrawer = (props: Props) => {
                     </div>
                   </Grid>
                 </Grid>
+              </Grid>
+
+              <Grid size={{ xs: 12, sm: 12 }}>
+                <FormControl fullWidth>
+                  <InputLabel error={Boolean(errors.licenseTypeCode)}>Loại bằng lái</InputLabel>
+                  <Controller
+                    name='licenseTypeCode'
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Select {...field} label='Loại bằng lái' error={Boolean(errors.licenseTypeCode)}>
+                        {licenseTypes.map((licenseType) => (
+                          <MenuItem key={licenseType.code} value={licenseType.code}>
+                            {licenseType.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    )}
+
+                  />
+                  {errors.licenseTypeCode && <FormHelperText error>This field is required.</FormHelperText>}
+                </FormControl>
               </Grid>
 
               <Grid size={{ xs: 12 }} className='flex gap-4'>

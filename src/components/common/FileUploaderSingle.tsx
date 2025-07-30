@@ -27,13 +27,10 @@ const FileUploaderSingle = ({
   // States
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 
-  // Effect to update preview when field value changes (e.g., on initial load with a URL)
   useEffect(() => {
     if (field.value && typeof field.value[0] === 'string') {
-      // If value is a string (URL), use it for preview
-      setPreviewUrl(field.value[0])
+      setPreviewUrl(process.env.NEXT_PUBLIC_STORAGE_BASE_URL + field.value[0])
     } else if (field.value && field.value[0] instanceof File) {
-      // If value is a File, create a blob URL for preview
       setPreviewUrl(URL.createObjectURL(field.value[0]))
     } else {
       setPreviewUrl(null)
@@ -102,7 +99,7 @@ const FileUploaderSingle = ({
         <input {...getInputProps()} />
         {displayImage ? (
           <img
-            src={displayImage}
+            src={`${displayImage}`}
             alt="Uploaded file"
             style={{
               width: '100%',

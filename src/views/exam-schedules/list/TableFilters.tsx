@@ -11,53 +11,71 @@ import type { SelectChangeEvent } from '@mui/material/Select';
 import Select from '@mui/material/Select'
 
 // Third-party Imports
-import { format, addDays } from 'date-fns'
+import { format } from 'date-fns'
 
 // Type Imports
 import type { TextFieldProps } from '@mui/material';
 import { TextField } from '@mui/material'
 
 import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
+import type { ExamAddressType } from '@/types/examAddressTypes'
+import CONFIG from '@/configs/config'
+import type { LicenseTypeDto } from '@/types/LicensesRegistrations'
 
 // Types
 type CustomInputProps = TextFieldProps & {
   label: string
-  end: Date | number
-  start: Date | number
+  value?: string
+}
+
+type TableFiltersProps = {
+  examAddresses: ExamAddressType[]
+  licenseTypes: LicenseTypeDto[]
+  setParams: (params: any) => void
 }
 
 // Vars
 
 
-const TableFilters = () => {
+const TableFilters = ({ examAddresses, setParams }: TableFiltersProps) => {
   // States
   const [registrationLimit, setRegistrationLimit] = useState<string[]>([])
   const [addresses, setAddresses] = useState<string[]>([])
-  const [startDate, setStartDate] = useState<Date | null | undefined>(new Date())
-  const [endDate, setEndDate] = useState<Date | null | undefined>(addDays(new Date(), 15))
+  const [startDate, setStartDate] = useState<Date | null | undefined>(null)
+  const [endDate, setEndDate] = useState<Date | null | undefined>(null)
 
-  const handleOnChange = (dates: any) => {
-    const [start, end] = dates
+  const handleStartDateChange = (date: Date | null) => {
+    setStartDate(date)
 
-    setStartDate(start)
-    setEndDate(end)
+    // Update params when both dates are available
+    setParams((prev: any) => ({
+      ...prev,
+      fromDate: date ? date.toISOString() : undefined,
+      toDate: endDate ? endDate.toISOString() : prev.toDate
+    }))
+  }
+
+  const handleEndDateChange = (date: Date | null) => {
+    setEndDate(date)
+
+    // Update params when both dates are available
+    setParams((prev: any) => ({
+      ...prev,
+      fromDate: startDate ? startDate.toISOString() : prev.fromDate,
+      toDate: date ? date.toISOString() : undefined
+    }))
   }
 
   const CustomInput = forwardRef((props: CustomInputProps, ref) => {
-    const { label, start, end, ...rest } = props
+    const { label, value, ...rest } = props
 
-    const startDate = format(start, 'MM/dd/yyyy')
-    const endDate = end !== null ? ` - ${format(end, 'MM/dd/yyyy')}` : null
-
-    const value = `${startDate}${endDate !== null ? endDate : ''}`
-
-    return <TextField fullWidth inputRef={ref} {...rest} label={label} value={value} />
+    return <TextField fullWidth inputRef={ref} {...rest} label={label} value={value || ''} />
   })
 
   return (
     <CardContent>
       <Grid container spacing={6}>
-        <Grid size={{ xs: 12, sm: 4 }}>
+        <Grid size={{ xs: 12, sm: 3 }}>
           <FormControl fullWidth>
             <InputLabel id='select-addresses'>Địa điểm</InputLabel>
             <Select
@@ -66,33 +84,67 @@ const TableFilters = () => {
               label='Địa điểm'
               value={addresses}
               onChange={(event: SelectChangeEvent<string[]>) => {
-                setAddresses(event.target.value as string[])
+                const selectedAddresses = event.target.value as string[]
+
+                setAddresses(selectedAddresses)
+                setParams((prev: any) => ({
+                  ...prev,
+                  examAddressIds: selectedAddresses.length > 0 ? selectedAddresses : undefined
+                }))
               }}
               labelId='select-addresses'
             >
-              <MenuItem value='0'>Nhổn</MenuItem>
-              <MenuItem value='1'>Khuất Duy Tiến</MenuItem>
+              <MenuItem value={""}>
+                <em>None</em>
+              </MenuItem>
+              {examAddresses.map((address) => (
+                <MenuItem key={address.id} value={address.id}>
+                  {address.fullAddress}
+                </MenuItem>
+              ))}
+
             </Select>
           </FormControl>
         </Grid>
-        <Grid size={{ xs: 12, sm: 4 }}>
+        <Grid size={{ xs: 12, sm: 3 }}>
           <FormControl fullWidth>
-
             <AppReactDatepicker
-              selectsRange
-              endDate={endDate as Date}
               selected={startDate}
-              startDate={startDate as Date}
-              id='date-range-picker'
-              onChange={handleOnChange}
-              shouldCloseOnSelect={false}
+              onChange={handleStartDateChange}
+              isClearable={true}
+              timeIntervals={1}
+              dateFormat="dd/MM/yyyy"
+              placeholderText="Chọn thời gian bắt đầu"
+              maxDate={endDate || undefined}
               customInput={
-                <CustomInput label='Thời gian' start={startDate as Date | number} end={endDate as Date | number} />
+                <CustomInput
+                  label='Từ ngày'
+                  value={startDate ? format(startDate, 'dd/MM/yyyy') : ''}
+                />
               }
             />
           </FormControl>
         </Grid>
-        <Grid size={{ xs: 12, sm: 4 }}>
+        <Grid size={{ xs: 12, sm: 3 }}>
+          <FormControl fullWidth>
+            <AppReactDatepicker
+              selected={endDate}
+              onChange={handleEndDateChange}
+              isClearable={true}
+              timeIntervals={1}
+              dateFormat="dd/MM/yyyy"
+              placeholderText="Chọn thời gian kết thúc"
+              minDate={startDate || undefined}
+              customInput={
+                <CustomInput
+                  label='Đến ngày'
+                  value={endDate ? format(endDate, 'dd/MM/yyyy') : ''}
+                />
+              }
+            />
+          </FormControl>
+        </Grid>
+        <Grid size={{ xs: 12, sm: 3 }}>
           <FormControl fullWidth>
             <InputLabel id='registration-limit'>Suất thi</InputLabel>
             <Select
@@ -101,14 +153,19 @@ const TableFilters = () => {
               id='registration-limit'
               value={registrationLimit}
               onChange={(event: SelectChangeEvent<string[]>) => {
-                setRegistrationLimit(event.target.value as string[])
+                const selectedLimits = event.target.value as string[]
+
+                setRegistrationLimit(selectedLimits)
+                setParams((prev: any) => ({
+                  ...prev,
+                  limitTypes: selectedLimits.length > 0 ? selectedLimits.map(Number) : undefined
+                }))
               }}
               label='Suât thi'
               labelId='registration-limit'
             >
-              <MenuItem value='0'>Còn trống</MenuItem>
-              <MenuItem value='1'>Đã hết</MenuItem>
-              <MenuItem value='2'>Không giới hạn</MenuItem>
+              <MenuItem value={CONFIG.LimitType.Limited.toString()}>Giới hạn</MenuItem>
+              <MenuItem value={CONFIG.LimitType.Unlimited.toString()}>Không giới hạn</MenuItem>
             </Select>
           </FormControl>
         </Grid>

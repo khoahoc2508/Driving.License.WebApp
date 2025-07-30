@@ -1,8 +1,12 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+
+import { Controller, useFormContext } from 'react-hook-form'
+import { toast } from 'react-toastify'
+
 import Grid from '@mui/material/Grid2'
 import Typography from '@mui/material/Typography'
-import { Controller, useFormContext } from 'react-hook-form'
 
 import Button from '@mui/material/Button'
 
@@ -11,12 +15,13 @@ import { FormControl, FormHelperText, InputLabel, MenuItem, Select } from '@mui/
 import DirectionalIcon from '@/components/common/DirectionalIcon'
 import type { Step } from './index'; // Import the Step type
 
-
 import CONFIG from '@/configs/config'
+import LicenseTypeAPI from '@/libs/api/licenseTypeApi'
+import type { LicenseTypeDto } from '@/types/LicensesRegistrations'
 
 // Define types based on your validation schema (adjust as needed)
 type LicenseDetailsForm = {
-  licenseType: number;
+  licenseType: string;
   hasCompletedHealthCheck: boolean;
   hasCarLicense: boolean;
 }
@@ -25,26 +30,53 @@ type LicenseDetailsStepProps = {
   steps: Step[]; // Use the imported Step type
   handleBack: () => void;
   handleNext: () => void;
-  vehicleTypePage?: any; // Add vehicleTypePage prop
+  vehicleTypePage?: string; // Update type to string since we're using codes
 }
 
 const LicenseDetailsStep = ({ steps, handleBack, handleNext, vehicleTypePage }: LicenseDetailsStepProps) => {
-  const { control, formState: { errors }, handleSubmit } = useFormContext<LicenseDetailsForm>();
+  const { control, formState: { errors }, handleSubmit, getValues } = useFormContext<LicenseDetailsForm>();
+  const [licenseTypes, setLicenseTypes] = useState<LicenseTypeDto[]>([]);
 
-  // Filter license type options based on vehicle type
-  const licenseTypeOptions = CONFIG.LicenseTypeSelectOption.filter(option => {
-    if (vehicleTypePage === CONFIG.VehicleType.Motorbike) {
-      return option.value === CONFIG.LicenseType.A1 || option.value === CONFIG.LicenseType.A2;
-    } else if (vehicleTypePage === CONFIG.VehicleType.Car) {
-      return option.value === CONFIG.LicenseType.B1 || option.value === CONFIG.LicenseType.B2;
-    }
+  // Fetch license types when vehicle type changes
+  useEffect(() => {
+    const fetchLicenseTypes = async () => {
+      if (!vehicleTypePage) return;
 
+      try {
+        const response = await LicenseTypeAPI.getAllLicenseTypes({
+          VehicleTypeCode: vehicleTypePage
+        });
 
-    return false;
-  });
+        if (response.data.success) {
+          setLicenseTypes(response.data.data || []);
+        }
+      } catch (error) {
+        console.error('Error fetching license types:', error);
+        toast.error('Lỗi khi tải danh sách bằng lái');
+      }
+    };
+
+    fetchLicenseTypes();
+  }, [vehicleTypePage]);
 
   // This function will be called by react-hook-form's handleSubmit with validated data
   const handleLicenseDetailsSubmit = () => {
+    const currentLicenseType = getValues('licenseType');
+
+    if (!currentLicenseType) {
+      toast.error('Vui lòng chọn bằng lái');
+
+      return;
+    }
+
+    const licenseTypeExists = licenseTypes.some(type => type.code === currentLicenseType);
+
+    if (!licenseTypeExists) {
+      toast.error('Loại bằng lái không hợp lệ');
+
+      return;
+    }
+
     handleNext(); // Call parent's handleNext to move to the next step
   };
 
@@ -64,26 +96,36 @@ const LicenseDetailsStep = ({ steps, handleBack, handleNext, vehicleTypePage }: 
           </Typography>
         </Grid>
         <Grid size={{ xs: 12 }}>
-          <FormControl fullWidth error={!!errors.licenseType}>
-            <InputLabel>Bằng lái (*)</InputLabel>
-            <Controller
-              name='licenseType'
-              control={control}
-              rules={{ required: 'Vui lòng chọn bằng lái' }}
-              render={({ field }) => (
-                <Select {...field} label='Bằng lái (*) '>
-                  {licenseTypeOptions.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
+          <Controller
+            name='licenseType'
+            control={control}
+            rules={{
+              required: 'Vui lòng chọn bằng lái',
+              validate: value => {
+                if (!value) return 'Vui lòng chọn bằng lái';
+                const exists = licenseTypes.some(type => type.code === value);
+
+                if (!exists) return 'Loại bằng lái không hợp lệ';
+
+                return true;
+              }
+            }}
+            render={({ field }) => (
+              <FormControl fullWidth error={!!errors.licenseType}>
+                <InputLabel>Bằng lái (*)</InputLabel>
+                <Select {...field} label='Bằng lái (*)'>
+                  {licenseTypes.map((type) => (
+                    <MenuItem key={type.code} value={type.code}>
+                      {type.name}
                     </MenuItem>
                   ))}
                 </Select>
-              )}
-            />
-            {errors.licenseType && (
-              <FormHelperText>{errors.licenseType.message}</FormHelperText>
+                {errors.licenseType && (
+                  <FormHelperText>{errors.licenseType.message}</FormHelperText>
+                )}
+              </FormControl>
             )}
-          </FormControl>
+          />
         </Grid>
 
         <Grid size={{ xs: 12 }}>
@@ -123,7 +165,7 @@ const LicenseDetailsStep = ({ steps, handleBack, handleNext, vehicleTypePage }: 
           </FormControl>
         </Grid>
         {/* Bằng ô tô - chỉ hiển thị khi đăng ký xe máy */}
-        {vehicleTypePage === CONFIG.VehicleType.Motorbike && (
+        {vehicleTypePage === CONFIG.VehicleTypeCode.Motorbike && (
           <Grid size={{ xs: 12 }}>
             <FormControl fullWidth error={!!errors.hasCarLicense}>
               <Controller
