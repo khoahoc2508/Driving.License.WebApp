@@ -56,4 +56,4 @@ jobs:
 
             echo "🚀 Starting new container..."
             docker compose -f \$COMPOSE_FILE up -d
-EOF
+          EOF
