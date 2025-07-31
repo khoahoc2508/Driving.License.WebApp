@@ -6,7 +6,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      image: license-fe-test
+    image: license-fe-test
     environment:
       - NODE_ENV=test
     env_file: .env.test

@@ -6,7 +6,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      image: license-fe-prod
+    image: license-fe-prod
     environment:
       - NODE_ENV=production
     env_file: .env.production
