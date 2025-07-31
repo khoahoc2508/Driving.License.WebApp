@@ -1,11 +1,12 @@
 version: '3.8'
 
 services:
-  web-test:
-    container_name: driving-license-test
+  license-fe:
+    container_name: license-fe-test
     build:
       context: .
       dockerfile: Dockerfile
+    image: license-fe:test
     environment:
       - NODE_ENV=test
     env_file: .env.test
