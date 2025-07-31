@@ -1,11 +1,12 @@
 version: '3.8'
 
 services:
-  web-prod:
-    container_name: driving-license-prod
+  license-fe:
+    container_name: license-prod
     build:
       context: .
       dockerfile: Dockerfile
+      image: license-fe-prod
     environment:
       - NODE_ENV=production
     env_file: .env.production
