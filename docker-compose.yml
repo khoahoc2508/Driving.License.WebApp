@@ -1,12 +1,10 @@
+version: '3.8'
+
 services:
-  web:
-    container_name: driving-license
-    image: driving-license:test
+  app-base:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - '2000:3000'
-    environment:
-      - NODE_ENV=production
+      - '2000:3000' # override nếu cần
     restart: always

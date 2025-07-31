@@ -1,9 +1,10 @@
-name: Deploy to VPS (test branch)
+name: Deploy to VPS
 
 on:
   push:
     branches:
       - test
+      - main
 
 jobs:
   deploy:
@@ -22,20 +23,37 @@ jobs:
 
       - name: Deploy to VPS
         run: |
-          ssh -i ~/.ssh/id_ed25519 duynq@${{ secrets.VPS_HOST }} -p 24700 << 'EOF'
+          BRANCH=$(echo "${{ github.ref }}" | sed 's|refs/heads/||')
+
+          echo "🔧 Deploying branch: $BRANCH"
+
+          ssh -i ~/.ssh/id_ed25519 duynq@${{ secrets.VPS_HOST }} -p 24700 << EOF
             set -e
 
-            cd /home/duynq/DrivingLicense/TestEnv/FE/Driving.License.WebApp/
+            if [ "$BRANCH" = "test" ]; then
+              CODE_DIR="/home/duynq/DrivingLicense/TestEnv/FE/Driving.License.WebApp"
+              COMPOSE_FILE="docker-compose.test.yml"
+              GIT_BRANCH="test"
+            elif [ "$BRANCH" = "main" ]; then
+              CODE_DIR="/home/duynq/DrivingLicense/ProdEnv/FE/Driving.License.WebApp"
+              COMPOSE_FILE="docker-compose.prod.yml"
+              GIT_BRANCH="main"
+            else
+              echo "❌ Unsupported branch: $BRANCH"
+              exit 1
+            fi
 
-            echo "🛠️  Pulling latest code..."
-            git pull origin test
+            cd \$CODE_DIR
 
-            echo "🛠️  Building new Docker image..."
-            docker compose build
+            echo "🛠️  Pulling latest code from branch: \$GIT_BRANCH"
+            git pull origin \$GIT_BRANCH
 
-            echo "🛑 Stopping old container (if any)..."
-            docker compose down
+            echo "🛠️  Building Docker image..."
+            docker compose -f \$COMPOSE_FILE build
+
+            echo "🛑 Stopping old container..."
+            docker compose -f \$COMPOSE_FILE down
 
             echo "🚀 Starting new container..."
-            docker compose up -d
+            docker compose -f \$COMPOSE_FILE up -d
           EOF
