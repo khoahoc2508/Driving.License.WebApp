@@ -27,7 +27,7 @@ jobs:
 
           echo "🔧 Deploying branch: $BRANCH"
 
-          ssh -i ~/.ssh/id_ed25519 duynq@${{ secrets.VPS_HOST }} -p 24700 << EOF
+          ssh -i ~/.ssh/id_ed25519 duynq@${{ secrets.VPS_HOST }} -p 24700 << 'EOF'
             set -e
 
             if [ "$BRANCH" = "test" ]; then
@@ -48,12 +48,12 @@ jobs:
             echo "🛠️  Pulling latest code from branch: \$GIT_BRANCH"
             git pull origin \$GIT_BRANCH
 
-            echo "🛠️  Building Docker image..."
+            echo "🔨 Building Docker image..."
             docker compose -f \$COMPOSE_FILE build
 
-            echo "🛑 Stopping old container..."
+            echo "🛑 Stopping old container (only after successful build)..."
             docker compose -f \$COMPOSE_FILE down
 
             echo "🚀 Starting new container..."
             docker compose -f \$COMPOSE_FILE up -d
-          EOF
+EOF
