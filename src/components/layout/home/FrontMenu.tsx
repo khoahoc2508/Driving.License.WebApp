@@ -52,7 +52,7 @@ const Wrapper = (props: WrapperProps) => {
         ModalProps={{
           keepMounted: true
         }}
-        sx={{ '& .MuiDrawer-paper': { width: ['100%', 300] } }}
+        sx={{ '& .MuiDrawer-paper': { width: ['65%', 300] } }}
         className={classnames('p-5', className)}
       >
         <div className='p-4 flex flex-col gap-x-3'>

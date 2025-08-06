@@ -4,9 +4,11 @@ import React, { useState, useEffect, useCallback, useRef } from 'react'
 
 import { useRouter, useSearchParams } from 'next/navigation'
 
-import { Box, Button, Card, useTheme, CardContent, Grid, Typography, Container, Divider, Dialog, DialogTitle, DialogContent, DialogActions, useMediaQuery } from '@mui/material'
+import { Box, Button, Card, useTheme, CardContent, Grid, Typography, Container, Divider, Dialog, DialogTitle, DialogContent, DialogActions, useMediaQuery, IconButton } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { toast } from 'react-toastify'
+
+import screenfull from 'screenfull'
 
 import styles from './styles.module.css'
 import type { questionTypes } from '@/types/questionTypes'
@@ -15,7 +17,6 @@ import ExamSubmissionAPI from '@/libs/api/examSubmissionAPI'
 import type { AnswerSubmissionRequestDto } from '@/types/examSubmissionTypes'
 import CONFIG from '@/configs/config'
 import QuestionAPI from '@/libs/api/questionAPI'
-
 
 const QuestionImage = styled('img')({
   maxWidth: '100%',
@@ -105,6 +106,7 @@ const ExamPractice = ({
   const [showAnswer, setShowAnswer] = useState(false);
   const [answerDetail, setAnswerDetail] = useState<any>(null);
   const [loadingAnswer, setLoadingAnswer] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false)
 
   // Xác định isPractice trực tiếp từ exam.type
   const isPractice = exam?.groupExamType === CONFIG.GroupExamType.Practice;
@@ -143,6 +145,16 @@ const ExamPractice = ({
   useEffect(() => {
     handleSubmitRef.current = handleSubmit;
   }, [handleSubmit]);
+
+  useEffect(() => {
+    if (screenfull.isEnabled) {
+      const handler = () => setIsFullscreen(screenfull.isFullscreen)
+
+      screenfull.on('change', handler)
+      
+return () => screenfull.off('change', handler)
+    }
+  }, [])
 
   // Bỏ timer nếu là Practice
   useEffect(() => {
@@ -219,6 +231,14 @@ const ExamPractice = ({
     const secs = seconds % 60
 
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
+  }
+
+  const toggleFullscreen = () => {
+    if (screenfull.isEnabled) {
+      screenfull.toggle()
+    } else {
+      alert('Trình duyệt của bạn không hỗ trợ chế độ toàn màn hình')
+    }
   }
 
   useEffect(() => {
@@ -343,7 +363,17 @@ const ExamPractice = ({
             </Grid>
           </Grid>
           <Grid item xs={12} md={8} sx={{ minHeight: leftHeight }}>
-            <Card sx={{ height: '100%' }} className='flex flex-col justify-start'>
+            <Card sx={{ height: '100%' }} className='flex flex-col justify-start relative'>
+              {isMobile && <IconButton
+                sx={{ position: 'absolute', top: 8, right: 8, zIndex: 1 }}
+                onClick={toggleFullscreen}
+              >
+                {isFullscreen ? (
+                  <i className="ri-fullscreen-exit-line" />
+                ) : (
+                  <i className="ri-fullscreen-line" />
+                )}
+              </IconButton>}
               <CardContent sx={{ flexGrow: 1 }}>
                 <Typography variant="h5" className='text-[#98999e]'>Câu {currentQuestionIndex + 1}{isPractice && questions[currentQuestionIndex]?.isCriticalQuestion ? <span className='text-error'> *</span> : ''}</Typography>
                 <Typography variant="h6" className='my-3' sx={{ fontWeight: 600 }}>{currentQuestion.content}</Typography>
