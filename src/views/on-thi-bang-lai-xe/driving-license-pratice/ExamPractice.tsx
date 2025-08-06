@@ -8,6 +8,8 @@ import { Box, Button, Card, useTheme, CardContent, Grid, Typography, Container, 
 import { styled } from '@mui/material/styles'
 import { toast } from 'react-toastify'
 
+import screenfull from 'screenfull'
+
 import styles from './styles.module.css'
 import type { questionTypes } from '@/types/questionTypes'
 import type { GroupExamDto } from '@/types/groupExamTypes'
@@ -15,7 +17,6 @@ import ExamSubmissionAPI from '@/libs/api/examSubmissionAPI'
 import type { AnswerSubmissionRequestDto } from '@/types/examSubmissionTypes'
 import CONFIG from '@/configs/config'
 import QuestionAPI from '@/libs/api/questionAPI'
-import screenfull from 'screenfull'
 
 const QuestionImage = styled('img')({
   maxWidth: '100%',
@@ -148,8 +149,10 @@ const ExamPractice = ({
   useEffect(() => {
     if (screenfull.isEnabled) {
       const handler = () => setIsFullscreen(screenfull.isFullscreen)
+
       screenfull.on('change', handler)
-      return () => screenfull.off('change', handler)
+      
+return () => screenfull.off('change', handler)
     }
   }, [])
 

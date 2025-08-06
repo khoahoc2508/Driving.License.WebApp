@@ -13,6 +13,10 @@ import Button from '@mui/material/Button'
 import classnames from 'classnames'
 
 // Hook Imports
+import { Controller, useForm } from 'react-hook-form'
+
+import { toast } from 'react-toastify'
+
 import { useIntersection } from '@/hooks/useIntersection'
 
 // SVG Imports
@@ -21,9 +25,8 @@ import Lines from '@assets/svg/front-pages/landing-page/Lines'
 
 // Styles Imports
 import frontCommonStyles from '@views/home/styles.module.css'
-import { Controller, useForm } from 'react-hook-form'
 import contactAPI from '@/libs/api/contactAPI'
-import { toast } from 'react-toastify'
+
 
 type FormValues = {
   fullName: string
