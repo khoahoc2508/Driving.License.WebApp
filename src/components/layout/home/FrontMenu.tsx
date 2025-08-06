@@ -98,6 +98,7 @@ const FrontMenu = (props: Props) => {
             pathname === '/'
         })}
         color='text.primary'
+        onClick={() => setIsDrawerOpen(false)}
       >
         Trang chủ
       </Typography>
@@ -108,6 +109,7 @@ const FrontMenu = (props: Props) => {
           'text-primary': pathname.startsWith('/on-thi-bang-lai-xe')
         })}
         color='text.primary'
+        onClick={() => setIsDrawerOpen(false)}
       >
         Ôn thi GPLX
       </Typography>
