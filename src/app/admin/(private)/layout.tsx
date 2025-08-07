@@ -1,5 +1,4 @@
 // MUI Imports
-import Button from '@mui/material/Button'
 
 // Type Imports
 import type { ChildrenType } from '@core/types'
@@ -16,7 +15,6 @@ import Header from '@components/layout/horizontal/Header'
 import Navbar from '@components/layout/vertical/Navbar'
 import VerticalFooter from '@components/layout/vertical/Footer'
 import HorizontalFooter from '@components/layout/horizontal/Footer'
-import ScrollToTop from '@core/components/scroll-to-top'
 
 import { ProgressProvider } from "@/@core/components/ProgressProvider"
 
@@ -24,6 +22,7 @@ import AuthGuard from '@/hocs/AuthGuard'
 
 // Util Imports
 import { getMode, getSystemMode } from '@core/utils/serverHelpers'
+import ScrollToTopClient from '@/components/ScrollToTopClient'
 
 const Layout = async (props: ChildrenType) => {
   const { children } = props
@@ -54,14 +53,7 @@ const Layout = async (props: ChildrenType) => {
             </HorizontalLayout>
           }
         />
-        <ScrollToTop className='mui-fixed'>
-          <Button
-            variant='contained'
-            className='is-10 bs-10 rounded-full p-0 min-is-0 flex items-center justify-center'
-          >
-            <i className='ri-arrow-up-line' />
-          </Button>
-        </ScrollToTop>
+        <ScrollToTopClient />
       </AuthGuard>
     </Providers>
   )
