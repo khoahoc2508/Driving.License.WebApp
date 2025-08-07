@@ -1,5 +1,4 @@
 // MUI Imports
-import Button from '@mui/material/Button'
 
 // Type Imports
 import type { ChildrenType } from '@core/types'
@@ -16,7 +15,6 @@ import Header from '@components/layout/horizontal/Header'
 import Navbar from '@components/layout/vertical/Navbar'
 import VerticalFooter from '@components/layout/vertical/Footer'
 import HorizontalFooter from '@components/layout/horizontal/Footer'
-import ScrollToTop from '@core/components/scroll-to-top'
 
 import { ProgressProvider } from "@/@core/components/ProgressProvider"
 

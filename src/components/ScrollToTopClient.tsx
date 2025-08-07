@@ -1,8 +1,9 @@
 'use client'
 
-import ScrollToTop from '@core/components/scroll-to-top'
 import Button from '@mui/material/Button'
 import { useMediaQuery, useTheme } from '@mui/material'
+
+import ScrollToTop from '@core/components/scroll-to-top'
 
 const ScrollToTopClient = () => {
     const theme = useTheme()

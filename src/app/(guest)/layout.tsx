@@ -1,5 +1,4 @@
 // MUI Imports
-import Button from '@mui/material/Button'
 import InitColorSchemeScript from '@mui/material/InitColorSchemeScript'
 
 // Third-party Imports
@@ -14,7 +13,6 @@ import type { ChildrenType } from '@core/types'
 import Providers from '@components/Providers'
 import BlankLayout from '@layouts/BlankLayout'
 import FrontLayout from '@/components/layout/home'
-import ScrollToTop from '@core/components/scroll-to-top'
 
 // Util Imports
 import { getSystemMode } from '@core/utils/serverHelpers'
