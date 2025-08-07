@@ -170,13 +170,16 @@ const CustomerReviews = () => {
                 <Card elevation={8} className='flex items-center' style={scaleStyle(index)}>
                   <CardContent className='p-8 items-center mlb-auto'>
                     <div className='flex flex-col gap-4 items-center justify-center text-center'>
-                      {item.svg}
-                      <Typography color='text.primary'>{item.desc}</Typography>
+                      {/* {item.svg} */}
+
                       <Rating value={item.rating} readOnly />
                       <div>
                         <Typography variant='h6'>{item.name}</Typography>
                         <Typography variant='body2'>{item.position}</Typography>
                       </div>
+                      <Typography color='text.primary'>{item.desc}</Typography>
+
+
                     </div>
                   </CardContent>
                 </Card>
@@ -200,13 +203,13 @@ const CustomerReviews = () => {
           )}
         </>
       </AppKeenSlider>
-      <div className='flex flex-wrap items-center justify-center gap-x-16 gap-y-6 mli-3'>
+      {/* <div className='flex flex-wrap items-center justify-center gap-x-16 gap-y-6 mli-3'>
         <Levis color='var(--mui-palette-text-secondary)' />
         <Continental color='var(--mui-palette-text-secondary)' />
         <Airbnb color='var(--mui-palette-text-secondary)' />
         <Eckerd color='var(--mui-palette-text-secondary)' />
         <Dribbble color='var(--mui-palette-text-secondary)' />
-      </div>
+      </div> */}
     </section>
   )
 }
