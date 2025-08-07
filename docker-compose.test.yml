@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  license-fe:
+  license-fe-test:
     container_name: license-fe-test
     build:
       context: .
