@@ -84,6 +84,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/contacts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Contacts_CreateContact"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/exam/addresses": {
         parameters: {
             query?: never;
@@ -713,6 +729,11 @@ export interface components {
             phoneNumber?: string | null;
             address?: string | null;
             images?: string[] | null;
+        };
+        CreateContactCommand: {
+            fullName?: string;
+            email?: string;
+            message?: string;
         };
         PaginatedListOfExamAddressVm: {
             data?: components["schemas"]["ExamAddressVm"][];
@@ -1600,6 +1621,29 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["UpsertBrandSettingCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    Contacts_CreateContact: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateContactCommand"];
             };
         };
         responses: {

@@ -52,7 +52,7 @@ const Wrapper = (props: WrapperProps) => {
         ModalProps={{
           keepMounted: true
         }}
-        sx={{ '& .MuiDrawer-paper': { width: ['100%', 300] } }}
+        sx={{ '& .MuiDrawer-paper': { width: ['65%', 300] } }}
         className={classnames('p-5', className)}
       >
         <div className='p-4 flex flex-col gap-x-3'>
@@ -98,6 +98,7 @@ const FrontMenu = (props: Props) => {
             pathname === '/'
         })}
         color='text.primary'
+        onClick={() => setIsDrawerOpen(false)}
       >
         Trang chủ
       </Typography>
@@ -108,6 +109,7 @@ const FrontMenu = (props: Props) => {
           'text-primary': pathname.startsWith('/on-thi-bang-lai-xe')
         })}
         color='text.primary'
+        onClick={() => setIsDrawerOpen(false)}
       >
         Ôn thi GPLX
       </Typography>

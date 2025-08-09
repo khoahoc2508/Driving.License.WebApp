@@ -1,5 +1,5 @@
 // React Imports
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 // MUI Imports
 import Typography from '@mui/material/Typography'
@@ -13,6 +13,10 @@ import Button from '@mui/material/Button'
 import classnames from 'classnames'
 
 // Hook Imports
+import { Controller, useForm } from 'react-hook-form'
+
+import { toast } from 'react-toastify'
+
 import { useIntersection } from '@/hooks/useIntersection'
 
 // SVG Imports
@@ -21,11 +25,37 @@ import Lines from '@assets/svg/front-pages/landing-page/Lines'
 
 // Styles Imports
 import frontCommonStyles from '@views/home/styles.module.css'
+import contactAPI from '@/libs/api/contactAPI'
+
+
+type FormValues = {
+  fullName: string
+  email: string
+  message: string
+}
+
 
 const ContactUs = () => {
   // Refs
   const skipIntersection = useRef(true)
   const ref = useRef<null | HTMLDivElement>(null)
+
+  const [loading, setLoading] = useState(false)
+
+  // Form hooks
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset
+  } = useForm<FormValues>({
+    defaultValues: {
+      fullName: '',
+      email: '',
+      message: ''
+    },
+    mode: 'onChange'
+  })
 
   // Hooks
   const { updateIntersections } = useIntersection()
@@ -47,6 +77,26 @@ const ContactUs = () => {
     ref.current && observer.observe(ref.current)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  const onSubmit = async (data: FormValues) => {
+    try {
+      setLoading(true)
+
+      await contactAPI.CreateContact({
+        fullName: data.fullName,
+        email: data.email,
+        message: data.message
+      })
+
+      reset()
+      toast.success('Gửi yêu cầu thành công!')
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Đã xảy ra lỗi')
+    } finally {
+      setLoading(false)
+    }
+  }
+
 
   return (
     <section
@@ -96,13 +146,79 @@ const ContactUs = () => {
                 <Typography variant='h5' className='mbe-5'>
                   Liên hệ chúng tôi
                 </Typography>
-                <form className='flex flex-col items-start gap-5'>
+                <form className='flex flex-col items-start gap-5' onSubmit={handleSubmit(onSubmit)}>
                   <div className='flex gap-5 is-full'>
-                    <TextField fullWidth label='Họ và tên' id='name-input' />
-                    <TextField fullWidth label='Địa chỉ Email' id='email-input' type='email' />
+                    <Controller
+                      name="fullName"
+                      control={control}
+                      rules={{
+                        required: 'Vui lòng nhập họ và tên',
+                        minLength: {
+                          value: 3,
+                          message: 'Họ và tên phải có ít nhất 3 ký tự'
+                        }
+                      }}
+                      render={({ field }) => (
+                        <TextField
+                          {...field}
+                          fullWidth
+                          label='Họ và tên'
+                          error={!!errors.fullName}
+                          helperText={errors.fullName?.message}
+                        />
+                      )}
+                    />
+                    <Controller
+                      name="email"
+                      control={control}
+                      rules={{
+                        required: 'Vui lòng nhập email',
+                        pattern: {
+                          value: /^\S+@\S+\.\S+$/,
+                          message: 'Email không hợp lệ'
+                        }
+                      }}
+                      render={({ field }) => (
+                        <TextField
+                          {...field}
+                          fullWidth
+                          label='Địa chỉ Email'
+                          type='email'
+                          error={!!errors.email}
+                          helperText={errors.email?.message}
+                        />
+                      )}
+                    />
                   </div>
-                  <TextField fullWidth multiline rows={6} label='Tin nhắn' id='message-input' />
-                  <Button variant='contained'>Gửi yêu cầu</Button>
+                  <Controller
+                    name="message"
+                    control={control}
+                    rules={{
+                      required: 'Vui lòng nhập tin nhắn',
+                      minLength: {
+                        value: 10,
+                        message: 'Tin nhắn phải có ít nhất 10 ký tự'
+                      }
+                    }}
+                    render={({ field }) => (
+                      <TextField
+                        {...field}
+                        fullWidth
+                        multiline
+                        rows={6}
+                        label='Tin nhắn'
+                        error={!!errors.message}
+                        helperText={errors.message?.message}
+                      />
+                    )}
+                  />
+                  <Button
+                    variant='contained'
+                    type='submit'
+                    disabled={loading}
+                  >
+                    {loading ? 'Đang gửi...' : 'Gửi yêu cầu'}
+                  </Button>
                 </form>
               </CardContent>
             </Card>
