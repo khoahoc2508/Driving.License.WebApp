@@ -1,9 +1,10 @@
-name: Deploy to VPS (test branch)
+name: Deploy to VPS
 
 on:
   push:
     branches:
       - test
+      - main
 
 jobs:
   deploy:
@@ -22,20 +23,46 @@ jobs:
 
       - name: Deploy to VPS
         run: |
-          ssh -i ~/.ssh/id_ed25519 duynq@${{ secrets.VPS_HOST }} -p 24700 << 'EOF'
+          BRANCH=$(echo "${{ github.ref }}" | sed 's|refs/heads/||')
+
+          ssh -i ~/.ssh/id_ed25519 duynq@${{ secrets.VPS_HOST }} -p 24700 << EOF
             set -e
 
-            cd /home/duynq/DrivingLicense/TestEnv/FE/Driving.License.WebApp/
+            if [ "$BRANCH" = "test" ]; then
+              echo "📦 Deploying TEST environment..."
 
-            echo "🛠️  Pulling latest code..."
-            git pull origin test
+              cd /home/duynq/DrivingLicense/TestEnv/FE/Driving.License.WebApp/
 
-            echo "🛠️  Building new Docker image..."
-            docker compose build
+              echo "🔄 Pulling latest code from test..."
+              git pull origin test
 
-            echo "🛑 Stopping old container (if any)..."
-            docker compose down
+              echo "🔨 Building Docker image..."
+              docker compose -f docker-compose.test.yml build
 
-            echo "🚀 Starting new container..."
-            docker compose up -d
+              echo "🛑 Stopping old container..."
+              docker compose -f docker-compose.test.yml down
+
+              echo "🚀 Starting new container..."
+              docker compose -f docker-compose.test.yml up -d
+
+            elif [ "$BRANCH" = "main" ]; then
+              echo "📦 Deploying PRODUCTION environment..."
+
+              cd /home/duynq/DrivingLicense/ProdEnv/FE/Driving.License.WebApp/
+
+              echo "🔄 Pulling latest code from main..."
+              git pull origin main
+
+              echo "🔨 Building Docker image..."
+              docker compose -f docker-compose.prod.yml build
+
+              echo "🛑 Stopping old container..."
+              docker compose -f docker-compose.prod.yml down
+
+              echo "🚀 Starting new container..."
+              docker compose -f docker-compose.prod.yml up -d
+            else
+              echo "❌ Unsupported branch: $BRANCH"
+              exit 1
+            fi
           EOF

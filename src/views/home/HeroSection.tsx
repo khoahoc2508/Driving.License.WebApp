@@ -29,9 +29,9 @@ const HeroSection = ({ mode }: { mode: Mode }) => {
   const [elementsPosition, setElementsPosition] = useState({ x: 0, y: 0 })
 
   // Vars
-  const dashboardImageLight = '/images/front-pages/landing-page/hero-dashboard-light.png'
+  const dashboardImageLight = '/images/front-pages/landing-page/xu-ly-ho-so.png'
   const dashboardImageDark = '/images/front-pages/landing-page/hero-dashboard-dark.png'
-  const elementsImageLight = '/images/front-pages/landing-page/hero-elements-light.png'
+  const elementsImageLight = '/images/front-pages/landing-page/bao-cao.png'
   const elementsImageDark = '/images/front-pages/landing-page/hero-elements-dark.png'
   const heroSectionBgLight = '/images/front-pages/landing-page/hero-bg-light.png'
   const heroSectionBgDark = '/images/front-pages/landing-page/hero-bg-dark.png'
