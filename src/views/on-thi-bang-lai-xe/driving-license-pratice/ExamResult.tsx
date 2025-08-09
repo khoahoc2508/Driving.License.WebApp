@@ -4,7 +4,7 @@ import React, { useState, useEffect, useRef } from 'react'
 
 import { useRouter } from 'next/navigation'
 
-import { Box, Button, Card, CardContent, Grid, Typography, Container, Divider, useTheme, useMediaQuery } from '@mui/material'
+import { Box, Button, Card, CardContent, Grid, Typography, Container, Divider, useTheme, useMediaQuery, IconButton } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { toast } from 'react-toastify'
 
@@ -72,6 +72,26 @@ const ButtonQuestionIndex = styled('div')<{
   };
 });
 
+const FullscreenCard = styled(Card)({
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  width: '100vw',
+  height: '100vh',
+  zIndex: 9999,
+  backgroundColor: 'white',
+  display: 'flex',
+  flexDirection: 'column',
+  overflow: 'hidden' // Tắt scroll toàn bộ card
+});
+
+const CardContentScrollable = styled('div')({
+  flex: 1,
+  overflowY: 'auto',
+  padding: '16px'
+});
+
+
 interface ExamResultProps {
   examSubmissionId: string
 }
@@ -86,6 +106,7 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
   const [exam, setExam] = useState(null)
+  const [isFullscreen, setIsFullscreen] = useState(false)
 
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -153,6 +174,10 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
       fetchExamResult()
     }
   }, [examSubmissionId, router])
+
+  const toggleFullscreen = () => {
+    setIsFullscreen(prev => !prev);
+  }
 
   const formatResultDuration = (duration?: string) => {
     if (!duration) return '-';
@@ -229,7 +254,134 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
   const currentResultAnswer: ExamSubmissionAnswerDto | undefined = result?.userAnswers?.find((a: ExamSubmissionAnswerDto) => a.question?.id === questions[currentQuestionIndex]?.id);
   const isPractice = result?.groupExamType === CONFIG.GroupExamType.Practice;
 
-  return (
+  const renderCardContent = () => {
+    const Wrapper = isFullscreen ? FullscreenCard : Card;
+
+    const wrapperProps = isFullscreen ? {} : {
+      sx: { height: '100%' },
+      className: 'flex flex-col justify-between relative'
+    };
+
+    const ContentWrapper = isFullscreen ? CardContentScrollable : CardContent;
+
+    const ContentWrapperProps = isFullscreen ? {} : {
+      sx: { flexGrow: 1 },
+    };
+
+    return (
+      <Wrapper {...wrapperProps}>
+        {isMobile && <IconButton
+          sx={{ position: 'absolute', top: 8, right: 8, zIndex: 1 }}
+          onClick={toggleFullscreen}
+        >
+          {isFullscreen ? (
+            <i className="ri-fullscreen-exit-line" />
+          ) : (
+            <i className="ri-fullscreen-line" />
+          )}
+        </IconButton>}
+        <ContentWrapper {...ContentWrapperProps}>
+          <Typography variant="h5" className='text-[#98999e]'>Câu {currentQuestionIndex + 1}{questions[currentQuestionIndex]?.isCriticalQuestion ? <span className='text-error'> *</span> : ''}</Typography>
+          <Typography variant="h6" className='my-3' sx={{ fontWeight: 600 }}>{questions[currentQuestionIndex]?.content}</Typography>
+          {questions[currentQuestionIndex]?.imageUrl && <QuestionImage src={process.env.NEXT_PUBLIC_STORAGE_BASE_URL + questions[currentQuestionIndex]?.imageUrl} alt={`Question ${currentQuestionIndex + 1}`} />}
+          <Divider sx={{ mb: 4 }} />
+          <div>
+            {(currentResultAnswer?.question?.answers || questions[currentQuestionIndex]?.answers)?.map((ans, index) => {
+              const answer = ans as { id?: string; order?: number; content?: string; isCorrect?: boolean };
+              const isCorrect = answer.isCorrect;
+              const isSelected = currentResultAnswer?.selectedAnswerId === answer.id;
+              let bg = 'transparent', color = 'inherit', border = '1px solid #e0e0e0';
+
+              if (isCorrect) {
+                bg = '#4caf50'; color = '#fff'; border = '1px solid #4caf50';
+              } else if (isSelected) {
+                color = 'red'; border = '1px solid red';
+              }
+
+              return (
+                <Box
+                  key={answer.id
+                    || index
+                  } sx={{
+                    background: bg,
+                    color,
+                    border,
+                    borderRadius: '8px',
+                    p: '12px 16px',
+                    mb: '8px',
+                    fontWeight: isCorrect ? 600 : 400,
+                  }}>
+                  {`${answer.order}. ${answer.content}`}
+                </Box>
+              );
+            })}
+          </div>
+          {currentResultAnswer?.question?.explanation && <Divider sx={{ mt: 4 }} />}
+          {currentResultAnswer?.question?.explanation && (
+            <Box sx={{ mt: 4, p: 2, border: '1px solid #7c4dff', borderRadius: '8px', color: '#7c4dff' }}>
+              Giải thích: {currentResultAnswer?.question?.explanation}
+            </Box>
+          )}
+        </ContentWrapper>
+        <Divider />
+        <Box sx={{
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          paddingX: { xs: 2, md: 6 },
+          paddingY: 3,
+          gap: { xs: 2, md: 0 }
+        }}>
+          <Box sx={{
+            display: 'flex',
+            flexDirection: { xs: 'row', md: 'row' },
+            gap: { xs: 15, md: 3 },
+            width: { xs: '100%', md: 'auto' }
+          }}>
+            <Button
+              variant="outlined"
+              disabled={currentQuestionIndex === 0}
+              onClick={() => setCurrentQuestionIndex(prev => prev - 1)}
+              startIcon={<i className='ri-arrow-left-line' />}
+              sx={{
+                flex: { xs: 1, md: 'none' },
+                minWidth: { xs: 'auto', md: 'auto' }
+              }}
+            >
+              TRƯỚC
+            </Button>
+            <Button
+              variant="outlined"
+              disabled={currentQuestionIndex === questions.length - 1}
+              onClick={() => setCurrentQuestionIndex(prev => prev + 1)}
+              endIcon={<i className='ri-arrow-right-line' />}
+              sx={{
+                flex: { xs: 1, md: 'none' },
+                minWidth: { xs: 'auto', md: 'auto' }
+              }}
+            >
+              SAU
+            </Button>
+          </Box>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleRestartExam}
+            sx={{
+              minWidth: { xs: '100%', md: 'auto' },
+              marginTop: { xs: '10px', md: '0' }
+            }}
+          >
+            {isPractice ? 'ÔN LẠI' : 'THI LẠI'}
+          </Button>
+        </Box>
+      </Wrapper>
+    )
+  }
+
+  
+return (
     <ExamLayoutWrapper isLoading={isLoading}>
       {
         isLoading ? <div className='h-screen'></div> : <Container className={styles.content} style={{ padding: 0 }}>
@@ -335,104 +487,7 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
                 </Card>
               </Grid>
               <Grid item xs={12} md={8} sx={{ minHeight: leftHeight }}>
-                <Card sx={{ height: '100%' }} className='flex flex-col justify-between'>
-                  <CardContent sx={{ flexGrow: 1 }}>
-                    <Typography variant="h5" className='text-[#98999e]'>Câu {currentQuestionIndex + 1}{questions[currentQuestionIndex]?.isCriticalQuestion ? <span className='text-error'> *</span> : ''}</Typography>
-                    <Typography variant="h6" className='my-3' sx={{ fontWeight: 600 }}>{questions[currentQuestionIndex]?.content}</Typography>
-                    {questions[currentQuestionIndex]?.imageUrl && <QuestionImage src={process.env.NEXT_PUBLIC_STORAGE_BASE_URL + questions[currentQuestionIndex]?.imageUrl} alt={`Question ${currentQuestionIndex + 1}`} />}
-                    <Divider sx={{ mb: 4 }} />
-                    <div>
-                      {(currentResultAnswer?.question?.answers || questions[currentQuestionIndex]?.answers)?.map((ans, index) => {
-                        const answer = ans as { id?: string; order?: number; content?: string; isCorrect?: boolean };
-                        const isCorrect = answer.isCorrect;
-                        const isSelected = currentResultAnswer?.selectedAnswerId === answer.id;
-                        let bg = 'transparent', color = 'inherit', border = '1px solid #e0e0e0';
-
-                        if (isCorrect) {
-                          bg = '#4caf50'; color = '#fff'; border = '1px solid #4caf50';
-                        } else if (isSelected) {
-                          color = 'red'; border = '1px solid red';
-                        }
-
-                        return (
-                          <Box
-                            key={answer.id
-                              || index
-                            } sx={{
-                              background: bg,
-                              color,
-                              border,
-                              borderRadius: '8px',
-                              p: '12px 16px',
-                              mb: '8px',
-                              fontWeight: isCorrect ? 600 : 400,
-                            }}>
-                            {`${answer.order}. ${answer.content}`}
-                          </Box>
-                        );
-                      })}
-                    </div>
-                    {currentResultAnswer?.question?.explanation && <Divider sx={{ mt: 4 }} />}
-                    {currentResultAnswer?.question?.explanation && (
-                      <Box sx={{ mt: 4, p: 2, border: '1px solid #7c4dff', borderRadius: '8px', color: '#7c4dff' }}>
-                        Giải thích: {currentResultAnswer?.question?.explanation}
-                      </Box>
-                    )}
-                  </CardContent>
-                  <Divider />
-                  <Box sx={{
-                    display: 'flex',
-                    flexDirection: { xs: 'column', md: 'row' },
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    paddingX: { xs: 2, md: 6 },
-                    paddingY: 3,
-                    gap: { xs: 2, md: 0 }
-                  }}>
-                    <Box sx={{
-                      display: 'flex',
-                      flexDirection: { xs: 'row', md: 'row' },
-                      gap: { xs: 15, md: 3 },
-                      width: { xs: '100%', md: 'auto' }
-                    }}>
-                      <Button
-                        variant="outlined"
-                        disabled={currentQuestionIndex === 0}
-                        onClick={() => setCurrentQuestionIndex(prev => prev - 1)}
-                        startIcon={<i className='ri-arrow-left-line' />}
-                        sx={{
-                          flex: { xs: 1, md: 'none' },
-                          minWidth: { xs: 'auto', md: 'auto' }
-                        }}
-                      >
-                        TRƯỚC
-                      </Button>
-                      <Button
-                        variant="outlined"
-                        disabled={currentQuestionIndex === questions.length - 1}
-                        onClick={() => setCurrentQuestionIndex(prev => prev + 1)}
-                        endIcon={<i className='ri-arrow-right-line' />}
-                        sx={{
-                          flex: { xs: 1, md: 'none' },
-                          minWidth: { xs: 'auto', md: 'auto' }
-                        }}
-                      >
-                        SAU
-                      </Button>
-                    </Box>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={handleRestartExam}
-                      sx={{
-                        minWidth: { xs: '100%', md: 'auto' },
-                        marginTop: { xs: '10px', md: '0' }
-                      }}
-                    >
-                      {isPractice ? 'ÔN LẠI' : 'THI LẠI'}
-                    </Button>
-                  </Box>
-                </Card>
+                {renderCardContent()}
               </Grid>
             </Grid>
           </Box>

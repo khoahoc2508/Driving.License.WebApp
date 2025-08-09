@@ -8,8 +8,6 @@ import { Box, Button, Card, useTheme, CardContent, Grid, Typography, Container, 
 import { styled } from '@mui/material/styles'
 import { toast } from 'react-toastify'
 
-import screenfull from 'screenfull'
-
 import styles from './styles.module.css'
 import type { questionTypes } from '@/types/questionTypes'
 import type { GroupExamDto } from '@/types/groupExamTypes'
@@ -60,7 +58,6 @@ const ButtonQuestionIndex = styled('div')<{
   }
 
   return {
-    // padding: '12px 16px',
     border: `1px solid ${borderColor}`,
     borderRadius: '6px',
     cursor: 'pointer',
@@ -75,6 +72,25 @@ const ButtonQuestionIndex = styled('div')<{
     width: "100%",
     height: "100%",
   };
+});
+
+const FullscreenCard = styled(Card)({
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  width: '100vw',
+  height: '100vh',
+  zIndex: 9999,
+  backgroundColor: 'white',
+  display: 'flex',
+  flexDirection: 'column',
+  overflow: 'hidden' // Tắt scroll toàn bộ card
+});
+
+const CardContentScrollable = styled('div')({
+  flex: 1,
+  overflowY: 'auto',
+  padding: '16px'
 });
 
 const ExamPractice = ({
@@ -120,7 +136,6 @@ const ExamPractice = ({
     }
 
     try {
-
       const answerPayload: AnswerSubmissionRequestDto = questions.map(q => ({
         questionId: q.id,
         selectedAnswerId: q.id ? answers[q.id] ?? undefined : undefined
@@ -146,16 +161,6 @@ const ExamPractice = ({
     handleSubmitRef.current = handleSubmit;
   }, [handleSubmit]);
 
-  useEffect(() => {
-    if (screenfull.isEnabled) {
-      const handler = () => setIsFullscreen(screenfull.isFullscreen)
-
-      screenfull.on('change', handler)
-      
-return () => screenfull.off('change', handler)
-    }
-  }, [])
-
   // Bỏ timer nếu là Practice
   useEffect(() => {
     if (isPractice || timeLeft <= 0) {
@@ -165,7 +170,6 @@ return () => screenfull.off('change', handler)
     const timerId = setInterval(() => {
       setTimeLeft(prev => prev - 1);
     }, 1000);
-
 
     return () => clearInterval(timerId);
   }, [timeLeft, isPractice]);
@@ -223,7 +227,6 @@ return () => screenfull.off('change', handler)
     }
   };
 
-
   const currentQuestion = questions[currentQuestionIndex]
 
   const formatTime = (seconds: number) => {
@@ -234,11 +237,7 @@ return () => screenfull.off('change', handler)
   }
 
   const toggleFullscreen = () => {
-    if (screenfull.isEnabled) {
-      screenfull.toggle()
-    } else {
-      alert('Trình duyệt của bạn không hỗ trợ chế độ toàn màn hình')
-    }
+    setIsFullscreen(prev => !prev);
   }
 
   useEffect(() => {
@@ -279,17 +278,210 @@ return () => screenfull.off('change', handler)
       }
     }
 
-    // Thêm event listener
     window.addEventListener('keydown', handleKeyDown)
 
-    // Cleanup event listener khi component unmount
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
     }
   }, [currentQuestionIndex, questions.length])
 
-  return (
-    <Container className={styles.content} style={{ padding: 0, minHeight: "650px" }}>
+
+  const renderCardContent = () => {
+    const Wrapper = isFullscreen ? FullscreenCard : Card;
+
+    const wrapperProps = isFullscreen ? {} : {
+      sx: { height: '100%' },
+      className: 'flex flex-col justify-start relative'
+    };
+
+    const ContentWrapper = isFullscreen ? CardContentScrollable : CardContent;
+
+    const ContentWrapperProps = isFullscreen ? {} : {
+      sx: { flexGrow: 1 },
+    };
+
+    return (<Wrapper {...wrapperProps}>
+      {isMobile && <IconButton
+        sx={{ position: 'absolute', top: 8, right: 8, zIndex: 1 }}
+        onClick={toggleFullscreen}
+      >
+        {isFullscreen ? (
+          <i className="ri-fullscreen-exit-line" />
+        ) : (
+          <i className="ri-fullscreen-line" />
+        )}
+      </IconButton>}
+
+      <ContentWrapper {...ContentWrapperProps}>
+        <Typography variant="h5" className='text-[#98999e]'>Câu {currentQuestionIndex + 1}{isPractice && questions[currentQuestionIndex]?.isCriticalQuestion ? <span className='text-error'> *</span> : ''}</Typography>
+        <Typography variant="h6" className='my-3' sx={{ fontWeight: 600 }}>{currentQuestion.content}</Typography>
+        {currentQuestion.imageUrl && <QuestionImage src={process.env.NEXT_PUBLIC_STORAGE_BASE_URL + currentQuestion.imageUrl} alt={`Question ${currentQuestionIndex + 1}`} />}
+        <Divider sx={{ mb: 4 }} />
+        <div>
+          {showAnswer && answerDetail
+            ? answerDetail.answers?.map((ans: any) => {
+              const isCorrect = ans.isCorrect;
+              const isSelected = answers[currentQuestion.id as string] === ans.id;
+              let bg = 'transparent', color = 'inherit', border = '1px solid #e0e0e0';
+
+              if (isCorrect) {
+                bg = '#4caf50'; color = '#fff'; border = '1px solid #4caf50';
+              } else if (isSelected) {
+                color = '#f55156'; border = '1px solid #f55156';
+              }
+
+
+              return (
+                <Box
+                  key={ans.id}
+                  sx={{
+                    background: bg,
+                    color,
+                    border,
+                    borderRadius: '8px',
+                    p: '12px 16px',
+                    mb: '8px',
+                    fontWeight: isCorrect ? 600 : 400,
+                    cursor: 'default',
+                  }}
+                >
+                  {`${ans.order}. ${ans.content}`}
+                </Box>
+              );
+            })
+            : currentQuestion.answers?.map(answer => (
+              <AnswerLabel
+                key={answer.id}
+                selected={!!(currentQuestion.id && answer.id && answers[currentQuestion.id] === answer.id)}
+                onClick={() => handleAnswerChange(currentQuestion.id, answer.id || '')}
+              >
+                {`${answer.order}. ${answer.content}`}
+              </AnswerLabel>
+            ))}
+        </div>
+        {showAnswer && answerDetail?.explanation && <Divider sx={{ mt: 4 }} />}
+        {showAnswer && answerDetail?.explanation && (
+          <Box sx={{ mt: 4, p: 2, border: '1px solid #7c4dff', borderRadius: '8px', color: '#7c4dff' }}>
+            Giải thích: {answerDetail.explanation}
+          </Box>
+        )}
+      </ContentWrapper >
+
+      <Divider />
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          paddingX: { xs: 2, md: 6 },
+          paddingY: 3,
+          gap: { xs: 2, md: 0 }
+        }}
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'row', md: 'row' },
+            gap: { xs: 15, md: 3 },
+            width: { xs: '100%', md: 'auto' },
+            marginTop: { xs: '10px', md: '0' }
+          }}
+        >
+          <Button
+            variant="outlined"
+            disabled={currentQuestionIndex === 0}
+            onClick={() => setCurrentQuestionIndex(prev => prev - 1)}
+            startIcon={<i className='ri-arrow-left-line' />}
+            sx={{
+              flex: { xs: 1, md: 'none' },
+              minWidth: { xs: 'auto', md: 'auto' }
+            }}
+          >
+            TRƯỚC
+          </Button>
+          <Button
+            variant="outlined"
+            disabled={currentQuestionIndex === questions.length - 1}
+            onClick={() => setCurrentQuestionIndex(prev => prev + 1)}
+            endIcon={<i className='ri-arrow-right-line' />}
+            sx={{
+              flex: { xs: 1, md: 'none' },
+              minWidth: { xs: 'auto', md: 'auto' },
+            }}
+          >
+            SAU
+          </Button>
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', md: 'row' },
+            gap: { xs: 1, md: 2 },
+            width: { xs: '100%', md: 'auto' },
+          }}
+        >
+          {isPractice && (
+            <Button
+              variant="outlined"
+              onClick={handleShowAnswer}
+              disabled={loadingAnswer || !answers[currentQuestion.id as string] || showAnswer}
+              sx={{
+                flex: { xs: 1, md: 'none' },
+                minWidth: { xs: '100%', md: 'auto' },
+                margin: { xs: '10px 0', md: '0' }
+              }}
+            >
+              {loadingAnswer ? 'Đang tải...' : 'XEM ĐÁP ÁN'}
+            </Button>
+          )}
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleOpenConfirmDialog}
+            disabled={isSubmitting}
+            sx={{
+              flex: { xs: 1, md: 'none' },
+              minWidth: { xs: 'auto', md: 'auto' },
+              marginTop: isPractice ? {} : { xs: '10px', md: '0' }
+            }}
+          >
+            {isPractice ? 'KẾT THÚC ÔN' : 'KẾT THÚC THI'}
+          </Button>
+        </Box>
+      </Box>
+    </Wrapper>)
+  };
+
+  return <>
+    <Dialog
+      open={openConfirmDialog}
+      onClose={handleCloseConfirmDialog}
+      fullWidth
+      maxWidth="xs"
+      style={{ zIndex: 10000 }}
+    >
+      <DialogTitle>{isPractice ? 'Kết thúc ôn tập?' : 'Kết thúc bài thi?'}</DialogTitle>
+      <DialogContent>
+        <Typography>
+          {isPractice ? 'Bạn chắc chắn muốn kết thúc bài ôn tập?' : 'Bạn chắc chắn muốn kết thúc bài thi?'}
+        </Typography>
+      </DialogContent>
+      <DialogActions className='p-4'>
+        <Button onClick={handleCloseConfirmDialog} variant="outlined" color="error">
+          Hủy
+        </Button>
+        <Button onClick={handleConfirmSubmit} variant="contained" color="primary">
+          Xác nhận
+        </Button>
+      </DialogActions>
+    </Dialog>
+
+    {isFullscreen ? (
+      <FullscreenCard>
+        {renderCardContent()}
+      </FullscreenCard>
+    ) : <Container className={styles.content} style={{ padding: 0, minHeight: "650px" }}>
       <Box sx={{ p: { xs: 0 } }}>
         <Typography variant="h4" gutterBottom align="center">
           {selectedClass?.name ? `${selectedClass.name.toUpperCase()} - ` : ''}{selectedExamType?.name?.toUpperCase()}
@@ -356,189 +548,18 @@ return () => screenfull.off('change', handler)
                         ))}
                       </Box>
                     </div>
-
                   </CardContent>
                 </Card>
               </Grid>
             </Grid>
           </Grid>
           <Grid item xs={12} md={8} sx={{ minHeight: leftHeight }}>
-            <Card sx={{ height: '100%' }} className='flex flex-col justify-start relative'>
-              {isMobile && <IconButton
-                sx={{ position: 'absolute', top: 8, right: 8, zIndex: 1 }}
-                onClick={toggleFullscreen}
-              >
-                {isFullscreen ? (
-                  <i className="ri-fullscreen-exit-line" />
-                ) : (
-                  <i className="ri-fullscreen-line" />
-                )}
-              </IconButton>}
-              <CardContent sx={{ flexGrow: 1 }}>
-                <Typography variant="h5" className='text-[#98999e]'>Câu {currentQuestionIndex + 1}{isPractice && questions[currentQuestionIndex]?.isCriticalQuestion ? <span className='text-error'> *</span> : ''}</Typography>
-                <Typography variant="h6" className='my-3' sx={{ fontWeight: 600 }}>{currentQuestion.content}</Typography>
-                {currentQuestion.imageUrl && <QuestionImage src={process.env.NEXT_PUBLIC_STORAGE_BASE_URL + currentQuestion.imageUrl} alt={`Question ${currentQuestionIndex + 1}`} />}
-                <Divider sx={{ mb: 4 }} />
-                <div>
-                  {showAnswer && answerDetail
-                    ? answerDetail.answers?.map((ans: any) => {
-                      const isCorrect = ans.isCorrect;
-                      const isSelected = answers[currentQuestion.id as string] === ans.id;
-                      let bg = 'transparent', color = 'inherit', border = '1px solid #e0e0e0';
-
-                      if (isCorrect) {
-                        bg = '#4caf50'; color = '#fff'; border = '1px solid #4caf50';
-                      } else if (isSelected) {
-                        color = '#f55156'; border = '1px solid #f55156';
-                      }
-
-
-                      return (
-                        <Box
-                          key={ans.id}
-                          sx={{
-                            background: bg,
-                            color,
-                            border,
-                            borderRadius: '8px',
-                            p: '12px 16px',
-                            mb: '8px',
-                            fontWeight: isCorrect ? 600 : 400,
-                            cursor: 'default',
-                          }}
-                        >
-                          {`${ans.order}. ${ans.content}`}
-                        </Box>
-                      );
-                    })
-                    : currentQuestion.answers?.map(answer => (
-                      <AnswerLabel
-                        key={answer.id}
-                        selected={!!(currentQuestion.id && answer.id && answers[currentQuestion.id] === answer.id)}
-                        onClick={() => handleAnswerChange(currentQuestion.id, answer.id || '')}
-                      >
-                        {`${answer.order}. ${answer.content}`}
-                      </AnswerLabel>
-                    ))}
-                </div>
-                {showAnswer && answerDetail?.explanation && <Divider sx={{ mt: 4 }} />}
-                {showAnswer && answerDetail?.explanation && (
-                  <Box sx={{ mt: 4, p: 2, border: '1px solid #7c4dff', borderRadius: '8px', color: '#7c4dff' }}>
-                    Giải thích: {answerDetail.explanation}
-                  </Box>
-                )}
-              </CardContent>
-              <Divider />
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: { xs: 'column', md: 'row' },
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  paddingX: { xs: 2, md: 6 },
-                  paddingY: 3,
-                  gap: { xs: 2, md: 0 }
-                }}
-              >
-                <Box
-                  sx={{
-                    display: 'flex',
-                    flexDirection: { xs: 'row', md: 'row' },
-                    gap: { xs: 15, md: 3 },
-                    width: { xs: '100%', md: 'auto' },
-                    marginTop: { xs: '10px', md: '0' }
-                  }}
-                >
-                  <Button
-                    variant="outlined"
-                    disabled={currentQuestionIndex === 0}
-                    onClick={() => setCurrentQuestionIndex(prev => prev - 1)}
-                    startIcon={<i className='ri-arrow-left-line' />}
-                    sx={{
-                      flex: { xs: 1, md: 'none' },
-                      minWidth: { xs: 'auto', md: 'auto' }
-                    }}
-                  >
-                    TRƯỚC
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    disabled={currentQuestionIndex === questions.length - 1}
-                    onClick={() => setCurrentQuestionIndex(prev => prev + 1)}
-                    endIcon={<i className='ri-arrow-right-line' />}
-                    sx={{
-                      flex: { xs: 1, md: 'none' },
-                      minWidth: { xs: 'auto', md: 'auto' },
-                    }}
-                  >
-                    SAU
-                  </Button>
-                </Box>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    flexDirection: { xs: 'column', md: 'row' },
-                    gap: { xs: 1, md: 2 },
-                    width: { xs: '100%', md: 'auto' },
-                  }}
-                >
-                  {isPractice && (
-                    <Button
-                      variant="outlined"
-                      onClick={handleShowAnswer}
-                      disabled={loadingAnswer || !answers[currentQuestion.id as string] || showAnswer}
-                      sx={{
-                        flex: { xs: 1, md: 'none' },
-                        minWidth: { xs: '100%', md: 'auto' },
-                        margin: { xs: '10px 0', md: '0' }
-                      }}
-                    >
-                      {loadingAnswer ? 'Đang tải...' : 'XEM ĐÁP ÁN'}
-                    </Button>
-                  )}
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleOpenConfirmDialog}
-                    disabled={isSubmitting}
-                    sx={{
-                      flex: { xs: 1, md: 'none' },
-                      minWidth: { xs: 'auto', md: 'auto' },
-                      marginTop: isPractice ? {} : { xs: '10px', md: '0' }
-                    }}
-                  >
-                    {isPractice ? 'KẾT THÚC ÔN' : 'KẾT THÚC THI'}
-                  </Button>
-                </Box>
-              </Box>
-            </Card>
+            {renderCardContent()}
           </Grid>
         </Grid>
-
       </Box>
-      <Dialog
-        open={openConfirmDialog}
-        onClose={handleCloseConfirmDialog}
-        fullWidth
-        maxWidth="xs"
-      >
-        <DialogTitle>{isPractice ? 'Kết thúc ôn tập?' : 'Kết thúc bài thi?'}</DialogTitle>
-        <DialogContent>
-          <Typography>
-            {isPractice ? 'Bạn chắc chắn muốn kết thúc bài ôn tập?' : 'Bạn chắc chắn muốn kết thúc bài thi?'}
-          </Typography>
-        </DialogContent>
-        <DialogActions className='p-4'>
-          <Button onClick={handleCloseConfirmDialog} variant="outlined" color="error">
-            Hủy
-          </Button>
-          <Button onClick={handleConfirmSubmit} variant="contained" color="primary">
-            Xác nhận
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Container >
-  )
+    </Container>}
+  </>;
 }
 
 export default ExamPractice
