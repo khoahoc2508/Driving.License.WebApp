@@ -77,12 +77,13 @@ const FullscreenCard = styled(Card)({
   top: 0,
   left: 0,
   width: '100vw',
-  height: '100vh',
+  height: '100dvh', // dùng dvh để tránh lỗi Safari khi ẩn/hiện thanh địa chỉ
   zIndex: 9999,
   backgroundColor: 'white',
   display: 'flex',
   flexDirection: 'column',
-  overflow: 'hidden' // Tắt scroll toàn bộ card
+  overflow: 'hidden', // Tắt scroll toàn bộ card,
+  paddingBottom: 'env(safe-area-inset-bottom)'
 });
 
 const CardContentScrollable = styled('div')({
@@ -244,7 +245,7 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
 
     console.log(exam)
 
-    // call API 
+    // call API
     debugger
   }
 
@@ -380,8 +381,8 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
     )
   }
 
-  
-return (
+
+  return (
     <ExamLayoutWrapper isLoading={isLoading}>
       {
         isLoading ? <div className='h-screen'></div> : <Container className={styles.content} style={{ padding: 0 }}>
