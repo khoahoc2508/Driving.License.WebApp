@@ -25,11 +25,6 @@ import '@assets/iconify-icons/generated-icons.css'
 import { IntersectionProvider } from '@/contexts/intersectionContext'
 import ScrollToTopClient from '@/components/ScrollToTopClient'
 
-export const metadata = {
-  title: 'Materio - Material Design Next.js Admin Template',
-  description:
-    'Materio - Material Design Next.js Admin Dashboard Template - is the most developer friendly & highly customizable Admin Dashboard Template based on MUI v5.'
-}
 
 const Layout = async ({ children }: ChildrenType) => {
   // Vars
