@@ -28,11 +28,10 @@ import ScrollToTopClient from '@/components/ScrollToTopClient'
 
 
 export const metadata = {
-  title: 'Materio - Material Design Next.js Admin Template',
-  description:
-    'Materio - Material Design Next.js Admin Dashboard Template - is the most developer friendly & highly customizable Admin Dashboard Template based on MUI v5.',
+  title: 'Thi Thử Bằng Lái Xe Online – Đề Chuẩn Mới Nhất',
+  description: 'Ôn luyện lý thuyết và thi thử bằng lái xe miễn phí. Bộ đề chuẩn của Bộ Giao Thông Vận Tải, có mẹo giải nhanh, kết quả tức thì.',
   openGraph: {
-    title: ' Thi Thử Bằng Lái Xe Online – Đề Chuẩn Mới Nhất',
+    title: 'Thi Thử Bằng Lái Xe Online – Đề Chuẩn Mới Nhất',
     description: 'Ôn luyện lý thuyết và thi thử bằng lái xe miễn phí. Bộ đề chuẩn của Bộ Giao Thông Vận Tải, có mẹo giải nhanh, kết quả tức thì.',
     url: process.env.NEXT_PUBLIC_APP_URL + '/on-thi-bang-lai-xe',
     siteName: process.env.NEXT_PUBLIC_APP_URL + '/on-thi-bang-lai-xe',
