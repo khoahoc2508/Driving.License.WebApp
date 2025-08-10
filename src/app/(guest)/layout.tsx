@@ -24,7 +24,7 @@ import '@/app/globals.css'
 import '@assets/iconify-icons/generated-icons.css'
 import { IntersectionProvider } from '@/contexts/intersectionContext'
 import ScrollToTopClient from '@/components/ScrollToTopClient'
-import { env } from 'process'
+
 
 
 export const metadata = {
@@ -34,11 +34,11 @@ export const metadata = {
   openGraph: {
     title: ' Thi Thử Bằng Lái Xe Online – Đề Chuẩn Mới Nhất',
     description: 'Ôn luyện lý thuyết và thi thử bằng lái xe miễn phí. Bộ đề chuẩn của Bộ Giao Thông Vận Tải, có mẹo giải nhanh, kết quả tức thì.',
-    url: env.NEXT_PUBLIC_APP_URL + '/on-thi-bang-lai-xe',
-    siteName: env.NEXT_PUBLIC_APP_URL,
+    url: process.env.NEXT_PUBLIC_APP_URL + '/on-thi-bang-lai-xe',
+    siteName: process.env.NEXT_PUBLIC_APP_URL,
     images: [
       {
-        url: env.NEXT_PUBLIC_APP_URL + '/images/thumbnail.jpg',
+        url: process.env.NEXT_PUBLIC_APP_URL + '/images/thumbnail.jpg',
       }
     ],
     locale: 'en_US',
