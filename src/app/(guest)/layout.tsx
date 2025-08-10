@@ -28,6 +28,7 @@ import ScrollToTopClient from '@/components/ScrollToTopClient'
 
 
 export const metadata = {
+  description: 'Ôn luyện lý thuyết và thi thử bằng lái xe miễn phí. Bộ đề chuẩn của Bộ Giao Thông Vận Tải, có mẹo giải nhanh, kết quả tức thì.',
   openGraph: {
     title: ' Thi Thử Bằng Lái Xe Online – Đề Chuẩn Mới Nhất',
     description: 'Ôn luyện lý thuyết và thi thử bằng lái xe miễn phí. Bộ đề chuẩn của Bộ Giao Thông Vận Tải, có mẹo giải nhanh, kết quả tức thì.',
