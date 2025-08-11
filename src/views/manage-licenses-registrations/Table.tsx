@@ -378,6 +378,7 @@ const Table = ({
           component='div'
           className='border-bs'
           count={totalItems}
+          labelRowsPerPage="Dòng trên trang:"
           rowsPerPage={pageSize}
           page={pageNumber - 1}
           onPageChange={(_, page) => {

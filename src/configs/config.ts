@@ -194,7 +194,10 @@ const GroupExamType = {
 const Routers = {
   ManageLicensesRegistration: '/admin/manage-licenses-registration',
   ExamSchedule: '/admin/exam-schedules',
-  BrandSetting: '/admin/account-settings'
+  BrandSetting: '/admin/account-settings',
+  ManageTeacher: '/admin/manage-teacher',
+  ManageCTV: '/admin/manage-ctv',
+  ManageEmployee: '/admin/manage-employee'
 }
 
 const RoutersCustomer = {
