@@ -4,6 +4,38 @@
  */
 
 export interface paths {
+    "/api/assignees": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Assignees_GetAssigneeById"];
+        put: operations["Assignees_UpsertBrandSetting"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/assignees/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Assignees_GetAssigneeById2"];
+        put?: never;
+        post?: never;
+        delete: operations["Assignees_DeleteAssigneeById"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/connect/token": {
         parameters: {
             query?: never;
@@ -696,6 +728,53 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        PaginatedListOfAssigneeDto: {
+            data?: components["schemas"]["AssigneeDto"][];
+
+            /** Format: int32 */
+            pageNumber?: number;
+
+            /** Format: int32 */
+            totalPages?: number;
+
+            /** Format: int32 */
+            totalCount?: number;
+            hasPreviousPage?: boolean;
+            hasNextPage?: boolean;
+        };
+        AssigneeDto: {
+            id?: string;
+            fullName?: string;
+            phone?: string;
+            description?: string;
+            active?: boolean;
+            assigneeType?: components["schemas"]["AssigneeType"];
+        };
+
+        /** @enum {integer} */
+        AssigneeType: 1 | 2 | 3;
+        BaseResponseOfAssigneeDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["AssigneeDto"] | null;
+        };
+        BaseResponse: {
+            success?: boolean;
+            message?: string | null;
+            statusCode?: components["schemas"]["HttpStatusCode"];
+        };
+
+        /** @enum {integer} */
+        HttpStatusCode: 100 | 101 | 102 | 103 | 200 | 201 | 202 | 203 | 204 | 205 | 206 | 207 | 208 | 226 | 300 | 300 | 301 | 301 | 302 | 302 | 303 | 303 | 304 | 305 | 306 | 307 | 307 | 308 | 400 | 401 | 402 | 403 | 404 | 405 | 406 | 407 | 408 | 409 | 410 | 411 | 412 | 413 | 414 | 415 | 416 | 417 | 421 | 422 | 422 | 423 | 424 | 426 | 428 | 429 | 431 | 451 | 500 | 501 | 502 | 503 | 504 | 505 | 506 | 507 | 508 | 510 | 511;
+        BaseResponseOfBoolean: components["schemas"]["BaseResponse"] & {
+            data?: boolean;
+        };
+        UpsertAssigneeCommand: {
+            id?: string | null;
+            fullName?: string;
+            phone?: string;
+            description?: string;
+            active?: boolean;
+            assigneeType?: components["schemas"]["AssigneeType"];
+        };
         BaseResponseOfBrandSettingDto: components["schemas"]["BaseResponse"] & {
             data?: components["schemas"]["BrandSettingDto"] | null;
         };
@@ -708,17 +787,6 @@ export interface components {
             phoneNumber?: string | null;
             address?: string | null;
             images?: string[] | null;
-        };
-        BaseResponse: {
-            success?: boolean;
-            message?: string | null;
-            statusCode?: components["schemas"]["HttpStatusCode"];
-        };
-
-        /** @enum {integer} */
-        HttpStatusCode: 100 | 101 | 102 | 103 | 200 | 201 | 202 | 203 | 204 | 205 | 206 | 207 | 208 | 226 | 300 | 300 | 301 | 301 | 302 | 302 | 303 | 303 | 304 | 305 | 306 | 307 | 307 | 308 | 400 | 401 | 402 | 403 | 404 | 405 | 406 | 407 | 408 | 409 | 410 | 411 | 412 | 413 | 414 | 415 | 416 | 417 | 421 | 422 | 422 | 423 | 424 | 426 | 428 | 429 | 431 | 451 | 500 | 501 | 502 | 503 | 504 | 505 | 506 | 507 | 508 | 510 | 511;
-        BaseResponseOfBoolean: components["schemas"]["BaseResponse"] & {
-            data?: boolean;
         };
         UpsertBrandSettingCommand: {
             avatarUrl?: string;
@@ -1514,6 +1582,96 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    Assignees_GetAssigneeById: {
+        parameters: {
+            query?: {
+                Search?: string | null;
+                AssigneeType?: components["schemas"]["AssigneeType"] | null;
+                PageNumber?: number;
+                PageSize?: number;
+                Active?: boolean | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedListOfAssigneeDto"];
+                };
+            };
+        };
+    };
+    Assignees_UpsertBrandSetting: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpsertAssigneeCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    Assignees_GetAssigneeById2: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfAssigneeDto"];
+                };
+            };
+        };
+    };
+    Assignees_DeleteAssigneeById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
     Authorization_Exchange: {
         parameters: {
             query?: never;

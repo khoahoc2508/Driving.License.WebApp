@@ -204,6 +204,11 @@ const RoutersCustomer = {
   examPratice: '/on-thi-bang-lai-xe'
 }
 
+const statusOptions = [
+  { label: 'Đang hoạt động', value: true },
+  { label: 'Dừng hoạt động', value: false }
+]
+
 const CONFIG = {
   LicenseRegistrationStatus,
   LicenseRegistrationStatusMappingText,
@@ -235,7 +240,8 @@ const CONFIG = {
   VehicleTypeCode,
   GroupExamType,
   Routers,
-  RoutersCustomer
+  RoutersCustomer,
+  statusOptions
 }
 
 export default CONFIG
