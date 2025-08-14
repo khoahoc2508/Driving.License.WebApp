@@ -166,12 +166,15 @@ const AddTeacherDialog = ({
                         render={({ field }) => (
                             <TextField
                                 {...field}
-                                label="Họ tên"
+                                label={
+                                    <span>
+                                        Họ tên <span style={{ color: 'red' }}>(*)</span>
+                                    </span>
+                                }
                                 fullWidth
                                 variant="outlined"
                                 error={!!errors.fullName}
                                 helperText={errors.fullName?.message}
-                                required
                             />
                         )}
                     />
