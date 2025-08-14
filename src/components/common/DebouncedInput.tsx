@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { TextField } from '@mui/material';
+import { TextField, InputAdornment } from '@mui/material';
 
 import type { TextFieldProps } from '@mui/material/TextField';
 
@@ -30,7 +30,22 @@ const DebouncedInput = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value])
 
-  return <TextField {...props} size='small' value={value} onChange={e => setValue(e.target.value)} />
+  return (
+    <TextField
+      {...props}
+      size='small'
+      value={value}
+      onChange={e => setValue(e.target.value)}
+      InputProps={{
+        startAdornment: (
+          <InputAdornment position="start" style={{ opacity: 0.5 }}>
+            <i className="ri-search-line" />
+          </InputAdornment>
+        ),
+        ...props.InputProps
+      }}
+    />
+  )
 }
 
 export default DebouncedInput

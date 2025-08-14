@@ -73,7 +73,7 @@ const AddTeacherDialog = ({
             setValue('fullName', editData.fullName || '')
             setValue('phone', editData.phone || '')
             setValue('description', editData.description || '')
-            setValue('active', editData.active || true)
+            setValue('active', editData.active === true)
             setValue('assigneeType', editData.assigneeType || 1)
         }
     }, [editData, mode, setValue])

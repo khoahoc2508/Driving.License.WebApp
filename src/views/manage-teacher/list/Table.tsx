@@ -93,10 +93,9 @@ const Table = ({
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null);
 
-    const getStatusChip = (status: boolean) => {
-        const label = status ? 'Đang hoạt động' : 'Dừng hoạt động'
-        const color = status ? 'success' : 'error'
-
+    const getStatusChip = (status: boolean | undefined) => {
+        const label = status === true ? 'Đang hoạt động' : 'Dừng hoạt động'
+        const color = status === true ? 'success' : 'error'
 
         return (
             <Chip label={label} color={color} variant='tonal' size='small' />
@@ -113,7 +112,7 @@ const Table = ({
                     <Typography>
                         {table.getRowModel().rows.indexOf(row) + 1}
                     </Typography>
-                )
+                ),
             }),
             columnHelper.accessor('fullName', {
                 header: 'HỌ TÊN',
@@ -130,26 +129,31 @@ const Table = ({
             columnHelper.accessor('phone', {
                 header: 'SỐ ĐIỆN THOẠI',
                 cell: ({ row }) => (
-                    <Typography>{row.original?.phone}</Typography>
+                    <div style={{ textAlign: 'right' }}>
+                        <Typography>{row.original?.phone}</Typography>
+                    </div>
+
                 )
             }),
             columnHelper.accessor('active', {
                 header: 'TRẠNG THÁI',
                 cell: ({ row }) => {
-                    return getStatusChip(row.original?.active || false);
+                    return (getStatusChip(row.original?.active))
                 }
             }),
             columnHelper.accessor('description', {
                 header: 'MÔ TẢ',
                 cell: ({ row }) => (
-                    <Typography>{row.original?.description || ''}</Typography>
+                    <div style={{ textAlign: 'left' }}>
+                        <Typography>{row.original?.description || ''}</Typography>
+                    </div>
                 )
             }),
             columnHelper.accessor('id', {
                 id: 'actions',
                 header: 'THAO TÁC',
                 cell: ({ row }) => (
-                    <div className="flex items-center">
+                    <div className="flex items-center justify-center">
                         <IconButton onClick={() => onEditTeacher?.(row.original)}>
                             <i className="ri-edit-box-line text-textSecondary" />
                         </IconButton>
@@ -165,7 +169,6 @@ const Table = ({
         [data, setData]
     )
 
-    // Handle delete action
     const handleOpenDeleteDialog = (id: string | undefined) => {
         if (id) {
             setItemIdToDelete(id);
