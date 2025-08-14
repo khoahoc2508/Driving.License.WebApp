@@ -9,18 +9,16 @@ import {
     CardContent,
     CardHeader,
     Divider,
+    TextField
 } from '@mui/material'
-import TextField from '@mui/material/TextField'
 import Autocomplete from '@mui/material/Autocomplete'
-
-import { toast } from 'react-toastify'
 
 import type { AssigneeListType, GetAssigneesQueryParams } from '@/types/assigneeTypes'
 import assigneeAPI from '@/libs/api/assigneeAPI'
 import DebouncedInput from '@/components/common/DebouncedInput'
 import Table from './Table'
+import AddTeacherDialog from './AddTeacherDialog'
 import CONFIG from '@/configs/config'
-
 
 const ManageTeacher = () => {
 
@@ -34,6 +32,9 @@ const ManageTeacher = () => {
     const [totalItems, setTotalItems] = useState<number>(0)
     const [reloadDataTable, setReloadDataTable] = useState<boolean>(false)
     const [params, setParams] = useState<GetAssigneesQueryParams>()
+
+    // Modal states
+    const [openAddDialog, setOpenAddDialog] = useState(false)
 
     useEffect(() => {
         setParams({
@@ -81,6 +82,19 @@ const ManageTeacher = () => {
         setStatusValue(null)
         setAppliedStatusValue(null)
         setPageNumber(1)
+    }
+
+    // Modal handlers
+    const handleOpenAddDialog = () => {
+        setOpenAddDialog(true)
+    }
+
+    const handleCloseAddDialog = () => {
+        setOpenAddDialog(false)
+    }
+
+    const handleAddSuccess = () => {
+        setReloadDataTable(prev => !prev)
     }
 
     const getAssignees = async (params: GetAssigneesQueryParams): Promise<void> => {
@@ -138,7 +152,7 @@ const ManageTeacher = () => {
                         placeholder='Họ tên, số điện thoại'
                     />
                 </div>
-                <Button variant='contained' color='primary' className='w-full sm:w-auto'>
+                <Button variant='contained' color='primary' className='w-full sm:w-auto' onClick={handleOpenAddDialog}>
                     Thêm mới
                 </Button>
             </div>
@@ -154,6 +168,11 @@ const ManageTeacher = () => {
                 isLoading={isLoading}
             />
 
+            <AddTeacherDialog
+                open={openAddDialog}
+                onClose={handleCloseAddDialog}
+                onSuccess={handleAddSuccess}
+            />
         </Card>
     )
 }
