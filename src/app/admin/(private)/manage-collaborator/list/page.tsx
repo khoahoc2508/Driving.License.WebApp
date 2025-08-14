@@ -1,9 +1,9 @@
 // MUI Imports
 import ManageCollaborator from '@/views/manage-collaborator/list'
-const ManageTeacherList = async () => {
+const ManageCollaboratorList = async () => {
   return (
     <ManageCollaborator />
   )
 }
 
-export default ManageTeacherList
+export default ManageCollaboratorList
