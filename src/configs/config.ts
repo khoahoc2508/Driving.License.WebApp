@@ -196,7 +196,7 @@ const Routers = {
   ExamSchedule: '/admin/exam-schedules',
   BrandSetting: '/admin/account-settings',
   ManageTeacher: '/admin/manage-teacher',
-  ManageCTV: '/admin/manage-ctv',
+  ManageCTV: '/admin/manage-collaborator',
   ManageEmployee: '/admin/manage-employee'
 }
 
@@ -208,6 +208,12 @@ const statusOptions = [
   { label: 'Đang hoạt động', value: true },
   { label: 'Dừng hoạt động', value: false }
 ]
+
+const AssigneeTypes = {
+  Teacher: 1,
+  Employee: 2,
+  Collaborator: 3
+}
 
 const CONFIG = {
   LicenseRegistrationStatus,
@@ -241,7 +247,8 @@ const CONFIG = {
   GroupExamType,
   Routers,
   RoutersCustomer,
-  statusOptions
+  statusOptions,
+  AssigneeTypes
 }
 
 export default CONFIG

@@ -17,11 +17,11 @@ import type { AssigneeListType, GetAssigneesQueryParams, AssigneeDto, AssigneeTy
 import assigneeAPI from '@/libs/api/assigneeAPI'
 import DebouncedInput from '@/components/common/DebouncedInput'
 import Table from './Table'
-import AddTeacherDialog, { DialogMode } from './AddTeacherDialog'
 import CONFIG from '@/configs/config'
 import { toast } from 'react-toastify'
+import AddCollaboratorDialog, { DialogMode } from './AddCollaboratorDialog'
 
-const ManageTeacher = () => {
+const ManageCollaborator = () => {
 
     const [dataTable, setDataTable] = useState<AssigneeListType>([])
     const [search, setSearch] = useState('')
@@ -41,7 +41,7 @@ const ManageTeacher = () => {
 
     useEffect(() => {
         setParams({
-            assigneeType: CONFIG.AssigneeTypes.Teacher as AssigneeType,
+            assigneeType: CONFIG.AssigneeTypes.Collaborator as AssigneeType,
             search: '',
             pageNumber: 1,
             pageSize: 10
@@ -99,9 +99,9 @@ const ManageTeacher = () => {
         setDialogMode(DialogMode.ADD)
     }
 
-    const handleEditTeacher = (teacher: AssigneeDto) => {
+    const handleEditCollaborator = (collaborator: AssigneeDto) => {
         setDialogMode(DialogMode.EDIT)
-        setEditData(teacher)
+        setEditData(collaborator)
         setOpenAddDialog(true)
     }
 
@@ -129,7 +129,7 @@ const ManageTeacher = () => {
 
     return (
         <Card>
-            <CardHeader title='Lọc giáo viên' />
+            <CardHeader title='Lọc cộng tác viên' />
             <CardContent>
                 <Grid container spacing={5} alignItems={'flex-end'}>
                     <Grid size={{ xs: 12, sm: 4, md: 3 }}>
@@ -137,7 +137,7 @@ const ManageTeacher = () => {
                             value={statusValue}
                             options={CONFIG.statusOptions}
                             onChange={handleStatusSelect}
-                            id='teacher-status-autocomplete'
+                            id='collaborator-status-autocomplete'
                             getOptionLabel={option => option?.label || ''}
                             isOptionEqualToValue={(opt, val) => opt.value === val.value}
                             renderInput={params => <TextField {...params} label='Trạng thái' />}
@@ -178,10 +178,10 @@ const ManageTeacher = () => {
                 onPageSizeChange={(size) => setPageSize(size)}
                 setReloadDataTable={setReloadDataTable}
                 isLoading={isLoading}
-                onEditTeacher={handleEditTeacher}
+                onEditCollaborator={handleEditCollaborator}
             />
 
-            <AddTeacherDialog
+            <AddCollaboratorDialog
                 open={openAddDialog}
                 onClose={handleCloseAddDialog}
                 onSuccess={handleAddSuccess}
@@ -192,4 +192,5 @@ const ManageTeacher = () => {
     )
 }
 
-export default ManageTeacher
+export default ManageCollaborator
+
