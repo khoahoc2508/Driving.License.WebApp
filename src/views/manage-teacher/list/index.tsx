@@ -13,12 +13,13 @@ import {
 } from '@mui/material'
 import Autocomplete from '@mui/material/Autocomplete'
 
-import type { AssigneeListType, GetAssigneesQueryParams } from '@/types/assigneeTypes'
+import type { AssigneeListType, GetAssigneesQueryParams, AssigneeDto } from '@/types/assigneeTypes'
 import assigneeAPI from '@/libs/api/assigneeAPI'
 import DebouncedInput from '@/components/common/DebouncedInput'
 import Table from './Table'
-import AddTeacherDialog from './AddTeacherDialog'
+import AddTeacherDialog, { DialogMode } from './AddTeacherDialog'
 import CONFIG from '@/configs/config'
+import { toast } from 'react-toastify'
 
 const ManageTeacher = () => {
 
@@ -35,6 +36,8 @@ const ManageTeacher = () => {
 
     // Modal states
     const [openAddDialog, setOpenAddDialog] = useState(false)
+    const [editData, setEditData] = useState<AssigneeDto | null>(null)
+    const [dialogMode, setDialogMode] = useState<DialogMode>(DialogMode.ADD)
 
     useEffect(() => {
         setParams({
@@ -84,13 +87,22 @@ const ManageTeacher = () => {
         setPageNumber(1)
     }
 
-    // Modal handlers
     const handleOpenAddDialog = () => {
+        setDialogMode(DialogMode.ADD)
+        setEditData(null)
         setOpenAddDialog(true)
     }
 
     const handleCloseAddDialog = () => {
         setOpenAddDialog(false)
+        setEditData(null)
+        setDialogMode(DialogMode.ADD)
+    }
+
+    const handleEditTeacher = (teacher: AssigneeDto) => {
+        setDialogMode(DialogMode.EDIT)
+        setEditData(teacher)
+        setOpenAddDialog(true)
     }
 
     const handleAddSuccess = () => {
@@ -166,12 +178,15 @@ const ManageTeacher = () => {
                 onPageSizeChange={(size) => setPageSize(size)}
                 setReloadDataTable={setReloadDataTable}
                 isLoading={isLoading}
+                onEditTeacher={handleEditTeacher}
             />
 
             <AddTeacherDialog
                 open={openAddDialog}
                 onClose={handleCloseAddDialog}
                 onSuccess={handleAddSuccess}
+                editData={editData}
+                mode={dialogMode}
             />
         </Card>
     )

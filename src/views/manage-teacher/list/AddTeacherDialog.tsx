@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 
 import {
@@ -23,26 +23,40 @@ import {
 
 import { toast } from 'react-toastify'
 
-import type { UpsertAssigneeCommand } from '@/types/assigneeTypes'
+import type { UpsertAssigneeCommand, AssigneeDto, AssigneeType } from '@/types/assigneeTypes'
 import assigneeAPI from '@/libs/api/assigneeAPI'
+
+export enum DialogMode {
+    ADD = 0,
+    EDIT = 1
+}
 
 interface AddTeacherDialogProps {
     open: boolean
     onClose: () => void
     onSuccess: () => void
+    editData?: AssigneeDto | null
+    mode?: DialogMode
 }
 
 interface FormData extends Omit<UpsertAssigneeCommand, 'assigneeType'> {
-    assigneeType: number
+    assigneeType: AssigneeType
 }
 
-const AddTeacherDialog = ({ open, onClose, onSuccess }: AddTeacherDialogProps) => {
+const AddTeacherDialog = ({
+    open,
+    onClose,
+    onSuccess,
+    editData = null,
+    mode = DialogMode.ADD
+}: AddTeacherDialogProps) => {
     const [isSubmitting, setIsSubmitting] = useState(false)
 
     const {
         control,
         handleSubmit,
         reset,
+        setValue,
         formState: { errors }
     } = useForm<FormData>({
         defaultValues: {
@@ -54,6 +68,16 @@ const AddTeacherDialog = ({ open, onClose, onSuccess }: AddTeacherDialogProps) =
         }
     })
 
+    useEffect(() => {
+        if (editData && mode === DialogMode.EDIT) {
+            setValue('fullName', editData.fullName || '')
+            setValue('phone', editData.phone || '')
+            setValue('description', editData.description || '')
+            setValue('active', editData.active || true)
+            setValue('assigneeType', editData.assigneeType || 1)
+        }
+    }, [editData, mode, setValue])
+
     const handleClose = () => {
         reset()
         setIsSubmitting(false)
@@ -63,20 +87,39 @@ const AddTeacherDialog = ({ open, onClose, onSuccess }: AddTeacherDialogProps) =
     const onSubmit = async (data: FormData) => {
         setIsSubmitting(true)
         try {
-            const response = await assigneeAPI.UpsertAssignee(data)
+            const payload: UpsertAssigneeCommand = {
+                ...data,
+                id: mode === DialogMode.EDIT && editData ? editData.id : undefined
+            }
+
+            const response = await assigneeAPI.UpsertAssignee(payload)
 
             if (response.data.success) {
-                toast.success('Thêm giáo viên thành công')
+                const successMessage = mode === DialogMode.EDIT ? 'Chỉnh sửa giáo viên thành công' : 'Thêm giáo viên thành công'
+                toast.success(successMessage)
                 handleClose()
                 onSuccess()
             } else {
-                toast.error(response.data.message || 'Có lỗi xảy ra khi thêm giáo viên')
+                const errorMessage = mode === DialogMode.EDIT ? 'Có lỗi xảy ra khi chỉnh sửa giáo viên' : 'Có lỗi xảy ra khi thêm giáo viên'
+                toast.error(response.data.message || errorMessage)
             }
         } catch (error: any) {
-            toast.error(error?.message || 'Có lỗi xảy ra khi thêm giáo viên')
+            const errorMessage = mode === DialogMode.EDIT ? 'Có lỗi xảy ra khi chỉnh sửa giáo viên' : 'Có lỗi xảy ra khi thêm giáo viên'
+            toast.error(error?.message || errorMessage)
         } finally {
             setIsSubmitting(false)
         }
+    }
+
+    const getDialogTitle = () => {
+        return mode === DialogMode.EDIT ? 'Chỉnh sửa giáo viên' : 'Thêm giáo viên'
+    }
+
+    const getSubmitButtonText = () => {
+        if (isSubmitting) {
+            return mode === DialogMode.EDIT ? 'Đang chỉnh sửa...' : 'Đang thêm...'
+        }
+        return 'XÁC NHẬN'
     }
 
     return (
@@ -98,7 +141,7 @@ const AddTeacherDialog = ({ open, onClose, onSuccess }: AddTeacherDialogProps) =
                 pb: 2,
             }}>
                 <Typography variant="h5" fontWeight={600} component="div">
-                    Thêm giáo viên
+                    {getDialogTitle()}
                 </Typography>
                 <IconButton
                     aria-label="close"
@@ -224,7 +267,7 @@ const AddTeacherDialog = ({ open, onClose, onSuccess }: AddTeacherDialogProps) =
                         }
                     }}
                 >
-                    {isSubmitting ? 'Đang thêm...' : 'XÁC NHẬN'}
+                    {getSubmitButtonText()}
                 </Button>
             </DialogActions>
         </Dialog>

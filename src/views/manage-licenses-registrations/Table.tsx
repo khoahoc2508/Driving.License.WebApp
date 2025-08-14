@@ -48,7 +48,6 @@ import type { LicenseRegistrationType, LicenseRegistrationTypeVm, LicenseTypeDto
 import { getInitials } from '@/utils/getInitials'
 import styles from '@core/styles/table.module.css'
 
-
 import LicenseRegistrationAPI from '@/libs/api/licenseRegistrationAPI'
 import SkeletonTableRowsLoader from '@/components/common/SkeletonTableRowsLoader'
 

@@ -57,15 +57,10 @@ declare module '@tanstack/table-core' {
 }
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
-    // Rank the item
     const itemRank = rankItem(row.getValue(columnId), value)
-
-    // Store the itemRank info
     addMeta({
         itemRank
     })
-
-    // Return if the item should be filtered in/out
     return itemRank.passed
 }
 
@@ -78,7 +73,8 @@ const Table = ({
     onPageChange,
     onPageSizeChange,
     setReloadDataTable,
-    isLoading
+    isLoading,
+    onEditTeacher
 }: {
     data?: AssigneeListType,
     setData: (data: AssigneeListType) => void,
@@ -88,7 +84,8 @@ const Table = ({
     onPageChange: (page: number) => void,
     onPageSizeChange: (pageSize: number) => void,
     setReloadDataTable: React.Dispatch<React.SetStateAction<boolean>>,
-    isLoading: boolean
+    isLoading: boolean,
+    onEditTeacher?: (teacher: AssigneeDto) => void
 }) => {
     // States
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -153,10 +150,8 @@ const Table = ({
                 header: 'THAO TÁC',
                 cell: ({ row }) => (
                     <div className="flex items-center">
-                        <IconButton>
-                            <a href={`manage-teacher/edit/${row.original.id}`} className='flex items-center'>
-                                <i className="ri-edit-box-line text-textSecondary" />
-                            </a>
+                        <IconButton onClick={() => onEditTeacher?.(row.original)}>
+                            <i className="ri-edit-box-line text-textSecondary" />
                         </IconButton>
 
                         <IconButton onClick={() => handleOpenDeleteDialog(row.original.id)}>
