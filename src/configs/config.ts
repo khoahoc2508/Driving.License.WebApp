@@ -197,7 +197,8 @@ const Routers = {
   BrandSetting: '/admin/account-settings',
   ManageTeacher: '/admin/manage-teacher',
   ManageCTV: '/admin/manage-collaborator',
-  ManageEmployee: '/admin/manage-employee'
+  ManageEmployee: '/admin/manage-employee',
+  ManageFeeType: '/admin/manage-fee-type'
 }
 
 const RoutersCustomer = {

@@ -24,34 +24,29 @@ import {
 
 import { toast } from 'react-toastify'
 
-import type { UpsertAssigneeCommand, AssigneeDto, AssigneeType } from '@/types/assigneeTypes'
-import assigneeAPI from '@/libs/api/assigneeAPI'
-import CONFIG from '@/configs/config'
+import type { UpsertFeeTypeCommand, FeeTypeDto } from '@/types/feeTypes'
+import feeTypeAPI from '@/libs/api/feeTypeAPI'
 
 export enum DialogMode {
     ADD = 0,
     EDIT = 1
 }
 
-interface AddCollaboratorDialogProps {
+interface AddFeeTypeDialogProps {
     open: boolean
     onClose: () => void
     onSuccess: () => void
-    editData?: AssigneeDto | null
+    editData?: FeeTypeDto | null
     mode?: DialogMode
 }
 
-interface FormData extends Omit<UpsertAssigneeCommand, 'assigneeType'> {
-    assigneeType: AssigneeType
-}
-
-const AddCollaboratorDialog = ({
+const AddFeeTypeDialog = ({
     open,
     onClose,
     onSuccess,
     editData = null,
     mode = DialogMode.ADD
-}: AddCollaboratorDialogProps) => {
+}: AddFeeTypeDialogProps) => {
     const [isSubmitting, setIsSubmitting] = useState(false)
 
     const {
@@ -60,23 +55,19 @@ const AddCollaboratorDialog = ({
         reset,
         setValue,
         formState: { errors }
-    } = useForm<FormData>({
+    } = useForm<UpsertFeeTypeCommand>({
         defaultValues: {
-            fullName: '',
-            phone: '',
+            name: '',
             description: '',
-            active: true,
-            assigneeType: CONFIG.AssigneeTypes.Collaborator as AssigneeType  // Collaborator
+            active: true
         }
     })
 
     useEffect(() => {
         if (editData && mode === DialogMode.EDIT) {
-            setValue('fullName', editData.fullName || '')
-            setValue('phone', editData.phone || '')
+            setValue('name', editData.name || '')
             setValue('description', editData.description || '')
             setValue('active', editData.active === true)
-            setValue('assigneeType', editData.assigneeType || CONFIG.AssigneeTypes.Collaborator as AssigneeType)
         }
     }, [editData, mode, setValue])
 
@@ -86,30 +77,30 @@ const AddCollaboratorDialog = ({
         onClose()
     }
 
-    const onSubmit = async (data: FormData) => {
+    const onSubmit = async (data: UpsertFeeTypeCommand) => {
         setIsSubmitting(true)
 
         try {
-            const payload: UpsertAssigneeCommand = {
+            const payload: UpsertFeeTypeCommand = {
                 ...data,
                 id: mode === DialogMode.EDIT && editData ? editData.id : undefined
             }
 
-            const response = await assigneeAPI.UpsertAssignee(payload)
+            const response = await feeTypeAPI.UpsertFeeType(payload)
 
             if (response.data.success) {
-                const successMessage = mode === DialogMode.EDIT ? 'Chỉnh sửa cộng tác viên thành công' : 'Thêm cộng tác viên thành công'
+                const successMessage = mode === DialogMode.EDIT ? 'Chỉnh sửa lệ phí thành công' : 'Thêm lệ phí thành công'
 
                 toast.success(successMessage)
                 handleClose()
                 onSuccess()
             } else {
-                const errorMessage = mode === DialogMode.EDIT ? 'Có lỗi xảy ra khi chỉnh sửa cộng tác viên' : 'Có lỗi xảy ra khi thêm cộng tác viên'
+                const errorMessage = mode === DialogMode.EDIT ? 'Có lỗi xảy ra khi chỉnh sửa lệ phí' : 'Có lỗi xảy ra khi thêm lệ phí'
 
                 toast.error(response.data.message || errorMessage)
             }
         } catch (error: any) {
-            const errorMessage = mode === DialogMode.EDIT ? 'Có lỗi xảy ra khi chỉnh sửa cộng tác viên' : 'Có lỗi xảy ra khi thêm cộng tác viên'
+            const errorMessage = mode === DialogMode.EDIT ? 'Có lỗi xảy ra khi chỉnh sửa lệ phí' : 'Có lỗi xảy ra khi thêm lệ phí'
 
             toast.error(error?.message || errorMessage)
         } finally {
@@ -118,7 +109,7 @@ const AddCollaboratorDialog = ({
     }
 
     const getDialogTitle = () => {
-        return mode === DialogMode.EDIT ? 'Chỉnh sửa cộng tác viên' : 'Thêm cộng tác viên'
+        return mode === DialogMode.EDIT ? 'Chỉnh sửa lệ phí' : 'Thêm lệ phí'
     }
 
     const getSubmitButtonText = () => {
@@ -165,46 +156,24 @@ return 'XÁC NHẬN'
             <DialogContent>
                 <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                     <Controller
-                        name="fullName"
+                        name="name"
                         control={control}
                         rules={{
-                            required: 'Vui lòng nhập họ tên',
-                            minLength: { value: 2, message: 'Họ tên phải có ít nhất 2 ký tự' }
+                            required: 'Vui lòng nhập tên lệ phí',
+                            minLength: { value: 2, message: 'Tên lệ phí phải có ít nhất 2 ký tự' }
                         }}
                         render={({ field }) => (
                             <TextField
                                 {...field}
                                 label={
                                     <span>
-                                        Họ tên <span style={{ color: 'red' }}>(*)</span>
+                                        Tên <span style={{ color: 'red' }}>*</span>
                                     </span>
                                 }
                                 fullWidth
                                 variant="outlined"
-                                error={!!errors.fullName}
-                                helperText={errors.fullName?.message}
-                            />
-                        )}
-                    />
-
-                    <Controller
-                        name="phone"
-                        control={control}
-                        rules={{
-                            pattern: {
-                                value: /^[0-9+\-\s()]*$/,
-                                message: 'Số điện thoại không hợp lệ'
-                            },
-                            minLength: { value: 10, message: 'Số điện thoại phải có ít nhất 10 số' }
-                        }}
-                        render={({ field }) => (
-                            <TextField
-                                {...field}
-                                label="Số điện thoại"
-                                fullWidth
-                                variant="outlined"
-                                error={!!errors.phone}
-                                helperText={errors.phone?.message}
+                                error={!!errors.name}
+                                helperText={errors.name?.message}
                             />
                         )}
                     />
@@ -285,4 +254,4 @@ return 'XÁC NHẬN'
     )
 }
 
-export default AddCollaboratorDialog
+export default AddFeeTypeDialog

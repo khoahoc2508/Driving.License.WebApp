@@ -13,12 +13,13 @@ import {
 } from '@mui/material'
 import Autocomplete from '@mui/material/Autocomplete'
 
+import { toast } from 'react-toastify'
+
 import type { AssigneeListType, GetAssigneesQueryParams, AssigneeDto, AssigneeType } from '@/types/assigneeTypes'
 import assigneeAPI from '@/libs/api/assigneeAPI'
 import DebouncedInput from '@/components/common/DebouncedInput'
 import Table from './Table'
 import CONFIG from '@/configs/config'
-import { toast } from 'react-toastify'
 import AddCollaboratorDialog, { DialogMode } from './AddCollaboratorDialog'
 
 const ManageCollaborator = () => {

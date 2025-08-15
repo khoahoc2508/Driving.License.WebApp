@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import { useForm, Controller } from 'react-hook-form'
 
 import {
@@ -87,6 +88,7 @@ const AddEmployeeDialog = ({
 
     const onSubmit = async (data: FormData) => {
         setIsSubmitting(true)
+
         try {
             const payload: UpsertAssigneeCommand = {
                 ...data,
@@ -97,15 +99,18 @@ const AddEmployeeDialog = ({
 
             if (response.data.success) {
                 const successMessage = mode === DialogMode.EDIT ? 'Chỉnh sửa nhân viên thành công' : 'Thêm nhân viên thành công'
+
                 toast.success(successMessage)
                 handleClose()
                 onSuccess()
             } else {
                 const errorMessage = mode === DialogMode.EDIT ? 'Có lỗi xảy ra khi chỉnh sửa nhân viên' : 'Có lỗi xảy ra khi thêm nhân viên'
+
                 toast.error(response.data.message || errorMessage)
             }
         } catch (error: any) {
             const errorMessage = mode === DialogMode.EDIT ? 'Có lỗi xảy ra khi chỉnh sửa nhân viên' : 'Có lỗi xảy ra khi thêm nhân viên'
+
             toast.error(error?.message || errorMessage)
         } finally {
             setIsSubmitting(false)
@@ -120,7 +125,9 @@ const AddEmployeeDialog = ({
         if (isSubmitting) {
             return mode === DialogMode.EDIT ? 'Đang chỉnh sửa...' : 'Đang thêm...'
         }
-        return 'XÁC NHẬN'
+
+        
+return 'XÁC NHẬN'
     }
 
     return (

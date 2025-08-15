@@ -58,10 +58,12 @@ declare module '@tanstack/table-core' {
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
     const itemRank = rankItem(row.getValue(columnId), value)
+
     addMeta({
         itemRank
     })
-    return itemRank.passed
+    
+return itemRank.passed
 }
 
 const Table = ({

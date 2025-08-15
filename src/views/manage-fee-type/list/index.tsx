@@ -15,16 +15,16 @@ import Autocomplete from '@mui/material/Autocomplete'
 
 import { toast } from 'react-toastify'
 
-import type { AssigneeListType, GetAssigneesQueryParams, AssigneeDto, AssigneeType } from '@/types/assigneeTypes'
-import assigneeAPI from '@/libs/api/assigneeAPI'
+import type { FeeTypeListType, GetFeeTypesQueryParams, FeeTypeDto } from '@/types/feeTypes'
+import feeTypeAPI from '@/libs/api/feeTypeAPI'
 import DebouncedInput from '@/components/common/DebouncedInput'
-import Table from './Table'
-import AddEmployeeDialog, { DialogMode } from './AddEmployeeDialog'
 import CONFIG from '@/configs/config'
+import Table from './Table'
+import AddFeeTypeDialog, { DialogMode } from './AddFeeTypeDialog'
 
-const ManageEmployee = () => {
+const ManageFeeType = () => {
 
-    const [dataTable, setDataTable] = useState<AssigneeListType>([])
+    const [dataTable, setDataTable] = useState<FeeTypeListType>([])
     const [search, setSearch] = useState('')
     const [statusValue, setStatusValue] = useState<{ label: string; value: boolean } | null>(null)
     const [appliedStatusValue, setAppliedStatusValue] = useState<{ label: string; value: boolean } | null>(null)
@@ -33,16 +33,15 @@ const ManageEmployee = () => {
     const [isLoading, setLoading] = useState<boolean>(true)
     const [totalItems, setTotalItems] = useState<number>(0)
     const [reloadDataTable, setReloadDataTable] = useState<boolean>(false)
-    const [params, setParams] = useState<GetAssigneesQueryParams>()
+    const [params, setParams] = useState<GetFeeTypesQueryParams>()
 
     // Modal states
     const [openAddDialog, setOpenAddDialog] = useState(false)
-    const [editData, setEditData] = useState<AssigneeDto | null>(null)
+    const [editData, setEditData] = useState<FeeTypeDto | null>(null)
     const [dialogMode, setDialogMode] = useState<DialogMode>(DialogMode.ADD)
 
     useEffect(() => {
         setParams({
-            assigneeType: CONFIG.AssigneeTypes.Employee as AssigneeType, // Employee
             search: '',
             pageNumber: 1,
             pageSize: 10
@@ -51,7 +50,7 @@ const ManageEmployee = () => {
 
     useEffect(() => {
         if (params) {
-            getAssignees(params)
+            getFeeTypes(params)
         }
     }, [params, reloadDataTable])
 
@@ -100,9 +99,9 @@ const ManageEmployee = () => {
         setDialogMode(DialogMode.ADD)
     }
 
-    const handleEditEmployee = (employee: AssigneeDto) => {
+    const handleEditFeeType = (feeType: FeeTypeDto) => {
         setDialogMode(DialogMode.EDIT)
-        setEditData(employee)
+        setEditData(feeType)
         setOpenAddDialog(true)
     }
 
@@ -110,10 +109,10 @@ const ManageEmployee = () => {
         setReloadDataTable(prev => !prev)
     }
 
-    const getAssignees = async (params: GetAssigneesQueryParams): Promise<void> => {
+    const getFeeTypes = async (params: GetFeeTypesQueryParams): Promise<void> => {
         try {
             setLoading(true)
-            const res = await assigneeAPI.GetAssignees(params)
+            const res = await feeTypeAPI.GetFeeTypes(params)
 
             if (res?.data?.data) {
                 const fetchedData = res?.data?.data || []
@@ -130,7 +129,7 @@ const ManageEmployee = () => {
 
     return (
         <Card>
-            <CardHeader title='Lọc nhân viên' />
+            <CardHeader title='Lọc lệ phí' />
             <CardContent>
                 <Grid container spacing={5} alignItems={'flex-end'}>
                     <Grid size={{ xs: 12, sm: 4, md: 3 }}>
@@ -138,7 +137,7 @@ const ManageEmployee = () => {
                             value={statusValue}
                             options={CONFIG.statusOptions}
                             onChange={handleStatusSelect}
-                            id='employee-status-autocomplete'
+                            id='fee-type-status-autocomplete'
                             getOptionLabel={option => option?.label || ''}
                             isOptionEqualToValue={(opt, val) => opt.value === val.value}
                             renderInput={params => <TextField {...params} label='Trạng thái' />}
@@ -162,7 +161,7 @@ const ManageEmployee = () => {
                         value={search}
                         className='w-full'
                         onDebounceChange={onChangeSearch}
-                        placeholder='Họ tên, số điện thoại'
+                        placeholder='Tên lệ phí'
                     />
                 </div>
                 <Button variant='contained' color='primary' className='w-full sm:w-auto' onClick={handleOpenAddDialog}>
@@ -179,10 +178,10 @@ const ManageEmployee = () => {
                 onPageSizeChange={(size) => setPageSize(size)}
                 setReloadDataTable={setReloadDataTable}
                 isLoading={isLoading}
-                onEditEmployee={handleEditEmployee}
+                onEditFeeType={handleEditFeeType}
             />
 
-            <AddEmployeeDialog
+            <AddFeeTypeDialog
                 open={openAddDialog}
                 onClose={handleCloseAddDialog}
                 onSuccess={handleAddSuccess}
@@ -193,4 +192,4 @@ const ManageEmployee = () => {
     )
 }
 
-export default ManageEmployee
+export default ManageFeeType

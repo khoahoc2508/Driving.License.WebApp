@@ -40,12 +40,12 @@ import ChevronRight from '@menu/svg/ChevronRight'
 // Style Imports
 import styles from '@core/styles/table.module.css'
 
-import assigneeAPI from '@/libs/api/assigneeAPI'
+import feeTypeAPI from '@/libs/api/feeTypeAPI'
 import SkeletonTableRowsLoader from '@/components/common/SkeletonTableRowsLoader'
-import type { AssigneeDto, AssigneeListType } from '@/types/assigneeTypes'
+import type { FeeTypeDto, FeeTypeListType } from '@/types/feeTypes'
 
 // Column Definitions
-const columnHelper = createColumnHelper<AssigneeDto>()
+const columnHelper = createColumnHelper<FeeTypeDto>()
 
 declare module '@tanstack/table-core' {
     interface FilterFns {
@@ -76,10 +76,10 @@ const Table = ({
     onPageSizeChange,
     setReloadDataTable,
     isLoading,
-    onEditCollaborator
+    onEditFeeType
 }: {
-    data?: AssigneeListType,
-    setData: (data: AssigneeListType) => void,
+    data?: FeeTypeListType,
+    setData: (data: FeeTypeListType) => void,
     pageNumber: number,
     pageSize: number,
     totalItems: number,
@@ -87,7 +87,7 @@ const Table = ({
     onPageSizeChange: (pageSize: number) => void,
     setReloadDataTable: React.Dispatch<React.SetStateAction<boolean>>,
     isLoading: boolean,
-    onEditCollaborator?: (collaborator: AssigneeDto) => void
+    onEditFeeType?: (feeType: FeeTypeDto) => void
 }) => {
     // States
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -105,42 +105,39 @@ const Table = ({
     }
 
     // Hooks
-    const columns = useMemo<ColumnDef<AssigneeDto, any>[]>(
+    const columns = useMemo<ColumnDef<FeeTypeDto, any>[]>(
         () => [
             columnHelper.accessor('id', {
                 id: 'stt',
                 header: 'STT',
                 cell: ({ row, table }) => (
-                    <Typography>
-                        {table.getRowModel().rows.indexOf(row) + 1}
-                    </Typography>
+                    <div style={{ textAlign: 'center' }}>
+                        <Typography>
+                            {table.getRowModel().rows.indexOf(row) + 1}
+                        </Typography>
+                    </div>
                 ),
             }),
-            columnHelper.accessor('fullName', {
-                header: 'HỌ TÊN',
+            columnHelper.accessor('name', {
+                header: 'TÊN',
                 cell: ({ row }) => (
                     <div className='flex items-center gap-3'>
                         <div className='flex flex-col'>
                             <Typography color='text.primary' className='font-medium'>
-                                {row.original?.fullName}
+                                {row.original?.name}
                             </Typography>
                         </div>
                     </div>
                 )
             }),
-            columnHelper.accessor('phone', {
-                header: 'SỐ ĐIỆN THOẠI',
-                cell: ({ row }) => (
-                    <div style={{ textAlign: 'right' }}>
-                        <Typography>{row.original?.phone}</Typography>
-                    </div>
-
-                )
-            }),
             columnHelper.accessor('active', {
                 header: 'TRẠNG THÁI',
                 cell: ({ row }) => {
-                    return (getStatusChip(row.original?.active))
+                    return (
+                        <div style={{ textAlign: 'center' }}>
+                            {getStatusChip(row.original?.active)}
+                        </div>
+                    )
                 }
             }),
             columnHelper.accessor('description', {
@@ -156,7 +153,7 @@ const Table = ({
                 header: 'THAO TÁC',
                 cell: ({ row }) => (
                     <div className="flex items-center justify-center">
-                        <IconButton onClick={() => onEditCollaborator?.(row.original)}>
+                        <IconButton onClick={() => onEditFeeType?.(row.original)}>
                             <i className="ri-edit-box-line text-textSecondary" />
                         </IconButton>
 
@@ -187,7 +184,7 @@ const Table = ({
         if (!itemIdToDelete) return;
 
         try {
-            const response = await assigneeAPI.DeleteAssigneeById(itemIdToDelete);
+            const response = await feeTypeAPI.DeleteFeeTypeById(itemIdToDelete);
 
             if (response.data.success) {
                 toast.success('Xóa thành công');
@@ -227,7 +224,7 @@ const Table = ({
 
     const renderTableRows = () => {
         if (isLoading) {
-            return <SkeletonTableRowsLoader rowsNum={10} columnsNum={6} />
+            return <SkeletonTableRowsLoader rowsNum={10} columnsNum={5} />
         }
 
         if (table.getFilteredRowModel().rows.length === 0) {
@@ -318,7 +315,7 @@ const Table = ({
                 <DialogTitle id="alert-dialog-title">{"Xác nhận xóa"}</DialogTitle>
                 <DialogContent>
                     <Typography id="alert-dialog-description">
-                        Bạn có chắc chắn muốn xóa cộng tác viên này không?
+                        Bạn có chắc chắn muốn xóa lệ phí này không?
                     </Typography>
                 </DialogContent>
                 <DialogActions>

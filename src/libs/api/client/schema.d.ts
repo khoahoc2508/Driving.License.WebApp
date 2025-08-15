@@ -11,7 +11,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["Assignees_GetAssigneeById"];
+        get: operations["Assignees_GetAssignees"];
         put: operations["Assignees_UpsertBrandSetting"];
         post?: never;
         delete?: never;
@@ -27,7 +27,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["Assignees_GetAssigneeById2"];
+        get: operations["Assignees_GetAssigneeById"];
         put?: never;
         post?: never;
         delete: operations["Assignees_DeleteAssigneeById"];
@@ -127,102 +127,6 @@ export interface paths {
         put?: never;
         post: operations["Contacts_CreateContact"];
         delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/exam/addresses": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["Exam_GetExamAddressesWithPaginationQuery"];
-        put?: never;
-        post: operations["Exam_CreateExamAddressCommand"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/exam/schedules": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["Exam_GetExamSchedulesWithPaginationQuery"];
-        put: operations["Exam_UpdateExamScheduleCommand"];
-        post: operations["Exam_CreateExamScheduleCommand"];
-        delete: operations["Exam_DeleteExamScheduleCommand"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/exam/schedules/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["Exam_GetExamScheduleByIdQuery"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/exam/schedules/results": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put: operations["Exam_UpdateResultsForExamScheduleCommand"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/exam/schedules/registrations/bulk": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put: operations["Exam_SetExamScheduleForBulkLicenseRegistrationsCommand"];
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/exam/schedules/registrations": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put: operations["Exam_SetExamScheduleForLicenseRegistrationCommand"];
-        post?: never;
-        delete: operations["Exam_RemoveExamScheduleForLicenseRegistrationCommand"];
         options?: never;
         head?: never;
         patch?: never;
@@ -356,6 +260,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/feetypes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["FeeTypes_GetFeeTypes"];
+        put: operations["FeeTypes_UpsertFeeType"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/feetypes/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["FeeTypes_GetFeeTypeById"];
+        put?: never;
+        post?: never;
+        delete: operations["FeeTypes_DeleteFeeTypeById"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/group-exams": {
         parameters: {
             query?: never;
@@ -364,86 +300,6 @@ export interface paths {
             cookie?: never;
         };
         get: operations["GroupExams_GetAllGroupExams"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/licenses/registrations": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["Licenses_GetLicenseRegistrationsWithPaginationQuery"];
-        put: operations["Licenses_UpdateLicenseRegistrationCommand"];
-        post: operations["Licenses_CreateLicenseRegistrationCommand"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/licenses/registrations/customer": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["Licenses_CreateLicenseRegistrationForCustomizeCommand"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/licenses/registrations/approve": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["Licenses_ApproveLicenseRegistrationCommand"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/licenses/registrations/{id}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["Licenses_GetLicenseRegistrationByIdQuery"];
-        put?: never;
-        post?: never;
-        delete: operations["Licenses_DeleteLicenseRegistrationCommand"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/licenses/registrations/paid": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["Licenses_GetLicenseRegistrationsHasPaidForAllWithPaginationQuery"];
         put?: never;
         post?: never;
         delete?: never;
@@ -564,6 +420,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/registration-records": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["RegistrationRecords_GetRegistrationRecordsWithPagination"];
+        put?: never;
+        post: operations["RegistrationRecords_CreateRegistrationRecord"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/registration-records/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["RegistrationRecords_UpdateRegistrationRecord"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/samples": {
         parameters: {
             query?: never;
@@ -572,70 +460,6 @@ export interface paths {
             cookie?: never;
         };
         get: operations["Samples_GetSecretResources"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/statistics/overview": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["Statistics_GetStatisticOverviewByTimeRange"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/statistics/exam-pass-fail-percentage": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["Statistics_GetExamPassFailPercentageByTimeRange"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/statistics/vehicle-type-percentage": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["Statistics_GetVehicleTypePercentageByTimeRange"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/statistics/vehicle-type-quantity": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["Statistics_GetVehicleTypeQuantityByTimeRange"];
         put?: never;
         post?: never;
         delete?: never;
@@ -803,136 +627,6 @@ export interface components {
             email?: string;
             message?: string;
         };
-        PaginatedListOfExamAddressVm: {
-            data?: components["schemas"]["ExamAddressVm"][];
-
-            /** Format: int32 */
-            pageNumber?: number;
-
-            /** Format: int32 */
-            totalPages?: number;
-
-            /** Format: int32 */
-            totalCount?: number;
-            hasPreviousPage?: boolean;
-            hasNextPage?: boolean;
-        };
-        ExamAddressVm: {
-            id?: string;
-            fullAddress?: string;
-        };
-        PaginatedListOfExamScheduleVm: {
-            data?: components["schemas"]["ExamScheduleVm"][];
-
-            /** Format: int32 */
-            pageNumber?: number;
-
-            /** Format: int32 */
-            totalPages?: number;
-
-            /** Format: int32 */
-            totalCount?: number;
-            hasPreviousPage?: boolean;
-            hasNextPage?: boolean;
-        };
-        ExamScheduleVm: {
-            id?: string;
-            name?: string;
-
-            /** Format: date-time */
-            dateTime?: string;
-            note?: string;
-            limitType?: components["schemas"]["LimitType"];
-
-            /** Format: int32 */
-            registrationLimit?: number | null;
-
-            /** Format: int32 */
-            registeredStudents?: number;
-
-            /** Format: int32 */
-            passedStudents?: number | null;
-            examAddress?: components["schemas"]["ExamAddressVm"];
-        };
-
-        /** @enum {integer} */
-        LimitType: 0 | 1;
-        BaseResponseOfExamScheduleById: components["schemas"]["BaseResponse"] & {
-            data?: components["schemas"]["ExamScheduleById"] | null;
-        };
-        ExamScheduleById: {
-            id?: string;
-            name?: string;
-
-            /** Format: date-time */
-            dateTime?: string;
-            note?: string;
-            limitType?: components["schemas"]["LimitType"];
-
-            /** Format: int32 */
-            registrationLimit?: number | null;
-
-            /** Format: int32 */
-            registeredStudents?: number;
-
-            /** Format: int32 */
-            passedStudents?: number | null;
-            licenseTypeCode?: string;
-            examAddress?: components["schemas"]["ExamAddressVm"];
-        };
-        BaseResponseOfString: components["schemas"]["BaseResponse"] & {
-            data?: string | null;
-        };
-        CreateExamScheduleCommand: {
-            name?: string;
-
-            /** Format: date-time */
-            dateTime?: string;
-            limitType?: components["schemas"]["LimitType"];
-            licenseTypeCode?: string;
-
-            /** Format: int32 */
-            registrationLimit?: number | null;
-            note?: string;
-            examAddressId?: string;
-        };
-        UpdateExamScheduleCommand: {
-            id?: string;
-            name?: string;
-
-            /** Format: date-time */
-            dateTime?: string;
-            licenseTypeCode?: string;
-            limitType?: components["schemas"]["LimitType"];
-
-            /** Format: int32 */
-            registrationLimit?: number | null;
-            note?: string;
-            examAddressId?: string;
-        };
-        DeleteExamScheduleCommand: {
-            id?: string;
-        };
-        UpdateResultsForExamScheduleCommand: {
-            id?: string;
-            results?: components["schemas"]["UpdateLicenseRegistrationResults"][];
-        };
-        UpdateLicenseRegistrationResults: {
-            licenseRegistrationId?: string;
-            passed?: boolean;
-        };
-        SetExamScheduleForBulkLicenseRegistrationsCommand: {
-            examScheduleId?: string;
-            licenseRegistrationIds?: string[];
-        };
-        SetExamScheduleForLicenseRegistrationCommand: {
-            examScheduleId?: string;
-            licenseRegistrationId?: string;
-        };
-        RemoveExamScheduleForLicenseRegistrationCommand: {
-            examScheduleId?: string;
-            licenseRegistrationId?: string;
-        };
         BaseResponseOfListOfExamDto: components["schemas"]["BaseResponse"] & {
             data?: components["schemas"]["ExamDto"][] | null;
         };
@@ -1068,6 +762,35 @@ export interface components {
             questionId?: string;
             selectedAnswerId?: string | null;
         };
+        PaginatedListOfFeeTypeDto: {
+            data?: components["schemas"]["FeeTypeDto"][];
+
+            /** Format: int32 */
+            pageNumber?: number;
+
+            /** Format: int32 */
+            totalPages?: number;
+
+            /** Format: int32 */
+            totalCount?: number;
+            hasPreviousPage?: boolean;
+            hasNextPage?: boolean;
+        };
+        FeeTypeDto: {
+            id?: string;
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        BaseResponseOfFeeTypeDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["FeeTypeDto"] | null;
+        };
+        UpsertFeeTypeCommand: {
+            id?: string | null;
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
         BaseResponseOfListOfGroupExamDto: components["schemas"]["BaseResponse"] & {
             data?: components["schemas"]["GroupExamDto"][] | null;
         };
@@ -1086,244 +809,6 @@ export interface components {
             children?: components["schemas"]["GroupExamDto"][];
         };
         GetAllGroupExamQuery: Record<string, never>;
-        PaginatedListOfLicenseRegistrationVm: {
-            data?: components["schemas"]["LicenseRegistrationVm"][];
-
-            /** Format: int32 */
-            pageNumber?: number;
-
-            /** Format: int32 */
-            totalPages?: number;
-
-            /** Format: int32 */
-            totalCount?: number;
-            hasPreviousPage?: boolean;
-            hasNextPage?: boolean;
-        };
-        LicenseRegistrationVm: {
-            id?: string;
-            vehicleType?: components["schemas"]["VehicleTypeDto"];
-            licenseType?: components["schemas"]["LicenseTypeDto"];
-            hasCarLicense?: boolean;
-            hasCompletedHealthCheck?: boolean;
-            hasApproved?: boolean;
-            person?: components["schemas"]["PersonVm"];
-            note?: string;
-            isPaid?: boolean;
-
-            /** Format: decimal */
-            amount?: number;
-            isRetake?: boolean;
-            examScheduleId?: string | null;
-            passed?: boolean | null;
-            status?: components["schemas"]["LicenseRegistrationStatus"];
-        };
-        VehicleTypeDto: {
-            code?: string;
-            name?: string;
-            description?: string;
-        };
-        PersonVm: {
-            id?: string;
-            avatarUrl?: string;
-            fullName?: string;
-
-            /** Format: date */
-            birthday?: string;
-            sex?: components["schemas"]["SexType"];
-            phoneNumber?: string;
-            email?: string;
-            address?: components["schemas"]["PersonAddressVm"];
-            citizenCardId?: string;
-            citizenCardFrontImgUrl?: string;
-            citizenCardBackImgUrl?: string;
-
-            /** Format: date */
-            citizenCardDateOfIssue?: string;
-            citizenCardPlaceOfIssue?: string;
-        };
-
-        /** @enum {integer} */
-        SexType: 0 | 1 | 2;
-        PersonAddressVm: {
-            provinceCode?: string;
-            districtCode?: string;
-            wardCode?: string;
-            addressDetail?: string;
-        };
-
-        /** @enum {integer} */
-        LicenseRegistrationStatus: 0 | 1 | 2 | 3;
-        CreateLicenseRegistrationCommand: {
-            vehicleTypeCode?: string;
-            licenseTypeCode?: string;
-            hasCarLicense?: boolean;
-            hasCompletedHealthCheck?: boolean;
-            hasApproved?: boolean;
-            ownerId?: string | null;
-            person?: components["schemas"]["PersonCommand"];
-            note?: string;
-            isPaid?: boolean;
-
-            /** Format: decimal */
-            amount?: number;
-        };
-        PersonCommand: {
-            avatarUrl?: string;
-            fullName?: string;
-
-            /** Format: date */
-            birthday?: string;
-            sex?: components["schemas"]["SexType"];
-            phoneNumber?: string;
-            email?: string;
-            address?: components["schemas"]["AddressCommand"];
-            citizenCardId?: string;
-            citizenCardFrontImgUrl?: string;
-            citizenCardBackImgUrl?: string;
-
-            /** Format: date */
-            citizenCardDateOfIssue?: string;
-            citizenCardPlaceOfIssue?: string;
-        };
-        AddressCommand: {
-            provinceCode?: string;
-            districtCode?: string;
-            wardCode?: string;
-            addressDetail?: string;
-        };
-        ApproveLicenseRegistrationCommand: {
-            id?: string;
-        };
-        UpdateLicenseRegistrationCommand: {
-            id?: string;
-            vehicleTypeCode?: string;
-            licenseTypeCode?: string;
-            hasCarLicense?: boolean;
-            hasCompletedHealthCheck?: boolean;
-            hasApproved?: boolean;
-            person?: components["schemas"]["PersonCommand2"];
-            note?: string;
-            isPaid?: boolean;
-
-            /** Format: decimal */
-            amount?: number;
-        };
-        PersonCommand2: {
-            avatarUrl?: string;
-            fullName?: string;
-
-            /** Format: date */
-            birthday?: string;
-            sex?: components["schemas"]["SexType"];
-            phoneNumber?: string;
-            email?: string;
-            address?: components["schemas"]["AddressCommand2"];
-            citizenCardId?: string;
-
-            /** Format: date */
-            citizenCardDateOfIssue?: string;
-            citizenCardPlaceOfIssue?: string;
-            citizenCardFrontImgUrl?: string;
-            citizenCardBackImgUrl?: string;
-        };
-        AddressCommand2: {
-            provinceCode?: string;
-            districtCode?: string;
-            wardCode?: string;
-            addressDetail?: string;
-        };
-        BaseResponseOfLicenseRegistrationById: components["schemas"]["BaseResponse"] & {
-            data?: components["schemas"]["LicenseRegistrationById"] | null;
-        };
-        LicenseRegistrationById: {
-            id?: string;
-            vehicleType?: components["schemas"]["VehicleTypeDto"];
-            licenseType?: components["schemas"]["LicenseTypeDto"];
-            hasCarLicense?: boolean;
-            hasCompletedHealthCheck?: boolean;
-            hasApproved?: boolean;
-            person?: components["schemas"]["PersonById"];
-            note?: string;
-            isPaid?: boolean;
-
-            /** Format: decimal */
-            amount?: number;
-            isRetake?: boolean;
-            examScheduleId?: string | null;
-            passed?: boolean | null;
-            status?: components["schemas"]["LicenseRegistrationStatus"];
-        };
-        PersonById: {
-            id?: string;
-            avatarUrl?: string;
-            fullName?: string;
-
-            /** Format: date */
-            birthday?: string;
-            sex?: components["schemas"]["SexType"];
-            phoneNumber?: string;
-            email?: string;
-            address?: components["schemas"]["PersonAddressById"];
-            citizenCardId?: string;
-
-            /** Format: date */
-            citizenCardDateOfIssue?: string;
-            citizenCardPlaceOfIssue?: string;
-            citizenCardFrontImgUrl?: string;
-            citizenCardBackImgUrl?: string;
-        };
-        PersonAddressById: {
-            provinceCode?: string;
-            districtCode?: string;
-            wardCode?: string;
-            addressDetail?: string;
-        };
-        PaginatedListOfLicenseRegistrationHasPaidForAllVm: {
-            data?: components["schemas"]["LicenseRegistrationHasPaidForAllVm"][];
-
-            /** Format: int32 */
-            pageNumber?: number;
-
-            /** Format: int32 */
-            totalPages?: number;
-
-            /** Format: int32 */
-            totalCount?: number;
-            hasPreviousPage?: boolean;
-            hasNextPage?: boolean;
-        };
-        LicenseRegistrationHasPaidForAllVm: {
-            id?: string;
-            licenseType?: components["schemas"]["LicenseTypeDto"];
-            person?: components["schemas"]["PersonHasPaidForAllVm"];
-            note?: string;
-            examRegistration?: components["schemas"]["ExamRegistrationHasPaidForAllVm"];
-        };
-        PersonHasPaidForAllVm: {
-            id?: string;
-            avatarUrl?: string;
-            fullName?: string;
-
-            /** Format: date */
-            birthday?: string;
-            sex?: components["schemas"]["SexType"];
-            phoneNumber?: string;
-            email?: string;
-            citizenCardId?: string;
-        };
-        ExamRegistrationHasPaidForAllVm: {
-            id?: string;
-            isRetake?: boolean;
-            examSchedule?: components["schemas"]["ExamScheduleHasPaidForAllVm"] | null;
-        };
-        ExamScheduleHasPaidForAllVm: {
-            id?: string;
-            name?: string;
-
-            /** Format: date-time */
-            dateTime?: string;
-        };
         BaseResponseOfListOfLicenseTypeDto: components["schemas"]["BaseResponse"] & {
             data?: components["schemas"]["LicenseTypeDto"][] | null;
         };
@@ -1342,12 +827,15 @@ export interface components {
 
             /** Format: date */
             birthday?: string;
-            sex?: components["schemas"]["SexType"];
+            gender?: components["schemas"]["GenderType"];
             placeOfOrigin?: components["schemas"]["Address"];
             placeOfResidence?: components["schemas"]["Address"];
             nationality?: string;
             imageUrl?: string | null;
         };
+
+        /** @enum {integer} */
+        GenderType: 0 | 1 | 2;
         Address: {
             provinceCode?: string;
             districtCode?: string;
@@ -1429,129 +917,114 @@ export interface components {
             isCorrect?: boolean;
             content?: string;
         };
-        BaseResponseOfGetStatisticOverviewByTimeRangeResponse: components["schemas"]["BaseResponse"] & {
-            data?: components["schemas"]["GetStatisticOverviewByTimeRangeResponse"] | null;
+        BaseResponseOfString: components["schemas"]["BaseResponse"] & {
+            data?: string | null;
         };
-        GetStatisticOverviewByTimeRangeResponse: {
+        CreateRegistrationRecordCommand: {
+            licenseTypeCode?: string;
+            avatarUrl?: string;
+            fullname?: string;
 
-            /** Format: int32 */
-            totalLicenseRegistration?: number;
-
-            /** Format: float */
-            increasePercentageLicenseRegistration?: number;
-
-            /** Format: int32 */
-            totalMotorbike?: number;
-
-            /** Format: float */
-            increasePercentageMotorbike?: number;
-
-            /** Format: int32 */
-            totalCar?: number;
-
-            /** Format: float */
-            increasePercentageCar?: number;
-
-            /** Format: int64 */
-            totalRevenue?: number;
-
-            /** Format: float */
-            increasePercentageRevenue?: number;
-
-            /** Format: float */
-            percentagePaid?: number;
-
-            /** Format: float */
-            percentageUnpaid?: number;
-        };
-        BaseResponseOfGetExamPassFailPercentageByTimeRangeResponse: components["schemas"]["BaseResponse"] & {
-            data?: components["schemas"]["GetExamPassFailPercentageByTimeRangeResponse"] | null;
-        };
-        GetExamPassFailPercentageByTimeRangeResponse: {
-            dataFollowExamSchedule?: components["schemas"]["DataFollowExamScheduleResponse"][] | null;
-            dataFollowMonth?: components["schemas"]["DataFollowMonthResponse"][] | null;
-        };
-        DataFollowExamScheduleResponse: {
-            name?: string;
+            /** Format: date */
+            birthday?: string;
+            gender?: components["schemas"]["GenderType"];
+            phone?: string;
+            email?: string | null;
+            address?: string | null;
+            citizenIdNumber?: string;
+            citizenIdFrontImageUrl?: string;
+            citizenIdBackImageUrl?: string;
 
             /** Format: date-time */
-            dateTime?: string;
+            receivedDate?: string;
 
-            /** Format: float */
-            passPercentage?: number;
-
-            /** Format: float */
-            failPercentage?: number;
+            /** Format: date-time */
+            healthCheckDate?: string | null;
+            staffAssigneeId?: string | null;
+            collaboratorId?: string | null;
+            note?: string | null;
         };
-        DataFollowMonthResponse: {
-            monthOfYear?: components["schemas"]["MonthOfYearType"];
+        UpdateRegistrationRecordCommand: {
+            id?: string;
+            licenseTypeCode?: string;
+            avatarUrl?: string;
+            fullname?: string;
 
-            /** Format: float */
-            passPercentage?: number;
+            /** Format: date */
+            birthday?: string;
+            gender?: components["schemas"]["GenderType"];
+            phone?: string;
+            email?: string | null;
+            address?: string | null;
+            citizenIdNumber?: string;
+            citizenIdFrontImageUrl?: string;
+            citizenIdBackImageUrl?: string;
 
-            /** Format: float */
-            failPercentage?: number;
+            /** Format: date-time */
+            receivedDate?: string;
+
+            /** Format: date-time */
+            healthCheckDate?: string | null;
+            staffAssigneeId?: string | null;
+            collaboratorId?: string | null;
+            note?: string | null;
+        };
+        PaginatedListOfGetRegistrationRecordsDto: {
+            data?: components["schemas"]["GetRegistrationRecordsDto"][];
+
+            /** Format: int32 */
+            pageNumber?: number;
+
+            /** Format: int32 */
+            totalPages?: number;
+
+            /** Format: int32 */
+            totalCount?: number;
+            hasPreviousPage?: boolean;
+            hasNextPage?: boolean;
+        };
+        GetRegistrationRecordsDto: {
+            id?: string;
+            licenseType?: components["schemas"]["GetRegistrationRecordsLicenseTypeDto"];
+            fullname?: string;
+            phone?: string;
+
+            /** Format: date */
+            birthday?: string;
+            citizenIdNumber?: string;
+
+            /** Format: date-time */
+            receivedDate?: string;
+
+            /** Format: date-time */
+            healthCheckDate?: string | null;
+            payment?: components["schemas"]["GetRegistrationRecordsPaymentDto"];
+            status?: components["schemas"]["RegistrationRecordStatus"];
+            staffAssigneeName?: string | null;
+            collaboratorName?: string | null;
+            note?: string | null;
+        };
+        GetRegistrationRecordsLicenseTypeDto: {
+            code?: string;
+            name?: string;
+        };
+        GetRegistrationRecordsPaymentDto: {
+
+            /** Format: decimal */
+            totalAmount?: number;
+
+            /** Format: decimal */
+            paidAmount?: number;
+
+            /** Format: decimal */
+            remainingAmount?: number;
         };
 
         /** @enum {integer} */
-        MonthOfYearType: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
-        BaseResponseOfGetVehicleTypePercentageByTimeRangeResponse: components["schemas"]["BaseResponse"] & {
-            data?: components["schemas"]["GetVehicleTypePercentageByTimeRangeResponse"] | null;
-        };
-        GetVehicleTypePercentageByTimeRangeResponse: {
-            dataFollowExamSchedule?: components["schemas"]["DataFollowExamScheduleResponse2"][] | null;
-            dataFollowMonth?: components["schemas"]["DataFollowMonthResponse2"][] | null;
-        };
-        DataFollowExamScheduleResponse2: {
-            name?: string;
+        RegistrationRecordStatus: 0 | 1 | 2;
 
-            /** Format: date-time */
-            dateTime?: string;
-
-            /** Format: float */
-            motorbikePercentage?: number;
-
-            /** Format: float */
-            carPercentage?: number;
-        };
-        DataFollowMonthResponse2: {
-            monthOfYear?: components["schemas"]["MonthOfYearType"];
-
-            /** Format: float */
-            motorbikePercentage?: number;
-
-            /** Format: float */
-            carPercentage?: number;
-        };
-        BaseResponseOfGetVehicleTypeQuantityByTimeRangeResponse: components["schemas"]["BaseResponse"] & {
-            data?: components["schemas"]["GetVehicleTypeQuantityByTimeRangeResponse"] | null;
-        };
-        GetVehicleTypeQuantityByTimeRangeResponse: {
-            dataFollowDay?: components["schemas"]["DataFollowDayResponse"][] | null;
-            dataFollowMonth?: components["schemas"]["DataFollowMonthResponse3"][] | null;
-        };
-        DataFollowDayResponse: {
-
-            /** Format: date */
-            date?: string;
-
-            /** Format: int32 */
-            motorbikeQuantity?: number;
-
-            /** Format: int32 */
-            carQuantity?: number;
-        };
-        DataFollowMonthResponse3: {
-
-            /** Format: int32 */
-            month?: number;
-
-            /** Format: int32 */
-            motorbikeQuantity?: number;
-
-            /** Format: int32 */
-            carQuantity?: number;
-        };
+        /** @enum {integer} */
+        PaymentStatus: 0 | 1 | 2;
         BaseResponseOfUploadFileResult: components["schemas"]["BaseResponse"] & {
             data?: components["schemas"]["UploadFileResult"] | null;
         };
@@ -1572,6 +1045,11 @@ export interface components {
         BaseResponseOfListOfVehicleTypeDto: components["schemas"]["BaseResponse"] & {
             data?: components["schemas"]["VehicleTypeDto"][] | null;
         };
+        VehicleTypeDto: {
+            code?: string;
+            name?: string;
+            description?: string;
+        };
         GetAllVehicleTypesQuery: Record<string, never>;
     };
     responses: never;
@@ -1582,7 +1060,7 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    Assignees_GetAssigneeById: {
+    Assignees_GetAssignees: {
         parameters: {
             query?: {
                 Search?: string | null;
@@ -1630,7 +1108,7 @@ export interface operations {
             };
         };
     };
-    Assignees_GetAssigneeById2: {
+    Assignees_GetAssigneeById: {
         parameters: {
             query?: never;
             header?: never;
@@ -1815,260 +1293,6 @@ export interface operations {
             };
         };
     };
-    Exam_GetExamAddressesWithPaginationQuery: {
-        parameters: {
-            query?: {
-                PageNumber?: number;
-                PageSize?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PaginatedListOfExamAddressVm"];
-                };
-            };
-        };
-    };
-    Exam_CreateExamAddressCommand: {
-        parameters: {
-            query?: {
-                FullAddress?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": string;
-                };
-            };
-        };
-    };
-    Exam_GetExamSchedulesWithPaginationQuery: {
-        parameters: {
-            query?: {
-                PageNumber?: number;
-                PageSize?: number;
-                Search?: string | null;
-                HasAvailableSlots?: boolean | null;
-                ExamAddressIds?: string[];
-                FromDate?: string;
-                ToDate?: string;
-                LimitTypes?: components["schemas"]["LimitType"][];
-                LicenseTypeCodes?: string[];
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PaginatedListOfExamScheduleVm"];
-                };
-            };
-        };
-    };
-    Exam_UpdateExamScheduleCommand: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateExamScheduleCommand"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BaseResponseOfString"];
-                };
-            };
-        };
-    };
-    Exam_CreateExamScheduleCommand: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateExamScheduleCommand"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BaseResponseOfString"];
-                };
-            };
-        };
-    };
-    Exam_DeleteExamScheduleCommand: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["DeleteExamScheduleCommand"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/octet-stream": string;
-                };
-            };
-        };
-    };
-    Exam_GetExamScheduleByIdQuery: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BaseResponseOfExamScheduleById"];
-                };
-            };
-        };
-    };
-    Exam_UpdateResultsForExamScheduleCommand: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateResultsForExamScheduleCommand"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BaseResponseOfString"];
-                };
-            };
-        };
-    };
-    Exam_SetExamScheduleForBulkLicenseRegistrationsCommand: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SetExamScheduleForBulkLicenseRegistrationsCommand"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BaseResponseOfString"];
-                };
-            };
-        };
-    };
-    Exam_SetExamScheduleForLicenseRegistrationCommand: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["SetExamScheduleForLicenseRegistrationCommand"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BaseResponseOfString"];
-                };
-            };
-        };
-    };
-    Exam_RemoveExamScheduleForLicenseRegistrationCommand: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["RemoveExamScheduleForLicenseRegistrationCommand"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BaseResponseOfString"];
-                };
-            };
-        };
-    };
     Exams_GetExamsByGroupExamId: {
         parameters: {
             query?: never;
@@ -2249,6 +1473,95 @@ export interface operations {
             };
         };
     };
+    FeeTypes_GetFeeTypes: {
+        parameters: {
+            query?: {
+                Search?: string | null;
+                PageNumber?: number;
+                PageSize?: number;
+                Active?: boolean | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedListOfFeeTypeDto"];
+                };
+            };
+        };
+    };
+    FeeTypes_UpsertFeeType: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpsertFeeTypeCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    FeeTypes_GetFeeTypeById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfFeeTypeDto"];
+                };
+            };
+        };
+    };
+    FeeTypes_DeleteFeeTypeById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
     GroupExams_GetAllGroupExams: {
         parameters: {
             query?: {
@@ -2266,193 +1579,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BaseResponseOfListOfGroupExamDto"];
-                };
-            };
-        };
-    };
-    Licenses_GetLicenseRegistrationsWithPaginationQuery: {
-        parameters: {
-            query?: {
-                PageNumber?: number;
-                PageSize?: number;
-                Search?: string | null;
-                ExamScheduleId?: string | null;
-                IsPaid?: boolean | null;
-                IsExamScheduled?: boolean | null;
-                HasCompletedHealthCheck?: boolean[] | null;
-                HasApproved?: boolean[] | null;
-                LicenseTypeCodes?: string[];
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PaginatedListOfLicenseRegistrationVm"];
-                };
-            };
-        };
-    };
-    Licenses_UpdateLicenseRegistrationCommand: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateLicenseRegistrationCommand"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BaseResponseOfString"];
-                };
-            };
-        };
-    };
-    Licenses_CreateLicenseRegistrationCommand: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateLicenseRegistrationCommand"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BaseResponseOfString"];
-                };
-            };
-        };
-    };
-    Licenses_CreateLicenseRegistrationForCustomizeCommand: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateLicenseRegistrationCommand"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BaseResponseOfString"];
-                };
-            };
-        };
-    };
-    Licenses_ApproveLicenseRegistrationCommand: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ApproveLicenseRegistrationCommand"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
-                };
-            };
-        };
-    };
-    Licenses_GetLicenseRegistrationByIdQuery: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BaseResponseOfLicenseRegistrationById"];
-                };
-            };
-        };
-    };
-    Licenses_DeleteLicenseRegistrationCommand: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BaseResponseOfString"];
-                };
-            };
-        };
-    };
-    Licenses_GetLicenseRegistrationsHasPaidForAllWithPaginationQuery: {
-        parameters: {
-            query?: {
-                PageNumber?: number;
-                PageSize?: number;
-                Search?: string;
-                ExamScheduleId?: string | null;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PaginatedListOfLicenseRegistrationHasPaidForAllVm"];
                 };
             };
         };
@@ -2621,6 +1747,82 @@ export interface operations {
             };
         };
     };
+    RegistrationRecords_GetRegistrationRecordsWithPagination: {
+        parameters: {
+            query?: {
+                LicenseTypeCode?: string | null;
+                PaymentStatus?: components["schemas"]["PaymentStatus"] | null;
+                Status?: components["schemas"]["RegistrationRecordStatus"] | null;
+                StaffAssigneeId?: string | null;
+                CollaboratorId?: string | null;
+                Search?: string | null;
+                PageNumber?: number;
+                PageSize?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedListOfGetRegistrationRecordsDto"];
+                };
+            };
+        };
+    };
+    RegistrationRecords_CreateRegistrationRecord: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateRegistrationRecordCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfString"];
+                };
+            };
+        };
+    };
+    RegistrationRecords_UpdateRegistrationRecord: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateRegistrationRecordCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfString"];
+                };
+            };
+        };
+    };
     Samples_GetSecretResources: {
         parameters: {
             query?: never;
@@ -2636,94 +1838,6 @@ export interface operations {
                 };
                 content: {
                     "application/octet-stream": string;
-                };
-            };
-        };
-    };
-    Statistics_GetStatisticOverviewByTimeRange: {
-        parameters: {
-            query?: {
-                StartDate?: string | null;
-                EndDate?: string | null;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BaseResponseOfGetStatisticOverviewByTimeRangeResponse"];
-                };
-            };
-        };
-    };
-    Statistics_GetExamPassFailPercentageByTimeRange: {
-        parameters: {
-            query?: {
-                StartDate?: string;
-                EndDate?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BaseResponseOfGetExamPassFailPercentageByTimeRangeResponse"];
-                };
-            };
-        };
-    };
-    Statistics_GetVehicleTypePercentageByTimeRange: {
-        parameters: {
-            query?: {
-                StartDate?: string;
-                EndDate?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BaseResponseOfGetVehicleTypePercentageByTimeRangeResponse"];
-                };
-            };
-        };
-    };
-    Statistics_GetVehicleTypeQuantityByTimeRange: {
-        parameters: {
-            query?: {
-                StartDate?: string | null;
-                EndDate?: string | null;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BaseResponseOfGetVehicleTypeQuantityByTimeRangeResponse"];
                 };
             };
         };

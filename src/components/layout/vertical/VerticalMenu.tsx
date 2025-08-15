@@ -100,6 +100,10 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
         <SubMenu label={"Quản lý nhân viên"} icon={<i className='ri-team-line' />}>
           <MenuItem href={`${CONFIG.Routers.ManageEmployee}/list`}>{"Danh sách nhân viên"}</MenuItem>
         </SubMenu>
+        {/* Quản lý loại phí */}
+        <SubMenu label={"Quản lý thanh toán"} icon={<i className='ri-money-cny-circle-line' />}>
+          <MenuItem href={`${CONFIG.Routers.ManageFeeType}/list`}>{"Danh sách lệ phí"}</MenuItem>
+        </SubMenu>
       </Menu>
       {/* <Menu
         popoutMenuOffset={{ mainAxis: 10 }}
