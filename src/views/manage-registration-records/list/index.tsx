@@ -9,7 +9,14 @@ import {
     CardContent,
     CardHeader,
     Divider,
-    TextField
+    TextField,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    Checkbox,
+    FormControlLabel,
+    Box
 } from '@mui/material'
 import Autocomplete from '@mui/material/Autocomplete'
 
@@ -23,6 +30,7 @@ import registrationRecordsAPI from '@/libs/api/registrationRecordsAPI'
 import licenseTypeAPI from '@/libs/api/licenseTypeApi'
 import assigneeAPI from '@/libs/api/assigneeAPI'
 import { AssigneeType } from '@/types/assigneeTypes'
+import type { VisibilityState } from '@tanstack/react-table'
 
 const ManageRegistrationRecords = () => {
 
@@ -57,6 +65,11 @@ const ManageRegistrationRecords = () => {
     const [collaboratorPage, setCollaboratorPage] = useState(1)
     const [hasMoreStaff, setHasMoreStaff] = useState(true)
     const [hasMoreCollaborator, setHasMoreCollaborator] = useState(true)
+
+    // Column visibility state
+    const [openColumnVisibilityDialog, setOpenColumnVisibilityDialog] = useState(false);
+    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+    const [columnVisibilitySearch, setColumnVisibilitySearch] = useState('');
 
     useEffect(() => {
         setParams({
@@ -244,110 +257,229 @@ const ManageRegistrationRecords = () => {
         }
     }
 
-    return (
-        <Card>
-            <CardHeader title='Lọc hồ sơ' />
-            <CardContent>
-                <Grid container spacing={5} alignItems={'flex-end'}>
-                    <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                        <Autocomplete
-                            multiple
-                            value={licenseTypeValue}
-                            options={licenseTypeOptions}
-                            onChange={handleLicenseTypeSelect}
-                            id='license-type-autocomplete'
-                            getOptionLabel={option => option?.label || ''}
-                            isOptionEqualToValue={(opt, val) => opt.value === val.value}
-                            renderInput={params => <TextField {...params} label='Hạng' />}
-                        />
-                    </Grid>
-                    <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                        <Autocomplete
-                            multiple
-                            value={paymentStatusValue}
-                            options={CONFIG.paymentStatusOptions || []}
-                            onChange={handlePaymentStatusSelect}
-                            id='payment-status-autocomplete'
-                            getOptionLabel={option => option?.label || ''}
-                            isOptionEqualToValue={(opt, val) => opt.value === val.value}
-                            renderInput={params => <TextField {...params} label='Thanh toán' />}
-                        />
-                    </Grid>
-                    <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                        <Autocomplete
-                            multiple
-                            value={registrationRecordStatusValue}
-                            options={CONFIG.registrationStatusOptions || []}
-                            onChange={handleRegistrationRecordStatusSelect}
-                            id='status-autocomplete'
-                            getOptionLabel={option => option?.label || ''}
-                            isOptionEqualToValue={(opt, val) => opt.value === val.value}
-                            renderInput={params => <TextField {...params} label='Trạng thái' />}
-                        />
-                    </Grid>
-                    <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                        <Autocomplete
-                            multiple
-                            value={staffAssigneeValue}
-                            options={staffAssigneeOptions}
-                            onChange={handleStaffAssigneeSelect}
-                            onScroll={handleStaffAssigneeScroll}
-                            id='staff-assignee-autocomplete'
-                            getOptionLabel={option => option?.label || ''}
-                            isOptionEqualToValue={(opt, val) => opt.value === val.value}
-                            renderInput={params => <TextField {...params} label='Người phụ trách' />}
-                        />
-                    </Grid>
-                </Grid>
-                <Grid container spacing={5} alignItems={'flex-end'} sx={{ mt: 2 }}>
-                    <Grid size={{ xs: 12, sm: 6, md: 3 }}>
-                        <Autocomplete
-                            multiple
-                            value={collaboratorValue}
-                            options={collaboratorOptions}
-                            onChange={handleCollaboratorSelect}
-                            onScroll={handleCollaboratorScroll}
-                            id='collaborator-autocomplete'
-                            getOptionLabel={option => option?.label || ''}
-                            isOptionEqualToValue={(opt, val) => opt.value === val.value}
-                            renderInput={params => <TextField {...params} label='Cộng tác viên' />}
-                        />
-                    </Grid>
-                </Grid>
-            </CardContent>
-            <CardContent>
-                <Grid size={{ xs: 12, sm: 8, md: 9 }} className='flex items-center gap-3'>
-                    <Button variant='contained' color='primary' className='min-w-[170px]' onClick={applyFilters}>LỌC</Button>
-                    <Button variant='outlined' color='error' className='min-w-[170px]' onClick={clearAllFilters}>XÓA TẤT CẢ</Button>
-                </Grid>
-            </CardContent>
-            <Divider />
+    // Column visibility handlers
+    const handleOpenColumnVisibilityDialog = () => {
+        setOpenColumnVisibilityDialog(true);
+    };
 
-            <div className='flex justify-between p-5 gap-4 flex-col sm:flex-row sm:items-center'>
-                <div className='flex items-center gap-3 w-full sm:w-auto'>
-                    <DebouncedInput
-                        value={search}
-                        className='w-full'
-                        onDebounceChange={onChangeSearch}
-                        placeholder='Q. Họ tên, số điện thoại'
-                    />
+    const handleCloseColumnVisibilityDialog = () => {
+        setOpenColumnVisibilityDialog(false);
+    };
+
+    const handleSaveColumnVisibility = () => {
+        setOpenColumnVisibilityDialog(false);
+        toast.success('Đã lưu cài đặt hiển thị cột');
+    };
+
+    const handleColumnVisibilityChange = (updater: VisibilityState | ((old: VisibilityState) => VisibilityState)) => {
+        if (typeof updater === 'function') {
+            setColumnVisibility(updater);
+        } else {
+            setColumnVisibility(updater);
+        }
+    };
+
+    return (
+        <>
+            <Card>
+                <CardHeader title='Lọc hồ sơ' />
+                <CardContent>
+                    <Grid container spacing={5} alignItems={'flex-end'}>
+                        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+                            <Autocomplete
+                                multiple
+                                value={licenseTypeValue}
+                                options={licenseTypeOptions}
+                                onChange={handleLicenseTypeSelect}
+                                id='license-type-autocomplete'
+                                getOptionLabel={option => option?.label || ''}
+                                isOptionEqualToValue={(opt, val) => opt.value === val.value}
+                                renderInput={params => <TextField {...params} label='Hạng' />}
+                            />
+                        </Grid>
+                        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+                            <Autocomplete
+                                multiple
+                                value={paymentStatusValue}
+                                options={CONFIG.paymentStatusOptions || []}
+                                onChange={handlePaymentStatusSelect}
+                                id='payment-status-autocomplete'
+                                getOptionLabel={option => option?.label || ''}
+                                isOptionEqualToValue={(opt, val) => opt.value === val.value}
+                                renderInput={params => <TextField {...params} label='Thanh toán' />}
+                            />
+                        </Grid>
+                        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+                            <Autocomplete
+                                multiple
+                                value={registrationRecordStatusValue}
+                                options={CONFIG.registrationStatusOptions || []}
+                                onChange={handleRegistrationRecordStatusSelect}
+                                id='status-autocomplete'
+                                getOptionLabel={option => option?.label || ''}
+                                isOptionEqualToValue={(opt, val) => opt.value === val.value}
+                                renderInput={params => <TextField {...params} label='Trạng thái' />}
+                            />
+                        </Grid>
+                        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+                            <Autocomplete
+                                multiple
+                                value={staffAssigneeValue}
+                                options={staffAssigneeOptions}
+                                onChange={handleStaffAssigneeSelect}
+                                onScroll={handleStaffAssigneeScroll}
+                                id='staff-assignee-autocomplete'
+                                getOptionLabel={option => option?.label || ''}
+                                isOptionEqualToValue={(opt, val) => opt.value === val.value}
+                                renderInput={params => <TextField {...params} label='Người phụ trách' />}
+                            />
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={5} alignItems={'flex-end'} sx={{ mt: 2 }}>
+                        <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+                            <Autocomplete
+                                multiple
+                                value={collaboratorValue}
+                                options={collaboratorOptions}
+                                onChange={handleCollaboratorSelect}
+                                onScroll={handleCollaboratorScroll}
+                                id='collaborator-autocomplete'
+                                getOptionLabel={option => option?.label || ''}
+                                isOptionEqualToValue={(opt, val) => opt.value === val.value}
+                                renderInput={params => <TextField {...params} label='Cộng tác viên' />}
+                            />
+                        </Grid>
+                    </Grid>
+                </CardContent>
+                <CardContent>
+                    <Grid size={{ xs: 12, sm: 8, md: 9 }} className='flex items-center gap-3'>
+                        <Button variant='contained' color='primary' className='min-w-[170px]' onClick={applyFilters}>LỌC</Button>
+                        <Button variant='outlined' color='error' className='min-w-[170px]' onClick={clearAllFilters}>XÓA TẤT CẢ</Button>
+                    </Grid>
+                </CardContent>
+                <Divider />
+
+                <div className='flex justify-between p-5 gap-4 flex-col sm:flex-row sm:items-center'>
+                    <div className='flex items-center gap-3 w-full sm:w-auto'>
+                        <Button
+                            variant="outlined"
+                            size="small"
+                            onClick={handleOpenColumnVisibilityDialog}
+                            startIcon={<i className="ri-settings-3-line" />}
+                        >
+                            Cột hiển thị
+                        </Button>
+                        <DebouncedInput
+                            value={search}
+                            className='w-full'
+                            onDebounceChange={onChangeSearch}
+                            placeholder='Q. Họ tên, số điện thoại'
+                        />
+                    </div>
+                    <Button variant='contained' color='primary' className='w-full sm:w-auto'>
+                        THÊM MỚI
+                    </Button>
                 </div>
-                <Button variant='contained' color='primary' className='w-full sm:w-auto'>
-                    THÊM MỚI
-                </Button>
-            </div>
-            <Table
-                data={dataTable}
-                setData={(data: GetRegistrationRecordsDto[] | undefined) => setDataTable(data || [])}
-                pageNumber={pageNumber}
-                pageSize={pageSize}
-                totalItems={totalItems}
-                onPageChange={(page: number) => setPageNumber(page)}
-                onPageSizeChange={(size: number) => setPageSize(size)}
-                setReloadDataTable={setReloadDataTable}
-                isLoading={isLoading}
-            />
-        </Card>
+                <Table
+                    data={dataTable}
+                    setData={(data: GetRegistrationRecordsDto[] | undefined) => setDataTable(data || [])}
+                    pageNumber={pageNumber}
+                    pageSize={pageSize}
+                    totalItems={totalItems}
+                    onPageChange={(page: number) => setPageNumber(page)}
+                    onPageSizeChange={(size: number) => setPageSize(size)}
+                    setReloadDataTable={setReloadDataTable}
+                    isLoading={isLoading}
+                    columnVisibility={columnVisibility}
+                    onColumnVisibilityChange={handleColumnVisibilityChange}
+                />
+            </Card>
+
+            {/* Column Visibility Dialog */}
+            <Dialog
+                open={openColumnVisibilityDialog}
+                onClose={handleCloseColumnVisibilityDialog}
+                maxWidth="sm"
+                fullWidth
+            >
+                <DialogTitle>Cột hiển thị</DialogTitle>
+                <DialogContent>
+                    <Box sx={{ mb: 2 }}>
+                        <TextField
+                            fullWidth
+                            size="small"
+                            placeholder="Tìm kiếm"
+                            value={columnVisibilitySearch}
+                            onChange={(e) => setColumnVisibilitySearch(e.target.value)}
+                            sx={{ mb: 2 }}
+                        />
+                    </Box>
+                    <Box sx={{ maxHeight: 300, overflow: 'auto' }}>
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={Object.keys(columnVisibility).length === 0 || Object.values(columnVisibility).every(v => v)}
+                                    onChange={(e) => {
+                                        const checked = e.target.checked;
+                                        const newVisibility: VisibilityState = {};
+                                        // Define all column IDs dynamically
+                                        const allColumns = [
+                                            { id: 'stt', header: 'STT' },
+                                            { id: 'hang', header: 'HẠNG' },
+                                            { id: 'hoSo', header: 'HỒ SƠ' },
+                                            { id: 'tong', header: 'TỔNG' },
+                                            { id: 'daNop', header: 'ĐÃ NỘP' },
+                                            { id: 'conThieu', header: 'CÒN THIẾU' },
+                                            { id: 'trangThai', header: 'TRẠNG THÁI' },
+                                            { id: 'nguoiPhuTrach', header: 'NGƯỜI PHỤ TRÁCH' },
+                                            { id: 'ctv', header: 'CTV' },
+                                            { id: 'thaoTac', header: 'THAO TÁC' }
+                                        ];
+                                        allColumns.forEach(col => {
+                                            newVisibility[col.id] = checked;
+                                        });
+                                        setColumnVisibility(newVisibility);
+                                    }}
+                                />
+                            }
+                            label="Tất cả"
+                        />
+                        {[
+                            { id: 'stt', header: 'STT' },
+                            { id: 'hang', header: 'HẠNG' },
+                            { id: 'hoSo', header: 'HỒ SƠ' },
+                            { id: 'tong', header: 'TỔNG' },
+                            { id: 'daNop', header: 'ĐÃ NỘP' },
+                            { id: 'conThieu', header: 'CÒN THIẾU' },
+                            { id: 'trangThai', header: 'TRẠNG THÁI' },
+                            { id: 'nguoiPhuTrach', header: 'NGƯỜI PHỤ TRÁCH' },
+                            { id: 'ctv', header: 'CTV' },
+                            { id: 'thaoTac', header: 'THAO TÁC' }
+                        ].map((column) => (
+                            <FormControlLabel
+                                key={column.id}
+                                control={
+                                    <Checkbox
+                                        checked={columnVisibility[column.id] !== false}
+                                        onChange={(e) => {
+                                            setColumnVisibility(prev => ({
+                                                ...prev,
+                                                [column.id]: e.target.checked
+                                            }));
+                                        }}
+                                    />
+                                }
+                                label={column.header}
+                            />
+                        ))}
+                    </Box>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseColumnVisibilityDialog}>HỦY</Button>
+                    <Button onClick={handleSaveColumnVisibility} variant="contained">LƯU</Button>
+                </DialogActions>
+            </Dialog>
+        </>
     )
 }
 

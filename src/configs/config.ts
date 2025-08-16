@@ -222,22 +222,16 @@ const registrationStatusOptions = [
   { label: 'Hoàn thành', value: 2 }
 ]
 
-const staffAssigneeOptions = [
-  { label: 'Nguyễn Quang Duy', value: 'staff-1' },
-  { label: 'Trần Văn A', value: 'staff-2' },
-  { label: 'Lê Thị B', value: 'staff-3' }
-]
-
-const collaboratorOptions = [
-  { label: 'NHN-Hoa01', value: 'collab-1' },
-  { label: 'NHN-Hoa02', value: 'collab-2' },
-  { label: 'NHN-Hoa03', value: 'collab-3' }
-]
-
 const AssigneeTypes = {
   Teacher: 1,
   Employee: 2,
   Collaborator: 3
+}
+
+const RegistrationRecordStatus = {
+  Pending: 0,
+  Processing: 1,
+  Completed: 2
 }
 
 const CONFIG = {
@@ -275,9 +269,8 @@ const CONFIG = {
   statusOptions,
   paymentStatusOptions,
   registrationStatusOptions,
-  staffAssigneeOptions,
-  collaboratorOptions,
-  AssigneeTypes
+  AssigneeTypes,
+  RegistrationRecordStatus
 }
 
 export default CONFIG

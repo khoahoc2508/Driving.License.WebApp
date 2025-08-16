@@ -12,11 +12,15 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import TablePagination from '@mui/material/TablePagination'
 import Avatar from '@mui/material/Avatar'
+import Checkbox from '@mui/material/Checkbox'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import TextField from '@mui/material/TextField'
+import Box from '@mui/material/Box'
 
 // Third-party Imports
 import type { RankingInfo } from '@tanstack/match-sorter-utils'
 import { rankItem } from '@tanstack/match-sorter-utils'
-import type { ColumnDef, ColumnFiltersState, FilterFn } from '@tanstack/react-table'
+import type { ColumnDef, ColumnFiltersState, FilterFn, Column, VisibilityState } from '@tanstack/react-table'
 import {
     createColumnHelper,
     flexRender,
@@ -43,8 +47,9 @@ import styles from '@core/styles/table.module.css'
 
 import registrationRecordsAPI from '@/libs/api/registrationRecordsAPI'
 import SkeletonTableRowsLoader from '@/components/common/SkeletonTableRowsLoader'
-import type { GetRegistrationRecordsDto, GetRegistrationRecordsListType } from '@/types/registrationRecords'
+import type { GetRegistrationRecordsDto, GetRegistrationRecordsListType, RegistrationRecordStatus } from '@/types/registrationRecords'
 import { getInitials } from '@/utils/getInitials'
+import CONFIG from '@/configs/config'
 
 // Column Definitions
 const columnHelper = createColumnHelper<GetRegistrationRecordsDto>()
@@ -75,7 +80,9 @@ const Table = ({
     onPageChange,
     onPageSizeChange,
     setReloadDataTable,
-    isLoading
+    isLoading,
+    columnVisibility,
+    onColumnVisibilityChange
 }: {
     data?: GetRegistrationRecordsListType,
     setData: (data: GetRegistrationRecordsListType) => void,
@@ -85,7 +92,9 @@ const Table = ({
     onPageChange: (page: number) => void,
     onPageSizeChange: (pageSize: number) => void,
     setReloadDataTable: React.Dispatch<React.SetStateAction<boolean>>,
-    isLoading: boolean
+    isLoading: boolean,
+    columnVisibility: VisibilityState,
+    onColumnVisibilityChange: (updater: VisibilityState | ((old: VisibilityState) => VisibilityState)) => void
 }) => {
     // States
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -93,20 +102,20 @@ const Table = ({
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null);
 
-    const getStatusChip = (status: number | undefined) => {
+    const getStatusChip = (status: RegistrationRecordStatus | undefined) => {
         let label = ''
         let color: 'default' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' = 'default'
 
         switch (status) {
-            case 0: // Pending
+            case CONFIG.RegistrationRecordStatus.Pending: // Pending
                 label = 'Chờ xử lý'
                 color = 'info'
                 break
-            case 1: // Processing
+            case CONFIG.RegistrationRecordStatus.Processing: // Processing
                 label = 'Đang xử lý'
                 color = 'warning'
                 break
-            case 2: // Completed
+            case CONFIG.RegistrationRecordStatus.Completed: // Completed
                 label = 'Hoàn thành'
                 color = 'success'
                 break
@@ -140,16 +149,18 @@ const Table = ({
                 ),
             }),
             columnHelper.accessor('licenseType.code', {
+                id: 'hang',
                 header: 'HẠNG',
                 cell: ({ row }) => (
                     <div style={{ textAlign: 'center' }}>
                         <Typography>
-                            {row.original?.licenseType?.code || ''}
+                            {row.original?.licenseType?.name || ''}
                         </Typography>
                     </div>
                 )
             }),
             columnHelper.accessor('fullname', {
+                id: 'hoSo',
                 header: 'HỒ SƠ',
                 cell: ({ row }) => (
                     <div className='flex items-center gap-3'>
@@ -162,7 +173,7 @@ const Table = ({
                         >
                             {getInitials(row.original?.fullname || '')}
                         </Avatar>
-                        <div className='flex flex-col'>
+                        <div className='flex flex-col justify-center items-start'>
                             <Typography color='text.primary' className='font-medium'>
                                 {row.original?.fullname}
                             </Typography>
@@ -173,40 +184,61 @@ const Table = ({
                     </div>
                 )
             }),
-            columnHelper.accessor('payment.totalAmount', {
+            // Grouped columns for payment
+            columnHelper.group({
+                id: 'thanhToan',
                 header: 'THANH TOÁN',
-                cell: ({ row }) => (
-                    <div className='flex flex-col gap-1'>
-                        <div className='flex justify-between'>
-                            <Typography variant='body2' color='text.secondary'>TỔNG:</Typography>
-                            <Typography variant='body2'>{formatCurrency(row.original?.payment?.totalAmount)}</Typography>
-                        </div>
-                        <div className='flex justify-between'>
-                            <Typography variant='body2' color='text.secondary'>ĐÃ NỘP:</Typography>
-                            <Typography variant='body2'>{formatCurrency(row.original?.payment?.paidAmount)}</Typography>
-                        </div>
-                        <div className='flex justify-between'>
-                            <Typography variant='body2' color='text.secondary'>CÒN THIẾU:</Typography>
-                            <Typography
-                                variant='body2'
-                                color={row.original?.payment?.remainingAmount && row.original.payment.remainingAmount > 0 ? 'error' : 'text.primary'}
-                                sx={{ fontWeight: 'bold' }}
-                            >
-                                {formatCurrency(row.original?.payment?.remainingAmount)}
-                            </Typography>
-                        </div>
-                    </div>
-                )
+                columns: [
+                    columnHelper.accessor('payment.totalAmount', {
+                        id: 'tong',
+                        header: 'TỔNG',
+                        cell: ({ row }) => (
+                            <div style={{ textAlign: 'right' }}>
+                                <Typography variant='body2'>
+                                    {formatCurrency(row.original?.payment?.totalAmount)}
+                                </Typography>
+                            </div>
+                        )
+                    }),
+                    columnHelper.accessor('payment.paidAmount', {
+                        id: 'daNop',
+                        header: 'ĐÃ NỘP',
+                        cell: ({ row }) => (
+                            <div style={{ textAlign: 'right' }}>
+                                <Typography variant='body2'>
+                                    {formatCurrency(row.original?.payment?.paidAmount)}
+                                </Typography>
+                            </div>
+                        )
+                    }),
+                    columnHelper.accessor('payment.remainingAmount', {
+                        id: 'conThieu',
+                        header: 'CÒN THIẾU',
+                        cell: ({ row }) => (
+                            <div style={{ textAlign: 'right' }}>
+                                <Typography
+                                    variant='body2'
+                                    color={row.original?.payment?.remainingAmount && row.original.payment.remainingAmount > 0 ? 'error' : 'text.primary'}
+                                    sx={{ fontWeight: 'bold' }}
+                                >
+                                    {formatCurrency(row.original?.payment?.remainingAmount)}
+                                </Typography>
+                            </div>
+                        )
+                    })
+                ]
             }),
             columnHelper.accessor('status', {
+                id: 'trangThai',
                 header: 'TRẠNG THÁI',
                 cell: ({ row }) => (
                     <div style={{ textAlign: 'center' }}>
-                        {getStatusChip(row.original?.status)}
+                        {getStatusChip(row.original?.status as RegistrationRecordStatus)}
                     </div>
                 )
             }),
             columnHelper.accessor('staffAssigneeName', {
+                id: 'nguoiPhuTrach',
                 header: 'NGƯỜI PHỤ TRÁCH',
                 cell: ({ row }) => (
                     <div style={{ textAlign: 'center' }}>
@@ -215,6 +247,7 @@ const Table = ({
                 )
             }),
             columnHelper.accessor('collaboratorName', {
+                id: 'ctv',
                 header: 'CTV',
                 cell: ({ row }) => (
                     <div style={{ textAlign: 'center' }}>
@@ -223,7 +256,7 @@ const Table = ({
                 )
             }),
             columnHelper.accessor('id', {
-                id: 'actions',
+                id: 'thaoTac',
                 header: 'THAO TÁC',
                 cell: ({ row }) => (
                     <div className="flex items-center justify-center gap-2">
@@ -240,6 +273,18 @@ const Table = ({
         ],
         [data, setData]
     )
+
+    const getTotalColumns = () => {
+        let total = 0
+        columns.forEach(column => {
+            if ('columns' in column && column.columns) {
+                total += column.columns.length
+            } else {
+                total += 1
+            }
+        })
+        return total
+    }
 
     const handleOpenDeleteDialog = (id: string | undefined) => {
         if (id) {
@@ -276,15 +321,17 @@ const Table = ({
     const table = useReactTable({
         data: data,
         columns,
-        filterFns: {
-            fuzzy: fuzzyFilter
-        },
         state: {
             columnFilters,
-            globalFilter
+            globalFilter,
+            columnVisibility
         },
         onColumnFiltersChange: setColumnFilters,
         onGlobalFilterChange: setGlobalFilter,
+        onColumnVisibilityChange: onColumnVisibilityChange,
+        filterFns: {
+            fuzzy: fuzzyFilter
+        },
         globalFilterFn: fuzzyFilter,
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
@@ -297,7 +344,7 @@ const Table = ({
 
     const renderTableRows = () => {
         if (isLoading) {
-            return <SkeletonTableRowsLoader rowsNum={10} columnsNum={8} />
+            return <SkeletonTableRowsLoader rowsNum={10} columnsNum={getTotalColumns()} />
         }
 
         if (table.getFilteredRowModel().rows.length === 0) {
@@ -335,8 +382,11 @@ const Table = ({
                             {table.getHeaderGroups().map(headerGroup => (
                                 <tr key={headerGroup.id} className="h-9">
                                     {headerGroup.headers.map(header => {
+                                        const isGrouped = header.column.columns && header.column.columns.length > 0
+                                        const colSpan = isGrouped ? header.column.columns.length : 1
+
                                         return (
-                                            <th key={header.id}>
+                                            <th key={header.id} colSpan={colSpan}>
                                                 {header.isPlaceholder ? null : (
                                                     <>
                                                         <div
@@ -379,6 +429,8 @@ const Table = ({
                     onRowsPerPageChange={e => onPageSizeChange(Number(e.target.value))}
                 />
             </Card>
+
+            {/* Delete Confirmation Dialog */}
             <Dialog
                 open={openDeleteDialog}
                 onClose={handleCloseDeleteDialog}

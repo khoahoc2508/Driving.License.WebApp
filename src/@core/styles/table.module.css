@@ -24,6 +24,8 @@
       text-align: center;
       block-size: 56px;
       background-color: var(--mui-palette-customColors-tableHeaderBg);
+      border: 1px solid var(--border-color);
+
       &:not(:first-of-type):not(:last-of-type) {
         padding-block: 0.5rem;
         padding-inline: 1rem;
@@ -53,6 +55,8 @@
       line-height: 1.4667;
       block-size: 50px;
       text-align: center;
+      border: 1px solid var(--border-color);
+
       &:not(:first-of-type):not(:last-of-type) {
         padding-block: 0.5rem;
         padding-inline: 1rem;
