@@ -8,7 +8,7 @@ export type RegistrationRecordStatus = components['schemas']['RegistrationRecord
 export type PaymentStatus = components['schemas']['PaymentStatus']
 export type GetRegistrationRecordsQueryParams = {
   licenseTypeCode?: string[]
-  registrationRecordStatus?: RegistrationRecordStatus[]
+  status?: RegistrationRecordStatus[]
   paymentStatus?: PaymentStatus[]
   staffAssigneeId?: string[]
   collaboratorId?: string[] | null

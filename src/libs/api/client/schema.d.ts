@@ -324,6 +324,70 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/payment-histories": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PaymentHistories_GetPaymentHistoriesByRegistrationRecordId"];
+        put?: never;
+        post: operations["PaymentHistories_CreatePaymentHistory"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/payment-histories/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PaymentHistories_GetPaymentHistoryById"];
+        put: operations["PaymentHistories_UpdatePaymentHistory"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/payments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Payments_GetPaymentsByRegistrationRecordId"];
+        put?: never;
+        post: operations["Payments_CreatePayment"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/payments/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Payments_GetPaymentById"];
+        put: operations["Payments_UpdatePayment"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/persons/recognition/citizen-by-files": {
         parameters: {
             query?: never;
@@ -443,8 +507,40 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        get: operations["RegistrationRecords_GetRegistrationRecordDetailQuery"];
         put: operations["RegistrationRecords_UpdateRegistrationRecord"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/registration-records/{id}/basic-infor": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["RegistrationRecords_GetBasicInfo"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/registration-records/{id}/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["RegistrationRecords_GetRegistrationRecordOverview"];
+        put?: never;
         post?: never;
         delete?: never;
         options?: never;
@@ -494,6 +590,38 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["Uploads_UploadFiles"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/user-page-config/{pageKey}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["UserPageConfigs_GetConfig"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/user-page-config/upsert": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["UserPageConfigs_UpsertConfig"];
         delete?: never;
         options?: never;
         head?: never;
@@ -554,13 +682,10 @@ export interface components {
     schemas: {
         PaginatedListOfAssigneeDto: {
             data?: components["schemas"]["AssigneeDto"][];
-
             /** Format: int32 */
             pageNumber?: number;
-
             /** Format: int32 */
             totalPages?: number;
-
             /** Format: int32 */
             totalCount?: number;
             hasPreviousPage?: boolean;
@@ -574,7 +699,6 @@ export interface components {
             active?: boolean;
             assigneeType?: components["schemas"]["AssigneeType"];
         };
-
         /** @enum {integer} */
         AssigneeType: 1 | 2 | 3;
         BaseResponseOfAssigneeDto: components["schemas"]["BaseResponse"] & {
@@ -585,7 +709,6 @@ export interface components {
             message?: string | null;
             statusCode?: components["schemas"]["HttpStatusCode"];
         };
-
         /** @enum {integer} */
         HttpStatusCode: 100 | 101 | 102 | 103 | 200 | 201 | 202 | 203 | 204 | 205 | 206 | 207 | 208 | 226 | 300 | 300 | 301 | 301 | 302 | 302 | 303 | 303 | 304 | 305 | 306 | 307 | 307 | 308 | 400 | 401 | 402 | 403 | 404 | 405 | 406 | 407 | 408 | 409 | 410 | 411 | 412 | 413 | 414 | 415 | 416 | 417 | 421 | 422 | 422 | 423 | 424 | 426 | 428 | 429 | 431 | 451 | 500 | 501 | 502 | 503 | 504 | 505 | 506 | 507 | 508 | 510 | 511;
         BaseResponseOfBoolean: components["schemas"]["BaseResponse"] & {
@@ -634,16 +757,12 @@ export interface components {
             id?: string;
             name?: string;
             description?: string;
-
             /** Format: int32 */
             totalQuestions?: number;
-
             /** Format: int32 */
             passingScore?: number;
-
             /** Format: int32 */
             durationMinutes?: number;
-
             /** Format: int32 */
             order?: number;
             examType?: components["schemas"]["ExamType"];
@@ -651,10 +770,8 @@ export interface components {
             licenseTypeCode?: string;
             groupExamId?: string;
         };
-
         /** @enum {integer} */
         ExamType: 1 | 2;
-
         /** @enum {integer} */
         GroupExamType: 0 | 1 | 2;
         GenerateExamsCommand: {
@@ -662,19 +779,14 @@ export interface components {
             licenseTypeCode?: string;
             questionNumbers?: number[];
             criticalQuestionNumbers?: number[];
-
             /** Format: int32 */
             numberOfExams?: number;
-
             /** Format: int32 */
             questionsPerExam?: number;
-
             /** Format: int32 */
             criticalQuestionsPerExam?: number;
-
             /** Format: int32 */
             durationMinutes?: number;
-
             /** Format: int32 */
             passingScore?: number;
         };
@@ -702,13 +814,10 @@ export interface components {
         ExamSubmissionResultDto: {
             id?: string;
             licenseTypeDto?: components["schemas"]["LicenseTypeDto"];
-
             /** Format: duration */
             duration?: string;
-
             /** Format: int32 */
             totalQuestions?: number;
-
             /** Format: int32 */
             correctAnswerCount?: number;
             hasCriticalMistake?: boolean;
@@ -729,7 +838,6 @@ export interface components {
         SubmitQuestionDto: {
             id?: string;
             explanation?: string | null;
-
             /** Format: int32 */
             order?: number;
             content?: string;
@@ -739,7 +847,6 @@ export interface components {
         };
         SubmitAnswerDto: {
             id?: string;
-
             /** Format: int32 */
             order?: number;
             isCorrect?: boolean;
@@ -764,13 +871,10 @@ export interface components {
         };
         PaginatedListOfFeeTypeDto: {
             data?: components["schemas"]["FeeTypeDto"][];
-
             /** Format: int32 */
             pageNumber?: number;
-
             /** Format: int32 */
             totalPages?: number;
-
             /** Format: int32 */
             totalCount?: number;
             hasPreviousPage?: boolean;
@@ -799,7 +903,6 @@ export interface components {
             name?: string;
             description?: string;
             iconUrl?: string | null;
-
             /** Format: int32 */
             order?: number;
             licenseTypeCode?: string | null;
@@ -811,6 +914,88 @@ export interface components {
         GetAllGroupExamQuery: Record<string, never>;
         BaseResponseOfListOfLicenseTypeDto: components["schemas"]["BaseResponse"] & {
             data?: components["schemas"]["LicenseTypeDto"][] | null;
+        };
+        BaseResponseOfString: components["schemas"]["BaseResponse"] & {
+            data?: string | null;
+        };
+        CreatePaymentHistoryCommand: {
+            paymentId?: string;
+            /** Format: decimal */
+            amount?: number;
+            /** Format: date-time */
+            paymentDate?: string;
+            note?: string;
+        };
+        UpdatePaymentHistoryCommand: {
+            id?: string;
+            paymentId?: string;
+            description?: string;
+            /** Format: decimal */
+            amount?: number;
+            /** Format: date-time */
+            paymentDate?: string;
+            note?: string;
+        };
+        BaseResponseOfListOfGetPaymentHistoryDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetPaymentHistoryDto"][] | null;
+        };
+        GetPaymentHistoryDto: {
+            id?: string;
+            /** Format: decimal */
+            amount?: number;
+            /** Format: date-time */
+            paymentDate?: string;
+            note?: string;
+        };
+        BaseResponseOfGetPaymentHistoryDetailDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetPaymentHistoryDetailDto"] | null;
+        };
+        GetPaymentHistoryDetailDto: {
+            id?: string;
+            paymentId?: string;
+            /** Format: decimal */
+            amount?: number;
+            /** Format: date-time */
+            paymentDate?: string;
+            note?: string;
+        };
+        BaseResponseOfListOfGetPaymentDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetPaymentDto"][] | null;
+        };
+        GetPaymentDto: {
+            id?: string;
+            feeTypeName?: string;
+            /** Format: decimal */
+            amount?: number;
+            note?: string;
+            status?: components["schemas"]["PaymentStatus"];
+        };
+        /** @enum {integer} */
+        PaymentStatus: 0 | 1 | 2 | 3;
+        BaseResponseOfGetPaymentDetailDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetPaymentDetailDto"] | null;
+        };
+        GetPaymentDetailDto: {
+            feeTypeId?: string;
+            registrationRecordId?: string;
+            /** Format: decimal */
+            amount?: number | null;
+            note?: string;
+        };
+        CreatePaymentCommand: {
+            feeTypeId?: string;
+            registrationRecordId?: string;
+            /** Format: decimal */
+            amount?: number;
+            note?: string;
+        };
+        UpdatePaymentCommand: {
+            id?: string;
+            feeTypeId?: string;
+            registrationRecordId?: string;
+            /** Format: decimal */
+            amount?: number;
+            note?: string;
         };
         BaseResponseOfListOfCitizenCardDto: components["schemas"]["BaseResponse"] & {
             data?: components["schemas"]["CitizenCardDto"][] | null;
@@ -824,7 +1009,6 @@ export interface components {
         };
         FrontCitizenCardDto: {
             fullName?: string;
-
             /** Format: date */
             birthday?: string;
             gender?: components["schemas"]["GenderType"];
@@ -833,7 +1017,6 @@ export interface components {
             nationality?: string;
             imageUrl?: string | null;
         };
-
         /** @enum {integer} */
         GenderType: 0 | 1 | 2;
         Address: {
@@ -842,7 +1025,6 @@ export interface components {
             wardCode?: string;
         };
         BackCitizenCardDto: {
-
             /** Format: date */
             issuedDate?: string;
             issuedBy?: string;
@@ -857,13 +1039,11 @@ export interface components {
         CitizenCardPdfRequest: {
             id?: string;
             fullName?: string;
-
             /** Format: date */
             birthday?: string;
             placeOfOrigin?: string;
             placeOfResidence?: string;
             nationality?: string;
-
             /** Format: date */
             issuedDate?: string;
             issuedBy?: string;
@@ -879,7 +1059,6 @@ export interface components {
         };
         QuestionDto: {
             id?: string;
-
             /** Format: int32 */
             order?: number;
             content?: string;
@@ -889,7 +1068,6 @@ export interface components {
         };
         AnswerDto: {
             id?: string;
-
             /** Format: int32 */
             order?: number;
             content?: string;
@@ -900,7 +1078,6 @@ export interface components {
         };
         QuestionDetailDto: {
             id?: string;
-
             /** Format: int32 */
             order?: number;
             content?: string;
@@ -911,20 +1088,15 @@ export interface components {
         };
         AnswerDto2: {
             id?: string;
-
             /** Format: int32 */
             order?: number;
             isCorrect?: boolean;
             content?: string;
         };
-        BaseResponseOfString: components["schemas"]["BaseResponse"] & {
-            data?: string | null;
-        };
         CreateRegistrationRecordCommand: {
             licenseTypeCode?: string;
             avatarUrl?: string;
             fullname?: string;
-
             /** Format: date */
             birthday?: string;
             gender?: components["schemas"]["GenderType"];
@@ -934,10 +1106,8 @@ export interface components {
             citizenIdNumber?: string;
             citizenIdFrontImageUrl?: string;
             citizenIdBackImageUrl?: string;
-
             /** Format: date-time */
             receivedDate?: string;
-
             /** Format: date-time */
             healthCheckDate?: string | null;
             staffAssigneeId?: string | null;
@@ -949,7 +1119,6 @@ export interface components {
             licenseTypeCode?: string;
             avatarUrl?: string;
             fullname?: string;
-
             /** Format: date */
             birthday?: string;
             gender?: components["schemas"]["GenderType"];
@@ -959,10 +1128,8 @@ export interface components {
             citizenIdNumber?: string;
             citizenIdFrontImageUrl?: string;
             citizenIdBackImageUrl?: string;
-
             /** Format: date-time */
             receivedDate?: string;
-
             /** Format: date-time */
             healthCheckDate?: string | null;
             staffAssigneeId?: string | null;
@@ -971,13 +1138,10 @@ export interface components {
         };
         PaginatedListOfGetRegistrationRecordsDto: {
             data?: components["schemas"]["GetRegistrationRecordsDto"][];
-
             /** Format: int32 */
             pageNumber?: number;
-
             /** Format: int32 */
             totalPages?: number;
-
             /** Format: int32 */
             totalCount?: number;
             hasPreviousPage?: boolean;
@@ -986,16 +1150,14 @@ export interface components {
         GetRegistrationRecordsDto: {
             id?: string;
             licenseType?: components["schemas"]["GetRegistrationRecordsLicenseTypeDto"];
+            avatarUrl?: string;
             fullname?: string;
             phone?: string;
-
             /** Format: date */
             birthday?: string;
             citizenIdNumber?: string;
-
             /** Format: date-time */
             receivedDate?: string;
-
             /** Format: date-time */
             healthCheckDate?: string | null;
             payment?: components["schemas"]["GetRegistrationRecordsPaymentDto"];
@@ -1009,22 +1171,105 @@ export interface components {
             name?: string;
         };
         GetRegistrationRecordsPaymentDto: {
-
             /** Format: decimal */
-            totalAmount?: number;
-
+            totalAmount?: number | null;
             /** Format: decimal */
-            paidAmount?: number;
-
+            paidAmount?: number | null;
             /** Format: decimal */
-            remainingAmount?: number;
+            remainingAmount?: number | null;
         };
-
         /** @enum {integer} */
         RegistrationRecordStatus: 0 | 1 | 2;
-
+        BaseResponseOfGetRegistrationRecordDetailDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetRegistrationRecordDetailDto"] | null;
+        };
+        GetRegistrationRecordDetailDto: {
+            id?: string;
+            licenseTypeCode?: string;
+            licenseTypeName?: string;
+            avatarUrl?: string;
+            fullname?: string;
+            /** Format: date */
+            birthday?: string;
+            gender?: components["schemas"]["GenderType"];
+            phone?: string;
+            email?: string | null;
+            address?: string | null;
+            citizenIdNumber?: string;
+            citizenIdFrontImageUrl?: string;
+            citizenIdBackImageUrl?: string;
+            /** Format: date-time */
+            receivedDate?: string;
+            /** Format: date-time */
+            healthCheckDate?: string | null;
+            staffAssigneeId?: string | null;
+            staffAssigneeName?: string | null;
+            collaboratorId?: string | null;
+            collaboratorName?: string | null;
+            note?: string | null;
+        };
+        BaseResponseOfRegistrationRecordBasicInfoDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["RegistrationRecordBasicInfoDto"] | null;
+        };
+        RegistrationRecordBasicInfoDto: {
+            avatarUrl?: string;
+            fullName?: string;
+            licenseTypeName?: string;
+            phone?: string;
+            /** Format: decimal */
+            totalAmount?: number | null;
+            /** Format: decimal */
+            paidAmount?: number | null;
+            /** Format: decimal */
+            remainingAmount?: number | null;
+        };
+        BaseResponseOfRegistrationRecordOverviewDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["RegistrationRecordOverviewDto"] | null;
+        };
+        RegistrationRecordOverviewDto: {
+            processing?: components["schemas"]["ProcessingDto"];
+            paymentSummary?: components["schemas"]["PaymentSummaryDto"];
+            generalInfo?: components["schemas"]["GeneralInfoDto"];
+            collaborator?: components["schemas"]["CollaboratorDto"] | null;
+        };
+        ProcessingDto: {
+            steps?: components["schemas"]["ProcessingStepDto"][];
+            examResultStatus?: components["schemas"]["ExamResultStatusType"];
+        };
+        ProcessingStepDto: {
+            name?: string;
+            status?: components["schemas"]["StepStatusType"];
+            assignee?: components["schemas"]["ProcessingStepAssigneeDto"] | null;
+        };
         /** @enum {integer} */
-        PaymentStatus: 0 | 1 | 2;
+        StepStatusType: 0 | 1 | 2;
+        ProcessingStepAssigneeDto: {
+            name?: string;
+            phone?: string;
+        };
+        /** @enum {integer} */
+        ExamResultStatusType: 1 | 2 | 3;
+        PaymentSummaryDto: {
+            /** Format: decimal */
+            totalAmount?: number | null;
+            /** Format: decimal */
+            paidAmount?: number | null;
+            /** Format: decimal */
+            remainingAmount?: number | null;
+        };
+        GeneralInfoDto: {
+            phone?: string;
+            /** Format: date-time */
+            healthCheckDate?: string | null;
+            /** Format: date-time */
+            receivedDate?: string | null;
+            note?: string | null;
+        };
+        CollaboratorDto: {
+            fullName?: string;
+            phone?: string;
+            avatarUrl?: string | null;
+        };
         BaseResponseOfUploadFileResult: components["schemas"]["BaseResponse"] & {
             data?: components["schemas"]["UploadFileResult"] | null;
         };
@@ -1035,6 +1280,14 @@ export interface components {
         };
         BaseResponseOfListOfUploadFileResult: components["schemas"]["BaseResponse"] & {
             data?: components["schemas"]["UploadFileResult"][] | null;
+        };
+        UpsertUserPageConfigCommand: {
+            pageKey?: string;
+            columns?: components["schemas"]["ColumnConfigDto"][];
+        };
+        ColumnConfigDto: {
+            column?: string;
+            visible?: boolean;
         };
         RegisterUserRequest: {
             userName?: string;
@@ -1604,6 +1857,186 @@ export interface operations {
             };
         };
     };
+    PaymentHistories_GetPaymentHistoriesByRegistrationRecordId: {
+        parameters: {
+            query?: {
+                RegistrationRecordId?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfGetPaymentHistoryDto"];
+                };
+            };
+        };
+    };
+    PaymentHistories_CreatePaymentHistory: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreatePaymentHistoryCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfString"];
+                };
+            };
+        };
+    };
+    PaymentHistories_GetPaymentHistoryById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfGetPaymentHistoryDetailDto"];
+                };
+            };
+        };
+    };
+    PaymentHistories_UpdatePaymentHistory: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdatePaymentHistoryCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    Payments_GetPaymentsByRegistrationRecordId: {
+        parameters: {
+            query?: {
+                RegistrationRecordId?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfGetPaymentDto"];
+                };
+            };
+        };
+    };
+    Payments_CreatePayment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreatePaymentCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfString"];
+                };
+            };
+        };
+    };
+    Payments_GetPaymentById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfGetPaymentDetailDto"];
+                };
+            };
+        };
+    };
+    Payments_UpdatePayment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdatePaymentCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
     Persons_RecognizeCitizenByFile: {
         parameters: {
             query?: never;
@@ -1683,7 +2116,6 @@ export interface operations {
         requestBody?: {
             content: {
                 "multipart/form-data": {
-
                     /** Format: binary */
                     FormFile?: string | null;
                 };
@@ -1750,11 +2182,11 @@ export interface operations {
     RegistrationRecords_GetRegistrationRecordsWithPagination: {
         parameters: {
             query?: {
-                LicenseTypeCode?: string | null;
-                PaymentStatus?: components["schemas"]["PaymentStatus"] | null;
-                Status?: components["schemas"]["RegistrationRecordStatus"] | null;
-                StaffAssigneeId?: string | null;
-                CollaboratorId?: string | null;
+                LicenseTypeCode?: string[];
+                PaymentStatus?: components["schemas"]["PaymentStatus"][];
+                Status?: components["schemas"]["RegistrationRecordStatus"][];
+                StaffAssigneeId?: string[];
+                CollaboratorId?: string[];
                 Search?: string | null;
                 PageNumber?: number;
                 PageSize?: number;
@@ -1798,6 +2230,27 @@ export interface operations {
             };
         };
     };
+    RegistrationRecords_GetRegistrationRecordDetailQuery: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfGetRegistrationRecordDetailDto"];
+                };
+            };
+        };
+    };
     RegistrationRecords_UpdateRegistrationRecord: {
         parameters: {
             query?: never;
@@ -1819,6 +2272,48 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BaseResponseOfString"];
+                };
+            };
+        };
+    };
+    RegistrationRecords_GetBasicInfo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfRegistrationRecordBasicInfoDto"];
+                };
+            };
+        };
+    };
+    RegistrationRecords_GetRegistrationRecordOverview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfRegistrationRecordOverviewDto"];
                 };
             };
         };
@@ -1852,7 +2347,6 @@ export interface operations {
         requestBody?: {
             content: {
                 "multipart/form-data": {
-
                     /** Format: binary */
                     File?: string | null;
                 };
@@ -1890,6 +2384,50 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BaseResponseOfListOfUploadFileResult"];
+                };
+            };
+        };
+    };
+    UserPageConfigs_GetConfig: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                pageKey: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+        };
+    };
+    UserPageConfigs_UpsertConfig: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpsertUserPageConfigCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
                 };
             };
         };

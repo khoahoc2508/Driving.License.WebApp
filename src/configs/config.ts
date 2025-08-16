@@ -213,7 +213,8 @@ const statusOptions = [
 const paymentStatusOptions = [
   { label: 'Chưa thanh toán', value: 0 },
   { label: 'Thanh toán một phần', value: 1 },
-  { label: 'Đã thanh toán', value: 2 }
+  { label: 'Đã thanh toán', value: 2 },
+  { label: 'Chưa thêm thanh toán', value: 3 }
 ]
 
 const registrationStatusOptions = [

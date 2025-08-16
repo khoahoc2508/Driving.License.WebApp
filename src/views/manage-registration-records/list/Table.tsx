@@ -12,10 +12,6 @@ import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import TablePagination from '@mui/material/TablePagination'
 import Avatar from '@mui/material/Avatar'
-import Checkbox from '@mui/material/Checkbox'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import TextField from '@mui/material/TextField'
-import Box from '@mui/material/Box'
 
 // Third-party Imports
 import type { RankingInfo } from '@tanstack/match-sorter-utils'
@@ -129,8 +125,8 @@ const Table = ({
         )
     }
 
-    const formatCurrency = (amount: number | undefined) => {
-        if (amount === undefined || amount === null) return '0'
+    const formatCurrency = (amount: number | undefined | null) => {
+        if (amount === undefined || amount === null) return null
         return new Intl.NumberFormat('vi-VN').format(amount)
     }
 
@@ -165,13 +161,12 @@ const Table = ({
                 cell: ({ row }) => (
                     <div className='flex items-center gap-3'>
                         <Avatar
+                            src={row.original?.avatarUrl}
                             sx={{
-                                bgcolor: 'primary.main',
                                 width: 40,
                                 height: 40
                             }}
                         >
-                            {getInitials(row.original?.fullname || '')}
                         </Avatar>
                         <div className='flex flex-col justify-center items-start'>
                             <Typography color='text.primary' className='font-medium'>
@@ -218,8 +213,7 @@ const Table = ({
                             <div style={{ textAlign: 'right' }}>
                                 <Typography
                                     variant='body2'
-                                    color={row.original?.payment?.remainingAmount && row.original.payment.remainingAmount > 0 ? 'error' : 'text.primary'}
-                                    sx={{ fontWeight: 'bold' }}
+                                    sx={{ color: 'error.main' }}
                                 >
                                     {formatCurrency(row.original?.payment?.remainingAmount)}
                                 </Typography>

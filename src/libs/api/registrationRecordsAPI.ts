@@ -11,7 +11,7 @@ const GetRegistrationRecords = async (params: GetRegistrationRecordsQueryParams)
     params: {
       LicenseTypeCode: params.licenseTypeCode,
       PaymentStatus: params.paymentStatus,
-      RegistrationRecordStatus: params.registrationRecordStatus,
+      Status: params.status,
       StaffAssigneeId: params.staffAssigneeId,
       CollaboratorId: params.collaboratorId,
       Search: params.search,

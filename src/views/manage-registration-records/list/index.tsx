@@ -10,19 +10,25 @@ import {
     CardHeader,
     Divider,
     TextField,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
+    Popover,
     Checkbox,
     FormControlLabel,
-    Box
+    Box,
+    Typography,
+    Chip,
+    Tooltip
 } from '@mui/material'
 import Autocomplete from '@mui/material/Autocomplete'
 
 import { toast } from 'react-toastify'
 
 import DebouncedInput from '@/components/common/DebouncedInput'
+
+// Hàm bỏ dấu tiếng Việt
+const removeAccents = (str: string) => {
+    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+};
+
 import CONFIG from '@/configs/config'
 import Table from './Table'
 import { GetRegistrationRecordsDto, GetRegistrationRecordsQueryParams, PaymentStatus, RegistrationRecordStatus } from '@/types/registrationRecords'
@@ -67,7 +73,7 @@ const ManageRegistrationRecords = () => {
     const [hasMoreCollaborator, setHasMoreCollaborator] = useState(true)
 
     // Column visibility state
-    const [openColumnVisibilityDialog, setOpenColumnVisibilityDialog] = useState(false);
+    const [columnVisibilityAnchorEl, setColumnVisibilityAnchorEl] = useState<HTMLElement | null>(null);
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
     const [columnVisibilitySearch, setColumnVisibilitySearch] = useState('');
 
@@ -90,7 +96,9 @@ const ManageRegistrationRecords = () => {
     }, [params, reloadDataTable])
 
     useEffect(() => {
+        debugger
         if (pageNumber && pageSize)
+
             setParams((prev: any) => {
                 return {
                     ...prev,
@@ -98,7 +106,7 @@ const ManageRegistrationRecords = () => {
                     pageSize: pageSize,
                     search,
                     licenseTypeCode: appliedLicenseTypeValue.map(item => item.value),
-                    registrationRecordStatus: appliedRegistrationRecordStatusValue.map(item => item.value),
+                    status: appliedRegistrationRecordStatusValue.map(item => item.value),
                     paymentStatus: appliedPaymentStatusValue.map(item => item.value),
                     staffAssigneeId: appliedStaffAssigneeValue.map(item => item.value),
                     collaboratorId: appliedCollaboratorValue.map(item => item.value),
@@ -258,16 +266,16 @@ const ManageRegistrationRecords = () => {
     }
 
     // Column visibility handlers
-    const handleOpenColumnVisibilityDialog = () => {
-        setOpenColumnVisibilityDialog(true);
+    const handleOpenColumnVisibilityPopover = (event: React.MouseEvent<HTMLElement>) => {
+        setColumnVisibilityAnchorEl(event.currentTarget);
     };
 
-    const handleCloseColumnVisibilityDialog = () => {
-        setOpenColumnVisibilityDialog(false);
+    const handleCloseColumnVisibilityPopover = () => {
+        setColumnVisibilityAnchorEl(null);
     };
 
     const handleSaveColumnVisibility = () => {
-        setOpenColumnVisibilityDialog(false);
+        setColumnVisibilityAnchorEl(null);
         toast.success('Đã lưu cài đặt hiển thị cột');
     };
 
@@ -288,6 +296,7 @@ const ManageRegistrationRecords = () => {
                         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                             <Autocomplete
                                 multiple
+                                limitTags={2}
                                 value={licenseTypeValue}
                                 options={licenseTypeOptions}
                                 onChange={handleLicenseTypeSelect}
@@ -295,11 +304,20 @@ const ManageRegistrationRecords = () => {
                                 getOptionLabel={option => option?.label || ''}
                                 isOptionEqualToValue={(opt, val) => opt.value === val.value}
                                 renderInput={params => <TextField {...params} label='Hạng' />}
+                                renderTags={(tagValue, getTagProps) =>
+                                    tagValue.map((option, index) => (
+                                        <Tooltip key={index} title={option.label} arrow>
+                                            <Chip label={option.label} {...(getTagProps({ index }) as {})} size='small' />
+                                        </Tooltip>
+                                    ))
+                                }
+                                noOptionsText='Không có dữ liệu'
                             />
                         </Grid>
                         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                             <Autocomplete
                                 multiple
+                                limitTags={1}
                                 value={paymentStatusValue}
                                 options={CONFIG.paymentStatusOptions || []}
                                 onChange={handlePaymentStatusSelect}
@@ -307,11 +325,32 @@ const ManageRegistrationRecords = () => {
                                 getOptionLabel={option => option?.label || ''}
                                 isOptionEqualToValue={(opt, val) => opt.value === val.value}
                                 renderInput={params => <TextField {...params} label='Thanh toán' />}
+                                renderTags={(tagValue, getTagProps) =>
+                                    tagValue.map((option, index) => (
+                                        <Tooltip key={index} title={option.label} arrow>
+                                            <Chip label={option.label} {...(getTagProps({ index }) as {})} size='small' />
+                                        </Tooltip>
+                                    ))
+                                }
+                                sx={{
+                                    '& .MuiAutocomplete-tag': {
+                                        margin: 0,
+                                        marginLeft: 0.5,
+                                        maxWidth: '69%',
+                                        '& .MuiChip-label': {
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
+                                            whiteSpace: 'nowrap'
+                                        }
+                                    },
+                                }}
+                                noOptionsText='Không có dữ liệu'
                             />
                         </Grid>
                         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                             <Autocomplete
                                 multiple
+                                limitTags={1}
                                 value={registrationRecordStatusValue}
                                 options={CONFIG.registrationStatusOptions || []}
                                 onChange={handleRegistrationRecordStatusSelect}
@@ -319,11 +358,32 @@ const ManageRegistrationRecords = () => {
                                 getOptionLabel={option => option?.label || ''}
                                 isOptionEqualToValue={(opt, val) => opt.value === val.value}
                                 renderInput={params => <TextField {...params} label='Trạng thái' />}
+                                renderTags={(tagValue, getTagProps) =>
+                                    tagValue.map((option, index) => (
+                                        <Tooltip key={index} title={option.label} arrow>
+                                            <Chip label={option.label} {...(getTagProps({ index }) as {})} size='small' />
+                                        </Tooltip>
+                                    ))
+                                }
+                                sx={{
+                                    '& .MuiAutocomplete-tag': {
+                                        margin: 0,
+                                        marginLeft: 0.5,
+                                        maxWidth: '69%',
+                                        '& .MuiChip-label': {
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
+                                            whiteSpace: 'nowrap'
+                                        }
+                                    },
+                                }}
+                                noOptionsText='Không có dữ liệu'
                             />
                         </Grid>
                         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                             <Autocomplete
                                 multiple
+                                limitTags={1}
                                 value={staffAssigneeValue}
                                 options={staffAssigneeOptions}
                                 onChange={handleStaffAssigneeSelect}
@@ -332,13 +392,34 @@ const ManageRegistrationRecords = () => {
                                 getOptionLabel={option => option?.label || ''}
                                 isOptionEqualToValue={(opt, val) => opt.value === val.value}
                                 renderInput={params => <TextField {...params} label='Người phụ trách' />}
+                                renderTags={(tagValue, getTagProps) =>
+                                    tagValue.map((option, index) => (
+                                        <Tooltip key={index} title={option.label} arrow>
+                                            <Chip label={option.label} {...(getTagProps({ index }) as {})} size='small' />
+                                        </Tooltip>
+                                    ))
+                                }
+                                sx={{
+                                    '& .MuiAutocomplete-tag': {
+                                        margin: 0,
+                                        marginLeft: 0.5,
+                                        maxWidth: '69%',
+                                        '& .MuiChip-label': {
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
+                                            whiteSpace: 'nowrap'
+                                        }
+                                    },
+                                }}
+                                noOptionsText='Không có dữ liệu'
                             />
                         </Grid>
                     </Grid>
-                    <Grid container spacing={5} alignItems={'flex-end'} sx={{ mt: 2 }}>
+                    <Grid container spacing={5} alignItems={'flex-end'} sx={{ mt: 4 }}>
                         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
                             <Autocomplete
                                 multiple
+                                limitTags={1}
                                 value={collaboratorValue}
                                 options={collaboratorOptions}
                                 onChange={handleCollaboratorSelect}
@@ -347,6 +428,26 @@ const ManageRegistrationRecords = () => {
                                 getOptionLabel={option => option?.label || ''}
                                 isOptionEqualToValue={(opt, val) => opt.value === val.value}
                                 renderInput={params => <TextField {...params} label='Cộng tác viên' />}
+                                renderTags={(tagValue, getTagProps) =>
+                                    tagValue.map((option, index) => (
+                                        <Tooltip key={index} title={option.label} arrow>
+                                            <Chip label={option.label} {...(getTagProps({ index }) as {})} size='small' />
+                                        </Tooltip>
+                                    ))
+                                }
+                                sx={{
+                                    '& .MuiAutocomplete-tag': {
+                                        margin: 0,
+                                        marginLeft: 0.5,
+                                        maxWidth: '69%',
+                                        '& .MuiChip-label': {
+                                            overflow: 'hidden',
+                                            textOverflow: 'ellipsis',
+                                            whiteSpace: 'nowrap'
+                                        }
+                                    },
+                                }}
+                                noOptionsText='Không có dữ liệu'
                             />
                         </Grid>
                     </Grid>
@@ -361,19 +462,12 @@ const ManageRegistrationRecords = () => {
 
                 <div className='flex justify-between p-5 gap-4 flex-col sm:flex-row sm:items-center'>
                     <div className='flex items-center gap-3 w-full sm:w-auto'>
-                        <Button
-                            variant="outlined"
-                            size="small"
-                            onClick={handleOpenColumnVisibilityDialog}
-                            startIcon={<i className="ri-settings-3-line" />}
-                        >
-                            Cột hiển thị
-                        </Button>
+                        <i className="ri-filter-3-line" onClick={handleOpenColumnVisibilityPopover} style={{ cursor: 'pointer', fontSize: '20px', color: '#1976d2' }} />
                         <DebouncedInput
                             value={search}
                             className='w-full'
                             onDebounceChange={onChangeSearch}
-                            placeholder='Q. Họ tên, số điện thoại'
+                            placeholder='Họ tên, số điện thoại'
                         />
                     </div>
                     <Button variant='contained' color='primary' className='w-full sm:w-auto'>
@@ -395,59 +489,82 @@ const ManageRegistrationRecords = () => {
                 />
             </Card>
 
-            {/* Column Visibility Dialog */}
-            <Dialog
-                open={openColumnVisibilityDialog}
-                onClose={handleCloseColumnVisibilityDialog}
-                maxWidth="sm"
-                fullWidth
+            {/* Column Visibility Popover */}
+            <Popover
+                open={Boolean(columnVisibilityAnchorEl)}
+                anchorEl={columnVisibilityAnchorEl}
+                onClose={handleCloseColumnVisibilityPopover}
+                anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'left',
+                }}
+                transformOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                }}
+                PaperProps={{
+                    sx: {
+                        width: 320,
+                    }
+                }}
             >
-                <DialogTitle>Cột hiển thị</DialogTitle>
-                <DialogContent>
-                    <Box sx={{ mb: 2 }}>
-                        <TextField
-                            fullWidth
-                            size="small"
-                            placeholder="Tìm kiếm"
-                            value={columnVisibilitySearch}
-                            onChange={(e) => setColumnVisibilitySearch(e.target.value)}
-                            sx={{ mb: 2 }}
-                        />
-                    </Box>
-                    <Box sx={{ maxHeight: 300, overflow: 'auto' }}>
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={Object.keys(columnVisibility).length === 0 || Object.values(columnVisibility).every(v => v)}
-                                    onChange={(e) => {
-                                        const checked = e.target.checked;
-                                        const newVisibility: VisibilityState = {};
-                                        // Define all column IDs dynamically
-                                        const allColumns = [
-                                            { id: 'stt', header: 'STT' },
-                                            { id: 'hang', header: 'HẠNG' },
-                                            { id: 'hoSo', header: 'HỒ SƠ' },
-                                            { id: 'tong', header: 'TỔNG' },
-                                            { id: 'daNop', header: 'ĐÃ NỘP' },
-                                            { id: 'conThieu', header: 'CÒN THIẾU' },
-                                            { id: 'trangThai', header: 'TRẠNG THÁI' },
-                                            { id: 'nguoiPhuTrach', header: 'NGƯỜI PHỤ TRÁCH' },
-                                            { id: 'ctv', header: 'CTV' },
-                                            { id: 'thaoTac', header: 'THAO TÁC' }
-                                        ];
-                                        allColumns.forEach(col => {
-                                            newVisibility[col.id] = checked;
-                                        });
-                                        setColumnVisibility(newVisibility);
-                                    }}
-                                />
-                            }
-                            label="Tất cả"
-                        />
+                <Box sx={{ p: 3, pb: 1 }}>
+                    <Typography variant='h5'>Cột hiển thị</Typography>
+                </Box>
+                <Box sx={{ p: 3, pb: 3 }}>
+                    <TextField
+                        fullWidth
+                        size="small"
+                        placeholder="Tìm kiếm"
+                        value={columnVisibilitySearch}
+                        onChange={(e) => setColumnVisibilitySearch(e.target.value)}
+                    />
+                </Box>
+                <Box sx={{ maxHeight: 150, overflow: 'auto', p: 3 }} className='custom-scrollbar'>
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={Object.keys(columnVisibility).length === 0 || Object.values(columnVisibility).every(v => v)}
+                                onChange={(e) => {
+                                    const checked = e.target.checked;
+                                    const newVisibility: VisibilityState = {};
+                                    const allColumns = [
+                                        { id: 'stt', header: 'STT' },
+                                        { id: 'hang', header: 'HẠNG' },
+                                        { id: 'hoSo', header: 'HỒ SƠ' },
+                                        { id: 'ngaySinh', header: 'NGÀY SINH' },
+                                        { id: 'ngayNhanHS', header: 'NGÀY NHẬN HS' },
+                                        { id: 'ngayKhamSK', header: 'NGÀY KHÁM SK' },
+                                        { id: 'tong', header: 'TỔNG' },
+                                        { id: 'daNop', header: 'ĐÃ NỘP' },
+                                        { id: 'conThieu', header: 'CÒN THIẾU' },
+                                        { id: 'trangThai', header: 'TRẠNG THÁI' },
+                                        { id: 'nguoiPhuTrach', header: 'NGƯỜI PHỤ TRÁCH' },
+                                        { id: 'ctv', header: 'CTV' },
+                                        { id: 'thaoTac', header: 'THAO TÁC' }
+                                    ];
+                                    const filteredColumns = allColumns.filter(col =>
+                                        columnVisibilitySearch === '' ||
+                                        col.header.toLowerCase().includes(columnVisibilitySearch.toLowerCase()) ||
+                                        removeAccents(col.header.toLowerCase()).includes(removeAccents(columnVisibilitySearch.toLowerCase()))
+                                    );
+                                    filteredColumns.forEach(col => {
+                                        newVisibility[col.id] = checked;
+                                    });
+                                    setColumnVisibility(newVisibility);
+                                }}
+                            />
+                        }
+                        label="Tất cả"
+                    />
+                    <Box sx={{ mt: 2 }}>
                         {[
                             { id: 'stt', header: 'STT' },
                             { id: 'hang', header: 'HẠNG' },
                             { id: 'hoSo', header: 'HỒ SƠ' },
+                            { id: 'ngaySinh', header: 'NGÀY SINH' },
+                            { id: 'ngayNhanHS', header: 'NGÀY NHẬN HS' },
+                            { id: 'ngayKhamSK', header: 'NGÀY KHÁM SK' },
                             { id: 'tong', header: 'TỔNG' },
                             { id: 'daNop', header: 'ĐÃ NỘP' },
                             { id: 'conThieu', header: 'CÒN THIẾU' },
@@ -455,30 +572,37 @@ const ManageRegistrationRecords = () => {
                             { id: 'nguoiPhuTrach', header: 'NGƯỜI PHỤ TRÁCH' },
                             { id: 'ctv', header: 'CTV' },
                             { id: 'thaoTac', header: 'THAO TÁC' }
-                        ].map((column) => (
-                            <FormControlLabel
-                                key={column.id}
-                                control={
-                                    <Checkbox
-                                        checked={columnVisibility[column.id] !== false}
-                                        onChange={(e) => {
-                                            setColumnVisibility(prev => ({
-                                                ...prev,
-                                                [column.id]: e.target.checked
-                                            }));
-                                        }}
-                                    />
-                                }
-                                label={column.header}
-                            />
-                        ))}
+                        ]
+                            .filter(column =>
+                                columnVisibilitySearch === '' ||
+                                column.header.toLowerCase().includes(columnVisibilitySearch.toLowerCase()) ||
+                                removeAccents(column.header.toLowerCase()).includes(removeAccents(columnVisibilitySearch.toLowerCase()))
+                            )
+                            .map((column) => (
+                                <FormControlLabel
+                                    key={column.id}
+                                    control={
+                                        <Checkbox
+                                            checked={columnVisibility[column.id] !== false}
+                                            onChange={(e) => {
+                                                setColumnVisibility(prev => ({
+                                                    ...prev,
+                                                    [column.id]: e.target.checked
+                                                }));
+                                            }}
+                                        />
+                                    }
+                                    label={column.header}
+                                    sx={{ display: 'block', mb: 1 }}
+                                />
+                            ))}
                     </Box>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCloseColumnVisibilityDialog}>HỦY</Button>
-                    <Button onClick={handleSaveColumnVisibility} variant="contained">LƯU</Button>
-                </DialogActions>
-            </Dialog>
+                </Box>
+                <Box sx={{ display: 'flex', gap: 3, mt: 2, justifyContent: 'center', alignItems: 'center', p: 3, borderTop: '1px solid #e0e0e0' }}>
+                    <Button onClick={handleCloseColumnVisibilityPopover} size="small" variant='outlined'>HỦY</Button>
+                    <Button onClick={handleSaveColumnVisibility} variant="contained" size="small">LƯU</Button>
+                </Box>
+            </Popover>
         </>
     )
 }
