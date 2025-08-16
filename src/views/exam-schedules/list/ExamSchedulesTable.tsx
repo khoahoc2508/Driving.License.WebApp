@@ -511,7 +511,7 @@ const ProductListTable = () => {
               className='max-sm:is-full is-auto'
               onClick={handleOpenAddDialog}
             >
-              Thêm mới
+              THÊM MỚI
             </Button>
           </div>
         </div>

@@ -192,13 +192,13 @@ const GroupExamType = {
 }
 
 const Routers = {
-  ManageLicensesRegistration: '/admin/manage-licenses-registration',
   ExamSchedule: '/admin/exam-schedules',
   BrandSetting: '/admin/account-settings',
   ManageTeacher: '/admin/manage-teacher',
   ManageCTV: '/admin/manage-collaborator',
   ManageEmployee: '/admin/manage-employee',
-  ManageFeeType: '/admin/manage-fee-type'
+  ManageFeeType: '/admin/manage-fee-type',
+  ManageRegistrationRecords: '/admin/manage-registration-records'
 }
 
 const RoutersCustomer = {
@@ -208,6 +208,30 @@ const RoutersCustomer = {
 const statusOptions = [
   { label: 'Đang hoạt động', value: true },
   { label: 'Dừng hoạt động', value: false }
+]
+
+const paymentStatusOptions = [
+  { label: 'Chưa thanh toán', value: 0 },
+  { label: 'Thanh toán một phần', value: 1 },
+  { label: 'Đã thanh toán', value: 2 }
+]
+
+const registrationStatusOptions = [
+  { label: 'Chờ xử lý', value: 0 },
+  { label: 'Đang xử lý', value: 1 },
+  { label: 'Hoàn thành', value: 2 }
+]
+
+const staffAssigneeOptions = [
+  { label: 'Nguyễn Quang Duy', value: 'staff-1' },
+  { label: 'Trần Văn A', value: 'staff-2' },
+  { label: 'Lê Thị B', value: 'staff-3' }
+]
+
+const collaboratorOptions = [
+  { label: 'NHN-Hoa01', value: 'collab-1' },
+  { label: 'NHN-Hoa02', value: 'collab-2' },
+  { label: 'NHN-Hoa03', value: 'collab-3' }
 ]
 
 const AssigneeTypes = {
@@ -249,6 +273,10 @@ const CONFIG = {
   Routers,
   RoutersCustomer,
   statusOptions,
+  paymentStatusOptions,
+  registrationStatusOptions,
+  staffAssigneeOptions,
+  collaboratorOptions,
   AssigneeTypes
 }
 

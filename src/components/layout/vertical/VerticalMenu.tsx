@@ -78,12 +78,14 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
         <MenuItem href='/admin/dashboard' icon={<i className="ri-bar-chart-line"></i>}>
           Dashboard
         </MenuItem>
-        <MenuItem href={CONFIG.Routers.ManageLicensesRegistration} icon={<i className='ri-user-3-line' />}>
-          Học viên
-        </MenuItem>
         <MenuItem href={`${CONFIG.Routers.ExamSchedule}/list`} icon={<i className="ri-calendar-line"></i>}>
           Lịch thi
         </MenuItem>
+        {/* Quản lý hồ sơ */}
+        <SubMenu label={"Quản lý hồ sơ"} icon={<i className='ri-file-list-line' />}>
+          <MenuItem href={`${CONFIG.Routers.ManageRegistrationRecords}/list`}>{"Danh sách hồ sơ"}</MenuItem>
+        </SubMenu>
+
         <SubMenu label={"Cấu hình cá nhân"} icon={<i className='ri-settings-3-line' />}>
           <MenuItem href={`${CONFIG.Routers.BrandSetting}/brand-setting`}>{"Thương hiệu"}</MenuItem>
         </SubMenu>
@@ -104,6 +106,8 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
         <SubMenu label={"Quản lý thanh toán"} icon={<i className='ri-money-cny-circle-line' />}>
           <MenuItem href={`${CONFIG.Routers.ManageFeeType}/list`}>{"Danh sách lệ phí"}</MenuItem>
         </SubMenu>
+
+
       </Menu>
       {/* <Menu
         popoutMenuOffset={{ mainAxis: 10 }}

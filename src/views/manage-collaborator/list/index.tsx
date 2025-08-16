@@ -166,7 +166,7 @@ const ManageCollaborator = () => {
                     />
                 </div>
                 <Button variant='contained' color='primary' className='w-full sm:w-auto' onClick={handleOpenAddDialog}>
-                    Thêm mới
+                    THÊM MỚI
                 </Button>
             </div>
             <Table

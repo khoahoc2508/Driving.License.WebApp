@@ -94,7 +94,7 @@ const ManageLicensesRegistrations = () => {
           />
           <Link href={'manage-licenses-registration/create'} passHref legacyBehavior className='max-sm:is-full'>
             <Button variant="contained" color="primary" className='w-full'>
-              Thêm mới
+              THÊM MỚI
             </Button>
           </Link>
         </div>
