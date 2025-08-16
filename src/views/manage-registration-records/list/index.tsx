@@ -96,7 +96,6 @@ const ManageRegistrationRecords = () => {
     }, [params, reloadDataTable])
 
     useEffect(() => {
-        debugger
         if (pageNumber && pageSize)
 
             setParams((prev: any) => {

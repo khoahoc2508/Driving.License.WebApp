@@ -1,7 +1,7 @@
 'use client'
 
 // React Imports
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useEffect, CSSProperties } from 'react'
 
 // MUI Imports
 import Button from '@mui/material/Button'
@@ -57,6 +57,9 @@ declare module '@tanstack/table-core' {
     interface FilterMeta {
         itemRank: RankingInfo
     }
+    interface ColumnMeta<TData extends unknown, TValue> {
+        sticky?: 'left' | 'right'
+    }
 }
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
@@ -65,6 +68,27 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
         itemRank
     })
     return itemRank.passed
+}
+
+// These are the important styles to make sticky column pinning work!
+const getCommonPinningStyles = (column: Column<any>): CSSProperties => {
+    const isPinned = column.getIsPinned()
+    const isLastLeftPinnedColumn = isPinned === 'left' && column.getIsLastColumn('left')
+    const isFirstRightPinnedColumn = isPinned === 'right' && column.getIsFirstColumn('right')
+
+    return {
+        boxShadow: isLastLeftPinnedColumn
+            ? '-4px 0 4px -4px gray inset'
+            : isFirstRightPinnedColumn
+                ? '4px 0 4px -4px gray inset'
+                : undefined,
+        left: isPinned === 'left' ? `${column.getStart('left')}px` : undefined,
+        right: isPinned === 'right' ? `${column.getAfter('right')}px` : undefined,
+        opacity: isPinned ? 0.95 : 1,
+        position: isPinned ? 'sticky' : 'relative',
+        width: column.getSize(),
+        zIndex: isPinned ? 1 : 0,
+    }
 }
 
 const Table = ({
@@ -97,6 +121,7 @@ const Table = ({
     const [globalFilter, setGlobalFilter] = useState('')
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null);
+    const [columnPinning, setColumnPinning] = useState({})
 
     const getStatusChip = (status: RegistrationRecordStatus | undefined) => {
         let label = ''
@@ -153,7 +178,7 @@ const Table = ({
                             {row.original?.licenseType?.name || ''}
                         </Typography>
                     </div>
-                )
+                ),
             }),
             columnHelper.accessor('fullname', {
                 id: 'hoSo',
@@ -250,7 +275,7 @@ const Table = ({
                 )
             }),
             columnHelper.accessor('id', {
-                id: 'thaoTac',
+                id: 'thaoTác',
                 header: 'THAO TÁC',
                 cell: ({ row }) => (
                     <div className="flex items-center justify-center gap-2">
@@ -318,11 +343,13 @@ const Table = ({
         state: {
             columnFilters,
             globalFilter,
-            columnVisibility
+            columnVisibility,
+            columnPinning
         },
         onColumnFiltersChange: setColumnFilters,
         onGlobalFilterChange: setGlobalFilter,
         onColumnVisibilityChange: onColumnVisibilityChange,
+        onColumnPinningChange: setColumnPinning,
         filterFns: {
             fuzzy: fuzzyFilter
         },
@@ -333,54 +360,73 @@ const Table = ({
         getPaginationRowModel: getPaginationRowModel(),
         getFacetedRowModel: getFacetedRowModel(),
         getFacetedUniqueValues: getFacetedUniqueValues(),
-        getFacetedMinMaxValues: getFacetedMinMaxValues()
+        getFacetedMinMaxValues: getFacetedMinMaxValues(),
+        columnResizeMode: 'onChange',
+        enableColumnPinning: true,
+        enableColumnResizing: true
     })
 
-    const renderTableRows = () => {
-        if (isLoading) {
-            return <SkeletonTableRowsLoader rowsNum={10} columnsNum={getTotalColumns()} />
-        }
+    // Pin columns when component mounts
+    // useEffect(() => {
+    //     if (table.getAllColumns().length > 0) {
+    //         const sttColumn = table.getColumn('stt')
+    //         if (sttColumn) {
+    //             sttColumn.pin('left')
+    //         }
 
-        if (table.getFilteredRowModel().rows.length === 0) {
-            return (
-                <tr>
-                    <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
-                        Không có dữ liệu
-                    </td>
-                </tr>
-            )
-        }
 
-        return (<>
-            {
-                table.getRowModel().rows.map((row, index) => {
-                    return (
-                        <tr key={`${row.id}-${index}`}>
-                            {row.getVisibleCells().map((cell, cellIndex) => {
-                                return <td key={`${cell.id}-${cellIndex}`}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-                            })}
-                        </tr>
-                    )
-                })
-            }
-        </>
-        )
-    }
+    //         // Pin HẠNG column to left
+    //         const hangColumn = table.getColumn('hang')
+    //         if (hangColumn) {
+    //             hangColumn.pin('left')
+    //         }
+
+
+    //         // // Pin HỒ SƠ column to left
+    //         // const hoSoColumn = table.getColumn('hoSo')
+    //         // if (hoSoColumn) {
+    //         //     hoSoColumn.pin('left')
+    //         // }
+
+    //         // Pin THAO TÁC column to right
+    //         const thaoTacColumn = table.getColumn('thaoTác')
+    //         if (thaoTacColumn) {
+    //             thaoTacColumn.pin('right')
+    //         }
+    //     }
+    // }, [table])
+
+
 
     return (
         <>
             <Card>
                 <div className='overflow-x-auto'>
-                    <table className={styles.table}>
+                    <table
+                        className={styles.table}
+                        style={{
+                            borderCollapse: 'separate',
+                            borderSpacing: 0,
+                            width: table.getTotalSize()
+                        }}
+                    >
                         <thead>
                             {table.getHeaderGroups().map(headerGroup => (
                                 <tr key={headerGroup.id} className="h-9">
                                     {headerGroup.headers.map(header => {
                                         const isGrouped = header.column.columns && header.column.columns.length > 0
                                         const colSpan = isGrouped ? header.column.columns.length : 1
+                                        const isPinned = header.column.getIsPinned()
 
                                         return (
-                                            <th key={header.id} colSpan={colSpan}>
+                                            <th
+                                                key={header.id}
+                                                colSpan={colSpan}
+                                                style={{
+                                                    ...getCommonPinningStyles(header.column),
+                                                    backgroundColor: header.column.getIsPinned() ? 'var(--mui-palette-background-paper)' : 'transparent'
+                                                }}
+                                            >
                                                 {header.isPlaceholder ? null : (
                                                     <>
                                                         <div
@@ -396,6 +442,51 @@ const Table = ({
                                                                 desc: <ChevronRight fontSize='1.25rem' className='rotate-90' />
                                                             }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
                                                         </div>
+                                                        {/* Pin/Unpin buttons */}
+                                                        {!header.isPlaceholder && header.column.getCanPin() && (
+                                                            <div className="flex gap-1 justify-center mt-2">
+                                                                {header.column.getIsPinned() !== 'left' ? (
+                                                                    <button
+                                                                        className="border rounded px-2 text-xs"
+                                                                        onClick={() => {
+                                                                            header.column.pin('left')
+                                                                        }}
+                                                                    >
+                                                                        {'<='}
+                                                                    </button>
+                                                                ) : null}
+                                                                {header.column.getIsPinned() ? (
+                                                                    <button
+                                                                        className="border rounded px-2 text-xs"
+                                                                        onClick={() => {
+                                                                            header.column.pin(false)
+                                                                        }}
+                                                                    >
+                                                                        X
+                                                                    </button>
+                                                                ) : null}
+                                                                {header.column.getIsPinned() !== 'right' ? (
+                                                                    <button
+                                                                        className="border rounded px-2 text-xs"
+                                                                        onClick={() => {
+                                                                            header.column.pin('right')
+                                                                        }}
+                                                                    >
+                                                                        {'=>'}
+                                                                    </button>
+                                                                ) : null}
+                                                            </div>
+                                                        )}
+                                                        {/* Resizer */}
+                                                        <div
+                                                            {...{
+                                                                onDoubleClick: () => header.column.resetSize(),
+                                                                onMouseDown: header.getResizeHandler(),
+                                                                onTouchStart: header.getResizeHandler(),
+                                                                className: `resizer ${header.column.getIsResizing() ? 'isResizing' : ''
+                                                                    }`,
+                                                            }}
+                                                        />
                                                     </>
                                                 )}
                                             </th>
@@ -405,7 +496,40 @@ const Table = ({
                             ))}
                         </thead>
                         <tbody>
-                            {renderTableRows()}
+                            {table.getRowModel().rows.map((row, index) => {
+                                if (isLoading) {
+                                    return <SkeletonTableRowsLoader key={`skeleton-${index}`} rowsNum={1} columnsNum={getTotalColumns()} />
+                                }
+
+                                if (table.getFilteredRowModel().rows.length === 0) {
+                                    return (
+                                        <tr key={`no-data-${index}`}>
+                                            <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
+                                                Không có dữ liệu
+                                            </td>
+                                        </tr>
+                                    )
+                                }
+
+                                return (
+                                    <tr key={`${row.id}-${index}`}>
+                                        {row.getVisibleCells().map((cell, cellIndex) => {
+                                            const isPinned = cell.column.getIsPinned()
+                                            return (
+                                                <td
+                                                    key={`${cell.id}-${cellIndex}`}
+                                                    style={{
+                                                        ...getCommonPinningStyles(cell.column),
+                                                        backgroundColor: cell.column.getIsPinned() ? 'var(--mui-palette-background-paper)' : 'transparent'
+                                                    }}
+                                                >
+                                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                                </td>
+                                            )
+                                        })}
+                                    </tr>
+                                )
+                            })}
                         </tbody>
                     </table>
                 </div>
