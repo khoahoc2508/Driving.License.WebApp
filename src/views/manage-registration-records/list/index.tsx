@@ -546,10 +546,10 @@ const ManageRegistrationRecords = () => {
                 onClose={handleCloseColumnVisibilityPopover}
                 anchorOrigin={{
                     vertical: 'top',
-                    horizontal: 'left',
+                    horizontal: 'right',
                 }}
                 transformOrigin={{
-                    vertical: 'bottom',
+                    vertical: 'top',
                     horizontal: 'left',
                 }}
                 PaperProps={{
@@ -570,7 +570,7 @@ const ManageRegistrationRecords = () => {
                         onChange={(e) => setColumnVisibilitySearch(e.target.value)}
                     />
                 </Box>
-                <Box sx={{ maxHeight: 150, overflow: 'auto', p: 3 }} className='custom-scrollbar'>
+                <Box sx={{ maxHeight: 250, overflow: 'auto', p: 3 }} className='custom-scrollbar'>
                     <FormControlLabel
                         control={
                             <Checkbox
