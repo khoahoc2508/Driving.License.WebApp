@@ -221,7 +221,7 @@ const Table = ({
                                 </Typography>
                             </div>
                         ),
-                        size: 100,
+                        size: 120,
                     }),
                     columnHelper.accessor('payment.paidAmount', {
                         id: 'daNop',
@@ -233,7 +233,7 @@ const Table = ({
                                 </Typography>
                             </div>
                         ),
-                        size: 100,
+                        size: 120,
                     }),
                     columnHelper.accessor('payment.remainingAmount', {
                         id: 'conThieu',
@@ -248,10 +248,10 @@ const Table = ({
                                 </Typography>
                             </div>
                         ),
-                        size: 100,
+                        size: 120,
                     })
                 ],
-                size: 300,
+                size: 360,
             }),
             columnHelper.accessor('status', {
                 id: 'trangThai',
@@ -377,34 +377,33 @@ const Table = ({
     })
 
     // Pin columns when component mounts
-    // useEffect(() => {
-    //     if (table.getAllColumns().length > 0) {
-    //         const sttColumn = table.getColumn('stt')
-    //         if (sttColumn) {
-    //             sttColumn.pin('left')
-    //         }
+    useEffect(() => {
+        if (table.getAllColumns().length > 0) {
+            // Pin STT column to left
+            const sttColumn = table.getColumn('stt')
+            if (sttColumn) {
+                sttColumn.pin('left')
+            }
 
+            // Pin HẠNG column to left
+            const hangColumn = table.getColumn('hang')
+            if (hangColumn) {
+                hangColumn.pin('left')
+            }
 
-    //         // Pin HẠNG column to left
-    //         const hangColumn = table.getColumn('hang')
-    //         if (hangColumn) {
-    //             hangColumn.pin('left')
-    //         }
+            // Pin HỒ SƠ column to left
+            const hoSoColumn = table.getColumn('hoSo')
+            if (hoSoColumn) {
+                hoSoColumn.pin('left')
+            }
 
-
-    //         // // Pin HỒ SƠ column to left
-    //         // const hoSoColumn = table.getColumn('hoSo')
-    //         // if (hoSoColumn) {
-    //         //     hoSoColumn.pin('left')
-    //         // }
-
-    //         // Pin THAO TÁC column to right
-    //         const thaoTacColumn = table.getColumn('thaoTác')
-    //         if (thaoTacColumn) {
-    //             thaoTacColumn.pin('right')
-    //         }
-    //     }
-    // }, [table])
+            // Pin THAO TÁC column to right
+            const thaoTacColumn = table.getColumn('thaoTác')
+            if (thaoTacColumn) {
+                thaoTacColumn.pin('right')
+            }
+        }
+    }, [table])
 
 
 
@@ -452,41 +451,7 @@ const Table = ({
                                                                 desc: <ChevronRight fontSize='1.25rem' className='rotate-90' />
                                                             }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
                                                         </div>
-                                                        {/* Pin/Unpin buttons */}
-                                                        {!header.isPlaceholder && header.column.getCanPin() && (
-                                                            <div className="flex gap-1 justify-center mt-2">
-                                                                {header.column.getIsPinned() !== 'left' ? (
-                                                                    <button
-                                                                        className="border rounded px-2 text-xs"
-                                                                        onClick={() => {
-                                                                            header.column.pin('left')
-                                                                        }}
-                                                                    >
-                                                                        {'<='}
-                                                                    </button>
-                                                                ) : null}
-                                                                {header.column.getIsPinned() ? (
-                                                                    <button
-                                                                        className="border rounded px-2 text-xs"
-                                                                        onClick={() => {
-                                                                            header.column.pin(false)
-                                                                        }}
-                                                                    >
-                                                                        X
-                                                                    </button>
-                                                                ) : null}
-                                                                {header.column.getIsPinned() !== 'right' ? (
-                                                                    <button
-                                                                        className="border rounded px-2 text-xs"
-                                                                        onClick={() => {
-                                                                            header.column.pin('right')
-                                                                        }}
-                                                                    >
-                                                                        {'=>'}
-                                                                    </button>
-                                                                ) : null}
-                                                            </div>
-                                                        )}
+
                                                         {/* Resizer */}
                                                         <div
                                                             {...{
