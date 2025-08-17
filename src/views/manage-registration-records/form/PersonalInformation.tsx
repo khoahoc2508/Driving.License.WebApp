@@ -99,7 +99,7 @@ const PersonalInformation = ({ control, errors }: PersonalInformationProps) => {
                                             {CONFIG.SexTypeSelectOption.map((option) => (
                                                 <FormControlLabel
                                                     key={option.value}
-                                                    value={option.label}
+                                                    value={option.value}
                                                     control={<Radio />}
                                                     label={option.label}
                                                 />

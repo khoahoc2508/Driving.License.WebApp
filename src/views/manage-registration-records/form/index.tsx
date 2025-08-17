@@ -4,6 +4,7 @@ import CONFIG from "@/configs/config";
 import { components } from "@/libs/api/client/schema";
 import LicenseTypeAPI from "@/libs/api/licenseTypeApi";
 import assigneeAPI from "@/libs/api/assigneeAPI";
+import UploadAPI from "@/libs/api/uploadAPI";
 import { SCREEN_TYPE } from "@/types/Common";
 import { LicenseTypeDto } from "@/types/examSubmissionTypes";
 import { VehicleTypeDto } from "@/types/LicensesRegistrations";
@@ -30,6 +31,7 @@ import { Button, Divider, Typography, useTheme } from "@mui/material";
 import CitizenCard from "./CitizenCard";
 import InfomationRegister from "./InfomationRegister";
 import Autocomplete from '@mui/material/Autocomplete'
+import registrationRecordsAPI from "@/libs/api/registrationRecordsAPI";
 
 
 type UpsertRegistrationRecordProps = {
@@ -172,8 +174,66 @@ const UpsertRegistrationRecord = ({ screenType, id }: UpsertRegistrationRecordPr
   }
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    console.log('Form data:', data)
-    // Form sẽ tự động validate và hiển thị lỗi
+    const uploadFile = async (fileOrUrl: string | File | undefined): Promise<string | undefined> => {
+      if (fileOrUrl instanceof File) {
+        try {
+          const response = await UploadAPI.uploadFiles([fileOrUrl]);
+          return response?.data?.[0]?.relativeUrl;
+        } catch (error) {
+          console.error("Error uploading file:", error);
+          toast.error("Lỗi khi tải lên ảnh");
+          return undefined;
+        }
+      } else if (typeof fileOrUrl === 'string') {
+        const uploadsIndex = fileOrUrl.indexOf('training/uploads/');
+        if (uploadsIndex !== -1) {
+          return fileOrUrl.substring(uploadsIndex);
+        } else {
+          return fileOrUrl;
+        }
+      }
+      return undefined;
+    };
+
+    try {
+      // Upload files
+      const uploadedAvatarUrl = await uploadFile(data.avatarUrl?.[0]);
+      const uploadedCitizenIdFrontUrl = await uploadFile(data.citizenIdFrontImageUrl?.[0]);
+      const uploadedCitizenIdBackUrl = await uploadFile(data.citizenIdBackImageUrl?.[0]);
+
+      // Prepare payload
+      const payload: CreateRegistrationRecordCommand = {
+        fullname: data.fullname,
+        birthday: data.birthday ? `${data.birthday.getFullYear()}-${(data.birthday.getMonth() + 1).toString().padStart(2, '0')}-${data.birthday.getDate().toString().padStart(2, '0')}` : '',
+        gender: Number(data.gender) as 0 | 1 | 2,
+        licenseTypeCode: data.licenseTypeCode,
+        avatarUrl: uploadedAvatarUrl || '',
+        phone: data.phone,
+        email: data.email,
+        address: data.address,
+        citizenIdNumber: data.citizenIdNumber,
+        citizenIdFrontImageUrl: uploadedCitizenIdFrontUrl || '',
+        citizenIdBackImageUrl: uploadedCitizenIdBackUrl || '',
+        receivedDate: data.receivedDate ? new Date(data.receivedDate.getFullYear(), data.receivedDate.getMonth(), data.receivedDate.getDate()).toISOString() : '',
+        healthCheckDate: data.healthCheckDate ? new Date(data.healthCheckDate.getFullYear(), data.healthCheckDate.getMonth(), data.healthCheckDate.getDate()).toISOString() : null,
+        staffAssigneeId: data.staffAssigneeId || null,
+        collaboratorId: data.collaboratorId || null,
+        note: data.note
+      };
+
+      if (id) {
+        await registrationRecordsAPI.UpdateRegistrationRecord(id, payload);
+      } else {
+        await registrationRecordsAPI.CreateRegistrationRecord(payload);
+      }
+
+      toast.success('Lưu thông tin thành công!');
+      router.push(`${CONFIG.Routers.ManageRegistrationRecords}/list`);
+
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      toast.error('Có lỗi xảy ra khi lưu thông tin');
+    }
   }
 
   return (
