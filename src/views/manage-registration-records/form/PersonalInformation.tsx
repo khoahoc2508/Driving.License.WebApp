@@ -20,7 +20,7 @@ interface PersonalInformationProps {
 const PersonalInformation = ({ control, errors }: PersonalInformationProps) => {
     return (
         <>
-            <Grid container spacing={5} className='my-4'>
+            <Grid container spacing={5}>
                 {/* Left Column */}
                 <Grid size={{ xs: 12, md: 3 }} className='h-[270px]'>
                     <Controller
@@ -47,7 +47,7 @@ const PersonalInformation = ({ control, errors }: PersonalInformationProps) => {
                     <Grid container spacing={5}>
                         <Grid size={{ xs: 12 }}>
                             <Controller
-                                name='fullName'
+                                name='fullname'
                                 control={control}
                                 rules={{ required: 'Vui lòng nhập họ tên' }}
                                 render={({ field }) => (
@@ -59,8 +59,8 @@ const PersonalInformation = ({ control, errors }: PersonalInformationProps) => {
                                                 Họ tên <span style={{ color: 'red' }}>(*)</span>
                                             </span>
                                         }
-                                        error={!!errors.fullName}
-                                        helperText={errors.fullName?.message}
+                                        error={!!errors.fullname}
+                                        helperText={errors.fullname?.message}
                                     />
                                 )}
                             />
@@ -106,7 +106,7 @@ const PersonalInformation = ({ control, errors }: PersonalInformationProps) => {
                                             ))}
                                         </RadioGroup>
                                         {errors.gender && (
-                                            <FormHelperText>{errors.gender.message}</FormHelperText>
+                                            <FormHelperText className='ml-4'>{errors.gender.message}</FormHelperText>
                                         )}
                                     </FormControl>
                                 )}
@@ -115,7 +115,7 @@ const PersonalInformation = ({ control, errors }: PersonalInformationProps) => {
                     </Grid>
                 </Grid>
             </Grid>
-            <Grid container spacing={5} className='mb-4'>
+            <Grid container spacing={5} className='my-4'>
                 <Grid size={{ xs: 12, sm: 6 }}>
                     <Controller
                         name='phone'
