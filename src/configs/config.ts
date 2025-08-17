@@ -235,6 +235,28 @@ const RegistrationRecordStatus = {
   Completed: 2
 }
 
+const UserPageConfigKey = {
+  RegistrationRecords: 'collumn-view-setting'
+}
+
+const RegistrationRecordsTableColumns = {
+  STT: 'STT',
+  HANG: 'HANG',
+  HO_SO: 'HO_SO',
+  NGAY_SINH: 'NGAY_SINH',
+  NGAY_NHAN_HS: 'NGAY_NHAN_HS',
+  NGAY_KHAM_SK: 'NGAY_KHAM_SK',
+  THANH_TOAN: 'THANH_TOAN',
+  TONG: 'TONG',
+  DA_NOP: 'DA_NOP',
+  CON_THIEU: 'CON_THIEU',
+  TRANG_THAI: 'TRANG_THAI',
+  NGUOI_PHU_TRACH: 'NGUOI_PHU_TRACH',
+  CTV: 'CTV',
+  GHI_CHU: 'GHI_CHU',
+  THAO_TAC: 'THAO_TAC'
+}
+
 const CONFIG = {
   LicenseRegistrationStatus,
   LicenseRegistrationStatusMappingText,
@@ -271,7 +293,9 @@ const CONFIG = {
   paymentStatusOptions,
   registrationStatusOptions,
   AssigneeTypes,
-  RegistrationRecordStatus
+  RegistrationRecordStatus,
+  UserPageConfigKey,
+  RegistrationRecordsTableColumns
 }
 
 export default CONFIG

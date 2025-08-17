@@ -158,7 +158,7 @@ const Table = ({
     const columns = useMemo<ColumnDef<GetRegistrationRecordsDto, any>[]>(
         () => [
             columnHelper.accessor('id', {
-                id: 'stt',
+                id: CONFIG.RegistrationRecordsTableColumns.STT,
                 header: 'STT',
                 cell: ({ row, table }) => (
                     <div style={{ textAlign: 'center' }}>
@@ -170,7 +170,7 @@ const Table = ({
                 size: 80,
             }),
             columnHelper.accessor('licenseType.code', {
-                id: 'hang',
+                id: CONFIG.RegistrationRecordsTableColumns.HANG,
                 header: 'HẠNG',
                 cell: ({ row }) => (
                     <div style={{ textAlign: 'center' }}>
@@ -182,7 +182,7 @@ const Table = ({
                 size: 100,
             }),
             columnHelper.accessor('fullname', {
-                id: 'hoSo',
+                id: CONFIG.RegistrationRecordsTableColumns.HO_SO,
                 header: 'HỒ SƠ',
                 cell: ({ row }) => (
                     <div className='flex items-center gap-3'>
@@ -204,15 +204,51 @@ const Table = ({
                         </div>
                     </div>
                 ),
-                size: 200,
+                size: 220,
+            }),
+            columnHelper.accessor('birthday', {
+                id: CONFIG.RegistrationRecordsTableColumns.NGAY_SINH,
+                header: 'NGÀY SINH',
+                cell: ({ row }) => (
+                    <div style={{ textAlign: 'center' }}>
+                        <Typography variant='body2'>
+                            {row.original?.birthday ? new Date(row.original.birthday).toLocaleDateString('vi-VN') : ''}
+                        </Typography>
+                    </div>
+                ),
+                size: 150,
+            }),
+            columnHelper.accessor('receivedDate', {
+                id: CONFIG.RegistrationRecordsTableColumns.NGAY_NHAN_HS,
+                header: 'NGÀY NHẬN HS',
+                cell: ({ row }) => (
+                    <div style={{ textAlign: 'center' }}>
+                        <Typography variant='body2'>
+                            {row.original?.receivedDate ? new Date(row.original.receivedDate).toLocaleDateString('vi-VN') : ''}
+                        </Typography>
+                    </div>
+                ),
+                size: 150,
+            }),
+            columnHelper.accessor('healthCheckDate', {
+                id: CONFIG.RegistrationRecordsTableColumns.NGAY_KHAM_SK,
+                header: 'NGÀY KHÁM SK',
+                cell: ({ row }) => (
+                    <div style={{ textAlign: 'center' }}>
+                        <Typography variant='body2'>
+                            {row.original?.healthCheckDate ? new Date(row.original.healthCheckDate).toLocaleDateString('vi-VN') : ''}
+                        </Typography>
+                    </div>
+                ),
+                size: 150,
             }),
             // Grouped columns for payment
             columnHelper.group({
-                id: 'thanhToan',
+                id: CONFIG.RegistrationRecordsTableColumns.THANH_TOAN,
                 header: 'THANH TOÁN',
                 columns: [
                     columnHelper.accessor('payment.totalAmount', {
-                        id: 'tong',
+                        id: CONFIG.RegistrationRecordsTableColumns.TONG,
                         header: 'TỔNG',
                         cell: ({ row }) => (
                             <div style={{ textAlign: 'right' }}>
@@ -224,7 +260,7 @@ const Table = ({
                         size: 120,
                     }),
                     columnHelper.accessor('payment.paidAmount', {
-                        id: 'daNop',
+                        id: CONFIG.RegistrationRecordsTableColumns.DA_NOP,
                         header: 'ĐÃ NỘP',
                         cell: ({ row }) => (
                             <div style={{ textAlign: 'right' }}>
@@ -236,7 +272,7 @@ const Table = ({
                         size: 120,
                     }),
                     columnHelper.accessor('payment.remainingAmount', {
-                        id: 'conThieu',
+                        id: CONFIG.RegistrationRecordsTableColumns.CON_THIEU,
                         header: 'CÒN THIẾU',
                         cell: ({ row }) => (
                             <div style={{ textAlign: 'right' }}>
@@ -254,7 +290,7 @@ const Table = ({
                 size: 360,
             }),
             columnHelper.accessor('status', {
-                id: 'trangThai',
+                id: CONFIG.RegistrationRecordsTableColumns.TRANG_THAI,
                 header: 'TRẠNG THÁI',
                 cell: ({ row }) => (
                     <div style={{ textAlign: 'center' }}>
@@ -264,7 +300,7 @@ const Table = ({
                 size: 120,
             }),
             columnHelper.accessor('staffAssigneeName', {
-                id: 'nguoiPhuTrach',
+                id: CONFIG.RegistrationRecordsTableColumns.NGUOI_PHU_TRACH,
                 header: 'NGƯỜI PHỤ TRÁCH',
                 cell: ({ row }) => (
                     <div style={{ textAlign: 'center' }}>
@@ -274,7 +310,7 @@ const Table = ({
                 size: 200,
             }),
             columnHelper.accessor('collaboratorName', {
-                id: 'ctv',
+                id: CONFIG.RegistrationRecordsTableColumns.CTV,
                 header: 'CTV',
                 cell: ({ row }) => (
                     <div style={{ textAlign: 'center' }}>
@@ -283,8 +319,20 @@ const Table = ({
                 ),
                 size: 200,
             }),
+            columnHelper.accessor('note', {
+                id: CONFIG.RegistrationRecordsTableColumns.GHI_CHU,
+                header: 'GHI CHÚ',
+                cell: ({ row }) => (
+                    <div style={{ textAlign: 'center' }}>
+                        <Typography variant='body2' sx={{ maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                            {row.original?.note || ''}
+                        </Typography>
+                    </div>
+                ),
+                size: 200,
+            }),
             columnHelper.accessor('id', {
-                id: 'thaoTác',
+                id: CONFIG.RegistrationRecordsTableColumns.THAO_TAC,
                 header: 'THAO TÁC',
                 cell: ({ row }) => (
                     <div className="flex items-center justify-center gap-2" style={{ width: '100%' }}>
@@ -380,25 +428,25 @@ const Table = ({
     useEffect(() => {
         if (table.getAllColumns().length > 0) {
             // Pin STT column to left
-            const sttColumn = table.getColumn('stt')
+            const sttColumn = table.getColumn(CONFIG.RegistrationRecordsTableColumns.STT)
             if (sttColumn) {
                 sttColumn.pin('left')
             }
 
             // Pin HẠNG column to left
-            const hangColumn = table.getColumn('hang')
+            const hangColumn = table.getColumn(CONFIG.RegistrationRecordsTableColumns.HANG)
             if (hangColumn) {
                 hangColumn.pin('left')
             }
 
             // Pin HỒ SƠ column to left
-            const hoSoColumn = table.getColumn('hoSo')
+            const hoSoColumn = table.getColumn(CONFIG.RegistrationRecordsTableColumns.HO_SO)
             if (hoSoColumn) {
                 hoSoColumn.pin('left')
             }
 
             // Pin THAO TÁC column to right
-            const thaoTacColumn = table.getColumn('thaoTác')
+            const thaoTacColumn = table.getColumn(CONFIG.RegistrationRecordsTableColumns.THAO_TAC)
             if (thaoTacColumn) {
                 thaoTacColumn.pin('right')
             }

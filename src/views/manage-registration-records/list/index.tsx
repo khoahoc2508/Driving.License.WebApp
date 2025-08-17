@@ -37,6 +37,7 @@ import licenseTypeAPI from '@/libs/api/licenseTypeApi'
 import assigneeAPI from '@/libs/api/assigneeAPI'
 import { AssigneeType } from '@/types/assigneeTypes'
 import type { VisibilityState } from '@tanstack/react-table'
+import userPageConfigAPI from '@/libs/api/userPageConfigAPI'
 
 const ManageRegistrationRecords = () => {
 
@@ -76,6 +77,7 @@ const ManageRegistrationRecords = () => {
     const [columnVisibilityAnchorEl, setColumnVisibilityAnchorEl] = useState<HTMLElement | null>(null);
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
     const [columnVisibilitySearch, setColumnVisibilitySearch] = useState('');
+    const [columnConfig, setColumnConfig] = useState<any[]>([]);
 
     useEffect(() => {
         setParams({
@@ -87,6 +89,11 @@ const ManageRegistrationRecords = () => {
         // Fetch initial staff assignees and collaborators
         fetchStaffAssignees(1, true)
         fetchCollaborators(1, true)
+    }, [])
+
+    useEffect(() => {
+        // Fetch column configuration
+        fetchColumnConfiguration()
     }, [])
 
     useEffect(() => {
@@ -184,6 +191,29 @@ const ManageRegistrationRecords = () => {
         }
     }
 
+    const fetchColumnConfiguration = async () => {
+        try {
+            const res = await userPageConfigAPI.GetUserPageConfig({ pageKey: CONFIG.UserPageConfigKey.RegistrationRecords })
+            if (res?.data?.data) {
+                const config = res.data.data
+                setColumnConfig(config)
+
+                // Convert API response to VisibilityState format
+                const visibilityState: VisibilityState = {}
+                config.forEach((col: any) => {
+                    // Use API column names directly as keys
+                    visibilityState[col.column] = col.visible
+                })
+
+                setColumnVisibility(visibilityState)
+            }
+        } catch (error: any) {
+            console.error('Error fetching column configuration:', error)
+            // Set default visibility if API fails
+            setColumnVisibility({})
+        }
+    }
+
     const handleStaffAssigneeScroll = (event: React.UIEvent<HTMLDivElement>) => {
         const target = event.currentTarget
         if (target.scrollTop + target.clientHeight >= target.scrollHeight - 1 && hasMoreStaff) {
@@ -273,9 +303,29 @@ const ManageRegistrationRecords = () => {
         setColumnVisibilityAnchorEl(null);
     };
 
-    const handleSaveColumnVisibility = () => {
-        setColumnVisibilityAnchorEl(null);
-        toast.success('Đã lưu cài đặt hiển thị cột');
+    const handleSaveColumnVisibility = async () => {
+        try {
+            // Convert VisibilityState back to API format
+            const columnConfigToSave = columnConfig.map(col => {
+                const isVisible = columnVisibility[col.column] !== false
+
+                return {
+                    column: col.column,
+                    visible: isVisible
+                }
+            })
+
+            await userPageConfigAPI.UpsertUserPageConfig({
+                pageKey: CONFIG.UserPageConfigKey.RegistrationRecords,
+                columns: columnConfigToSave
+            })
+
+            setColumnVisibilityAnchorEl(null);
+            toast.success('Đã lưu cài đặt hiển thị cột');
+        } catch (error: any) {
+            console.error('Error saving column configuration:', error)
+            toast.error('Có lỗi xảy ra khi lưu cài đặt');
+        }
     };
 
     const handleColumnVisibilityChange = (updater: VisibilityState | ((old: VisibilityState) => VisibilityState)) => {
@@ -527,28 +577,14 @@ const ManageRegistrationRecords = () => {
                                 onChange={(e) => {
                                     const checked = e.target.checked;
                                     const newVisibility: VisibilityState = {};
-                                    const allColumns = [
-                                        { id: 'stt', header: 'STT' },
-                                        { id: 'hang', header: 'HẠNG' },
-                                        { id: 'hoSo', header: 'HỒ SƠ' },
-                                        { id: 'ngaySinh', header: 'NGÀY SINH' },
-                                        { id: 'ngayNhanHS', header: 'NGÀY NHẬN HS' },
-                                        { id: 'ngayKhamSK', header: 'NGÀY KHÁM SK' },
-                                        { id: 'tong', header: 'TỔNG' },
-                                        { id: 'daNop', header: 'ĐÃ NỘP' },
-                                        { id: 'conThieu', header: 'CÒN THIẾU' },
-                                        { id: 'trangThai', header: 'TRẠNG THÁI' },
-                                        { id: 'nguoiPhuTrach', header: 'NGƯỜI PHỤ TRÁCH' },
-                                        { id: 'ctv', header: 'CTV' },
-                                        { id: 'thaoTac', header: 'THAO TÁC' }
-                                    ];
-                                    const filteredColumns = allColumns.filter(col =>
+                                    const filteredColumns = columnConfig.filter(col =>
                                         columnVisibilitySearch === '' ||
-                                        col.header.toLowerCase().includes(columnVisibilitySearch.toLowerCase()) ||
-                                        removeAccents(col.header.toLowerCase()).includes(removeAccents(columnVisibilitySearch.toLowerCase()))
+                                        col.column.toLowerCase().includes(columnVisibilitySearch.toLowerCase()) ||
+                                        removeAccents(col.column.toLowerCase()).includes(removeAccents(columnVisibilitySearch.toLowerCase()))
                                     );
                                     filteredColumns.forEach(col => {
-                                        newVisibility[col.id] = checked;
+                                        // Use API column names directly
+                                        newVisibility[col.column] = checked;
                                     });
                                     setColumnVisibility(newVisibility);
                                 }}
@@ -557,44 +593,46 @@ const ManageRegistrationRecords = () => {
                         label="Tất cả"
                     />
                     <Box sx={{ mt: 2 }}>
-                        {[
-                            { id: 'stt', header: 'STT' },
-                            { id: 'hang', header: 'HẠNG' },
-                            { id: 'hoSo', header: 'HỒ SƠ' },
-                            { id: 'ngaySinh', header: 'NGÀY SINH' },
-                            { id: 'ngayNhanHS', header: 'NGÀY NHẬN HS' },
-                            { id: 'ngayKhamSK', header: 'NGÀY KHÁM SK' },
-                            { id: 'tong', header: 'TỔNG' },
-                            { id: 'daNop', header: 'ĐÃ NỘP' },
-                            { id: 'conThieu', header: 'CÒN THIẾU' },
-                            { id: 'trangThai', header: 'TRẠNG THÁI' },
-                            { id: 'nguoiPhuTrach', header: 'NGƯỜI PHỤ TRÁCH' },
-                            { id: 'ctv', header: 'CTV' },
-                            { id: 'thaoTac', header: 'THAO TÁC' }
-                        ]
+                        {columnConfig
                             .filter(column =>
                                 columnVisibilitySearch === '' ||
-                                column.header.toLowerCase().includes(columnVisibilitySearch.toLowerCase()) ||
-                                removeAccents(column.header.toLowerCase()).includes(removeAccents(columnVisibilitySearch.toLowerCase()))
+                                column.column.toLowerCase().includes(columnVisibilitySearch.toLowerCase()) ||
+                                removeAccents(column.column.toLowerCase()).includes(removeAccents(columnVisibilitySearch.toLowerCase()))
                             )
-                            .map((column) => (
-                                <FormControlLabel
-                                    key={column.id}
-                                    control={
-                                        <Checkbox
-                                            checked={columnVisibility[column.id] !== false}
-                                            onChange={(e) => {
-                                                setColumnVisibility(prev => ({
-                                                    ...prev,
-                                                    [column.id]: e.target.checked
-                                                }));
-                                            }}
-                                        />
-                                    }
-                                    label={column.header}
-                                    sx={{ display: 'block', mb: 1 }}
-                                />
-                            ))}
+                            .map((column) => {
+                                const columnHeaderMapping: { [key: string]: string } = {
+                                    'STT': 'STT',
+                                    'HANG': 'HẠNG',
+                                    'HO_SO': 'HỒ SƠ',
+                                    'NGAY_SINH': 'NGÀY SINH',
+                                    'NGAY_NHAN_HS': 'NGÀY NHẬN HS',
+                                    'NGAY_KHAM_SK': 'NGÀY KHÁM SK',
+                                    'THANH_TOAN': 'THANH TOÁN',
+                                    'TRANG_THAI': 'TRẠNG THÁI',
+                                    'NGUOI_PHU_TRACH': 'NGƯỜI PHỤ TRÁCH',
+                                    'CTV': 'CTV',
+                                    'GHI_CHU': 'GHI CHÚ'
+                                }
+
+                                return (
+                                    <FormControlLabel
+                                        key={column.column}
+                                        control={
+                                            <Checkbox
+                                                checked={columnVisibility[column.column] !== false}
+                                                onChange={(e) => {
+                                                    setColumnVisibility(prev => ({
+                                                        ...prev,
+                                                        [column.column]: e.target.checked
+                                                    }));
+                                                }}
+                                            />
+                                        }
+                                        label={columnHeaderMapping[column.column]}
+                                        sx={{ display: 'block', mb: 1 }}
+                                    />
+                                );
+                            })}
                     </Box>
                 </Box>
                 <Box sx={{ display: 'flex', gap: 3, mt: 2, justifyContent: 'center', alignItems: 'center', p: 3, borderTop: '1px solid #e0e0e0' }}>
