@@ -308,7 +308,8 @@ const ManageRegistrationRecords = () => {
 
                 return {
                     column: col.column,
-                    visible: isVisible
+                    visible: isVisible,
+                    label: col.label
                 }
             })
 
