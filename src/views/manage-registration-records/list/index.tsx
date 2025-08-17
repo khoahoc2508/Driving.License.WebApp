@@ -198,10 +198,8 @@ const ManageRegistrationRecords = () => {
                 const config = res.data.data
                 setColumnConfig(config)
 
-                // Convert API response to VisibilityState format
                 const visibilityState: VisibilityState = {}
                 config.forEach((col: any) => {
-                    // Use API column names directly as keys
                     visibilityState[col.column] = col.visible
                 })
 
@@ -209,7 +207,6 @@ const ManageRegistrationRecords = () => {
             }
         } catch (error: any) {
             console.error('Error fetching column configuration:', error)
-            // Set default visibility if API fails
             setColumnVisibility({})
         }
     }
@@ -583,7 +580,6 @@ const ManageRegistrationRecords = () => {
                                         removeAccents(col.column.toLowerCase()).includes(removeAccents(columnVisibilitySearch.toLowerCase()))
                                     );
                                     filteredColumns.forEach(col => {
-                                        // Use API column names directly
                                         newVisibility[col.column] = checked;
                                     });
                                     setColumnVisibility(newVisibility);
@@ -600,18 +596,39 @@ const ManageRegistrationRecords = () => {
                                 removeAccents(column.column.toLowerCase()).includes(removeAccents(columnVisibilitySearch.toLowerCase()))
                             )
                             .map((column) => {
-                                const columnHeaderMapping: { [key: string]: string } = {
-                                    'STT': 'STT',
-                                    'HANG': 'HẠNG',
-                                    'HO_SO': 'HỒ SƠ',
-                                    'NGAY_SINH': 'NGÀY SINH',
-                                    'NGAY_NHAN_HS': 'NGÀY NHẬN HS',
-                                    'NGAY_KHAM_SK': 'NGÀY KHÁM SK',
-                                    'THANH_TOAN': 'THANH TOÁN',
-                                    'TRANG_THAI': 'TRẠNG THÁI',
-                                    'NGUOI_PHU_TRACH': 'NGƯỜI PHỤ TRÁCH',
-                                    'CTV': 'CTV',
-                                    'GHI_CHU': 'GHI CHÚ'
+                                if (column.column === CONFIG.RegistrationRecordsTableColumns.TONG || column.column === CONFIG.RegistrationRecordsTableColumns.DA_NOP || column.column === CONFIG.RegistrationRecordsTableColumns.CON_THIEU) {
+                                    if (column.column === CONFIG.RegistrationRecordsTableColumns.TONG) {
+                                        const tongVisible = columnVisibility[CONFIG.RegistrationRecordsTableColumns.TONG] !== false;
+                                        const daNopVisible = columnVisibility[CONFIG.RegistrationRecordsTableColumns.DA_NOP] !== false;
+                                        const conThieuVisible = columnVisibility[CONFIG.RegistrationRecordsTableColumns.CON_THIEU] !== false;
+                                        const allVisible = tongVisible && daNopVisible && conThieuVisible;
+                                        const someVisible = tongVisible || daNopVisible || conThieuVisible;
+
+                                        return (
+                                            <Box key="payment-group" sx={{ mb: 2 }}>
+                                                <FormControlLabel
+                                                    control={
+                                                        <Checkbox
+                                                            checked={allVisible}
+                                                            indeterminate={someVisible && !allVisible}
+                                                            onChange={(e) => {
+                                                                const checked = e.target.checked;
+                                                                setColumnVisibility(prev => ({
+                                                                    ...prev,
+                                                                    [CONFIG.RegistrationRecordsTableColumns.TONG]: checked,
+                                                                    [CONFIG.RegistrationRecordsTableColumns.DA_NOP]: checked,
+                                                                    [CONFIG.RegistrationRecordsTableColumns.CON_THIEU]: checked
+                                                                }));
+                                                            }}
+                                                        />
+                                                    }
+                                                    label="THANH TOÁN"
+                                                    sx={{ display: 'block', mb: 1, fontWeight: 'bold' }}
+                                                />
+                                            </Box>
+                                        );
+                                    }
+                                    return null;
                                 }
 
                                 return (
@@ -628,7 +645,7 @@ const ManageRegistrationRecords = () => {
                                                 }}
                                             />
                                         }
-                                        label={columnHeaderMapping[column.column]}
+                                        label={column.label}
                                         sx={{ display: 'block', mb: 1 }}
                                     />
                                 );

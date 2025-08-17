@@ -211,7 +211,7 @@ const Table = ({
                 header: 'NGÀY SINH',
                 cell: ({ row }) => (
                     <div style={{ textAlign: 'center' }}>
-                        <Typography variant='body2'>
+                        <Typography>
                             {row.original?.birthday ? new Date(row.original.birthday).toLocaleDateString('vi-VN') : ''}
                         </Typography>
                     </div>
@@ -223,7 +223,7 @@ const Table = ({
                 header: 'NGÀY NHẬN HS',
                 cell: ({ row }) => (
                     <div style={{ textAlign: 'center' }}>
-                        <Typography variant='body2'>
+                        <Typography>
                             {row.original?.receivedDate ? new Date(row.original.receivedDate).toLocaleDateString('vi-VN') : ''}
                         </Typography>
                     </div>
@@ -235,7 +235,7 @@ const Table = ({
                 header: 'NGÀY KHÁM SK',
                 cell: ({ row }) => (
                     <div style={{ textAlign: 'center' }}>
-                        <Typography variant='body2'>
+                        <Typography>
                             {row.original?.healthCheckDate ? new Date(row.original.healthCheckDate).toLocaleDateString('vi-VN') : ''}
                         </Typography>
                     </div>
@@ -304,27 +304,27 @@ const Table = ({
                 header: 'NGƯỜI PHỤ TRÁCH',
                 cell: ({ row }) => (
                     <div style={{ textAlign: 'center' }}>
-                        <Typography>{row.original?.staffAssigneeName || ''}</Typography>
+                        <Typography sx={{ maxWidth: 230, overflow: 'hidden', textOverflow: 'ellipsis' }}>{row.original?.staffAssigneeName || ''}</Typography>
                     </div>
                 ),
-                size: 200,
+                size: 230,
             }),
             columnHelper.accessor('collaboratorName', {
                 id: CONFIG.RegistrationRecordsTableColumns.CTV,
                 header: 'CTV',
                 cell: ({ row }) => (
                     <div style={{ textAlign: 'center' }}>
-                        <Typography>{row.original?.collaboratorName || ''}</Typography>
+                        <Typography sx={{ maxWidth: 230, overflow: 'hidden', textOverflow: 'ellipsis' }}>{row.original?.collaboratorName || ''}</Typography>
                     </div>
                 ),
-                size: 200,
+                size: 230,
             }),
             columnHelper.accessor('note', {
                 id: CONFIG.RegistrationRecordsTableColumns.GHI_CHU,
                 header: 'GHI CHÚ',
                 cell: ({ row }) => (
                     <div style={{ textAlign: 'center' }}>
-                        <Typography variant='body2' sx={{ maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        <Typography sx={{ maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis' }}>
                             {row.original?.note || ''}
                         </Typography>
                     </div>
@@ -458,7 +458,7 @@ const Table = ({
     return (
         <>
             <Card>
-                <div className='overflow-x-auto'>
+                <div className='overflow-x-auto custom-scrollbar'>
                     <table
                         className={styles.table}
                         style={{
