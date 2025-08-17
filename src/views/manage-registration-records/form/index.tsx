@@ -8,7 +8,7 @@ import UploadAPI from "@/libs/api/uploadAPI";
 import { SCREEN_TYPE } from "@/types/Common";
 import { LicenseTypeDto } from "@/types/examSubmissionTypes";
 import { VehicleTypeDto } from "@/types/LicensesRegistrations";
-import { CreateRegistrationRecordCommand, GenderType } from "@/types/registrationRecords";
+import { CreateRegistrationRecordCommand, UpdateRegistrationRecordCommand, GenderType } from "@/types/registrationRecords";
 import { AssigneeType } from "@/types/assigneeTypes";
 import { useEffect, useState } from "react";
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
@@ -43,7 +43,7 @@ type UpsertRegistrationRecordProps = {
 type FormValues = {
   fullname?: string;
   birthday?: Date | null | undefined;
-  gender?: components["schemas"]["GenderType"];
+  gender?: components["schemas"]["GenderType"] | null;
   licenseTypeCode?: string;
   avatarUrl?: (string | File)[]
   phone?: string;
@@ -63,6 +63,7 @@ const UpsertRegistrationRecord = ({ screenType, id }: UpsertRegistrationRecordPr
   const [licenseTypes, setLicenseTypes] = useState<LicenseTypeDto[]>([])
   const [staffAssigneeOptions, setStaffAssigneeOptions] = useState<{ label: string; value: string }[]>([])
   const [collaboratorOptions, setCollaboratorOptions] = useState<{ label: string; value: string }[]>([])
+  const [isLoading, setIsLoading] = useState(false)
   const theme = useTheme()
   const router = useRouter()
 
@@ -79,7 +80,7 @@ const UpsertRegistrationRecord = ({ screenType, id }: UpsertRegistrationRecordPr
     defaultValues: {
       fullname: '',
       birthday: null,
-      gender: undefined,
+      gender: null,
       licenseTypeCode: '',
       avatarUrl: [],
       phone: '',
@@ -131,6 +132,13 @@ const UpsertRegistrationRecord = ({ screenType, id }: UpsertRegistrationRecordPr
     fetchCollaborators()
   }, []);
 
+  // Fetch data when id exists (edit mode)
+  useEffect(() => {
+    if (id) {
+      fetchRegistrationRecordData()
+    }
+  }, [id]);
+
   const fetchStaffAssignees = async () => {
     try {
       const res = await assigneeAPI.GetAssignees({
@@ -173,6 +181,52 @@ const UpsertRegistrationRecord = ({ screenType, id }: UpsertRegistrationRecordPr
     }
   }
 
+  const fetchRegistrationRecordData = async () => {
+    if (!id) return
+
+    try {
+      setIsLoading(true)
+      const response = await registrationRecordsAPI.GetRegistrationRecordById(id)
+
+      if (response.data.success) {
+        const data = response.data.data
+        setValue('fullname', data.fullname || '')
+        setValue('birthday', data.birthday ? new Date(data.birthday) : null)
+
+        const genderValue = data.gender !== undefined && data.gender !== null ? Number(data.gender) as 0 | 1 | 2 : null
+        setValue('gender', genderValue)
+
+        setValue('licenseTypeCode', data?.licenseTypeCode || '')
+        setValue('phone', data.phone || '')
+        setValue('email', data.email || '')
+        setValue('address', data.address || '')
+        setValue('citizenIdNumber', data.citizenIdNumber || '')
+        setValue('receivedDate', data.receivedDate ? new Date(data.receivedDate) : new Date())
+        setValue('healthCheckDate', data.healthCheckDate ? new Date(data.healthCheckDate) : null)
+        setValue('staffAssigneeId', data.staffAssigneeId || '')
+        setValue('collaboratorId', data.collaboratorId || '')
+        setValue('note', data.note || '')
+
+        if (data.avatarUrl && data.avatarUrl !== '') {
+          setValue('avatarUrl', [data.avatarUrl])
+        }
+
+        if (data.citizenIdFrontImageUrl && data.citizenIdFrontImageUrl !== '') {
+          setValue('citizenIdFrontImageUrl', [data.citizenIdFrontImageUrl])
+        }
+
+        if (data.citizenIdBackImageUrl && data.citizenIdBackImageUrl !== '') {
+          setValue('citizenIdBackImageUrl', [data.citizenIdBackImageUrl])
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching registration record data:', error)
+      toast.error('Có lỗi xảy ra khi tải dữ liệu')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const uploadFile = async (fileOrUrl: string | File | undefined): Promise<string | undefined> => {
       if (fileOrUrl instanceof File) {
@@ -201,11 +255,11 @@ const UpsertRegistrationRecord = ({ screenType, id }: UpsertRegistrationRecordPr
       const uploadedCitizenIdFrontUrl = await uploadFile(data.citizenIdFrontImageUrl?.[0]);
       const uploadedCitizenIdBackUrl = await uploadFile(data.citizenIdBackImageUrl?.[0]);
 
-      // Prepare payload
-      const payload: CreateRegistrationRecordCommand = {
+      // Prepare payload based on mode
+      const basePayload = {
         fullname: data.fullname,
         birthday: data.birthday ? `${data.birthday.getFullYear()}-${(data.birthday.getMonth() + 1).toString().padStart(2, '0')}-${data.birthday.getDate().toString().padStart(2, '0')}` : '',
-        gender: Number(data.gender) as 0 | 1 | 2,
+        gender: data.gender !== null ? Number(data.gender) as 0 | 1 | 2 : undefined,
         licenseTypeCode: data.licenseTypeCode,
         avatarUrl: uploadedAvatarUrl || '',
         phone: data.phone,
@@ -222,12 +276,16 @@ const UpsertRegistrationRecord = ({ screenType, id }: UpsertRegistrationRecordPr
       };
 
       if (id) {
-        await registrationRecordsAPI.UpdateRegistrationRecord(id, payload);
+        // Edit mode - use UpdateRegistrationRecordCommand
+        const updatePayload: UpdateRegistrationRecordCommand = basePayload as UpdateRegistrationRecordCommand;
+        await registrationRecordsAPI.UpdateRegistrationRecord(id, updatePayload);
       } else {
-        await registrationRecordsAPI.CreateRegistrationRecord(payload);
+        // Create mode - use CreateRegistrationRecordCommand
+        const createPayload: CreateRegistrationRecordCommand = basePayload as CreateRegistrationRecordCommand;
+        await registrationRecordsAPI.CreateRegistrationRecord(createPayload);
       }
 
-      toast.success('Lưu thông tin thành công!');
+      toast.success(id ? 'Cập nhật thành công!' : 'Lưu thông tin thành công!');
       router.push(`${CONFIG.Routers.ManageRegistrationRecords}/list`);
 
     } catch (error) {
@@ -248,7 +306,7 @@ const UpsertRegistrationRecord = ({ screenType, id }: UpsertRegistrationRecordPr
           <i className="ri-arrow-left-line" style={{ fontSize: '20px', color: theme.palette.primary.main }} />
         </Button>
         <Typography variant='h4'>
-          Thêm mới hồ sơ
+          {id ? 'Chỉnh sửa hồ sơ' : 'Thêm mới hồ sơ'}
         </Typography>
       </CardContent>
       <Divider />
@@ -352,8 +410,14 @@ const UpsertRegistrationRecord = ({ screenType, id }: UpsertRegistrationRecordPr
         <Button variant='outlined' color='secondary' onClick={() => router.push(`${CONFIG.Routers.ManageRegistrationRecords}/list`)}>
           Hủy
         </Button>
-        <Button variant='contained' color='primary' type='submit' form='registration-record-form'>
-          Lưu thay dổi
+        <Button
+          variant='contained'
+          color='primary'
+          type='submit'
+          form='registration-record-form'
+          disabled={isLoading}
+        >
+          {isLoading ? 'Đang xử lý...' : 'Lưu thay đổi'}
         </Button>
       </CardContent>
     </Card>

@@ -37,14 +37,13 @@ import { Card, IconButton, Typography } from '@mui/material'
 import { toast } from 'react-toastify'
 
 import ChevronRight from '@menu/svg/ChevronRight'
-
+import { useRouter } from 'next/navigation'
 // Style Imports
 import styles from '@core/styles/table.module.css'
 
 import registrationRecordsAPI from '@/libs/api/registrationRecordsAPI'
 import SkeletonTableRowsLoader from '@/components/common/SkeletonTableRowsLoader'
 import type { GetRegistrationRecordsDto, GetRegistrationRecordsListType, RegistrationRecordStatus } from '@/types/registrationRecords'
-import { getInitials } from '@/utils/getInitials'
 import CONFIG from '@/configs/config'
 
 // Column Definitions
@@ -121,6 +120,8 @@ const Table = ({
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null);
     const [columnPinning, setColumnPinning] = useState({})
+
+    const router = useRouter()
 
     const getStatusChip = (status: RegistrationRecordStatus | undefined) => {
         let label = ''
@@ -336,8 +337,10 @@ const Table = ({
                 header: 'THAO TÁC',
                 cell: ({ row }) => (
                     <div className="flex items-center justify-center gap-2" style={{ width: '100%' }}>
-                        <IconButton>
-                            <i className="ri-edit-box-line text-textSecondary" />
+                        <IconButton onClick={() => router.push(`${CONFIG.Routers.ManageRegistrationRecords}/edit/${row.original.id}`)}>
+                            <a href={`${CONFIG.Routers.ManageRegistrationRecords}/edit/${row.original.id}`} className='flex items-center cursor-pointer'>
+                                <i className="ri-edit-box-line text-textSecondary" />
+                            </a>
                         </IconButton>
                         <IconButton onClick={() => handleOpenDeleteDialog(row.original.id)}>
                             <i className='ri-delete-bin-7-line text-textSecondary' />

@@ -22,6 +22,10 @@ const GetRegistrationRecords = async (params: GetRegistrationRecordsQueryParams)
   })
 }
 
+const GetRegistrationRecordById = async (id: string) => {
+  return await axiosInstance.get(`/api/registration-records/${id}`)
+}
+
 const CreateRegistrationRecord = async (data: CreateRegistrationRecordCommand) => {
   return await axiosInstance.post('/api/registration-records', data)
 }
@@ -36,6 +40,7 @@ const DeleteRegistrationRecord = async (id: string) => {
 
 const registrationRecordsAPI = {
   GetRegistrationRecords,
+  GetRegistrationRecordById,
   CreateRegistrationRecord,
   UpdateRegistrationRecord,
   DeleteRegistrationRecord

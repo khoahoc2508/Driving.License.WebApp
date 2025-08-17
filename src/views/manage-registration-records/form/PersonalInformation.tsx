@@ -95,7 +95,12 @@ const PersonalInformation = ({ control, errors }: PersonalInformationProps) => {
                                 rules={{ required: 'Vui lòng chọn giới tính' }}
                                 render={({ field }) => (
                                     <FormControl error={!!errors.gender}>
-                                        <RadioGroup row {...field} name='gender-buttons-group'>
+                                        <RadioGroup
+                                            row
+                                            value={field.value}
+                                            onChange={field.onChange}
+                                            name='gender-buttons-group'
+                                        >
                                             {CONFIG.SexTypeSelectOption.map((option) => (
                                                 <FormControlLabel
                                                     key={option.value}
