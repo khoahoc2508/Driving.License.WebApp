@@ -381,7 +381,7 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
 
       if (response.data.success) {
         toast.success(id ? 'Cập nhật thành công' : 'Thêm mới thành công')
-        router.push(CONFIG.Routers.ManageLicensesRegistration)
+        router.push(CONFIG.Routers.ManageRegistrationRecords)
       } else {
         toast.error(response.data.message || 'Có lỗi xảy ra')
       }
@@ -394,7 +394,7 @@ const LicenseRegistrationForm = ({ id }: LicenseRegistrationFormProps) => {
   return (
     <Grid container spacing={6}>
       <Grid size={{ xs: 12 }}>
-        <Header onCancel={() => router.push(CONFIG.Routers.ManageLicensesRegistration)} />
+        <Header onCancel={() => router.push(CONFIG.Routers.ManageRegistrationRecords)} />
       </Grid>
       <form id="license-registration-form" onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={6}>

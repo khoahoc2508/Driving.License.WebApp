@@ -5,6 +5,7 @@ export type GetRegistrationRecordsListType = components['schemas']['PaginatedLis
 export type CreateRegistrationRecordCommand = components['schemas']['CreateRegistrationRecordCommand']
 export type UpdateRegistrationRecordCommand = components['schemas']['UpdateRegistrationRecordCommand']
 export type RegistrationRecordStatus = components['schemas']['RegistrationRecordStatus']
+export type GenderType = components['schemas']['GenderType']
 export type PaymentStatus = components['schemas']['PaymentStatus']
 export type GetRegistrationRecordsQueryParams = {
   licenseTypeCode?: string[]

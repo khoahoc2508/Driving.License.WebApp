@@ -117,8 +117,8 @@ const AddFeeTypeDialog = ({
             return mode === DialogMode.EDIT ? 'Đang chỉnh sửa...' : 'Đang thêm...'
         }
 
-        
-return 'XÁC NHẬN'
+
+        return 'XÁC NHẬN'
     }
 
     return (
@@ -167,7 +167,7 @@ return 'XÁC NHẬN'
                                 {...field}
                                 label={
                                     <span>
-                                        Tên <span style={{ color: 'red' }}>*</span>
+                                        Tên <span style={{ color: 'red' }}>(*)</span>
                                     </span>
                                 }
                                 fullWidth

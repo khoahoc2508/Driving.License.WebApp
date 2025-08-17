@@ -38,6 +38,7 @@ import assigneeAPI from '@/libs/api/assigneeAPI'
 import { AssigneeType } from '@/types/assigneeTypes'
 import type { VisibilityState } from '@tanstack/react-table'
 import userPageConfigAPI from '@/libs/api/userPageConfigAPI'
+import Link from '@/components/Link'
 
 const ManageRegistrationRecords = () => {
 
@@ -517,9 +518,11 @@ const ManageRegistrationRecords = () => {
                             placeholder='Họ tên, số điện thoại'
                         />
                     </div>
-                    <Button variant='contained' color='primary' className='w-full sm:w-auto'>
-                        THÊM MỚI
-                    </Button>
+                    <Link href={`${CONFIG.Routers.ManageRegistrationRecords}/create`} passHref legacyBehavior className='max-sm:is-full'>
+                        <Button variant='contained' color='primary' className='w-full sm:w-auto'>
+                            THÊM MỚI
+                        </Button>
+                    </Link>
                 </div>
                 <Table
                     data={dataTable}
