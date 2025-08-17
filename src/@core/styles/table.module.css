@@ -3,6 +3,7 @@
   border-collapse: collapse;
   font-size: 0.875rem;
   white-space: nowrap;
+  table-layout: fixed;
 
   [align='right'] > * {
     text-align: end;

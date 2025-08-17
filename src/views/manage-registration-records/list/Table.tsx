@@ -84,7 +84,6 @@ const getCommonPinningStyles = (column: Column<any>): CSSProperties => {
                 : undefined,
         left: isPinned === 'left' ? `${column.getStart('left')}px` : undefined,
         right: isPinned === 'right' ? `${column.getAfter('right')}px` : undefined,
-        opacity: isPinned ? 0.95 : 1,
         position: isPinned ? 'sticky' : 'relative',
         width: column.getSize(),
         zIndex: isPinned ? 1 : 0,
@@ -168,6 +167,7 @@ const Table = ({
                         </Typography>
                     </div>
                 ),
+                size: 80,
             }),
             columnHelper.accessor('licenseType.code', {
                 id: 'hang',
@@ -179,6 +179,7 @@ const Table = ({
                         </Typography>
                     </div>
                 ),
+                size: 100,
             }),
             columnHelper.accessor('fullname', {
                 id: 'hoSo',
@@ -202,7 +203,8 @@ const Table = ({
                             </Typography>
                         </div>
                     </div>
-                )
+                ),
+                size: 200,
             }),
             // Grouped columns for payment
             columnHelper.group({
@@ -218,7 +220,8 @@ const Table = ({
                                     {formatCurrency(row.original?.payment?.totalAmount)}
                                 </Typography>
                             </div>
-                        )
+                        ),
+                        size: 100,
                     }),
                     columnHelper.accessor('payment.paidAmount', {
                         id: 'daNop',
@@ -229,7 +232,8 @@ const Table = ({
                                     {formatCurrency(row.original?.payment?.paidAmount)}
                                 </Typography>
                             </div>
-                        )
+                        ),
+                        size: 100,
                     }),
                     columnHelper.accessor('payment.remainingAmount', {
                         id: 'conThieu',
@@ -243,9 +247,11 @@ const Table = ({
                                     {formatCurrency(row.original?.payment?.remainingAmount)}
                                 </Typography>
                             </div>
-                        )
+                        ),
+                        size: 100,
                     })
-                ]
+                ],
+                size: 300,
             }),
             columnHelper.accessor('status', {
                 id: 'trangThai',
@@ -254,7 +260,8 @@ const Table = ({
                     <div style={{ textAlign: 'center' }}>
                         {getStatusChip(row.original?.status as RegistrationRecordStatus)}
                     </div>
-                )
+                ),
+                size: 120,
             }),
             columnHelper.accessor('staffAssigneeName', {
                 id: 'nguoiPhuTrach',
@@ -263,7 +270,8 @@ const Table = ({
                     <div style={{ textAlign: 'center' }}>
                         <Typography>{row.original?.staffAssigneeName || ''}</Typography>
                     </div>
-                )
+                ),
+                size: 200,
             }),
             columnHelper.accessor('collaboratorName', {
                 id: 'ctv',
@@ -272,13 +280,14 @@ const Table = ({
                     <div style={{ textAlign: 'center' }}>
                         <Typography>{row.original?.collaboratorName || ''}</Typography>
                     </div>
-                )
+                ),
+                size: 200,
             }),
             columnHelper.accessor('id', {
                 id: 'thaoTác',
                 header: 'THAO TÁC',
                 cell: ({ row }) => (
-                    <div className="flex items-center justify-center gap-2">
+                    <div className="flex items-center justify-center gap-2" style={{ width: '100%' }}>
                         <IconButton>
                             <i className="ri-edit-box-line text-textSecondary" />
                         </IconButton>
@@ -287,7 +296,8 @@ const Table = ({
                         </IconButton>
                     </div>
                 ),
-                enableSorting: false
+                enableSorting: false,
+                size: 120,
             })
         ],
         [data, setData]
