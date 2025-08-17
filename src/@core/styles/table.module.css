@@ -4,6 +4,7 @@
   font-size: 0.875rem;
   white-space: nowrap;
   table-layout: fixed;
+  min-height: 250px;
 
   [align='right'] > * {
     text-align: end;

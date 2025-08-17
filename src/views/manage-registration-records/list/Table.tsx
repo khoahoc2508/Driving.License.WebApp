@@ -188,7 +188,7 @@ const Table = ({
                 cell: ({ row }) => (
                     <div className='flex items-center gap-3'>
                         <Avatar
-                            src={row.original?.avatarUrl}
+                            src={`${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}${row.original?.avatarUrl}`}
                             sx={{
                                 width: 40,
                                 height: 40
@@ -522,22 +522,29 @@ const Table = ({
                             ))}
                         </thead>
                         <tbody>
-                            {table.getRowModel().rows.map((row, index) => {
-                                if (isLoading) {
-                                    return <SkeletonTableRowsLoader key={`skeleton-${index}`} rowsNum={1} columnsNum={getTotalColumns()} />
-                                }
-
-                                if (table.getFilteredRowModel().rows.length === 0) {
-                                    return (
-                                        <tr key={`no-data-${index}`}>
-                                            <td colSpan={table.getVisibleFlatColumns().length} className='text-center'>
-                                                Không có dữ liệu
-                                            </td>
-                                        </tr>
-                                    )
-                                }
-
-                                return (
+                            {isLoading ? (
+                                // Show skeleton loading when data is loading
+                                <SkeletonTableRowsLoader
+                                    rowsNum={Math.min(pageSize, 5)} // Show max 5 skeleton rows
+                                    columnsNum={getTotalColumns()}
+                                />
+                            ) : table.getRowModel().rows.length === 0 ? (
+                                // Show no data message when no rows
+                                <tr>
+                                    <td
+                                        colSpan={table.getVisibleFlatColumns().length}
+                                        className='text-center py-8'
+                                        style={{
+                                            color: 'var(--mui-palette-text-secondary)',
+                                            fontSize: '14px'
+                                        }}
+                                    >
+                                        Không có dữ liệu
+                                    </td>
+                                </tr>
+                            ) : (
+                                // Show actual data rows
+                                table.getRowModel().rows.map((row, index) => (
                                     <tr key={`${row.id}-${index}`}>
                                         {row.getVisibleCells().map((cell, cellIndex) => {
                                             const isPinned = cell.column.getIsPinned()
@@ -554,8 +561,8 @@ const Table = ({
                                             )
                                         })}
                                     </tr>
-                                )
-                            })}
+                                ))
+                            )}
                         </tbody>
                     </table>
                 </div>
