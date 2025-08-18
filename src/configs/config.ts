@@ -257,6 +257,12 @@ const RegistrationRecordsTableColumns = {
   THAO_TAC: 'THAO_TAC'
 }
 
+const ExamResultStatusMappingText = {
+  1: 'Đỗ',
+  2: 'Trượt',
+  3: 'Chưa thi'
+}
+
 const CONFIG = {
   LicenseRegistrationStatus,
   LicenseRegistrationStatusMappingText,
@@ -295,7 +301,8 @@ const CONFIG = {
   AssigneeTypes,
   RegistrationRecordStatus,
   UserPageConfigKey,
-  RegistrationRecordsTableColumns
+  RegistrationRecordsTableColumns,
+  ExamResultStatusMappingText
 }
 
 export default CONFIG

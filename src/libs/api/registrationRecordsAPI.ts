@@ -26,6 +26,14 @@ const GetRegistrationRecordById = async (id: string) => {
   return await axiosInstance.get(`/api/registration-records/${id}`)
 }
 
+const GetRegistrationRecordBasicInfo = async (id: string) => {
+  return await axiosInstance.get(`/api/registration-records/${id}/basic-infor`)
+}
+
+const GetRegistrationRecordOverview = async (id: string) => {
+  return await axiosInstance.get(`/api/registration-records/${id}/overview`)
+}
+
 const CreateRegistrationRecord = async (data: CreateRegistrationRecordCommand) => {
   return await axiosInstance.post('/api/registration-records', data)
 }
@@ -41,6 +49,8 @@ const DeleteRegistrationRecord = async (id: string) => {
 const registrationRecordsAPI = {
   GetRegistrationRecords,
   GetRegistrationRecordById,
+  GetRegistrationRecordBasicInfo,
+  GetRegistrationRecordOverview,
   CreateRegistrationRecord,
   UpdateRegistrationRecord,
   DeleteRegistrationRecord

@@ -186,7 +186,7 @@ const Table = ({
                 id: CONFIG.RegistrationRecordsTableColumns.HO_SO,
                 header: 'HỒ SƠ',
                 cell: ({ row }) => (
-                    <div className='flex items-center gap-3'>
+                    <div className='flex items-center gap-3 cursor-pointer' onClick={() => router.push(`${CONFIG.Routers.ManageRegistrationRecords}/detail/${row.original.id}`)}>
                         <Avatar
                             src={`${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}${row.original?.avatarUrl}`}
                             sx={{

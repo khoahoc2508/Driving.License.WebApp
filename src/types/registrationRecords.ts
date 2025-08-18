@@ -17,3 +17,21 @@ export type GetRegistrationRecordsQueryParams = {
   pageNumber?: number
   pageSize?: number
 }
+
+// view
+export type RegistrationRecordBasicInfoDto = components['schemas']['RegistrationRecordBasicInfoDto']
+
+// overview
+export type RegistrationRecordOverviewDto = components['schemas']['RegistrationRecordOverviewDto']
+
+// detail
+export type GetRegistrationRecordDetailDto = components['schemas']['GetRegistrationRecordDetailDto']
+
+// overview sub-types
+export type ProcessingDto = components['schemas']['ProcessingDto']
+export type ProcessingStepDto = components['schemas']['ProcessingStepDto']
+export type StepStatusType = components['schemas']['StepStatusType']
+export type ExamResultStatusType = components['schemas']['ExamResultStatusType']
+export type PaymentSummaryDto = components['schemas']['PaymentSummaryDto']
+export type GeneralInfoDto = components['schemas']['GeneralInfoDto']
+export type CollaboratorDto = components['schemas']['CollaboratorDto']
