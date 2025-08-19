@@ -35,3 +35,10 @@ export type ExamResultStatusType = components['schemas']['ExamResultStatusType']
 export type PaymentSummaryDto = components['schemas']['PaymentSummaryDto']
 export type GeneralInfoDto = components['schemas']['GeneralInfoDto']
 export type CollaboratorDto = components['schemas']['CollaboratorDto']
+
+// payments
+export type GetPaymentDto = components['schemas']['GetPaymentDto']
+export type GetPaymentListType = components['schemas']['BaseResponseOfListOfGetPaymentDto']['data']
+export type GetPaymentDetailDto = components['schemas']['GetPaymentDetailDto']
+export type CreatePaymentCommand = components['schemas']['CreatePaymentCommand']
+export type UpdatePaymentCommand = components['schemas']['UpdatePaymentCommand']

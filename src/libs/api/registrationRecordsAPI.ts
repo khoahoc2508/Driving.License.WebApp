@@ -3,6 +3,7 @@ import type {
   CreateRegistrationRecordCommand,
   UpdateRegistrationRecordCommand
 } from '@/types/registrationRecords'
+import type { CreatePaymentCommand, UpdatePaymentCommand } from '@/types/registrationRecords'
 import axiosInstance from '../axios'
 import { customParamsSerializer } from './commonAPI'
 
@@ -34,6 +35,29 @@ const GetRegistrationRecordOverview = async (id: string) => {
   return await axiosInstance.get(`/api/registration-records/${id}/overview`)
 }
 
+// Payments
+const GetPaymentsByRegistrationRecordId = async (registrationRecordId: string) => {
+  return await axiosInstance.get('/api/payments', {
+    params: { RegistrationRecordId: registrationRecordId }
+  })
+}
+
+const CreatePayment = async (data: CreatePaymentCommand) => {
+  return await axiosInstance.post('/api/payments', data)
+}
+
+const GetPaymentById = async (id: string) => {
+  return await axiosInstance.get(`/api/payments/${id}`)
+}
+
+const UpdatePayment = async (id: string, data: UpdatePaymentCommand) => {
+  return await axiosInstance.put(`/api/payments/${id}`, data)
+}
+
+const DeletePayment = async (id: string) => {
+  return await axiosInstance.delete(`/api/payments/${id}`)
+}
+
 const CreateRegistrationRecord = async (data: CreateRegistrationRecordCommand) => {
   return await axiosInstance.post('/api/registration-records', data)
 }
@@ -51,6 +75,11 @@ const registrationRecordsAPI = {
   GetRegistrationRecordById,
   GetRegistrationRecordBasicInfo,
   GetRegistrationRecordOverview,
+  GetPaymentsByRegistrationRecordId,
+  CreatePayment,
+  GetPaymentById,
+  UpdatePayment,
+  DeletePayment,
   CreateRegistrationRecord,
   UpdateRegistrationRecord,
   DeleteRegistrationRecord

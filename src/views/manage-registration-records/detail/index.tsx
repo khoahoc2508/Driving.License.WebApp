@@ -7,7 +7,7 @@ import { useEffect, useMemo, useState } from "react";
 import registrationRecordsAPI from "@/libs/api/registrationRecordsAPI";
 import type { RegistrationRecordBasicInfoDto, RegistrationRecordOverviewDto, GetRegistrationRecordDetailDto } from "@/types/registrationRecords";
 import OverviewTab from "./OverviewTab";
-import PaymentsTab from "./PaymentsTab";
+import PaymentsTab from "./payments/PaymentsTab";
 import ProcessingTab from "./ProcessingTab";
 
 
@@ -151,7 +151,7 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
                         <OverviewTab basicInfo={basicInfo} overview={overview} />
                     )}
                     {!isLoading && activeTab === 1 && (
-                        <PaymentsTab overview={overview} />
+                        <PaymentsTab overview={overview} registrationRecordId={id} />
                     )}
                     {!isLoading && activeTab === 2 && (
                         <ProcessingTab overview={overview} />
