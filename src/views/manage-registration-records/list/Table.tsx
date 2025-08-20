@@ -463,7 +463,7 @@ const Table = ({
             <Card>
                 <div className='overflow-x-auto custom-scrollbar'>
                     <table
-                        className={styles.table}
+                        className={`${styles.table} ${styles.fixed}`}
                         style={{
                             borderCollapse: 'separate',
                             borderSpacing: 0,

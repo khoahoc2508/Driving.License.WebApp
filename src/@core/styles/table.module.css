@@ -3,7 +3,7 @@
   border-collapse: collapse;
   font-size: 0.875rem;
   white-space: nowrap;
-  table-layout: fixed;
+  /* table-layout: fixed; */
   min-height: 250px;
 
   [align='right'] > * {
@@ -11,6 +11,10 @@
   }
   [align='center'] > * {
     text-align: center;
+  }
+
+  &.fixed {
+    table-layout: fixed;
   }
 
   thead {

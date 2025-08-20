@@ -59,27 +59,14 @@ const PaymentsTab = ({ overview, registrationRecordId }: PaymentsTabProps) => {
 
             {/* Fee Table Tab */}
             {activeSubTab === 0 && (
-                <Box>
-                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', mb: 3 }}>
-                        <Button
-                            variant="outlined"
-                            color="primary"
-                            sx={{
-                                borderColor: 'primary.main',
-                                color: 'primary.main',
-                            }}
-                        >
-                            THÊM MỚI
-                        </Button>
-                    </Box>
+                <FeeTab
+                    data={payments}
+                    isLoading={isLoading}
+                    onEditPayment={handleEditPayment}
+                    onRefresh={handleRefresh}
+                    registrationRecordId={registrationRecordId}
+                />
 
-                    <FeeTab
-                        data={payments}
-                        isLoading={isLoading}
-                        onEditPayment={handleEditPayment}
-                        onRefresh={handleRefresh}
-                    />
-                </Box>
             )}
 
             {/* Payment History Tab */}

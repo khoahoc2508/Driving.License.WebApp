@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { Button, Card, Chip, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, TablePagination, Typography } from '@mui/material'
+import { Box, Button, Card, Chip, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, TablePagination, Typography } from '@mui/material'
 import type { RankingInfo } from '@tanstack/match-sorter-utils'
 import { rankItem } from '@tanstack/match-sorter-utils'
 import type { ColumnDef, ColumnFiltersState, FilterFn } from '@tanstack/react-table'
@@ -24,6 +24,7 @@ import styles from '@core/styles/table.module.css'
 import type { GetPaymentDto } from '@/types/registrationRecords'
 import registrationRecordsAPI from '@/libs/api/registrationRecordsAPI'
 import SkeletonTableRowsLoader from '@/components/common/SkeletonTableRowsLoader'
+import AddPaymentDialog from './AddPaymentDialog'
 
 // Column Definitions
 const columnHelper = createColumnHelper<GetPaymentDto>()
@@ -50,9 +51,10 @@ type FeeTabProps = {
     isLoading: boolean
     onEditPayment: (payment: GetPaymentDto) => void
     onRefresh: () => void
+    registrationRecordId?: string
 }
 
-const FeeTab = ({ data, isLoading, onEditPayment, onRefresh }: FeeTabProps) => {
+const FeeTab = ({ data, isLoading, onEditPayment, onRefresh, registrationRecordId }: FeeTabProps) => {
     // States
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [globalFilter, setGlobalFilter] = useState('')
@@ -60,6 +62,7 @@ const FeeTab = ({ data, isLoading, onEditPayment, onRefresh }: FeeTabProps) => {
     const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null)
     const [pageNumber, setPageNumber] = useState(1)
     const [pageSize, setPageSize] = useState(10)
+    const [openAddDialog, setOpenAddDialog] = useState(false)
 
     const currency = (value?: number | null) => {
         if (value === undefined || value === null) return 'Chưa có dữ liệu'
@@ -100,17 +103,15 @@ const FeeTab = ({ data, isLoading, onEditPayment, onRefresh }: FeeTabProps) => {
         () => [
             columnHelper.accessor('id', {
                 id: 'stt',
-                header: 'STT',
+                header: () => (<Typography>STT</Typography>),
                 cell: ({ row, table }) => (
-                    <Typography>
-                        {table.getRowModel().rows.indexOf(row) + 1}
-                    </Typography>
+                    <Typography>{table.getRowModel().rows.indexOf(row) + 1}</Typography>
                 ),
             }),
             columnHelper.accessor('feeTypeName', {
                 header: 'LOẠI LỆ PHÍ',
                 cell: ({ row }) => (
-                    <Typography color='text.primary' className='font-medium'>
+                    <Typography color='text.primary' className='w-full' sx={{ textAlign: "left" }}>
                         {row.original?.feeTypeName || 'Không xác định'}
                     </Typography>
                 )
@@ -119,7 +120,7 @@ const FeeTab = ({ data, isLoading, onEditPayment, onRefresh }: FeeTabProps) => {
                 header: 'SỐ TIỀN',
                 cell: ({ row }) => (
                     <div style={{ textAlign: 'right' }}>
-                        <Typography className='font-semibold'>
+                        <Typography className='w-full'>
                             {currency(row.original?.amount)}
                         </Typography>
                     </div>
@@ -128,7 +129,7 @@ const FeeTab = ({ data, isLoading, onEditPayment, onRefresh }: FeeTabProps) => {
             columnHelper.accessor('note', {
                 header: 'GHI CHÚ',
                 cell: ({ row }) => (
-                    <Typography color='text.secondary'>
+                    <Typography color='text.secondary' sx={{ textAlign: "right" }}>
                         {row.original?.note || '-'}
                     </Typography>
                 )
@@ -241,7 +242,20 @@ const FeeTab = ({ data, isLoading, onEditPayment, onRefresh }: FeeTabProps) => {
     }
 
     return (
-        <>
+        <Box>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', mb: 3 }}>
+                <Button
+                    variant="outlined"
+                    color="primary"
+                    sx={{
+                        borderColor: 'primary.main',
+                        color: 'primary.main',
+                    }}
+                    onClick={() => setOpenAddDialog(true)}
+                >
+                    THÊM MỚI
+                </Button>
+            </Box>
             <div className='overflow-x-auto'>
                 <table className={styles.table}>
                     <thead>
@@ -310,7 +324,17 @@ const FeeTab = ({ data, isLoading, onEditPayment, onRefresh }: FeeTabProps) => {
                     </Button>
                 </DialogActions>
             </Dialog>
-        </>
+
+            <AddPaymentDialog
+                open={openAddDialog}
+                onClose={() => setOpenAddDialog(false)}
+                onSuccess={() => {
+                    setOpenAddDialog(false)
+                    onRefresh()
+                }}
+                registrationRecordId={registrationRecordId as string}
+            />
+        </Box>
     )
 }
 
