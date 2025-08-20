@@ -52,9 +52,10 @@ type FeeTabProps = {
     onEditPayment: (payment: GetPaymentDto) => void
     onRefresh: () => void
     registrationRecordId?: string
+    onAdd?: () => void
 }
 
-const FeeTab = ({ data, isLoading, onEditPayment, onRefresh, registrationRecordId }: FeeTabProps) => {
+const FeeTab = ({ data, isLoading, onEditPayment, onRefresh, registrationRecordId, onAdd }: FeeTabProps) => {
     // States
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [globalFilter, setGlobalFilter] = useState('')
@@ -62,7 +63,7 @@ const FeeTab = ({ data, isLoading, onEditPayment, onRefresh, registrationRecordI
     const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null)
     const [pageNumber, setPageNumber] = useState(1)
     const [pageSize, setPageSize] = useState(10)
-    const [openAddDialog, setOpenAddDialog] = useState(false)
+    // Add handled by parent dialog
 
     const currency = (value?: number | null) => {
         if (value === undefined || value === null) return 'Chưa có dữ liệu'
@@ -251,7 +252,7 @@ const FeeTab = ({ data, isLoading, onEditPayment, onRefresh, registrationRecordI
                         borderColor: 'primary.main',
                         color: 'primary.main',
                     }}
-                    onClick={() => setOpenAddDialog(true)}
+                    onClick={onAdd}
                 >
                     THÊM MỚI
                 </Button>
@@ -325,15 +326,7 @@ const FeeTab = ({ data, isLoading, onEditPayment, onRefresh, registrationRecordI
                 </DialogActions>
             </Dialog>
 
-            <AddPaymentDialog
-                open={openAddDialog}
-                onClose={() => setOpenAddDialog(false)}
-                onSuccess={() => {
-                    setOpenAddDialog(false)
-                    onRefresh()
-                }}
-                registrationRecordId={registrationRecordId as string}
-            />
+            {/* Add dialog moved to parent */}
         </Box>
     )
 }

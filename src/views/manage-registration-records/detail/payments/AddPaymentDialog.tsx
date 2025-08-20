@@ -26,6 +26,11 @@ import type { CreatePaymentCommand } from '@/types/registrationRecords'
 import registrationRecordsAPI from '@/libs/api/registrationRecordsAPI'
 import feeTypeAPI from '@/libs/api/feeTypeAPI'
 
+export enum DialogMode {
+    ADD = 0,
+    EDIT = 1
+}
+
 type FeeTypeOption = { value: string; label: string }
 
 type AddPaymentDialogProps = {
@@ -33,22 +38,25 @@ type AddPaymentDialogProps = {
     onClose: () => void
     onSuccess: () => void
     registrationRecordId: string
+    mode?: DialogMode
+    editPaymentId?: string | null
 }
 
 type FormData = {
     feeTypeId: string
-    amount: string
+    amountInput: string
     note?: string
 }
 
-const AddPaymentDialog = ({ open, onClose, onSuccess, registrationRecordId }: AddPaymentDialogProps) => {
+const AddPaymentDialog = ({ open, onClose, onSuccess, registrationRecordId, mode = DialogMode.ADD, editPaymentId = null }: AddPaymentDialogProps) => {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [feeTypeOptions, setFeeTypeOptions] = useState<FeeTypeOption[]>([])
+    const [isLoadingDetail, setIsLoadingDetail] = useState(false)
 
     const { control, handleSubmit, reset, setValue, formState: { errors } } = useForm<FormData>({
         defaultValues: {
             feeTypeId: '',
-            amount: '',
+            amountInput: '',
             note: ''
         }
     })
@@ -66,6 +74,25 @@ const AddPaymentDialog = ({ open, onClose, onSuccess, registrationRecordId }: Ad
         }
         fetchFeeTypes()
     }, [open])
+
+    useEffect(() => {
+        if (!open || mode !== DialogMode.EDIT || !editPaymentId) return
+        const fetchDetail = async () => {
+            try {
+                setIsLoadingDetail(true)
+                const res = await registrationRecordsAPI.GetPaymentById(editPaymentId)
+                const detail = res?.data?.data
+                if (detail) {
+                    setValue('feeTypeId', detail.feeTypeId || '')
+                    setValue('amountInput', new Intl.NumberFormat('vi-VN').format(detail.amount ?? 0))
+                    setValue('note', detail.note || '')
+                }
+            } finally {
+                setIsLoadingDetail(false)
+            }
+        }
+        fetchDetail()
+    }, [open, mode, editPaymentId, setValue])
 
     const handleClose = () => {
         reset()
@@ -86,10 +113,29 @@ const AddPaymentDialog = ({ open, onClose, onSuccess, registrationRecordId }: Ad
     const onSubmit = async (data: FormData) => {
         setIsSubmitting(true)
         try {
+            if (mode === DialogMode.EDIT && editPaymentId) {
+                const payload = {
+                    id: editPaymentId,
+                    feeTypeId: data.feeTypeId,
+                    registrationRecordId,
+                    amount: parseAmount(data.amountInput),
+                    note: data.note || ''
+                }
+                const response = await registrationRecordsAPI.UpdatePayment(editPaymentId, payload as any)
+                if (response.data.success) {
+                    toast.success('Cập nhật khoản phí thành công')
+                    handleClose()
+                    onSuccess()
+                } else {
+                    toast.error(response.data.message || 'Có lỗi xảy ra khi cập nhật khoản phí')
+                }
+                return
+            }
+
             const payload: CreatePaymentCommand = {
                 feeTypeId: data.feeTypeId,
                 registrationRecordId,
-                amount: parseAmount(data.amount),
+                amount: parseAmount(data.amountInput),
                 note: data.note || ''
             }
             const response = await registrationRecordsAPI.CreatePayment(payload)
@@ -101,11 +147,14 @@ const AddPaymentDialog = ({ open, onClose, onSuccess, registrationRecordId }: Ad
                 toast.error(response.data.message || 'Có lỗi xảy ra khi thêm khoản phí')
             }
         } catch (error: any) {
-            toast.error(error?.message || 'Có lỗi xảy ra khi thêm khoản phí')
+            toast.error(error?.message || 'Có lỗi xảy ra')
         } finally {
             setIsSubmitting(false)
         }
     }
+
+    const getDialogTitle = () => (mode === DialogMode.EDIT ? 'Chỉnh sửa - Khoản phí' : 'Thêm - Khoản phí')
+    const submitButtonText = isSubmitting ? (mode === DialogMode.EDIT ? 'Đang cập nhật...' : 'Đang thêm...') : 'XÁC NHẬN'
 
     return (
         <Dialog
@@ -118,7 +167,7 @@ const AddPaymentDialog = ({ open, onClose, onSuccess, registrationRecordId }: Ad
         >
             <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pb: 2 }}>
                 <Typography variant="h5" fontWeight={600} component="div">
-                    Thêm - Khoản phí
+                    {getDialogTitle()}
                 </Typography>
                 <IconButton aria-label="close" onClick={handleClose} sx={{ color: theme => theme.palette.grey[500] }}>
                     <i className="ri-close-line" />
@@ -147,7 +196,7 @@ const AddPaymentDialog = ({ open, onClose, onSuccess, registrationRecordId }: Ad
                     </FormControl>
 
                     <Controller
-                        name="amount"
+                        name="amountInput"
                         control={control}
                         rules={{ required: 'Vui lòng nhập số tiền' }}
                         render={({ field }) => (
@@ -158,10 +207,10 @@ const AddPaymentDialog = ({ open, onClose, onSuccess, registrationRecordId }: Ad
                                 variant="outlined"
                                 onChange={e => field.onChange(formatAmount(e.target.value))}
                                 InputProps={{
-                                    startAdornment: <InputAdornment position="start" className='opacity-70'>VND</InputAdornment>
+                                    startAdornment: <InputAdornment position="start">VND</InputAdornment>
                                 }}
-                                error={!!errors.amount}
-                                helperText={errors.amount?.message}
+                                error={!!errors.amountInput}
+                                helperText={errors.amountInput?.message}
                             />
                         )}
                     />
@@ -197,13 +246,13 @@ const AddPaymentDialog = ({ open, onClose, onSuccess, registrationRecordId }: Ad
                 <Button
                     onClick={handleSubmit(onSubmit)}
                     variant="contained"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || isLoadingDetail}
                     sx={{ backgroundColor: 'primary.main', '&:hover': { backgroundColor: 'primary.dark' } }}
                 >
-                    XÁC NHẬN
+                    {submitButtonText}
                 </Button>
             </DialogActions>
-        </Dialog >
+        </Dialog>
     )
 }
 

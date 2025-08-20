@@ -6,6 +6,7 @@ import type { RegistrationRecordOverviewDto, GetPaymentDto } from '@/types/regis
 import registrationRecordsAPI from '@/libs/api/registrationRecordsAPI'
 import FeeTab from './FeeTab'
 import PaymentHistoryTab from './PaymentHistoryTab'
+import AddPaymentDialog, { DialogMode } from './AddPaymentDialog'
 
 type PaymentsTabProps = {
     overview: RegistrationRecordOverviewDto | null
@@ -16,6 +17,8 @@ const PaymentsTab = ({ overview, registrationRecordId }: PaymentsTabProps) => {
     const [activeSubTab, setActiveSubTab] = useState(0)
     const [payments, setPayments] = useState<GetPaymentDto[]>([])
     const [isLoading, setIsLoading] = useState(false)
+    const [isAddOpen, setIsAddOpen] = useState(false)
+    const [editPaymentId, setEditPaymentId] = useState<string | null>(null)
 
     useEffect(() => {
         if (registrationRecordId && activeSubTab === 0) {
@@ -41,8 +44,8 @@ const PaymentsTab = ({ overview, registrationRecordId }: PaymentsTabProps) => {
     }
 
     const handleEditPayment = (payment: GetPaymentDto) => {
-        // TODO: Implement edit payment
-        console.log('Edit payment:', payment)
+        setEditPaymentId(payment.id || null)
+        setIsAddOpen(true)
     }
 
     const handleRefresh = () => {
@@ -65,6 +68,7 @@ const PaymentsTab = ({ overview, registrationRecordId }: PaymentsTabProps) => {
                     onEditPayment={handleEditPayment}
                     onRefresh={handleRefresh}
                     registrationRecordId={registrationRecordId}
+                    onAdd={() => { setEditPaymentId(null); setIsAddOpen(true) }}
                 />
 
             )}
@@ -73,6 +77,16 @@ const PaymentsTab = ({ overview, registrationRecordId }: PaymentsTabProps) => {
             {activeSubTab === 1 && (
                 <PaymentHistoryTab />
             )}
+
+            {/* Shared Add/Edit Dialog */}
+            <AddPaymentDialog
+                open={isAddOpen}
+                onClose={() => { setIsAddOpen(false); setEditPaymentId(null) }}
+                onSuccess={() => { setIsAddOpen(false); setEditPaymentId(null); handleRefresh() }}
+                registrationRecordId={registrationRecordId as string}
+                mode={editPaymentId ? DialogMode.EDIT : DialogMode.ADD}
+                editPaymentId={editPaymentId}
+            />
         </CardContent>
     )
 }
