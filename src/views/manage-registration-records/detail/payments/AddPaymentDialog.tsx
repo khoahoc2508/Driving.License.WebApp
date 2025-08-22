@@ -231,7 +231,8 @@ const AddPaymentDialog = ({ open, onClose, onSuccess, registrationRecordId, mode
                     />
                 </Box>
             </DialogContent>
-            <DialogActions sx={{ p: 3, pt: 1 }}>
+            <Divider />
+            <DialogActions sx={{ p: 3 }}>
                 <Button
                     onClick={handleClose}
                     variant="outlined"

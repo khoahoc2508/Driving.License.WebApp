@@ -350,7 +350,7 @@ export interface paths {
         get: operations["PaymentHistories_GetPaymentHistoryById"];
         put: operations["PaymentHistories_UpdatePaymentHistory"];
         post?: never;
-        delete?: never;
+        delete: operations["PaymentHistories_DeletePaymentHistoryById"];
         options?: never;
         head?: never;
         patch?: never;
@@ -382,7 +382,7 @@ export interface paths {
         get: operations["Payments_GetPaymentById"];
         put: operations["Payments_UpdatePayment"];
         post?: never;
-        delete?: never;
+        delete: operations["Payments_DeletePaymentById"];
         options?: never;
         head?: never;
         patch?: never;
@@ -510,7 +510,7 @@ export interface paths {
         get: operations["RegistrationRecords_GetRegistrationRecordDetailQuery"];
         put: operations["RegistrationRecords_UpdateRegistrationRecord"];
         post?: never;
-        delete?: never;
+        delete: operations["RegistrationRecords_DeleteRegistrationRecordById"];
         options?: never;
         head?: never;
         patch?: never;
@@ -668,6 +668,22 @@ export interface paths {
             cookie?: never;
         };
         get: operations["VehicleTypes_GetAllLicenseTypes"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/steps": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Steps_GetStepsByRegistrationRecordIdQuery"];
         put?: never;
         post?: never;
         delete?: never;
@@ -946,6 +962,7 @@ export interface components {
             /** Format: date-time */
             paymentDate?: string;
             note?: string;
+            feeTypeName?: string;
         };
         BaseResponseOfGetPaymentHistoryDetailDto: components["schemas"]["BaseResponse"] & {
             data?: components["schemas"]["GetPaymentHistoryDetailDto"] | null;
@@ -1288,6 +1305,7 @@ export interface components {
         ColumnConfigDto: {
             column?: string;
             visible?: boolean;
+            label?: string;
         };
         RegisterUserRequest: {
             userName?: string;
@@ -1304,6 +1322,17 @@ export interface components {
             description?: string;
         };
         GetAllVehicleTypesQuery: Record<string, never>;
+        BaseResponseOfListOfGetStepsDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetStepsDto"][] | null;
+        };
+        GetStepsDto: {
+            id?: string;
+            name?: string;
+            /** Format: int32 */
+            order?: number;
+            status?: components["schemas"]["StepStatusType"];
+            assigneeId?: string | null;
+        };
     };
     responses: never;
     parameters: never;
@@ -1947,6 +1976,27 @@ export interface operations {
             };
         };
     };
+    PaymentHistories_DeletePaymentHistoryById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
     Payments_GetPaymentsByRegistrationRecordId: {
         parameters: {
             query?: {
@@ -2026,6 +2076,27 @@ export interface operations {
                 "application/json": components["schemas"]["UpdatePaymentCommand"];
             };
         };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    Payments_DeletePaymentById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
                 headers: {
@@ -2276,6 +2347,27 @@ export interface operations {
             };
         };
     };
+    RegistrationRecords_DeleteRegistrationRecordById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
     RegistrationRecords_GetBasicInfo: {
         parameters: {
             query?: never;
@@ -2491,6 +2583,27 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BaseResponseOfListOfVehicleTypeDto"];
+                };
+            };
+        };
+    };
+    Steps_GetStepsByRegistrationRecordIdQuery: {
+        parameters: {
+            query?: {
+                RegistrationRecordId?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfGetStepsDto"];
                 };
             };
         };

@@ -58,6 +58,29 @@ const DeletePayment = async (id: string) => {
   return await axiosInstance.delete(`/api/payments/${id}`)
 }
 
+// Payment Histories
+const GetPaymentHistoriesByRegistrationRecordId = async (registrationRecordId: string) => {
+  return await axiosInstance.get('/api/payment-histories', {
+    params: { RegistrationRecordId: registrationRecordId }
+  })
+}
+
+const CreatePaymentHistory = async (data: any) => {
+  return await axiosInstance.post('/api/payment-histories', data)
+}
+
+const GetPaymentHistoryById = async (id: string) => {
+  return await axiosInstance.get(`/api/payment-histories/${id}`)
+}
+
+const UpdatePaymentHistory = async (id: string, data: any) => {
+  return await axiosInstance.put(`/api/payment-histories/${id}`, data)
+}
+
+const DeletePaymentHistory = async (id: string) => {
+  return await axiosInstance.delete(`/api/payment-histories/${id}`)
+}
+
 const CreateRegistrationRecord = async (data: CreateRegistrationRecordCommand) => {
   return await axiosInstance.post('/api/registration-records', data)
 }
@@ -80,6 +103,11 @@ const registrationRecordsAPI = {
   GetPaymentById,
   UpdatePayment,
   DeletePayment,
+  GetPaymentHistoriesByRegistrationRecordId,
+  CreatePaymentHistory,
+  GetPaymentHistoryById,
+  UpdatePaymentHistory,
+  DeletePaymentHistory,
   CreateRegistrationRecord,
   UpdateRegistrationRecord,
   DeleteRegistrationRecord

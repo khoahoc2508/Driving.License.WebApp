@@ -107,7 +107,7 @@ const FeeTab = ({ data, isLoading, onEditPayment, onRefresh, registrationRecordI
                 header: () => (<Typography>STT</Typography>),
                 cell: ({ row, table }) => (
                     <Typography>{table.getRowModel().rows.indexOf(row) + 1}</Typography>
-                ),
+                )
             }),
             columnHelper.accessor('feeTypeName', {
                 header: 'LOẠI LỆ PHÍ',

@@ -42,3 +42,9 @@ export type GetPaymentListType = components['schemas']['BaseResponseOfListOfGetP
 export type GetPaymentDetailDto = components['schemas']['GetPaymentDetailDto']
 export type CreatePaymentCommand = components['schemas']['CreatePaymentCommand']
 export type UpdatePaymentCommand = components['schemas']['UpdatePaymentCommand']
+
+// payment histories
+export type GetPaymentHistoryDto = components['schemas']['GetPaymentHistoryDto']
+export type GetPaymentHistoryDetailDto = components['schemas']['GetPaymentHistoryDetailDto']
+export type CreatePaymentHistoryCommand = components['schemas']['CreatePaymentHistoryCommand']
+export type UpdatePaymentHistoryCommand = components['schemas']['UpdatePaymentHistoryCommand']
