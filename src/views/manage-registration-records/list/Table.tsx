@@ -336,7 +336,10 @@ const Table = ({
                 id: CONFIG.RegistrationRecordsTableColumns.THAO_TAC,
                 header: 'THAO TÁC',
                 cell: ({ row }) => (
-                    <div className="flex items-center justify-center gap-2" style={{ width: '100%' }}>
+                    <div className="flex items-center justify-center" style={{ width: '100%' }}>
+                        <IconButton onClick={() => router.push(`${CONFIG.Routers.ManageRegistrationRecords}/detail/${row.original.id}`)}>
+                            <i className='ri-eye-line text-textSecondary' />
+                        </IconButton>
                         <IconButton onClick={() => router.push(`${CONFIG.Routers.ManageRegistrationRecords}/edit/${row.original.id}`)}>
                             <a href={`${CONFIG.Routers.ManageRegistrationRecords}/edit/${row.original.id}`} className='flex items-center cursor-pointer'>
                                 <i className="ri-edit-box-line text-textSecondary" />
@@ -345,10 +348,11 @@ const Table = ({
                         <IconButton onClick={() => handleOpenDeleteDialog(row.original.id)}>
                             <i className='ri-delete-bin-7-line text-textSecondary' />
                         </IconButton>
+
                     </div>
                 ),
                 enableSorting: false,
-                size: 120,
+                size: 150,
             })
         ],
         [data, setData]

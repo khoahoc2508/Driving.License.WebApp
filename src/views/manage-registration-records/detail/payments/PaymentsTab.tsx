@@ -11,10 +11,11 @@ import AddPaymentHistoryDialog, { DialogMode as PaymentHistoryDialogMode } from 
 
 type PaymentsTabProps = {
     overview: RegistrationRecordOverviewDto | null
-    registrationRecordId?: string
+    registrationRecordId?: string,
+    onDataChange: () => void
 }
 
-const PaymentsTab = ({ overview, registrationRecordId }: PaymentsTabProps) => {
+const PaymentsTab = ({ overview, registrationRecordId, onDataChange }: PaymentsTabProps) => {
     const [activeSubTab, setActiveSubTab] = useState(0)
     const [payments, setPayments] = useState<GetPaymentDto[]>([])
     const [paymentHistories, setPaymentHistories] = useState<GetPaymentHistoryDto[]>([])
@@ -80,6 +81,7 @@ const PaymentsTab = ({ overview, registrationRecordId }: PaymentsTabProps) => {
         } else {
             fetchPaymentHistories()
         }
+        onDataChange()
     }
 
     return (

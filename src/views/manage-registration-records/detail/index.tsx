@@ -25,29 +25,35 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
     const [overview, setOverview] = useState<RegistrationRecordOverviewDto | null>(null)
     const [isLoading, setIsLoading] = useState(false)
 
+
+    const refreshData = () => {
+        if (id) {
+            fetchData(id)
+        }
+    }
     useEffect(() => {
         if (!id) return
-
-        const fetchData = async () => {
-            try {
-                setIsLoading(true)
-                const [basicRes, overviewRes] = await Promise.all([
-                    registrationRecordsAPI.GetRegistrationRecordBasicInfo(id),
-                    registrationRecordsAPI.GetRegistrationRecordOverview(id)
-                ])
-
-                setBasicInfo(basicRes?.data?.data || null)
-                setOverview(overviewRes?.data?.data || null)
-            } catch (error) {
-                setBasicInfo(null)
-                setOverview(null)
-            } finally {
-                setIsLoading(false)
-            }
-        }
-
-        fetchData()
+        fetchData(id)
     }, [id])
+
+    const fetchData = async (id: string) => {
+        try {
+            setIsLoading(true)
+            const [basicRes, overviewRes] = await Promise.all([
+                registrationRecordsAPI.GetRegistrationRecordBasicInfo(id),
+                registrationRecordsAPI.GetRegistrationRecordOverview(id)
+            ])
+
+            setBasicInfo(basicRes?.data?.data || null)
+            setOverview(overviewRes?.data?.data || null)
+        } catch (error) {
+            setBasicInfo(null)
+            setOverview(null)
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
 
     const handleApprovedChange = (_: any, checked: boolean) => setIsApproved(checked)
 
@@ -151,7 +157,7 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
                         <OverviewTab basicInfo={basicInfo} overview={overview} />
                     )}
                     {!isLoading && activeTab === 1 && (
-                        <PaymentsTab overview={overview} registrationRecordId={id} />
+                        <PaymentsTab overview={overview} registrationRecordId={id} onDataChange={refreshData} />
                     )}
                     {!isLoading && activeTab === 2 && (
                         <ProcessingTab overview={overview} />

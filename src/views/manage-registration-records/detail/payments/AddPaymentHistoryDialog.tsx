@@ -209,6 +209,7 @@ const AddPaymentHistoryDialog = ({
                                 showYearDropdown
                                 showMonthDropdown
                                 dateFormat='dd/MM/yyyy'
+                                maxDate={new Date()}
                                 onChange={(date) => {
                                     if (date) {
                                         field.onChange(date.toISOString().split('T')[0])

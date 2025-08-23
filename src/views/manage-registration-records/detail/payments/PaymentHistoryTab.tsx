@@ -138,7 +138,7 @@ const PaymentHistoryTab = ({ data, isLoading, onRefresh, registrationRecordId, o
                 id: 'actions',
                 header: 'THAO TÁC',
                 cell: ({ row }) => (
-                    <div className="flex items-center justify-center gap-2">
+                    <div className="flex items-center justify-center">
                         <IconButton onClick={() => handleEditPaymentHistory(row.original)}>
                             <i className="ri-edit-box-line text-textSecondary" />
                         </IconButton>

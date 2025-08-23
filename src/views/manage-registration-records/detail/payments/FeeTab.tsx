@@ -25,6 +25,7 @@ import type { GetPaymentDto } from '@/types/registrationRecords'
 import registrationRecordsAPI from '@/libs/api/registrationRecordsAPI'
 import SkeletonTableRowsLoader from '@/components/common/SkeletonTableRowsLoader'
 import AddPaymentDialog from './AddPaymentDialog'
+import CONFIG from '@/configs/config'
 
 // Column Definitions
 const columnHelper = createColumnHelper<GetPaymentDto>()
@@ -71,32 +72,32 @@ const FeeTab = ({ data, isLoading, onEditPayment, onRefresh, registrationRecordI
     }
 
     const getStatusChip = (status: number | undefined) => {
-        let label = ''
+        const statusOption = CONFIG.paymentStatusOptions.find(option => option.value === status)
+
+        if (!statusOption) {
+            return <Chip label="Không xác định" color="default" size='small' variant='filled' />
+        }
+
         let color: 'default' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' = 'default'
 
         switch (status) {
-            case 0: // Unpaid
-                label = 'Chưa thanh toán'
+            case 0: // Chưa thanh toán
                 color = 'error'
                 break
-            case 1: // Paid
-                label = 'Đã thanh toán'
-                color = 'success'
-                break
-            case 2: // Partially paid
-                label = 'Thanh toán 1 phần'
+            case 1: // Thanh toán một phần
                 color = 'warning'
                 break
-            case 3: // Overdue
-                label = 'Quá hạn'
+            case 2: // Đã thanh toán
+                color = 'success'
+                break
+            case 3: // Chưa thêm thanh toán
                 color = 'error'
                 break
             default:
-                label = 'Không xác định'
                 color = 'default'
         }
 
-        return <Chip label={label} color={color} size='small' variant='filled' />
+        return <Chip label={statusOption.label} color={color} size='small' variant='filled' />
     }
 
     // Hooks
@@ -143,7 +144,7 @@ const FeeTab = ({ data, isLoading, onEditPayment, onRefresh, registrationRecordI
                 id: 'actions',
                 header: 'THAO TÁC',
                 cell: ({ row }) => (
-                    <div className="flex items-center justify-center gap-2">
+                    <div className="flex items-center justify-center">
                         <IconButton onClick={() => onEditPayment(row.original)}>
                             <i className="ri-edit-box-line text-textSecondary" />
                         </IconButton>
