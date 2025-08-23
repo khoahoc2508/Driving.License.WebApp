@@ -41,7 +41,7 @@ const PaymentsTab = ({ overview, registrationRecordId, onDataChange }: PaymentsT
 
         try {
             setIsLoading(true)
-            const response = await registrationRecordsAPI.GetPaymentsByRegistrationRecordId(registrationRecordId)
+            const response = await registrationRecordsAPI.GetAllPaymentsByRegistrationRecordId(registrationRecordId)
             if (response?.data?.data) {
                 setPayments(response.data.data)
             }
@@ -58,7 +58,7 @@ const PaymentsTab = ({ overview, registrationRecordId, onDataChange }: PaymentsT
 
         try {
             setIsHistoryLoading(true)
-            const response = await registrationRecordsAPI.GetPaymentHistoriesByRegistrationRecordId(registrationRecordId)
+            const response = await registrationRecordsAPI.GetAllPaymentHistoriesByRegistrationRecordId(registrationRecordId)
             if (response?.data?.data) {
                 setPaymentHistories(response.data.data)
             }

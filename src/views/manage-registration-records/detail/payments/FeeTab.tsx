@@ -1,7 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { Box, Button, Card, Chip, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, TablePagination, Typography } from '@mui/material'
+import { Box, Button, Card, Chip, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material'
 import type { RankingInfo } from '@tanstack/match-sorter-utils'
 import { rankItem } from '@tanstack/match-sorter-utils'
 import type { ColumnDef, ColumnFiltersState, FilterFn } from '@tanstack/react-table'
@@ -62,8 +62,6 @@ const FeeTab = ({ data, isLoading, onEditPayment, onRefresh, registrationRecordI
     const [globalFilter, setGlobalFilter] = useState('')
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false)
     const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null)
-    const [pageNumber, setPageNumber] = useState(1)
-    const [pageSize, setPageSize] = useState(10)
     // Add handled by parent dialog
 
     const currency = (value?: number | null) => {
@@ -312,19 +310,7 @@ const FeeTab = ({ data, isLoading, onEditPayment, onRefresh, registrationRecordI
                         </tbody>
                     </table>
                 </div>
-                <TablePagination
-                    rowsPerPageOptions={[7, 10, 25]}
-                    component='div'
-                    className='border-bs'
-                    count={data.length}
-                    labelRowsPerPage="Dòng trên trang:"
-                    rowsPerPage={pageSize}
-                    page={pageNumber - 1}
-                    onPageChange={(_, page) => {
-                        setPageNumber(page + 1)
-                    }}
-                    onRowsPerPageChange={e => setPageSize(Number(e.target.value))}
-                />
+
             </div>
             <Dialog
                 open={openDeleteDialog}

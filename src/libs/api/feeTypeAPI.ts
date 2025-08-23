@@ -18,6 +18,16 @@ const GetFeeTypes = async (params: GetFeeTypesQueryParams) => {
   })
 }
 
+const GetAllFeeTypes = async (params?: { Active?: boolean | null; Search?: string | null }) => {
+  return await axiosInstance.get('/api/feetypes/all', {
+    params: {
+      Active: params?.Active,
+      Search: params?.Search
+    },
+    paramsSerializer: customParamsSerializer
+  })
+}
+
 const GetFeeTypeById = async (id: string) => {
   return await axiosInstance.get('/api/feetypes/' + id)
 }
@@ -29,6 +39,7 @@ const DeleteFeeTypeById = async (id: string) => {
 const feeTypeAPI = {
   UpsertFeeType,
   GetFeeTypes,
+  GetAllFeeTypes,
   GetFeeTypeById,
   DeleteFeeTypeById
 }
