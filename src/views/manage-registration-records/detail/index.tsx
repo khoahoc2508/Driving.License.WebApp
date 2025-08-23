@@ -97,7 +97,7 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
 
             {/* Header summary */}
             <Card sx={{ mt: 3, flex: 1 }}>
-                <CardContent className="h-full flex flex-col justify-between">
+                <CardContent className="h-full flex flex-col">
                     {isLoading ? (
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 4, minHeight: 80 }}>
                             <Box sx={{ width: 56, height: 56, borderRadius: '50%', bgcolor: 'action.hover' }} />

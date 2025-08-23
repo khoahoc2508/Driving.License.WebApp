@@ -85,7 +85,7 @@ const PaymentsTab = ({ overview, registrationRecordId, onDataChange }: PaymentsT
     }
 
     return (
-        <CardContent className='px-0'>
+        <CardContent className='px-0 flex-1 h-full flex flex-col justify-between pb-0'>
             {/* Sub-tabs */}
             <Tabs value={activeSubTab} onChange={(_, v) => setActiveSubTab(v)} sx={{ mb: 3 }}>
                 <Tab label="Bảng khoản phí" />

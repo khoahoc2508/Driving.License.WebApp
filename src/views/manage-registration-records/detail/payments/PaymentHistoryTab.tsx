@@ -99,6 +99,8 @@ const PaymentHistoryTab = ({ data, isLoading, onRefresh, registrationRecordId, o
                 cell: ({ row, table }) => (
                     <Typography>{table.getRowModel().rows.indexOf(row) + 1}</Typography>
                 ),
+                size: 40,
+                minSize: 40
             }),
             columnHelper.accessor('paymentDate', {
                 header: 'NGÀY NỘP',
@@ -106,7 +108,9 @@ const PaymentHistoryTab = ({ data, isLoading, onRefresh, registrationRecordId, o
                     <Typography color='text.primary' className='w-full'>
                         {formatDate(row.original?.paymentDate)}
                     </Typography>
-                )
+                ),
+                size: 100,
+                minSize: 100
             }),
             columnHelper.accessor('feeTypeName', {
                 header: 'LOẠI LỆ PHÍ',
@@ -114,7 +118,9 @@ const PaymentHistoryTab = ({ data, isLoading, onRefresh, registrationRecordId, o
                     <Typography color='text.primary' className='w-full' sx={{ textAlign: "left" }}>
                         {row.original?.feeTypeName || 'Không xác định'}
                     </Typography>
-                )
+                ),
+                size: 200,
+                minSize: 150
             }),
             columnHelper.accessor('amount', {
                 header: 'SỐ TIỀN',
@@ -124,7 +130,9 @@ const PaymentHistoryTab = ({ data, isLoading, onRefresh, registrationRecordId, o
                             {currency(row.original?.amount)}
                         </Typography>
                     </div>
-                )
+                ),
+                size: 70,
+                minSize: 60
             }),
             columnHelper.accessor('note', {
                 header: 'GHI CHÚ',
@@ -132,7 +140,9 @@ const PaymentHistoryTab = ({ data, isLoading, onRefresh, registrationRecordId, o
                     <Typography color='text.secondary' sx={{ textAlign: "right" }}>
                         {row.original?.note || '-'}
                     </Typography>
-                )
+                ),
+                size: 100,
+                minSize: 100
             }),
             columnHelper.accessor('id', {
                 id: 'actions',
@@ -147,7 +157,9 @@ const PaymentHistoryTab = ({ data, isLoading, onRefresh, registrationRecordId, o
                         </IconButton>
                     </div>
                 ),
-                enableSorting: false
+                enableSorting: false,
+                size: 100,
+                minSize: 100
             })
         ],
         [handleEditPaymentHistory]
@@ -222,7 +234,8 @@ const PaymentHistoryTab = ({ data, isLoading, onRefresh, registrationRecordId, o
         getPaginationRowModel: getPaginationRowModel(),
         getFacetedRowModel: getFacetedRowModel(),
         getFacetedUniqueValues: getFacetedUniqueValues(),
-        getFacetedMinMaxValues: getFacetedMinMaxValues()
+        getFacetedMinMaxValues: getFacetedMinMaxValues(),
+        columnResizeMode: 'onChange'
     })
 
     const renderTableRows = () => {
@@ -256,7 +269,7 @@ const PaymentHistoryTab = ({ data, isLoading, onRefresh, registrationRecordId, o
     }
 
     return (
-        <Box>
+        <Box className='flex-1 h-full flex flex-col justify-between'>
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', mb: 3 }}>
                 <Button
                     variant="outlined"
@@ -270,55 +283,61 @@ const PaymentHistoryTab = ({ data, isLoading, onRefresh, registrationRecordId, o
                     THÊM MỚI
                 </Button>
             </Box>
-            <div className='overflow-x-auto'>
-                <table className={styles.table}>
-                    <thead>
-                        {table.getHeaderGroups().map(headerGroup => (
-                            <tr key={headerGroup.id} className="h-9">
-                                {headerGroup.headers.map(header => {
-                                    return (
-                                        <th key={header.id}>
-                                            {header.isPlaceholder ? null : (
-                                                <>
-                                                    <div
-                                                        className={classnames({
-                                                            'flex items-center': header.column.getIsSorted(),
-                                                            'cursor-pointer select-none': header.column.getCanSort()
-                                                        })}
-                                                        onClick={header.column.getToggleSortingHandler()}
-                                                    >
-                                                        {flexRender(header.column.columnDef.header, header.getContext())}
-                                                        {{
-                                                            asc: <ChevronRight fontSize='1.25rem' className='-rotate-90' />,
-                                                            desc: <ChevronRight fontSize='1.25rem' className='rotate-90' />
-                                                        }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
-                                                    </div>
-                                                </>
-                                            )}
-                                        </th>
-                                    )
-                                })}
-                            </tr>
-                        ))}
-                    </thead>
-                    <tbody>
-                        {renderTableRows()}
-                    </tbody>
-                </table>
+            <div className='flex-1 flex flex-col justify-between'>
+                <div className='overflow-x-auto'>
+                    <table className={styles.table}>
+                        <thead>
+                            {table.getHeaderGroups().map(headerGroup => (
+                                <tr key={headerGroup.id} className="h-9">
+                                    {headerGroup.headers.map(header => {
+                                        return (
+                                            <th key={header.id} style={{
+                                                width: header.getSize(),
+                                                minWidth: header.column.columnDef.minSize,
+                                                maxWidth: header.column.columnDef.maxSize
+                                            }}>
+                                                {header.isPlaceholder ? null : (
+                                                    <>
+                                                        <div
+                                                            className={classnames({
+                                                                'flex items-center': header.column.getIsSorted(),
+                                                                'cursor-pointer select-none': header.column.getCanSort()
+                                                            })}
+                                                            onClick={header.column.getToggleSortingHandler()}
+                                                        >
+                                                            {flexRender(header.column.columnDef.header, header.getContext())}
+                                                            {{
+                                                                asc: <ChevronRight fontSize='1.25rem' className='-rotate-90' />,
+                                                                desc: <ChevronRight fontSize='1.25rem' className='rotate-90' />
+                                                            }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
+                                                        </div>
+                                                    </>
+                                                )}
+                                            </th>
+                                        )
+                                    })}
+                                </tr>
+                            ))}
+                        </thead>
+                        <tbody>
+                            {renderTableRows()}
+                        </tbody>
+                    </table>
+                </div>
+                <TablePagination
+                    rowsPerPageOptions={[7, 10, 25]}
+                    component='div'
+                    className='border-bs'
+                    count={data.length}
+                    labelRowsPerPage="Dòng trên trang:"
+                    rowsPerPage={pageSize}
+                    page={pageNumber - 1}
+                    onPageChange={(_, page) => {
+                        setPageNumber(page + 1)
+                    }}
+                    onRowsPerPageChange={e => setPageSize(Number(e.target.value))}
+                />
             </div>
-            <TablePagination
-                rowsPerPageOptions={[7, 10, 25]}
-                component='div'
-                className='border-bs'
-                count={data.length}
-                labelRowsPerPage="Dòng trên trang:"
-                rowsPerPage={pageSize}
-                page={pageNumber - 1}
-                onPageChange={(_, page) => {
-                    setPageNumber(page + 1)
-                }}
-                onRowsPerPageChange={e => setPageSize(Number(e.target.value))}
-            />
             <Dialog
                 open={openDeleteDialog}
                 onClose={handleCloseDeleteDialog}
