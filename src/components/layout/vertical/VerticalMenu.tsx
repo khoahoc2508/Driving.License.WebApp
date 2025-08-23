@@ -107,6 +107,13 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
         <SubMenu label={"Quản lý nhân viên"} icon={<i className='ri-team-line' />}>
           <MenuItem href={`${CONFIG.Routers.ManageEmployee}/list`}>{"Danh sách nhân viên"}</MenuItem>
         </SubMenu>
+
+        {/* Quản lý thiết bị */}
+        <SubMenu label={"Quản lý thiết bị"} icon={<i className='ri-cpu-line' />}>
+          <MenuItem href={`${CONFIG.Routers.ManageCars}/list`}>{"Ô tô"}</MenuItem>
+          <MenuItem href={`${CONFIG.Routers.ManageDATDevices}/list`}>{"Máy DAT"}</MenuItem>
+        </SubMenu>
+
         {/* Quản lý loại phí */}
         <SubMenu label={"Quản lý thanh toán"} icon={<i className='ri-money-cny-circle-line' />}>
           <MenuItem href={`${CONFIG.Routers.ManageFeeType}/list`}>{"Danh sách lệ phí"}</MenuItem>

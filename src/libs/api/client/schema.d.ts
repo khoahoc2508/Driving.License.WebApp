@@ -116,6 +116,70 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/cars": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Cars_GetCarsWithPagination"];
+        put?: never;
+        post: operations["Cars_CreateCar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/cars/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Cars_GetCarById"];
+        put: operations["Cars_UpdateCar"];
+        post?: never;
+        delete: operations["Cars_DeleteCar"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/cars/all": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Cars_GetAllCars"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/constants/exam-results": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Constants_GetExamResults"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/contacts": {
         parameters: {
             query?: never;
@@ -126,6 +190,54 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["Contacts_CreateContact"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/dat-devices": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["DATDevices_GetDATDevicesWithPagination"];
+        put?: never;
+        post: operations["DATDevices_CreateDATDevice"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/dat-devices/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["DATDevices_GetDATDeviceById"];
+        put: operations["DATDevices_UpdateDATDevice"];
+        post?: never;
+        delete: operations["DATDevices_DeleteDATDevice"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/dat-devices/all": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["DATDevices_GetAllDATDevices"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -427,7 +539,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["PaymentHistories_GetPaymentHistoriesByRegistrationRecordId"];
+        get?: never;
         put?: never;
         post: operations["PaymentHistories_CreatePaymentHistory"];
         delete?: never;
@@ -452,7 +564,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/payments": {
+    "/api/payment-histories/all": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PaymentHistories_GetPaymentHistoriesByRegistrationRecordId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/payments/all": {
         parameters: {
             query?: never;
             header?: never;
@@ -461,7 +589,7 @@ export interface paths {
         };
         get: operations["Payments_GetPaymentsByRegistrationRecordId"];
         put?: never;
-        post: operations["Payments_CreatePayment"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -479,6 +607,22 @@ export interface paths {
         put: operations["Payments_UpdatePayment"];
         post?: never;
         delete: operations["Payments_DeletePaymentById"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/payments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Payments_CreatePayment"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -788,7 +932,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/tasks": {
+    "/api/tasks/all": {
         parameters: {
             query?: never;
             header?: never;
@@ -797,6 +941,22 @@ export interface paths {
         };
         get: operations["Tasks_GetTasksByRegistrationRecordIdQuery"];
         put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/tasks/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["Tasks_UpdateTask"];
         post?: never;
         delete?: never;
         options?: never;
@@ -873,10 +1033,112 @@ export interface components {
             address?: string | null;
             images?: string[] | null;
         };
+        PaginatedListOfGetCarsDto: {
+            data?: components["schemas"]["GetCarsDto"][];
+            /** Format: int32 */
+            pageNumber?: number;
+            /** Format: int32 */
+            totalPages?: number;
+            /** Format: int32 */
+            totalCount?: number;
+            hasPreviousPage?: boolean;
+            hasNextPage?: boolean;
+        };
+        GetCarsDto: {
+            id?: string;
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        BaseResponseOfGetCarDetailDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetCarDetailDto"] | null;
+        };
+        GetCarDetailDto: {
+            id?: string;
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        BaseResponseOfString: components["schemas"]["BaseResponse"] & {
+            data?: string | null;
+        };
+        CreateCarCommand: {
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        UpdateCarCommand: {
+            id?: string;
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        BaseResponseOfListOfGetAllCarsDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetAllCarsDto"][] | null;
+        };
+        GetAllCarsDto: {
+            id?: string;
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        BaseResponseOfListOfConstantDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["ConstantDto"][] | null;
+        };
+        ConstantDto: {
+            value?: string;
+            label?: string;
+        };
         CreateContactCommand: {
             fullName?: string;
             email?: string;
             message?: string;
+        };
+        PaginatedListOfGetDATDevicesDto: {
+            data?: components["schemas"]["GetDATDevicesDto"][];
+            /** Format: int32 */
+            pageNumber?: number;
+            /** Format: int32 */
+            totalPages?: number;
+            /** Format: int32 */
+            totalCount?: number;
+            hasPreviousPage?: boolean;
+            hasNextPage?: boolean;
+        };
+        GetDATDevicesDto: {
+            id?: string;
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        BaseResponseOfGetDATDeviceDetailDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetDATDeviceDetailDto"] | null;
+        };
+        GetDATDeviceDetailDto: {
+            id?: string;
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        CreateDATDeviceCommand: {
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        UpdateDATDeviceCommand: {
+            id?: string;
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        BaseResponseOfListOfGetAllDATDevicesDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetAllDATDevicesDto"][] | null;
+        };
+        GetAllDATDevicesDto: {
+            id?: string;
+            name?: string;
+            description?: string;
+            active?: boolean;
         };
         PaginatedListOfGetExamCentersDto: {
             data?: components["schemas"]["GetExamCentersDto"][];
@@ -903,9 +1165,6 @@ export interface components {
             name?: string;
             description?: string;
             active?: boolean;
-        };
-        BaseResponseOfString: components["schemas"]["BaseResponse"] & {
-            data?: string | null;
         };
         CreateExamCenterCommand: {
             name?: string;
@@ -1542,12 +1801,12 @@ export interface components {
         };
         GetTaskDto: {
             id?: string;
-            title?: string;
+            name?: string;
             assigneeId?: string | null;
             status?: components["schemas"]["TaskStatusType"];
             note?: string | null;
             taskFieldTemplateConfig?: components["schemas"]["TaskFieldTemplateConfigDto"][];
-            taskFieldInstanceSubmission?: components["schemas"]["TaskFieldInstanceSubmissionDto"][];
+            taskFieldInstanceSubmissions?: components["schemas"]["TaskFieldInstanceSubmissionDto"][];
         };
         /** @enum {integer} */
         TaskStatusType: 0 | 1 | 2;
@@ -1575,6 +1834,17 @@ export interface components {
             labelField?: string;
         };
         TaskFieldInstanceSubmissionDto: {
+            taskFieldTemplateConfigId?: string;
+            value?: string | null;
+        };
+        UpdateTaskCommand: {
+            id?: string;
+            assigneeId?: string | null;
+            status?: components["schemas"]["TaskStatusType"];
+            note?: string | null;
+            taskFieldInstanceSubmissions?: components["schemas"]["TaskFieldInstanceSubmissionDto2"][];
+        };
+        TaskFieldInstanceSubmissionDto2: {
             taskFieldTemplateConfigId?: string;
             value?: string | null;
         };
@@ -1797,6 +2067,161 @@ export interface operations {
             };
         };
     };
+    Cars_GetCarsWithPagination: {
+        parameters: {
+            query?: {
+                Search?: string | null;
+                Active?: boolean | null;
+                PageNumber?: number;
+                PageSize?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedListOfGetCarsDto"];
+                };
+            };
+        };
+    };
+    Cars_CreateCar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateCarCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfString"];
+                };
+            };
+        };
+    };
+    Cars_GetCarById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfGetCarDetailDto"];
+                };
+            };
+        };
+    };
+    Cars_UpdateCar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateCarCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    Cars_DeleteCar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    Cars_GetAllCars: {
+        parameters: {
+            query?: {
+                Active?: boolean | null;
+                Search?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfGetAllCarsDto"];
+                };
+            };
+        };
+    };
+    Constants_GetExamResults: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfConstantDto"];
+                };
+            };
+        };
+    };
     Contacts_CreateContact: {
         parameters: {
             query?: never;
@@ -1816,6 +2241,142 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    DATDevices_GetDATDevicesWithPagination: {
+        parameters: {
+            query?: {
+                Search?: string | null;
+                Active?: boolean | null;
+                PageNumber?: number;
+                PageSize?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedListOfGetDATDevicesDto"];
+                };
+            };
+        };
+    };
+    DATDevices_CreateDATDevice: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateDATDeviceCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfString"];
+                };
+            };
+        };
+    };
+    DATDevices_GetDATDeviceById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfGetDATDeviceDetailDto"];
+                };
+            };
+        };
+    };
+    DATDevices_UpdateDATDevice: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateDATDeviceCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    DATDevices_DeleteDATDevice: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    DATDevices_GetAllDATDevices: {
+        parameters: {
+            query?: {
+                Active?: boolean | null;
+                Search?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfGetAllDATDevicesDto"];
                 };
             };
         };
@@ -2403,27 +2964,6 @@ export interface operations {
             };
         };
     };
-    PaymentHistories_GetPaymentHistoriesByRegistrationRecordId: {
-        parameters: {
-            query?: {
-                RegistrationRecordId?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BaseResponseOfListOfGetPaymentHistoryDto"];
-                };
-            };
-        };
-    };
     PaymentHistories_CreatePaymentHistory: {
         parameters: {
             query?: never;
@@ -2514,6 +3054,27 @@ export interface operations {
             };
         };
     };
+    PaymentHistories_GetPaymentHistoriesByRegistrationRecordId: {
+        parameters: {
+            query?: {
+                RegistrationRecordId?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfGetPaymentHistoryDto"];
+                };
+            };
+        };
+    };
     Payments_GetPaymentsByRegistrationRecordId: {
         parameters: {
             query?: {
@@ -2531,29 +3092,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BaseResponseOfListOfGetPaymentDto"];
-                };
-            };
-        };
-    };
-    Payments_CreatePayment: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreatePaymentCommand"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BaseResponseOfString"];
                 };
             };
         };
@@ -2621,6 +3159,29 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    Payments_CreatePayment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreatePaymentCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfString"];
                 };
             };
         };
@@ -3142,6 +3703,31 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BaseResponseOfListOfGetTaskDto"];
+                };
+            };
+        };
+    };
+    Tasks_UpdateTask: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateTaskCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
                 };
             };
         };

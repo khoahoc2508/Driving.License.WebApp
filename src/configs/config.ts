@@ -200,7 +200,9 @@ const Routers = {
   ManageFeeType: '/admin/manage-fee-type',
   ManageRegistrationRecords: '/admin/manage-registration-records',
   ManageExamCenters: '/admin/manage-exam-centers',
-  ManageExamYards: '/admin/manage-exam-yards'
+  ManageExamYards: '/admin/manage-exam-yards',
+  ManageCars: '/admin/manage-cars',
+  ManageDATDevices: '/admin/manage-dat-devices'
 }
 
 const RoutersCustomer = {
