@@ -37,7 +37,7 @@ const GetRegistrationRecordOverview = async (id: string) => {
 
 // Payments
 const GetPaymentsByRegistrationRecordId = async (registrationRecordId: string) => {
-  return await axiosInstance.get('/api/payments', {
+  return await axiosInstance.get('/api/payments/all', {
     params: { RegistrationRecordId: registrationRecordId }
   })
 }
@@ -60,7 +60,7 @@ const DeletePayment = async (id: string) => {
 
 // Payment Histories
 const GetPaymentHistoriesByRegistrationRecordId = async (registrationRecordId: string) => {
-  return await axiosInstance.get('/api/payment-histories', {
+  return await axiosInstance.get('/api/payment-histories/all', {
     params: { RegistrationRecordId: registrationRecordId }
   })
 }

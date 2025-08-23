@@ -86,6 +86,11 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
           <MenuItem href={`${CONFIG.Routers.ManageRegistrationRecords}/list`}>{"Danh sách hồ sơ"}</MenuItem>
         </SubMenu>
 
+        <SubMenu label={"Quản lý địa điểm"} icon={<i className='ri-map-pin-line' />}>
+          <MenuItem href={`${CONFIG.Routers.ManageExamCenters}/list`}>{"Trường thi"}</MenuItem>
+          <MenuItem href={`${CONFIG.Routers.ManageExamYards}/list`}>{"Sân thi"}</MenuItem>
+        </SubMenu>
+
         <SubMenu label={"Cấu hình cá nhân"} icon={<i className='ri-settings-3-line' />}>
           <MenuItem href={`${CONFIG.Routers.BrandSetting}/brand-setting`}>{"Thương hiệu"}</MenuItem>
         </SubMenu>

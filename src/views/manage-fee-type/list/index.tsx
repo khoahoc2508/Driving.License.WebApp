@@ -141,6 +141,7 @@ const ManageFeeType = () => {
                             getOptionLabel={option => option?.label || ''}
                             isOptionEqualToValue={(opt, val) => opt.value === val.value}
                             renderInput={params => <TextField {...params} label='Trạng thái' />}
+                            noOptionsText='Không có dữ liệu'
                         />
                     </Grid>
                     <Grid size={{ xs: 12, sm: 8, md: 9 }}>

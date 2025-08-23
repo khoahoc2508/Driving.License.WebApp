@@ -132,6 +132,54 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/exam-centers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ExamCenters_GetExamCentersWithPagination"];
+        put?: never;
+        post: operations["ExamCenters_CreateExamCenter"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/exam-centers/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ExamCenters_GetExamCenterById"];
+        put: operations["ExamCenters_UpdateExamCenter"];
+        post?: never;
+        delete: operations["ExamCenters_DeleteExamCenter"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/exam-centers/all": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ExamCenters_GetAllExamCenters"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/exams/by-group/{id}": {
         parameters: {
             query?: never;
@@ -254,6 +302,54 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["ExamSubmissions_SubmitExam"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/exam-yards": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ExamYards_GetExamYardsWithPagination"];
+        put?: never;
+        post: operations["ExamYards_CreateExamYard"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/exam-yards/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ExamYards_GetExamYardById"];
+        put: operations["ExamYards_UpdateExamYard"];
+        post?: never;
+        delete: operations["ExamYards_DeleteExamYard"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/exam-yards/all": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ExamYards_GetAllExamYards"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -692,6 +788,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/tasks": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Tasks_GetTasksByRegistrationRecordIdQuery"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -765,6 +877,55 @@ export interface components {
             fullName?: string;
             email?: string;
             message?: string;
+        };
+        PaginatedListOfGetExamCentersDto: {
+            data?: components["schemas"]["GetExamCentersDto"][];
+            /** Format: int32 */
+            pageNumber?: number;
+            /** Format: int32 */
+            totalPages?: number;
+            /** Format: int32 */
+            totalCount?: number;
+            hasPreviousPage?: boolean;
+            hasNextPage?: boolean;
+        };
+        GetExamCentersDto: {
+            id?: string;
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        BaseResponseOfGetExamCenterDetailDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetExamCenterDetailDto"] | null;
+        };
+        GetExamCenterDetailDto: {
+            id?: string;
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        BaseResponseOfString: components["schemas"]["BaseResponse"] & {
+            data?: string | null;
+        };
+        CreateExamCenterCommand: {
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        UpdateExamCenterCommand: {
+            id?: string;
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        BaseResponseOfListOfGetAllExamCentersDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetAllExamCentersDto"][] | null;
+        };
+        GetAllExamCentersDto: {
+            id?: string;
+            name?: string;
+            description?: string;
+            active?: boolean;
         };
         BaseResponseOfListOfExamDto: components["schemas"]["BaseResponse"] & {
             data?: components["schemas"]["ExamDto"][] | null;
@@ -885,6 +1046,52 @@ export interface components {
             questionId?: string;
             selectedAnswerId?: string | null;
         };
+        PaginatedListOfGetExamYardsDto: {
+            data?: components["schemas"]["GetExamYardsDto"][];
+            /** Format: int32 */
+            pageNumber?: number;
+            /** Format: int32 */
+            totalPages?: number;
+            /** Format: int32 */
+            totalCount?: number;
+            hasPreviousPage?: boolean;
+            hasNextPage?: boolean;
+        };
+        GetExamYardsDto: {
+            id?: string;
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        BaseResponseOfGetExamYardDetailDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetExamYardDetailDto"] | null;
+        };
+        GetExamYardDetailDto: {
+            id?: string;
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        CreateExamYardCommand: {
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        UpdateExamYardCommand: {
+            id?: string;
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        BaseResponseOfListOfGetAllExamYardsDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetAllExamYardsDto"][] | null;
+        };
+        GetAllExamYardsDto: {
+            id?: string;
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
         PaginatedListOfFeeTypeDto: {
             data?: components["schemas"]["FeeTypeDto"][];
             /** Format: int32 */
@@ -930,9 +1137,6 @@ export interface components {
         GetAllGroupExamQuery: Record<string, never>;
         BaseResponseOfListOfLicenseTypeDto: components["schemas"]["BaseResponse"] & {
             data?: components["schemas"]["LicenseTypeDto"][] | null;
-        };
-        BaseResponseOfString: components["schemas"]["BaseResponse"] & {
-            data?: string | null;
         };
         CreatePaymentHistoryCommand: {
             paymentId?: string;
@@ -1333,6 +1537,47 @@ export interface components {
             status?: components["schemas"]["StepStatusType"];
             assigneeId?: string | null;
         };
+        BaseResponseOfListOfGetTaskDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetTaskDto"][] | null;
+        };
+        GetTaskDto: {
+            id?: string;
+            title?: string;
+            assigneeId?: string | null;
+            status?: components["schemas"]["TaskStatusType"];
+            note?: string | null;
+            taskFieldTemplateConfig?: components["schemas"]["TaskFieldTemplateConfigDto"][];
+            taskFieldInstanceSubmission?: components["schemas"]["TaskFieldInstanceSubmissionDto"][];
+        };
+        /** @enum {integer} */
+        TaskStatusType: 0 | 1 | 2;
+        TaskFieldTemplateConfigDto: {
+            id?: string;
+            label?: string;
+            isRequired?: boolean;
+            isVisible?: boolean;
+            inputType?: components["schemas"]["InputType"];
+            defaultValue?: string;
+            hint?: string;
+            description?: string;
+            active?: boolean;
+            readOnly?: boolean;
+            key?: string;
+            /** Format: int32 */
+            order?: number;
+            dataSourceConfig?: components["schemas"]["DataSourceConfigDto"] | null;
+        };
+        /** @enum {integer} */
+        InputType: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+        DataSourceConfigDto: {
+            apiUrl?: string;
+            valueField?: string;
+            labelField?: string;
+        };
+        TaskFieldInstanceSubmissionDto: {
+            taskFieldTemplateConfigId?: string;
+            value?: string | null;
+        };
     };
     responses: never;
     parameters: never;
@@ -1575,6 +1820,142 @@ export interface operations {
             };
         };
     };
+    ExamCenters_GetExamCentersWithPagination: {
+        parameters: {
+            query?: {
+                Search?: string | null;
+                Active?: boolean | null;
+                PageNumber?: number;
+                PageSize?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedListOfGetExamCentersDto"];
+                };
+            };
+        };
+    };
+    ExamCenters_CreateExamCenter: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateExamCenterCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfString"];
+                };
+            };
+        };
+    };
+    ExamCenters_GetExamCenterById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfGetExamCenterDetailDto"];
+                };
+            };
+        };
+    };
+    ExamCenters_UpdateExamCenter: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateExamCenterCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    ExamCenters_DeleteExamCenter: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    ExamCenters_GetAllExamCenters: {
+        parameters: {
+            query?: {
+                Active?: boolean | null;
+                Search?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfGetAllExamCentersDto"];
+                };
+            };
+        };
+    };
     Exams_GetExamsByGroupExamId: {
         parameters: {
             query?: never;
@@ -1751,6 +2132,142 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BaseResponseOfExamSubmissionResultDto"];
+                };
+            };
+        };
+    };
+    ExamYards_GetExamYardsWithPagination: {
+        parameters: {
+            query?: {
+                Search?: string | null;
+                Active?: boolean | null;
+                PageNumber?: number;
+                PageSize?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedListOfGetExamYardsDto"];
+                };
+            };
+        };
+    };
+    ExamYards_CreateExamYard: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateExamYardCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfString"];
+                };
+            };
+        };
+    };
+    ExamYards_GetExamYardById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfGetExamYardDetailDto"];
+                };
+            };
+        };
+    };
+    ExamYards_UpdateExamYard: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateExamYardCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    ExamYards_DeleteExamYard: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    ExamYards_GetAllExamYards: {
+        parameters: {
+            query?: {
+                Active?: boolean | null;
+                Search?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfGetAllExamYardsDto"];
                 };
             };
         };
@@ -2604,6 +3121,27 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BaseResponseOfListOfGetStepsDto"];
+                };
+            };
+        };
+    };
+    Tasks_GetTasksByRegistrationRecordIdQuery: {
+        parameters: {
+            query?: {
+                StepId?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfGetTaskDto"];
                 };
             };
         };

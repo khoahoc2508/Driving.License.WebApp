@@ -15,16 +15,15 @@ import Autocomplete from '@mui/material/Autocomplete'
 
 import { toast } from 'react-toastify'
 
-import type { AssigneeListType, GetAssigneesQueryParams, AssigneeDto, AssigneeType } from '@/types/assigneeTypes'
-import assigneeAPI from '@/libs/api/assigneeAPI'
+import type { ExamCenterListType, GetExamCentersQueryParams, GetExamCentersDto } from '@/types/examCenterTypes'
+import examCentersAPI from '@/libs/api/examCentersAPI'
 import DebouncedInput from '@/components/common/DebouncedInput'
+import AddExamCenterDialog, { DialogMode } from './AddExamCenterDialog'
 import Table from './Table'
-import AddEmployeeDialog, { DialogMode } from './AddEmployeeDialog'
-import CONFIG from '@/configs/config'
 
-const ManageEmployee = () => {
+const ManageExamCentersList = () => {
 
-    const [dataTable, setDataTable] = useState<AssigneeListType>([])
+    const [dataTable, setDataTable] = useState<ExamCenterListType>([])
     const [search, setSearch] = useState('')
     const [statusValue, setStatusValue] = useState<{ label: string; value: boolean } | null>(null)
     const [appliedStatusValue, setAppliedStatusValue] = useState<{ label: string; value: boolean } | null>(null)
@@ -33,16 +32,15 @@ const ManageEmployee = () => {
     const [isLoading, setLoading] = useState<boolean>(true)
     const [totalItems, setTotalItems] = useState<number>(0)
     const [reloadDataTable, setReloadDataTable] = useState<boolean>(false)
-    const [params, setParams] = useState<GetAssigneesQueryParams>()
+    const [params, setParams] = useState<GetExamCentersQueryParams>()
 
     // Modal states
     const [openAddDialog, setOpenAddDialog] = useState(false)
-    const [editData, setEditData] = useState<AssigneeDto | null>(null)
+    const [editData, setEditData] = useState<GetExamCentersDto | null>(null)
     const [dialogMode, setDialogMode] = useState<DialogMode>(DialogMode.ADD)
 
     useEffect(() => {
         setParams({
-            assigneeType: CONFIG.AssigneeTypes.Employee as AssigneeType, // Employee
             search: '',
             pageNumber: 1,
             pageSize: 10
@@ -51,7 +49,7 @@ const ManageEmployee = () => {
 
     useEffect(() => {
         if (params) {
-            getAssignees(params)
+            getExamCenters(params)
         }
     }, [params, reloadDataTable])
 
@@ -100,9 +98,9 @@ const ManageEmployee = () => {
         setDialogMode(DialogMode.ADD)
     }
 
-    const handleEditEmployee = (employee: AssigneeDto) => {
+    const handleEditExamCenter = (examCenter: GetExamCentersDto) => {
         setDialogMode(DialogMode.EDIT)
-        setEditData(employee)
+        setEditData(examCenter)
         setOpenAddDialog(true)
     }
 
@@ -110,10 +108,10 @@ const ManageEmployee = () => {
         setReloadDataTable(prev => !prev)
     }
 
-    const getAssignees = async (params: GetAssigneesQueryParams): Promise<void> => {
+    const getExamCenters = async (params: GetExamCentersQueryParams): Promise<void> => {
         try {
             setLoading(true)
-            const res = await assigneeAPI.GetAssignees(params)
+            const res = await examCentersAPI.GetExamCenters(params)
 
             if (res?.data?.data) {
                 const fetchedData = res?.data?.data || []
@@ -128,17 +126,22 @@ const ManageEmployee = () => {
         }
     }
 
+    const statusOptions = [
+        { label: 'Đang hoạt động', value: true },
+        { label: 'Dừng hoạt động', value: false }
+    ]
+
     return (
-        <Card>
-            <CardHeader title='Lọc nhân viên' />
+        <Card className='h-full flex flex-col'>
+            <CardHeader title='Lọc trường thi' />
             <CardContent>
                 <Grid container spacing={5} alignItems={'flex-end'}>
                     <Grid size={{ xs: 12, sm: 4, md: 3 }}>
                         <Autocomplete
                             value={statusValue}
-                            options={CONFIG.statusOptions}
+                            options={statusOptions}
                             onChange={handleStatusSelect}
-                            id='employee-status-autocomplete'
+                            id='exam-center-status-autocomplete'
                             getOptionLabel={option => option?.label || ''}
                             isOptionEqualToValue={(opt, val) => opt.value === val.value}
                             renderInput={params => <TextField {...params} label='Trạng thái' />}
@@ -156,14 +159,13 @@ const ManageEmployee = () => {
                 </Grid>
             </CardContent>
             <Divider />
-
             <div className='flex justify-between p-5 gap-4 flex-col sm:flex-row sm:items-center'>
                 <div className='flex items-center gap-3 w-full sm:w-auto'>
                     <DebouncedInput
                         value={search}
                         className='w-full'
                         onDebounceChange={onChangeSearch}
-                        placeholder='Họ tên, số điện thoại'
+                        placeholder='Tên trường thi'
                     />
                 </div>
                 <Button variant='contained' color='primary' className='w-full sm:w-auto' onClick={handleOpenAddDialog}>
@@ -176,14 +178,14 @@ const ManageEmployee = () => {
                 pageNumber={pageNumber}
                 pageSize={pageSize}
                 totalItems={totalItems}
-                onPageChange={(page) => setPageNumber(page)}
-                onPageSizeChange={(size) => setPageSize(size)}
+                onPageChange={(page: number) => setPageNumber(page)}
+                onPageSizeChange={(size: number) => setPageSize(size)}
                 setReloadDataTable={setReloadDataTable}
                 isLoading={isLoading}
-                onEditEmployee={handleEditEmployee}
+                onEditExamCenter={handleEditExamCenter}
             />
 
-            <AddEmployeeDialog
+            <AddExamCenterDialog
                 open={openAddDialog}
                 onClose={handleCloseAddDialog}
                 onSuccess={handleAddSuccess}
@@ -194,4 +196,4 @@ const ManageEmployee = () => {
     )
 }
 
-export default ManageEmployee
+export default ManageExamCentersList

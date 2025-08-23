@@ -198,7 +198,9 @@ const Routers = {
   ManageCTV: '/admin/manage-collaborator',
   ManageEmployee: '/admin/manage-employee',
   ManageFeeType: '/admin/manage-fee-type',
-  ManageRegistrationRecords: '/admin/manage-registration-records'
+  ManageRegistrationRecords: '/admin/manage-registration-records',
+  ManageExamCenters: '/admin/manage-exam-centers',
+  ManageExamYards: '/admin/manage-exam-yards'
 }
 
 const RoutersCustomer = {
