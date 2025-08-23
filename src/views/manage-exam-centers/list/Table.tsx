@@ -115,9 +115,8 @@ const Table = ({
                         {table.getRowModel().rows.indexOf(row) + 1}
                     </Typography>
                 ),
-                size: 80,
-                minSize: 60,
-                maxSize: 100
+                size: 50,
+                minSize: 50
             }),
             columnHelper.accessor('name', {
                 header: 'TÊN',

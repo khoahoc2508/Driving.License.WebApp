@@ -464,7 +464,7 @@ const Table = ({
 
     return (
         <>
-            <Card>
+            <div className='flex flex-col justify-between flex-1'>
                 <div className='overflow-x-auto custom-scrollbar'>
                     <table
                         className={`${styles.table} ${styles.fixed}`}
@@ -583,7 +583,7 @@ const Table = ({
                     }}
                     onRowsPerPageChange={e => onPageSizeChange(Number(e.target.value))}
                 />
-            </Card>
+            </div>
 
             {/* Delete Confirmation Dialog */}
             <Dialog

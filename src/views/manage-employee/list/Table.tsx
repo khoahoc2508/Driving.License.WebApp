@@ -62,8 +62,8 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
     addMeta({
         itemRank
     })
-    
-return itemRank.passed
+
+    return itemRank.passed
 }
 
 const Table = ({
@@ -115,6 +115,9 @@ const Table = ({
                         {table.getRowModel().rows.indexOf(row) + 1}
                     </Typography>
                 ),
+                size: 50,
+                minSize: 65,
+                maxSize: 100
             }),
             columnHelper.accessor('fullName', {
                 header: 'HỌ TÊN',
@@ -126,7 +129,9 @@ const Table = ({
                             </Typography>
                         </div>
                     </div>
-                )
+                ),
+                size: 50,
+                minSize: 40
             }),
             columnHelper.accessor('phone', {
                 header: 'SỐ ĐIỆN THOẠI',
@@ -134,14 +139,17 @@ const Table = ({
                     <div style={{ textAlign: 'right' }}>
                         <Typography>{row.original?.phone}</Typography>
                     </div>
-
-                )
+                ),
+                size: 50,
+                minSize: 40
             }),
             columnHelper.accessor('active', {
                 header: 'TRẠNG THÁI',
                 cell: ({ row }) => {
                     return (getStatusChip(row.original?.active))
-                }
+                },
+                size: 150,
+                minSize: 120
             }),
             columnHelper.accessor('description', {
                 header: 'MÔ TẢ',
@@ -149,7 +157,9 @@ const Table = ({
                     <div style={{ textAlign: 'left' }}>
                         <Typography>{row.original?.description || ''}</Typography>
                     </div>
-                )
+                ),
+                size: 250,
+                minSize: 200
             }),
             columnHelper.accessor('id', {
                 id: 'actions',
@@ -165,7 +175,9 @@ const Table = ({
                         </IconButton>
                     </div>
                 ),
-                enableSorting: false
+                enableSorting: false,
+                size: 80,
+                minSize: 60
             })
         ],
         [data, setData]
@@ -222,7 +234,8 @@ const Table = ({
         getPaginationRowModel: getPaginationRowModel(),
         getFacetedRowModel: getFacetedRowModel(),
         getFacetedUniqueValues: getFacetedUniqueValues(),
-        getFacetedMinMaxValues: getFacetedMinMaxValues()
+        getFacetedMinMaxValues: getFacetedMinMaxValues(),
+        columnResizeMode: 'onChange'
     })
 
     const renderTableRows = () => {
@@ -258,7 +271,7 @@ const Table = ({
 
     return (
         <>
-            <Card>
+            <div className='flex flex-col justify-between flex-1'>
                 <div className='overflow-x-auto'>
                     <table className={styles.table}>
                         <thead>
@@ -266,7 +279,11 @@ const Table = ({
                                 <tr key={headerGroup.id} className="h-9">
                                     {headerGroup.headers.map(header => {
                                         return (
-                                            <th key={header.id}>
+                                            <th key={header.id} style={{
+                                                width: header.getSize(),
+                                                minWidth: header.column.columnDef.minSize,
+                                                maxWidth: header.column.columnDef.maxSize
+                                            }}>
                                                 {header.isPlaceholder ? null : (
                                                     <>
                                                         <div
@@ -308,7 +325,7 @@ const Table = ({
                     }}
                     onRowsPerPageChange={e => onPageSizeChange(Number(e.target.value))}
                 />
-            </Card>
+            </div>
             <Dialog
                 open={openDeleteDialog}
                 onClose={handleCloseDeleteDialog}

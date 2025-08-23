@@ -128,7 +128,7 @@ const ManageFeeType = () => {
     }
 
     return (
-        <Card>
+        <Card className='h-full flex flex-col'>
             <CardHeader title='Lọc lệ phí' />
             <CardContent>
                 <Grid container spacing={5} alignItems={'flex-end'}>

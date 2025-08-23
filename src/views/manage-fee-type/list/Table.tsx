@@ -62,8 +62,8 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
     addMeta({
         itemRank
     })
-    
-return itemRank.passed
+
+    return itemRank.passed
 }
 
 const Table = ({
@@ -117,6 +117,9 @@ const Table = ({
                         </Typography>
                     </div>
                 ),
+                size: 50,
+                minSize: 65,
+                maxSize: 100
             }),
             columnHelper.accessor('name', {
                 header: 'TÊN',
@@ -128,7 +131,9 @@ const Table = ({
                             </Typography>
                         </div>
                     </div>
-                )
+                ),
+                size: 200,
+                minSize: 150
             }),
             columnHelper.accessor('active', {
                 header: 'TRẠNG THÁI',
@@ -138,7 +143,9 @@ const Table = ({
                             {getStatusChip(row.original?.active)}
                         </div>
                     )
-                }
+                },
+                size: 150,
+                minSize: 120
             }),
             columnHelper.accessor('description', {
                 header: 'MÔ TẢ',
@@ -146,7 +153,9 @@ const Table = ({
                     <div style={{ textAlign: 'left' }}>
                         <Typography>{row.original?.description || ''}</Typography>
                     </div>
-                )
+                ),
+                size: 250,
+                minSize: 200
             }),
             columnHelper.accessor('id', {
                 id: 'actions',
@@ -162,7 +171,9 @@ const Table = ({
                         </IconButton>
                     </div>
                 ),
-                enableSorting: false
+                enableSorting: false,
+                size: 80,
+                minSize: 60
             })
         ],
         [data, setData]
@@ -255,7 +266,7 @@ const Table = ({
 
     return (
         <>
-            <Card>
+            <div className='flex flex-col justify-between flex-1'>
                 <div className='overflow-x-auto'>
                     <table className={styles.table}>
                         <thead>
@@ -263,7 +274,11 @@ const Table = ({
                                 <tr key={headerGroup.id} className="h-9">
                                     {headerGroup.headers.map(header => {
                                         return (
-                                            <th key={header.id}>
+                                            <th key={header.id} style={{
+                                                width: header.getSize(),
+                                                minWidth: header.column.columnDef.minSize,
+                                                maxWidth: header.column.columnDef.maxSize
+                                            }}>
                                                 {header.isPlaceholder ? null : (
                                                     <>
                                                         <div
@@ -305,7 +320,7 @@ const Table = ({
                     }}
                     onRowsPerPageChange={e => onPageSizeChange(Number(e.target.value))}
                 />
-            </Card>
+            </div>
             <Dialog
                 open={openDeleteDialog}
                 onClose={handleCloseDeleteDialog}

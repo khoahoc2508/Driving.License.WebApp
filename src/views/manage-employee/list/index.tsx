@@ -129,7 +129,7 @@ const ManageEmployee = () => {
     }
 
     return (
-        <Card>
+        <Card className='h-full flex flex-col'>
             <CardHeader title='Lọc nhân viên' />
             <CardContent>
                 <Grid container spacing={5} alignItems={'flex-end'}>

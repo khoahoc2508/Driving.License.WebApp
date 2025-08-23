@@ -337,7 +337,7 @@ const ManageRegistrationRecords = () => {
 
     return (
         <>
-            <Card>
+            <Card className='h-full flex flex-col'>
                 <CardHeader title='Lọc hồ sơ' />
                 <CardContent>
                     <Grid container spacing={5} alignItems={'flex-end'}>
