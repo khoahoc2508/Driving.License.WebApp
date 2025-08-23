@@ -11,9 +11,9 @@ import CONFIG from "@/configs/config";
 
 import registrationRecordsAPI from "@/libs/api/registrationRecordsAPI";
 import type { RegistrationRecordBasicInfoDto, RegistrationRecordOverviewDto } from "@/types/registrationRecords";
-import OverviewTab from "./OverviewTab";
+import OverviewTab from "./overview/OverviewTab";
 import PaymentsTab from "./payments/PaymentsTab";
-import ProcessingTab from "./ProcessingTab";
+import ProcessingTab from "./processes/ProcessingTab";
 
 
 type RegistrationRecordDetailProps = {
@@ -168,7 +168,7 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
                         <PaymentsTab registrationRecordId={id} onDataChange={refreshData} />
                     )}
                     {!isLoading && activeTab === 2 && (
-                        <ProcessingTab overview={overview} />
+                        <ProcessingTab overview={overview} registrationRecordId={id} />
                     )}
                     {isLoading && (
                         <Box sx={{ mt: 4, display: 'flex', flexDirection: 'column', gap: 3 }}>
