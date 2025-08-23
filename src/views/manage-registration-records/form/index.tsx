@@ -1,41 +1,50 @@
 'use client'
 
+import { useEffect, useState } from "react";
+
+import { useRouter } from 'next/navigation'
+
+import type { SubmitHandler } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form'
+
+import { toast } from "react-toastify";
+
+import Card from '@mui/material/Card'
+
+import CardContent from '@mui/material/CardContent'
+
+
+import Grid from '@mui/material/Grid2'
+
+import TextField from '@mui/material/TextField'
+
+import { Button, Divider, Typography, useTheme } from "@mui/material";
+
+import Autocomplete from '@mui/material/Autocomplete'
+
 import CONFIG from "@/configs/config";
-import { components } from "@/libs/api/client/schema";
+import type { components } from "@/libs/api/client/schema";
 import LicenseTypeAPI from "@/libs/api/licenseTypeApi";
 import assigneeAPI from "@/libs/api/assigneeAPI";
 import UploadAPI from "@/libs/api/uploadAPI";
-import { SCREEN_TYPE } from "@/types/Common";
-import { LicenseTypeDto } from "@/types/examSubmissionTypes";
-import { VehicleTypeDto } from "@/types/LicensesRegistrations";
-import { CreateRegistrationRecordCommand, UpdateRegistrationRecordCommand, GenderType } from "@/types/registrationRecords";
-import { AssigneeType } from "@/types/assigneeTypes";
-import { useEffect, useState } from "react";
-import { Controller, SubmitHandler, useForm } from 'react-hook-form'
-import { toast } from "react-toastify";
+import type { LicenseTypeDto } from "@/types/examSubmissionTypes";
+import type { CreateRegistrationRecordCommand, UpdateRegistrationRecordCommand } from "@/types/registrationRecords";
+import type { AssigneeType } from "@/types/assigneeTypes";
+
 // MUI Imports
-import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
-import CardHeader from '@mui/material/CardHeader'
-import FormControl from '@mui/material/FormControl'
-import FormHelperText from '@mui/material/FormHelperText'
-import Grid from '@mui/material/Grid2'
-import InputLabel from '@mui/material/InputLabel'
-import MenuItem from '@mui/material/MenuItem'
-import Select from '@mui/material/Select'
-import TextField from '@mui/material/TextField'
-import Header from "@/views/manage-licenses-registrations/form/Header";
+
 import PersonalInformation from "./PersonalInformation";
-import { useRouter } from 'next/navigation'
-import { Button, Divider, Typography, useTheme } from "@mui/material";
+
+
+
 import CitizenCard from "./CitizenCard";
 import InfomationRegister from "./InfomationRegister";
-import Autocomplete from '@mui/material/Autocomplete'
+
+
 import registrationRecordsAPI from "@/libs/api/registrationRecordsAPI";
 
 
 type UpsertRegistrationRecordProps = {
-  screenType: SCREEN_TYPE
   id?: string
 }
 
@@ -59,7 +68,7 @@ type FormValues = {
   note?: string | null;
 }
 
-const UpsertRegistrationRecord = ({ screenType, id }: UpsertRegistrationRecordProps) => {
+const UpsertRegistrationRecord = ({ id }: UpsertRegistrationRecordProps) => {
   const [licenseTypes, setLicenseTypes] = useState<LicenseTypeDto[]>([])
   const [staffAssigneeOptions, setStaffAssigneeOptions] = useState<{ label: string; value: string }[]>([])
   const [collaboratorOptions, setCollaboratorOptions] = useState<{ label: string; value: string }[]>([])
@@ -152,6 +161,7 @@ const UpsertRegistrationRecord = ({ screenType, id }: UpsertRegistrationRecordPr
           label: assignee.fullName || 'Unknown',
           value: assignee.id || ''
         }))
+
         setStaffAssigneeOptions(options)
       }
     } catch (error: any) {
@@ -173,6 +183,7 @@ const UpsertRegistrationRecord = ({ screenType, id }: UpsertRegistrationRecordPr
           label: assignee.fullName || 'Unknown',
           value: assignee.id || ''
         }))
+
         setCollaboratorOptions(options)
       }
     } catch (error: any) {
@@ -190,10 +201,12 @@ const UpsertRegistrationRecord = ({ screenType, id }: UpsertRegistrationRecordPr
 
       if (response.data.success) {
         const data = response.data.data
+
         setValue('fullname', data.fullname || '')
         setValue('birthday', data.birthday ? new Date(data.birthday) : null)
 
         const genderValue = data.gender !== undefined && data.gender !== null ? Number(data.gender) as 0 | 1 | 2 : null
+
         setValue('gender', genderValue)
 
         setValue('licenseTypeCode', data?.licenseTypeCode || '')
@@ -232,20 +245,26 @@ const UpsertRegistrationRecord = ({ screenType, id }: UpsertRegistrationRecordPr
       if (fileOrUrl instanceof File) {
         try {
           const response = await UploadAPI.uploadFiles([fileOrUrl]);
+
+
           return response?.data?.[0]?.relativeUrl;
         } catch (error) {
           console.error("Error uploading file:", error);
           toast.error("Lỗi khi tải lên ảnh");
+
           return undefined;
         }
       } else if (typeof fileOrUrl === 'string') {
         const uploadsIndex = fileOrUrl.indexOf('training/uploads/');
+
         if (uploadsIndex !== -1) {
           return fileOrUrl.substring(uploadsIndex);
         } else {
           return fileOrUrl;
         }
       }
+
+
       return undefined;
     };
 
@@ -278,10 +297,12 @@ const UpsertRegistrationRecord = ({ screenType, id }: UpsertRegistrationRecordPr
       if (id) {
         // Edit mode - use UpdateRegistrationRecordCommand
         const updatePayload: UpdateRegistrationRecordCommand = basePayload as UpdateRegistrationRecordCommand;
+
         await registrationRecordsAPI.UpdateRegistrationRecord(id, updatePayload);
       } else {
         // Create mode - use CreateRegistrationRecordCommand
         const createPayload: CreateRegistrationRecordCommand = basePayload as CreateRegistrationRecordCommand;
+
         await registrationRecordsAPI.CreateRegistrationRecord(createPayload);
       }
 

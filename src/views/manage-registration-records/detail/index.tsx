@@ -1,11 +1,16 @@
 'use client'
 
-import CONFIG from "@/configs/config";
-import { Avatar, Box, Button, Card, CardContent, CardHeader, Divider, Switch, Tab, Tabs, Typography, useTheme } from "@mui/material";
+import { useEffect, useState } from "react";
+
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+
+import { Avatar, Box, Button, Card, CardContent, Switch, Tab, Tabs, Typography, useTheme } from "@mui/material";
+
+import CONFIG from "@/configs/config";
+
+
 import registrationRecordsAPI from "@/libs/api/registrationRecordsAPI";
-import type { RegistrationRecordBasicInfoDto, RegistrationRecordOverviewDto, GetRegistrationRecordDetailDto } from "@/types/registrationRecords";
+import type { RegistrationRecordBasicInfoDto, RegistrationRecordOverviewDto } from "@/types/registrationRecords";
 import OverviewTab from "./OverviewTab";
 import PaymentsTab from "./payments/PaymentsTab";
 import ProcessingTab from "./ProcessingTab";
@@ -31,6 +36,7 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
             fetchData(id)
         }
     }
+
     useEffect(() => {
         if (!id) return
         fetchData(id)
@@ -39,6 +45,7 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
     const fetchData = async (id: string) => {
         try {
             setIsLoading(true)
+
             const [basicRes, overviewRes] = await Promise.all([
                 registrationRecordsAPI.GetRegistrationRecordBasicInfo(id),
                 registrationRecordsAPI.GetRegistrationRecordOverview(id)
@@ -63,6 +70,7 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
 
     const currency = (value?: number | null) => {
         if (value === undefined || value === null) return 'Chưa có dữ liệu'
+
         return new Intl.NumberFormat('vi-VN').format(value)
     }
 
@@ -154,10 +162,10 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
                         />
                     </Tabs>
                     {!isLoading && activeTab === 0 && (
-                        <OverviewTab basicInfo={basicInfo} overview={overview} />
+                        <OverviewTab overview={overview} />
                     )}
                     {!isLoading && activeTab === 1 && (
-                        <PaymentsTab overview={overview} registrationRecordId={id} onDataChange={refreshData} />
+                        <PaymentsTab registrationRecordId={id} onDataChange={refreshData} />
                     )}
                     {!isLoading && activeTab === 2 && (
                         <ProcessingTab overview={overview} />

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+
 import { useForm, Controller } from 'react-hook-form'
 import {
     Dialog,
@@ -63,25 +64,30 @@ const AddPaymentDialog = ({ open, onClose, onSuccess, registrationRecordId, mode
 
     useEffect(() => {
         if (!open) return
+
         const fetchFeeTypes = async () => {
             try {
                 const res = await feeTypeAPI.GetFeeTypes({ pageNumber: 1, pageSize: 9999 } as any)
                 const options = res?.data?.data?.map((x: any) => ({ value: x.id, label: x.name })) || []
+
                 setFeeTypeOptions(options)
             } catch (e) {
                 setFeeTypeOptions([])
             }
         }
+
         fetchFeeTypes()
     }, [open])
 
     useEffect(() => {
         if (!open || mode !== DialogMode.EDIT || !editPaymentId) return
+
         const fetchDetail = async () => {
             try {
                 setIsLoadingDetail(true)
                 const res = await registrationRecordsAPI.GetPaymentById(editPaymentId)
                 const detail = res?.data?.data
+
                 if (detail) {
                     setValue('feeTypeId', detail.feeTypeId || '')
                     setValue('amountInput', new Intl.NumberFormat('vi-VN').format(detail.amount ?? 0))
@@ -91,6 +97,7 @@ const AddPaymentDialog = ({ open, onClose, onSuccess, registrationRecordId, mode
                 setIsLoadingDetail(false)
             }
         }
+
         fetchDetail()
     }, [open, mode, editPaymentId, setValue])
 
@@ -102,16 +109,21 @@ const AddPaymentDialog = ({ open, onClose, onSuccess, registrationRecordId, mode
 
     const parseAmount = (input: string): number => {
         const numeric = input.replace(/[^\d]/g, '')
-        return numeric ? Number(numeric) : 0
+
+        
+return numeric ? Number(numeric) : 0
     }
 
     const formatAmount = (value: string): string => {
         const num = value.replace(/[^\d]/g, '')
-        return num ? new Intl.NumberFormat('vi-VN').format(Number(num)) : ''
+
+        
+return num ? new Intl.NumberFormat('vi-VN').format(Number(num)) : ''
     }
 
     const onSubmit = async (data: FormData) => {
         setIsSubmitting(true)
+
         try {
             if (mode === DialogMode.EDIT && editPaymentId) {
                 const payload = {
@@ -121,7 +133,9 @@ const AddPaymentDialog = ({ open, onClose, onSuccess, registrationRecordId, mode
                     amount: parseAmount(data.amountInput),
                     note: data.note || ''
                 }
+
                 const response = await registrationRecordsAPI.UpdatePayment(editPaymentId, payload as any)
+
                 if (response.data.success) {
                     toast.success('Cập nhật khoản phí thành công')
                     handleClose()
@@ -129,7 +143,9 @@ const AddPaymentDialog = ({ open, onClose, onSuccess, registrationRecordId, mode
                 } else {
                     toast.error(response.data.message || 'Có lỗi xảy ra khi cập nhật khoản phí')
                 }
-                return
+
+                
+return
             }
 
             const payload: CreatePaymentCommand = {
@@ -138,7 +154,9 @@ const AddPaymentDialog = ({ open, onClose, onSuccess, registrationRecordId, mode
                 amount: parseAmount(data.amountInput),
                 note: data.note || ''
             }
+
             const response = await registrationRecordsAPI.CreatePayment(payload)
+
             if (response.data.success) {
                 toast.success('Thêm khoản phí thành công')
                 handleClose()

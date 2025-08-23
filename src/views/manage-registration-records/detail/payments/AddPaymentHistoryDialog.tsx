@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+
 import { useForm, Controller } from 'react-hook-form'
 import {
     Dialog,
@@ -21,7 +22,8 @@ import {
     InputAdornment
 } from '@mui/material'
 import { toast } from 'react-toastify'
-import type { CreatePaymentHistoryCommand, UpdatePaymentHistoryCommand } from '@/types/registrationRecords'
+
+import type { CreatePaymentHistoryCommand } from '@/types/registrationRecords'
 import registrationRecordsAPI from '@/libs/api/registrationRecordsAPI'
 import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
 
@@ -59,7 +61,7 @@ const AddPaymentHistoryDialog = ({
     const [isLoading, setIsLoading] = useState(false)
     const [paymentOptions, setPaymentOptions] = useState<PaymentOption[]>([])
 
-    const { control, handleSubmit, reset, setValue, formState: { errors } } = useForm<FormData>({
+    const { control, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
         defaultValues: {
             paymentDate: new Date().toISOString().split('T')[0],
             paymentId: '',
@@ -70,18 +72,22 @@ const AddPaymentHistoryDialog = ({
 
     useEffect(() => {
         if (!open) return
+
         const fetchPayments = async () => {
             try {
-                const res = await registrationRecordsAPI.GetPaymentsByRegistrationRecordId(registrationRecordId)
+                const res = await registrationRecordsAPI.GetAllPaymentsByRegistrationRecordId(registrationRecordId)
+
                 const options = res?.data?.data?.map((x: any) => ({
                     value: x.id,
                     label: `${x.feeTypeName || 'Loại phí'} - ${new Intl.NumberFormat('vi-VN').format(x.amount || 0)} VNĐ`
                 })) || []
+
                 setPaymentOptions(options)
             } catch (e) {
                 setPaymentOptions([])
             }
         }
+
         fetchPayments()
     }, [open, registrationRecordId])
 
@@ -103,8 +109,10 @@ const AddPaymentHistoryDialog = ({
 
         try {
             const response = await registrationRecordsAPI.GetPaymentHistoryById(editPaymentHistoryId)
+
             if (response?.data?.data) {
                 const data = response.data.data
+
                 reset({
                     paymentDate: data.paymentDate ? new Date(data.paymentDate).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
                     paymentId: data.paymentId || '',
@@ -120,11 +128,15 @@ const AddPaymentHistoryDialog = ({
 
     const parseAmount = (input: string): number => {
         const numeric = input.replace(/[^\d]/g, '')
+
+
         return numeric ? Number(numeric) : 0
     }
 
     const formatAmount = (value: string): string => {
         const num = value.replace(/[^\d]/g, '')
+
+
         return num ? new Intl.NumberFormat('vi-VN').format(Number(num)) : ''
     }
 
@@ -141,6 +153,7 @@ const AddPaymentHistoryDialog = ({
 
             if (mode === DialogMode.ADD) {
                 const response = await registrationRecordsAPI.CreatePaymentHistory(paymentHistoryData)
+
                 if (response?.data?.success) {
                     toast.success('Thêm lịch sử thanh toán thành công')
                     onSuccess()
@@ -149,10 +162,12 @@ const AddPaymentHistoryDialog = ({
                 }
             } else {
                 if (!editPaymentHistoryId) return
+
                 const response = await registrationRecordsAPI.UpdatePaymentHistory(editPaymentHistoryId, {
                     id: editPaymentHistoryId,
                     ...paymentHistoryData
                 })
+
                 if (response?.data?.success) {
                     toast.success('Cập nhật lịch sử thanh toán thành công')
                     onSuccess()

@@ -1,4 +1,5 @@
 import React from 'react'
+
 import UpsertRegistrationRecord from '@/views/manage-registration-records/form'
 
 const Page = ({ params }: { params: Promise<{ id: string }> }) => {

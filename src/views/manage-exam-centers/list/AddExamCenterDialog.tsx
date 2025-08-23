@@ -121,6 +121,7 @@ const AddExamCenterDialog = ({
             }
         } catch (error: any) {
             const errorMessage = mode === DialogMode.EDIT ? 'Có lỗi xảy ra khi chỉnh sửa trường thi' : 'Có lỗi xảy ra khi thêm trường thi'
+
             toast.error(error?.message || errorMessage)
         } finally {
             setIsSubmitting(false)

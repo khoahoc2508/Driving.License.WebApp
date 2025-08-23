@@ -1,8 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Box, CardContent, Tab, Tabs, Button } from '@mui/material'
-import type { RegistrationRecordOverviewDto, GetPaymentDto, GetPaymentHistoryDto } from '@/types/registrationRecords'
+
+import { CardContent, Tab, Tabs } from '@mui/material'
+
+import type { GetPaymentDto, GetPaymentHistoryDto } from '@/types/registrationRecords'
 import registrationRecordsAPI from '@/libs/api/registrationRecordsAPI'
 import FeeTab from './FeeTab'
 import PaymentHistoryTab from './PaymentHistoryTab'
@@ -10,12 +12,11 @@ import AddPaymentDialog, { DialogMode } from './AddPaymentDialog'
 import AddPaymentHistoryDialog, { DialogMode as PaymentHistoryDialogMode } from './AddPaymentHistoryDialog'
 
 type PaymentsTabProps = {
-    overview: RegistrationRecordOverviewDto | null
     registrationRecordId?: string,
     onDataChange: () => void
 }
 
-const PaymentsTab = ({ overview, registrationRecordId, onDataChange }: PaymentsTabProps) => {
+const PaymentsTab = ({ registrationRecordId, onDataChange }: PaymentsTabProps) => {
     const [activeSubTab, setActiveSubTab] = useState(0)
     const [payments, setPayments] = useState<GetPaymentDto[]>([])
     const [paymentHistories, setPaymentHistories] = useState<GetPaymentHistoryDto[]>([])
@@ -42,6 +43,7 @@ const PaymentsTab = ({ overview, registrationRecordId, onDataChange }: PaymentsT
         try {
             setIsLoading(true)
             const response = await registrationRecordsAPI.GetAllPaymentsByRegistrationRecordId(registrationRecordId)
+
             if (response?.data?.data) {
                 setPayments(response.data.data)
             }
@@ -59,6 +61,7 @@ const PaymentsTab = ({ overview, registrationRecordId, onDataChange }: PaymentsT
         try {
             setIsHistoryLoading(true)
             const response = await registrationRecordsAPI.GetAllPaymentHistoriesByRegistrationRecordId(registrationRecordId)
+
             if (response?.data?.data) {
                 setPaymentHistories(response.data.data)
             }
@@ -81,6 +84,7 @@ const PaymentsTab = ({ overview, registrationRecordId, onDataChange }: PaymentsT
         } else {
             fetchPaymentHistories()
         }
+
         onDataChange()
     }
 
@@ -99,7 +103,6 @@ const PaymentsTab = ({ overview, registrationRecordId, onDataChange }: PaymentsT
                     isLoading={isLoading}
                     onEditPayment={handleEditPayment}
                     onRefresh={handleRefresh}
-                    registrationRecordId={registrationRecordId}
                     onAdd={() => { setEditPaymentId(null); setIsAddOpen(true) }}
                 />
             )}

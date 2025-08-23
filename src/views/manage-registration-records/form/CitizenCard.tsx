@@ -1,7 +1,7 @@
 'use client'
 
 
-import { Card, CardContent, CardHeader, FormControl, TextField } from '@mui/material';
+import { FormControl } from '@mui/material';
 import type { Control } from 'react-hook-form';
 import { Controller } from 'react-hook-form';
 
@@ -9,7 +9,6 @@ import Grid from '@mui/material/Grid2';
 
 
 import FileUploaderSingle from '@/components/common/FileUploaderSingle';
-import AppReactDatepicker from '@/libs/styles/AppReactDatepicker';
 
 interface CitizenCardProps {
   control: Control<any>

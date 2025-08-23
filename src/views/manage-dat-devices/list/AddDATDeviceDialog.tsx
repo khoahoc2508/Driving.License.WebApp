@@ -121,6 +121,7 @@ const AddDATDeviceDialog = ({
             }
         } catch (error: any) {
             const errorMessage = mode === DialogMode.EDIT ? 'Có lỗi xảy ra khi chỉnh sửa thiết bị DAT' : 'Có lỗi xảy ra khi thêm thiết bị DAT'
+
             toast.error(error?.message || errorMessage)
         } finally {
             setIsSubmitting(false)

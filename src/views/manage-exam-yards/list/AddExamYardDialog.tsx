@@ -121,6 +121,7 @@ const AddExamYardDialog = ({
             }
         } catch (error: any) {
             const errorMessage = mode === DialogMode.EDIT ? 'Có lỗi xảy ra khi chỉnh sửa sân thi' : 'Có lỗi xảy ra khi thêm sân thi'
+
             toast.error(error?.message || errorMessage)
         } finally {
             setIsSubmitting(false)

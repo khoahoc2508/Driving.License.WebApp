@@ -1,9 +1,12 @@
 'use client'
 
 // React Imports
-import { useMemo, useState, useEffect, CSSProperties } from 'react'
+import type { CSSProperties } from 'react';
+import { useMemo, useState, useEffect } from 'react'
 
 // MUI Imports
+import { useRouter } from 'next/navigation'
+
 import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
 import Dialog from '@mui/material/Dialog'
@@ -32,12 +35,12 @@ import {
 import classnames from 'classnames'
 
 // Icon Imports
-import { Card, IconButton, Typography } from '@mui/material'
+import { IconButton, Typography } from '@mui/material'
 
 import { toast } from 'react-toastify'
 
 import ChevronRight from '@menu/svg/ChevronRight'
-import { useRouter } from 'next/navigation'
+
 // Style Imports
 import styles from '@core/styles/table.module.css'
 
@@ -56,16 +59,16 @@ declare module '@tanstack/table-core' {
     interface FilterMeta {
         itemRank: RankingInfo
     }
-    interface ColumnMeta<TData extends unknown, TValue> {
-        sticky?: 'left' | 'right'
-    }
+
 }
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
     const itemRank = rankItem(row.getValue(columnId), value)
+
     addMeta({
         itemRank
     })
+
     return itemRank.passed
 }
 
@@ -91,7 +94,6 @@ const getCommonPinningStyles = (column: Column<any>): CSSProperties => {
 
 const Table = ({
     data = [],
-    setData,
     pageNumber,
     pageSize,
     totalItems,
@@ -103,7 +105,6 @@ const Table = ({
     onColumnVisibilityChange
 }: {
     data?: GetRegistrationRecordsListType,
-    setData: (data: GetRegistrationRecordsListType) => void,
     pageNumber: number,
     pageSize: number,
     totalItems: number,
@@ -152,6 +153,7 @@ const Table = ({
 
     const formatCurrency = (amount: number | undefined | null) => {
         if (amount === undefined || amount === null) return null
+
         return new Intl.NumberFormat('vi-VN').format(amount)
     }
 
@@ -243,6 +245,7 @@ const Table = ({
                 ),
                 size: 150,
             }),
+
             // Grouped columns for payment
             columnHelper.group({
                 id: CONFIG.RegistrationRecordsTableColumns.THANH_TOAN,
@@ -355,11 +358,12 @@ const Table = ({
                 size: 150,
             })
         ],
-        [data, setData]
+        [data]
     )
 
     const getTotalColumns = () => {
         let total = 0
+
         columns.forEach(column => {
             if ('columns' in column && column.columns) {
                 total += column.columns.length
@@ -367,6 +371,7 @@ const Table = ({
                 total += 1
             }
         })
+
         return total
     }
 
@@ -436,24 +441,28 @@ const Table = ({
         if (table.getAllColumns().length > 0) {
             // Pin STT column to left
             const sttColumn = table.getColumn(CONFIG.RegistrationRecordsTableColumns.STT)
+
             if (sttColumn) {
                 sttColumn.pin('left')
             }
 
             // Pin HẠNG column to left
             const hangColumn = table.getColumn(CONFIG.RegistrationRecordsTableColumns.HANG)
+
             if (hangColumn) {
                 hangColumn.pin('left')
             }
 
             // Pin HỒ SƠ column to left
             const hoSoColumn = table.getColumn(CONFIG.RegistrationRecordsTableColumns.HO_SO)
+
             if (hoSoColumn) {
                 hoSoColumn.pin('left')
             }
 
             // Pin THAO TÁC column to right
             const thaoTacColumn = table.getColumn(CONFIG.RegistrationRecordsTableColumns.THAO_TAC)
+
             if (thaoTacColumn) {
                 thaoTacColumn.pin('right')
             }
@@ -480,7 +489,6 @@ const Table = ({
                                     {headerGroup.headers.map(header => {
                                         const isGrouped = header.column.columns && header.column.columns.length > 0
                                         const colSpan = isGrouped ? header.column.columns.length : 1
-                                        const isPinned = header.column.getIsPinned()
 
                                         return (
                                             <th
@@ -527,12 +535,14 @@ const Table = ({
                         </thead>
                         <tbody>
                             {isLoading ? (
+
                                 // Show skeleton loading when data is loading
                                 <SkeletonTableRowsLoader
                                     rowsNum={Math.min(pageSize, 5)} // Show max 5 skeleton rows
                                     columnsNum={getTotalColumns()}
                                 />
                             ) : table.getRowModel().rows.length === 0 ? (
+
                                 // Show no data message when no rows
                                 <tr>
                                     <td
@@ -547,11 +557,12 @@ const Table = ({
                                     </td>
                                 </tr>
                             ) : (
+
                                 // Show actual data rows
                                 table.getRowModel().rows.map((row, index) => (
                                     <tr key={`${row.id}-${index}`}>
                                         {row.getVisibleCells().map((cell, cellIndex) => {
-                                            const isPinned = cell.column.getIsPinned()
+
                                             return (
                                                 <td
                                                     key={`${cell.id}-${cellIndex}`}

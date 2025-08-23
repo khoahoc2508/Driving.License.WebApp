@@ -1,7 +1,8 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { Box, Button, Card, Chip, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material'
+
+import { Box, Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material'
 import type { RankingInfo } from '@tanstack/match-sorter-utils'
 import { rankItem } from '@tanstack/match-sorter-utils'
 import type { ColumnDef, ColumnFiltersState, FilterFn } from '@tanstack/react-table'
@@ -19,12 +20,12 @@ import {
 } from '@tanstack/react-table'
 import classnames from 'classnames'
 import { toast } from 'react-toastify'
+
 import ChevronRight from '@menu/svg/ChevronRight'
 import styles from '@core/styles/table.module.css'
 import type { GetPaymentDto } from '@/types/registrationRecords'
 import registrationRecordsAPI from '@/libs/api/registrationRecordsAPI'
 import SkeletonTableRowsLoader from '@/components/common/SkeletonTableRowsLoader'
-import AddPaymentDialog from './AddPaymentDialog'
 import CONFIG from '@/configs/config'
 
 // Column Definitions
@@ -41,9 +42,11 @@ declare module '@tanstack/table-core' {
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
     const itemRank = rankItem(row.getValue(columnId), value)
+
     addMeta({
         itemRank
     })
+
     return itemRank.passed
 }
 
@@ -52,20 +55,21 @@ type FeeTabProps = {
     isLoading: boolean
     onEditPayment: (payment: GetPaymentDto) => void
     onRefresh: () => void
-    registrationRecordId?: string
     onAdd?: () => void
 }
 
-const FeeTab = ({ data, isLoading, onEditPayment, onRefresh, registrationRecordId, onAdd }: FeeTabProps) => {
+const FeeTab = ({ data, isLoading, onEditPayment, onRefresh, onAdd }: FeeTabProps) => {
     // States
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [globalFilter, setGlobalFilter] = useState('')
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false)
     const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null)
+
     // Add handled by parent dialog
 
     const currency = (value?: number | null) => {
         if (value === undefined || value === null) return 'Chưa có dữ liệu'
+
         return new Intl.NumberFormat('vi-VN').format(value)
     }
 

@@ -1,23 +1,25 @@
 'use client'
 
-import { Avatar, Box, CardContent, Chip, Divider, Typography } from '@mui/material'
 import { useMemo } from 'react'
-import type { RegistrationRecordBasicInfoDto, RegistrationRecordOverviewDto } from '@/types/registrationRecords'
-import CONFIG from '@/configs/config'
+
+import { Avatar, Box, CardContent, Chip, Divider, Typography } from '@mui/material'
+
+import type { RegistrationRecordOverviewDto } from '@/types/registrationRecords'
 
 type OverviewTabProps = {
-    basicInfo: RegistrationRecordBasicInfoDto | null
     overview: RegistrationRecordOverviewDto | null
 }
 
-const OverviewTab = ({ basicInfo, overview }: OverviewTabProps) => {
+const OverviewTab = ({ overview }: OverviewTabProps) => {
     const currency = (value?: number | null) => {
         if (value === undefined || value === null) return 'Chưa có dữ liệu'
+
         return new Intl.NumberFormat('vi-VN').format(value)
     }
 
     const formatDate = (value?: string | null) => {
         if (!value) return 'Chưa có dữ liệu'
+
         try {
             return new Date(value).toLocaleDateString('vi-VN')
         } catch {
@@ -27,6 +29,8 @@ const OverviewTab = ({ basicInfo, overview }: OverviewTabProps) => {
 
     const processingStepChips = useMemo(() => {
         const steps = overview?.processing?.steps || []
+
+
         return steps.map((step, index) => (
             <Chip
                 key={`${step?.name}-${index}`}
@@ -56,6 +60,7 @@ const OverviewTab = ({ basicInfo, overview }: OverviewTabProps) => {
                     <Box>
                         {(() => {
                             const status = overview?.processing?.examResultStatus
+
                             if (!status) return <Chip label="Chưa có dữ liệu" size='small' variant='tonal' />
 
                             let color: 'default' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' = 'default'

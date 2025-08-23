@@ -31,7 +31,7 @@ import {
 import classnames from 'classnames'
 
 // Icon Imports
-import { Card, IconButton, Typography } from '@mui/material'
+import { IconButton, Typography } from '@mui/material'
 
 import { toast } from 'react-toastify'
 

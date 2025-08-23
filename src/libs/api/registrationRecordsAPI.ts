@@ -2,8 +2,7 @@ import type {
   GetRegistrationRecordsQueryParams,
   CreateRegistrationRecordCommand,
   UpdateRegistrationRecordCommand
-} from '@/types/registrationRecords'
-import type { CreatePaymentCommand, UpdatePaymentCommand } from '@/types/registrationRecords'
+, CreatePaymentCommand, UpdatePaymentCommand } from '@/types/registrationRecords'
 import axiosInstance from '../axios'
 import { customParamsSerializer } from './commonAPI'
 

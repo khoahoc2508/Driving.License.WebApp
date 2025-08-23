@@ -1,7 +1,8 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import { Box, Button, Card, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material'
+
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material'
 import type { RankingInfo } from '@tanstack/match-sorter-utils'
 import { rankItem } from '@tanstack/match-sorter-utils'
 import type { ColumnDef, ColumnFiltersState, FilterFn } from '@tanstack/react-table'
@@ -19,6 +20,7 @@ import {
 } from '@tanstack/react-table'
 import classnames from 'classnames'
 import { toast } from 'react-toastify'
+
 import ChevronRight from '@menu/svg/ChevronRight'
 import styles from '@core/styles/table.module.css'
 import type { GetPaymentHistoryDto } from '@/types/registrationRecords'
@@ -40,9 +42,11 @@ declare module '@tanstack/table-core' {
 
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
     const itemRank = rankItem(row.getValue(columnId), value)
+
     addMeta({
         itemRank
     })
+
     return itemRank.passed
 }
 
@@ -66,13 +70,17 @@ const PaymentHistoryTab = ({ data, isLoading, onRefresh, registrationRecordId, o
 
     const currency = (value?: number | null) => {
         if (value === undefined || value === null) return 'Chưa có dữ liệu'
+
         return new Intl.NumberFormat('vi-VN').format(value)
     }
 
     const formatDate = (dateString?: string) => {
         if (!dateString) return '-'
+
         try {
             const date = new Date(dateString)
+
+
             return date.toLocaleDateString('vi-VN')
         } catch {
             return '-'
@@ -199,6 +207,7 @@ const PaymentHistoryTab = ({ data, isLoading, onRefresh, registrationRecordId, o
 
         try {
             const response = await registrationRecordsAPI.DeletePaymentHistory(itemIdToDelete)
+
             if (response.data.success) {
                 toast.success('Xóa lịch sử thanh toán thành công')
                 onRefresh()

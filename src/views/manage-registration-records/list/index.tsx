@@ -22,6 +22,8 @@ import Autocomplete from '@mui/material/Autocomplete'
 
 import { toast } from 'react-toastify'
 
+import type { VisibilityState } from '@tanstack/react-table'
+
 import DebouncedInput from '@/components/common/DebouncedInput'
 
 // Hàm bỏ dấu tiếng Việt
@@ -31,12 +33,11 @@ const removeAccents = (str: string) => {
 
 import CONFIG from '@/configs/config'
 import Table from './Table'
-import { GetRegistrationRecordsDto, GetRegistrationRecordsQueryParams, PaymentStatus, RegistrationRecordStatus } from '@/types/registrationRecords'
+import type { GetRegistrationRecordsDto, GetRegistrationRecordsQueryParams } from '@/types/registrationRecords';
 import registrationRecordsAPI from '@/libs/api/registrationRecordsAPI'
 import licenseTypeAPI from '@/libs/api/licenseTypeApi'
 import assigneeAPI from '@/libs/api/assigneeAPI'
-import { AssigneeType } from '@/types/assigneeTypes'
-import type { VisibilityState } from '@tanstack/react-table'
+import type { AssigneeType } from '@/types/assigneeTypes'
 import userPageConfigAPI from '@/libs/api/userPageConfigAPI'
 import Link from '@/components/Link'
 
@@ -85,8 +86,10 @@ const ManageRegistrationRecords = () => {
             pageNumber: 1,
             pageSize: 10
         })
+
         // Fetch license types on component mount
         fetchLicenseTypes()
+
         // Fetch initial staff assignees and collaborators
         fetchStaffAssignees(1, true)
         fetchCollaborators(1, true)
@@ -124,11 +127,13 @@ const ManageRegistrationRecords = () => {
     const fetchLicenseTypes = async () => {
         try {
             const res = await licenseTypeAPI.getAllLicenseTypes({})
+
             if (res?.data?.data) {
                 const options = res.data.data.map((licenseType: any) => ({
                     label: licenseType.name || licenseType.code,
                     value: licenseType.code
                 }))
+
                 setLicenseTypeOptions(options)
             }
         } catch (error: any) {
@@ -195,11 +200,14 @@ const ManageRegistrationRecords = () => {
     const fetchColumnConfiguration = async () => {
         try {
             const res = await userPageConfigAPI.GetUserPageConfig({ pageKey: CONFIG.UserPageConfigKey.RegistrationRecords })
+
             if (res?.data?.data) {
                 const config = res.data.data
+
                 setColumnConfig(config)
 
                 const visibilityState: VisibilityState = {}
+
                 config.forEach((col: any) => {
                     visibilityState[col.column] = col.visible
                 })
@@ -214,6 +222,7 @@ const ManageRegistrationRecords = () => {
 
     const handleStaffAssigneeScroll = (event: React.UIEvent<HTMLDivElement>) => {
         const target = event.currentTarget
+
         if (target.scrollTop + target.clientHeight >= target.scrollHeight - 1 && hasMoreStaff) {
             fetchStaffAssignees(staffAssigneePage + 1, false)
         }
@@ -221,6 +230,7 @@ const ManageRegistrationRecords = () => {
 
     const handleCollaboratorScroll = (event: React.UIEvent<HTMLDivElement>) => {
         const target = event.currentTarget
+
         if (target.scrollTop + target.clientHeight >= target.scrollHeight - 1 && hasMoreCollaborator) {
             fetchCollaborators(collaboratorPage + 1, false)
         }
@@ -526,7 +536,6 @@ const ManageRegistrationRecords = () => {
                 </div>
                 <Table
                     data={dataTable}
-                    setData={(data: GetRegistrationRecordsDto[] | undefined) => setDataTable(data || [])}
                     pageNumber={pageNumber}
                     pageSize={pageSize}
                     totalItems={totalItems}
@@ -578,11 +587,13 @@ const ManageRegistrationRecords = () => {
                                 onChange={(e) => {
                                     const checked = e.target.checked;
                                     const newVisibility: VisibilityState = {};
+
                                     const filteredColumns = columnConfig.filter(col =>
                                         columnVisibilitySearch === '' ||
                                         col.column.toLowerCase().includes(columnVisibilitySearch.toLowerCase()) ||
                                         removeAccents(col.column.toLowerCase()).includes(removeAccents(columnVisibilitySearch.toLowerCase()))
                                     );
+
                                     filteredColumns.forEach(col => {
                                         newVisibility[col.column] = checked;
                                     });
@@ -617,6 +628,7 @@ const ManageRegistrationRecords = () => {
                                                             indeterminate={someVisible && !allVisible}
                                                             onChange={(e) => {
                                                                 const checked = e.target.checked;
+
                                                                 setColumnVisibility(prev => ({
                                                                     ...prev,
                                                                     [CONFIG.RegistrationRecordsTableColumns.TONG]: checked,
@@ -632,6 +644,8 @@ const ManageRegistrationRecords = () => {
                                             </Box>
                                         );
                                     }
+
+
                                     return null;
                                 }
 

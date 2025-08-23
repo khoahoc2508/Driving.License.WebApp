@@ -1,6 +1,7 @@
 'use client'
 
-import { Box, Card, CardContent, Typography } from '@mui/material'
+import { Box, CardContent, Typography } from '@mui/material'
+
 import type { RegistrationRecordOverviewDto } from '@/types/registrationRecords'
 
 type ProcessingTabProps = {
