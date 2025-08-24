@@ -4,7 +4,7 @@ import stepsAPI from '@/libs/api/stepsAPI'
 import type { GetStepsDto, GetTaskDto } from '@/types/stepsTypes'
 import { Box, Typography, Chip, IconButton, Avatar } from '@mui/material'
 import { useEffect, useState, useMemo } from 'react'
-import { createColumnHelper, flexRender, getCoreRowModel, useReactTable, type FilterFn } from '@tanstack/react-table'
+import { createColumnHelper, flexRender, getCoreRowModel, useReactTable, type FilterFn, type Column } from '@tanstack/react-table'
 import styles from '@core/styles/table.module.css'
 import CONFIG from '@/configs/config'
 import EditTaskDialog from './EditTaskDialog'
@@ -24,10 +24,31 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value) => {
     return true
 }
 
+// Thêm function để xử lý pinning styles
+const getCommonPinningStyles = (column: Column<any>): React.CSSProperties => {
+    const isPinned = column.getIsPinned()
+    const isLastLeftPinnedColumn = isPinned === 'left' && column.getIsLastColumn('left')
+    const isFirstRightPinnedColumn = isPinned === 'right' && column.getIsFirstColumn('right')
+
+    return {
+        boxShadow: isLastLeftPinnedColumn
+            ? '-4px 0 4px -4px gray inset'
+            : isFirstRightPinnedColumn
+                ? '4px 0 4px -4px gray inset'
+                : undefined,
+        left: isPinned === 'left' ? `${column.getStart('left')}px` : undefined,
+        right: isPinned === 'right' ? `${column.getAfter('right')}px` : undefined,
+        position: isPinned ? 'sticky' : 'relative',
+        width: column.getSize(),
+        zIndex: isPinned ? 1 : 0,
+    }
+}
+
 const TaskTab = ({ selectedStep }: TaskTabProps) => {
     const [tasks, setTasks] = useState<GetTaskDto[]>([])
     const [selectedTask, setSelectedTask] = useState<GetTaskDto | null>(null)
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+    const [columnPinning, setColumnPinning] = useState({})
 
     const fetchTasks = async () => {
         if (selectedStep?.id) {
@@ -130,7 +151,7 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
                 </Box>
             ),
             size: 300,
-            minSize: 250
+            minSize: 300
         }),
         columnHelper.accessor('note', {
             header: 'GHI CHÚ',
@@ -180,7 +201,7 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
             ),
             enableSorting: false,
             size: 80,
-            minSize: 60
+            minSize: 60,
         })
     ], [])
 
@@ -191,8 +212,23 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
         columnResizeMode: 'onChange',
         filterFns: {
             fuzzy: fuzzyFilter
-        }
+        },
+        state: {
+            columnPinning
+        },
+        onColumnPinningChange: setColumnPinning,
+        enableColumnPinning: true
     })
+
+    // Pin cột THAO TÁC sang phải khi component mount
+    useEffect(() => {
+        if (table.getAllColumns().length > 0) {
+            const thaoTacColumn = table.getColumn('actions')
+            if (thaoTacColumn) {
+                thaoTacColumn.pin('right')
+            }
+        }
+    }, [table])
 
     if (!selectedStep) {
         return (
@@ -207,17 +243,32 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
     return (
         <Box>
             <div className='overflow-x-auto custom-scrollbar'>
-                <table className={styles.table}>
+                <table
+                    className={styles.table}
+                    style={{
+                        borderCollapse: 'separate',
+                        borderSpacing: 0
+                    }}
+                >
                     <thead>
                         {table.getHeaderGroups().map(headerGroup => (
                             <tr key={headerGroup.id} className="h-9">
                                 {headerGroup.headers.map(header => {
+                                    const isPinned = header.column.getIsPinned()
                                     return (
-                                        <th key={header.id} style={{
-                                            width: header.getSize(),
-                                            minWidth: header.column.columnDef.minSize,
-                                            maxWidth: header.column.columnDef.maxSize
-                                        }}>
+                                        <th
+                                            key={header.id}
+                                            style={{
+                                                width: header.getSize(),
+                                                minWidth: header.column.columnDef.minSize,
+                                                maxWidth: header.column.columnDef.maxSize,
+                                                position: isPinned ? 'sticky' : 'relative',
+                                                right: isPinned === 'right' ? '0px' : undefined,
+                                                backgroundColor: isPinned ? 'var(--mui-palette-background-paper)' : 'transparent',
+                                                zIndex: isPinned ? 1 : 0,
+                                                boxShadow: isPinned === 'right' ? '4px 0 4px -4px gray inset' : undefined
+                                            }}
+                                        >
                                             {header.isPlaceholder ? null : (
                                                 <div className="flex items-center justify-center">
                                                     {flexRender(header.column.columnDef.header, header.getContext())}
@@ -239,11 +290,23 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
                         ) : (
                             table.getRowModel().rows.map((row, index) => (
                                 <tr key={`${row.id}-${index}`} className="hover:bg-gray-50">
-                                    {row.getVisibleCells().map((cell, cellIndex) => (
-                                        <td key={`${cell.id}-${cellIndex}`}>
-                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                        </td>
-                                    ))}
+                                    {row.getVisibleCells().map((cell, cellIndex) => {
+                                        const isPinned = cell.column.getIsPinned()
+                                        return (
+                                            <td
+                                                key={`${cell.id}-${cellIndex}`}
+                                                style={{
+                                                    position: isPinned ? 'sticky' : 'relative',
+                                                    right: isPinned === 'right' ? '0px' : undefined,
+                                                    backgroundColor: isPinned ? 'var(--mui-palette-background-paper)' : 'transparent',
+                                                    zIndex: isPinned ? 1 : 0,
+                                                    boxShadow: isPinned === 'right' ? '4px 0 4px -4px gray inset' : undefined
+                                                }}
+                                            >
+                                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                            </td>
+                                        )
+                                    })}
                                 </tr>
                             ))
                         )}
