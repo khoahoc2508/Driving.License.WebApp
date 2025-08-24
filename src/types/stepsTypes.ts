@@ -3,6 +3,7 @@ import type { components } from '@/libs/api/client/schema'
 export type GetStepsDto = components['schemas']['GetStepsDto']
 export type StepStatusType = components['schemas']['StepStatusType']
 export type StepsListType = components['schemas']['GetStepsDto'][]
+export type GetTaskDto = components['schemas']['GetTaskDto']
 
 export type StepOverviewDto = components['schemas']['StepOverviewDto']
 
@@ -12,4 +13,8 @@ export type GetStepByStepIdOverviewQueryParams = {
 
 export type GetStepsQueryParams = {
   registrationRecordId: string
+}
+
+export type GetTaskByStepIdQueryParams = {
+  id: string
 }

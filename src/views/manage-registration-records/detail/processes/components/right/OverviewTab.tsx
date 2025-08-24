@@ -35,7 +35,10 @@ const OverviewTab = ({ selectedStep }: OverviewTabProps) => {
         )
     }
 
-    const getStatusText = (status: number) => {
+    const getStatusText = (status: number | undefined) => {
+        if (status === undefined) {
+            return ''
+        }
         switch (status) {
             case CONFIG.StepStatus.Pending:
                 return 'Chưa xử lý'
@@ -48,7 +51,10 @@ const OverviewTab = ({ selectedStep }: OverviewTabProps) => {
         }
     }
 
-    const getStatusColor = (status: number) => {
+    const getStatusColor = (status: number | undefined) => {
+        if (status === undefined) {
+            return 'default'
+        }
         switch (status) {
             case CONFIG.StepStatus.Pending:
                 return 'default'
@@ -68,8 +74,8 @@ const OverviewTab = ({ selectedStep }: OverviewTabProps) => {
                     Trạng thái:
                 </Typography>
                 <Chip
-                    label={getStatusText(stepOverview?.processing?.status || 0)}
-                    color={getStatusColor(stepOverview?.processing?.status || 0)}
+                    label={getStatusText(stepOverview?.processing?.status)}
+                    color={getStatusColor(stepOverview?.processing?.status)}
                     size="small"
                     sx={{ width: 'fit-content' }}
                 />
