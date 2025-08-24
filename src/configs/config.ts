@@ -273,6 +273,20 @@ const StepStatus = {
   Completed: 2
 }
 
+const InputType = {
+  Text: 0,
+  Number: 1,
+  DateTime: 2,
+  DateOnly: 3,
+  Time: 4,
+  SingleSelect: 5,
+  MultiSelect: 6,
+  Radio: 7,
+  Checkbox: 8,
+  Textarea: 9,
+  Password: 10
+}
+
 const CONFIG = {
   LicenseRegistrationStatus,
   LicenseRegistrationStatusMappingText,
@@ -313,7 +327,8 @@ const CONFIG = {
   UserPageConfigKey,
   RegistrationRecordsTableColumns,
   ExamResultStatusMappingText,
-  StepStatus
+  StepStatus,
+  InputType
 }
 
 export default CONFIG

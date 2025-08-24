@@ -5,9 +5,9 @@ import type { GetStepsDto, GetTaskDto } from '@/types/stepsTypes'
 import { Box, Typography, Chip, IconButton, Avatar } from '@mui/material'
 import { useEffect, useState, useMemo } from 'react'
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable, type FilterFn } from '@tanstack/react-table'
-import classnames from 'classnames'
 import styles from '@core/styles/table.module.css'
 import CONFIG from '@/configs/config'
+import EditTaskDialog from './EditTaskDialog'
 
 type TaskTabProps = {
     selectedStep: GetStepsDto | null
@@ -26,6 +26,8 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value) => {
 
 const TaskTab = ({ selectedStep }: TaskTabProps) => {
     const [tasks, setTasks] = useState<GetTaskDto[]>([])
+    const [selectedTask, setSelectedTask] = useState<GetTaskDto | null>(null)
+    const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
 
     const fetchTasks = async () => {
         if (selectedStep?.id) {
@@ -37,6 +39,20 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
     useEffect(() => {
         fetchTasks()
     }, [selectedStep?.id])
+
+    const handleEditTask = (task: GetTaskDto) => {
+        setSelectedTask(task)
+        setIsEditDialogOpen(true)
+    }
+
+    const handleEditDialogClose = () => {
+        setIsEditDialogOpen(false)
+        setSelectedTask(null)
+    }
+
+    const handleEditSuccess = () => {
+        fetchTasks() // Refresh tasks after successful edit
+    }
 
     const getStatusText = (status: number | undefined) => {
         if (status === undefined) return 'Không xác định'
@@ -81,15 +97,12 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
             cell: ({ row }) => (
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
                     <Avatar
+                        src={`${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}${row.original?.assignee?.avatarUrl}`}
                         sx={{
-                            width: 32,
-                            height: 32,
-                            bgcolor: 'primary.light',
-                            color: 'primary.main',
-                            fontSize: '0.875rem'
+                            width: 40,
+                            height: 40
                         }}
                     >
-                        {row.original.title?.charAt(0) || 'T'}
                     </Avatar>
                     <Box className='flex flex-col items-start'>
                         <Typography variant="body1" sx={{ fontWeight: 500 }}>
@@ -109,7 +122,7 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
                                 |
                             </Typography>
                             <Typography variant="caption" color="text.secondary">
-                                Người xử lý: {row.original.assigneeId || 'Chưa được giao'}
+                                Người xử lý: {row.original.assignee?.fullName || 'Chưa được giao'}
                             </Typography>
                         </Box>
                     </Box>
@@ -121,19 +134,45 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
         columnHelper.accessor('note', {
             header: 'GHI CHÚ',
             cell: ({ row }) => (
-                <Typography color="text.secondary" sx={{ textAlign: "left" }}>
+                <Typography color="text.secondary" sx={{ textAlign: "right" }}>
                     {row.original.note || '-'}
                 </Typography>
             ),
-            size: 200,
-            minSize: 150
+            size: 250,
+            minSize: 250
+        }),
+        columnHelper.accessor('summaryItems', {
+            header: 'NỘI DUNG',
+            cell: ({ row }) => (
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                    {row.original.summaryItems?.map((item, index) => (
+                        <Typography
+                            key={index}
+                            variant="body2"
+                            color="text.primary"
+                            sx={{ fontSize: '0.875rem' }}
+                        >
+                            {item.label}: <span className='font-semibold'>{item.value}</span>
+                        </Typography>
+                    )) || (
+                            <Typography variant="body2" color="text.secondary">
+                                Không có dữ liệu
+                            </Typography>
+                        )}
+                </Box>
+            ),
+            size: 250,
+            minSize: 200
         }),
         columnHelper.accessor('id', {
             id: 'actions',
             header: 'THAO TÁC',
             cell: ({ row }) => (
                 <div className="flex items-center justify-center">
-                    <IconButton size="small">
+                    <IconButton
+                        size="small"
+                        onClick={() => handleEditTask(row.original)}
+                    >
                         <i className="ri-edit-box-line text-textSecondary" />
                     </IconButton>
                 </div>
@@ -210,6 +249,14 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
                     </tbody>
                 </table>
             </div>
+
+            {/* Edit Task Dialog */}
+            <EditTaskDialog
+                open={isEditDialogOpen}
+                onClose={handleEditDialogClose}
+                onSuccess={handleEditSuccess}
+                task={selectedTask}
+            />
         </Box>
     )
 }

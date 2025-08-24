@@ -1891,14 +1891,24 @@ export interface components {
         GetTaskDto: {
             id?: string;
             title?: string;
-            assigneeId?: string | null;
+            assignee?: components["schemas"]["AssigneeDto2"] | null;
             status?: components["schemas"]["TaskStatusType"];
             note?: string | null;
+            summaryItems?: components["schemas"]["SummaryItemDto"][];
             taskFieldTemplateConfig?: components["schemas"]["TaskFieldTemplateConfigDto"][];
             taskFieldInstanceSubmissions?: components["schemas"]["TaskFieldInstanceSubmissionDto"][];
         };
+        AssigneeDto2: {
+            id?: string;
+            fullName?: string;
+            avatarUrl?: string;
+        };
         /** @enum {integer} */
         TaskStatusType: 0 | 1 | 2;
+        SummaryItemDto: {
+            label?: string;
+            value?: string;
+        };
         TaskFieldTemplateConfigDto: {
             id?: string;
             label?: string;
