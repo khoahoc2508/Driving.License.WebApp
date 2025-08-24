@@ -1,20 +1,18 @@
 'use client'
 
-import { Box, Typography, Chip, Divider } from '@mui/material'
+import { Box, Typography, Chip, Divider, Button } from '@mui/material'
 import type { GetStepsDto } from '@/types/stepsTypes'
-import type { RegistrationRecordOverviewDto } from '@/types/registrationRecords'
 
-type OverviewTabProps = {
+type TaskTabProps = {
     selectedStep: GetStepsDto | null
-    overview?: RegistrationRecordOverviewDto | null
 }
 
-const OverviewTab = ({ selectedStep, overview }: OverviewTabProps) => {
+const TaskTab = ({ selectedStep }: TaskTabProps) => {
     if (!selectedStep) {
         return (
             <Box sx={{ textAlign: 'center', py: 4 }}>
                 <Typography variant="body2" color="text.secondary">
-                    Vui lòng chọn một bước để xem thông tin tổng quan
+                    Vui lòng chọn một bước để xem thông tin công việc
                 </Typography>
             </Box>
         )
@@ -46,15 +44,35 @@ const OverviewTab = ({ selectedStep, overview }: OverviewTabProps) => {
         }
     }
 
+    const canUpdateStatus = (status: number) => {
+        return status === 0 || status === 1
+    }
+
+    const getNextStatus = (currentStatus: number) => {
+        switch (currentStatus) {
+            case 0:
+                return 1
+            case 1:
+                return 2
+            default:
+                return currentStatus
+        }
+    }
+
+    const handleStatusUpdate = (newStatus: number) => {
+        // TODO: Implement status update logic
+        console.log(`Updating step ${selectedStep.id} status to ${newStatus}`)
+    }
+
     return (
         <Box>
             <Typography variant="h6" sx={{ mb: 3 }}>
-                Thông tin tổng quan - {selectedStep.name}
+                Công việc - {selectedStep.name}
             </Typography>
 
             <Box sx={{ mb: 2 }}>
                 <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
-                    Trạng thái:
+                    Trạng thái hiện tại:
                 </Typography>
                 <Chip
                     label={getStatusText(selectedStep.status || 0)}
@@ -67,7 +85,7 @@ const OverviewTab = ({ selectedStep, overview }: OverviewTabProps) => {
 
             <Box sx={{ mb: 2 }}>
                 <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
-                    Tên bước:
+                    Tên công việc:
                 </Typography>
                 <Typography variant="body1">
                     {selectedStep.name || 'Không có tên'}
@@ -76,7 +94,7 @@ const OverviewTab = ({ selectedStep, overview }: OverviewTabProps) => {
 
             <Box sx={{ mb: 2 }}>
                 <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
-                    Thứ tự:
+                    Thứ tự thực hiện:
                 </Typography>
                 <Typography variant="body1">
                     {selectedStep.order || 'Không có thứ tự'}
@@ -85,46 +103,43 @@ const OverviewTab = ({ selectedStep, overview }: OverviewTabProps) => {
 
             <Box sx={{ mb: 2 }}>
                 <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
-                    Người được giao:
+                    Người thực hiện:
                 </Typography>
                 <Typography variant="body1">
                     {selectedStep.assigneeId || 'Chưa được giao'}
                 </Typography>
             </Box>
 
-            {overview && (
-                <>
-                    <Divider sx={{ my: 2 }} />
+            <Divider sx={{ my: 2 }} />
 
-                    <Typography variant="h6" sx={{ mb: 2 }}>
-                        Thông tin chung
-                    </Typography>
-
-                    {overview.generalInfo && (
-                        <Box sx={{ mb: 2 }}>
-                            <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
-                                Số điện thoại:
-                            </Typography>
-                            <Typography variant="body1">
-                                {overview.generalInfo.phone || 'Không có'}
-                            </Typography>
-                        </Box>
+            <Box sx={{ mb: 2 }}>
+                <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
+                    Hành động:
+                </Typography>
+                <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                    {canUpdateStatus(selectedStep.status || 0) && (
+                        <Button
+                            variant="contained"
+                            size="small"
+                            onClick={() => handleStatusUpdate(getNextStatus(selectedStep.status || 0))}
+                        >
+                            {selectedStep.status === 0 ? 'Bắt đầu xử lý' : 'Hoàn thành'}
+                        </Button>
                     )}
 
-                    {overview.processing && (
-                        <Box sx={{ mb: 2 }}>
-                            <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
-                                Trạng thái kết quả thi:
-                            </Typography>
-                            <Typography variant="body1">
-                                {overview.processing.examResultStatus || 'Chưa có'}
-                            </Typography>
-                        </Box>
+                    {selectedStep.status === 0 && (
+                        <Button
+                            variant="outlined"
+                            size="small"
+                            onClick={() => handleStatusUpdate(1)}
+                        >
+                            Giao việc
+                        </Button>
                     )}
-                </>
-            )}
+                </Box>
+            </Box>
         </Box>
     )
 }
 
-export default OverviewTab
+export default TaskTab

@@ -1,32 +1,58 @@
 'use client'
 
-import { Box, Paper } from '@mui/material'
-import SubTabs from './SubTabs'
-import OverviewTab from './OverviewTab'
-import TasksTab from './TasksTab'
 import type { RegistrationRecordOverviewDto } from '@/types/registrationRecords'
-
-type SubTab = 'overview' | 'tasks'
+import type { GetStepsDto } from '@/types/stepsTypes'
+import { Box, Tabs, Tab } from '@mui/material'
+import { useState } from 'react'
+import OverviewTab from './OverviewTab'
+import TaskTab from './TaskTab'
 
 type MainContentProps = {
-    activeTab: SubTab
-    onTabChange: (tab: SubTab) => void
     overview: RegistrationRecordOverviewDto | null
+    selectedStep: GetStepsDto | null
+    selectedStepIndex: number
 }
 
-const MainContent = ({ activeTab, onTabChange, overview }: MainContentProps) => {
-    return (
-        <Paper elevation={1} sx={{ p: 2 }}>
-            {/* Sub-tabs */}
-            <SubTabs activeTab={activeTab} onTabChange={onTabChange} />
+const MainContent = ({ overview, selectedStep, selectedStepIndex }: MainContentProps) => {
+    const [tabValue, setTabValue] = useState(0)
 
-            {/* Content based on active sub-tab */}
-            {activeTab === 'overview' ? (
-                <OverviewTab overview={overview} />
-            ) : (
-                <TasksTab />
-            )}
-        </Paper>
+    const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+        setTabValue(newValue)
+    }
+
+    return (
+        <Box sx={{
+            p: 3,
+            height: '100%',
+            borderLeft: { xs: 'none', md: '1px solid' },
+            borderColor: { md: 'divider' }
+        }}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
+                <Tabs
+                    value={tabValue}
+                    onChange={handleTabChange}
+                    sx={{
+                        '& .MuiTab-root': {
+                            textTransform: 'none',
+                            fontWeight: 600,
+                            fontSize: '1rem'
+                        }
+                    }}
+                >
+                    <Tab label="Tổng quan" />
+                    <Tab label="Công việc" />
+                </Tabs>
+            </Box>
+
+            <Box>
+                {tabValue === 0 && (
+                    <OverviewTab selectedStep={selectedStep} overview={overview} />
+                )}
+                {tabValue === 1 && (
+                    <TaskTab selectedStep={selectedStep} />
+                )}
+            </Box>
+        </Box>
     )
 }
 

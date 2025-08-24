@@ -1,0 +1,94 @@
+/* Custom styles for ProcessSteps component */
+.processStepsContainer {
+  position: relative;
+}
+
+/* Override MUI Stepper connector styles */
+.processStepsContainer :global(.MuiStepConnector-root) {
+  margin-left: 12px !important;
+}
+
+.processStepsContainer :global(.MuiStepConnector-line) {
+  border-left-width: 2px !important;
+  border-left-style: solid !important;
+  border-left-color: #e0e0e0 !important;
+}
+
+/* Override connector colors based on step status */
+.processStepsContainer :global(.MuiStep-root.Mui-completed + .MuiStepConnector-root .MuiStepConnector-line) {
+  border-left-color: var(--mui-palette-success-main) !important;
+}
+
+.processStepsContainer :global(.MuiStep-root.Mui-active + .MuiStepConnector-root .MuiStepConnector-line) {
+  border-left-color: var(--mui-palette-warning-main) !important;
+}
+
+/* Step icon container styles */
+.processStepsContainer :global(.MuiStepLabel-iconContainer) {
+  margin-right: 2px !important;
+}
+
+/* Step label styles */
+.processStepsContainer :global(.MuiStepLabel-labelContainer) {
+  margin-left: 2px !important;
+}
+
+.processStepsContainer :global(.step-label) {
+  cursor: pointer;
+  padding: 2px 0;
+  transition: all 0.2s ease;
+}
+
+/* .processStepsContainer :global(.step-label:hover) {
+  border-radius: 4px;
+  padding-left: 8px;
+} */
+
+/* Highlight bar for active step using data attribute with dynamic colors */
+.processStepsContainer :global(.MuiStep-root[data-active='true']) {
+  position: relative;
+}
+
+.processStepsContainer :global(.MuiStep-root[data-active='true']::before) {
+  content: '';
+  position: absolute;
+  left: -0;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  border-radius: 2px;
+  z-index: 1;
+}
+
+/* Highlight bar colors based on step status */
+.processStepsContainer :global(.MuiStep-root[data-status='0']::before) {
+  background-color: var(--mui-palette-text-disabled) !important;
+}
+
+.processStepsContainer :global(.MuiStep-root[data-status='1']::before) {
+  background-color: var(--mui-palette-warning-main) !important;
+}
+
+.processStepsContainer :global(.MuiStep-root[data-status='2']::before) {
+  background-color: var(--mui-palette-success-main) !important;
+}
+
+/* Highlight background for active step */
+.processStepsContainer :global(.MuiStep-root[data-active='true']) {
+  background-color: #0000000a !important;
+  border-radius: 4px !important;
+  padding: 4px !important;
+  margin: -4px !important;
+  padding-left: 19px !important;
+  margin-left: -19px !important;
+}
+
+/* Reduce spacing between steps */
+.processStepsContainer :global(.MuiStep-root) {
+  padding: 4px 0 !important;
+}
+
+.processStepsContainer :global(.MuiStepConnector-root) {
+  margin-top: -10px !important;
+  margin-bottom: -10px !important;
+}

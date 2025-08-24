@@ -267,6 +267,12 @@ const ExamResultStatusMappingText = {
   3: 'Chưa thi'
 }
 
+const StepStatus = {
+  Pending: 0,
+  InProgress: 1,
+  Completed: 2
+}
+
 const CONFIG = {
   LicenseRegistrationStatus,
   LicenseRegistrationStatusMappingText,
@@ -306,7 +312,8 @@ const CONFIG = {
   RegistrationRecordStatus,
   UserPageConfigKey,
   RegistrationRecordsTableColumns,
-  ExamResultStatusMappingText
+  ExamResultStatusMappingText,
+  StepStatus
 }
 
 export default CONFIG

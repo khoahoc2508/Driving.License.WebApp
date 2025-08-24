@@ -1,19 +1,105 @@
 'use client'
 
-import { Box, Paper, Typography, CircularProgress } from '@mui/material'
+import { Box, Paper, Typography, CircularProgress, Stepper, Step, StepLabel, useTheme } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { IconCircleCheck, IconCircle, IconRadio } from '@tabler/icons-react'
 
 import type { GetStepsDto } from '@/types/stepsTypes'
 import stepsAPI from '@/libs/api/stepsAPI'
+import StepperWrapper from '@/@core/styles/stepper'
+import styles from './ProcessSteps.module.css'
+import CONFIG from '@/configs/config'
 
 type ProcessStepsProps = {
     registrationRecordId: string | undefined
+    onStepClick?: (step: GetStepsDto, stepIndex: number) => void
+    selectedStepIndex?: number
 }
 
-const ProcessSteps = ({ registrationRecordId }: ProcessStepsProps) => {
+const CustomStepIcon = ({ step, index }: { step: GetStepsDto; index: number }) => {
+    const theme = useTheme()
+
+    const getStepIcon = (status: number | undefined) => {
+        switch (status) {
+            case CONFIG.StepStatus.Completed: // Completed - Xanh lá
+                return (
+                    <Box
+                        sx={{
+                            width: 13,
+                            height: 13,
+                            borderRadius: '50%',
+                            backgroundColor: theme.palette.success.main,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}
+                    />
+                )
+            case CONFIG.StepStatus.InProgress: // In Progress - Cam
+                return (
+                    <Box
+                        sx={{
+                            width: 13,
+                            height: 13,
+                            borderRadius: '50%',
+                            backgroundColor: theme.palette.warning.main,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}
+                    />
+                )
+            case CONFIG.StepStatus.Pending: // Pending - Xám
+                return (
+                    <Box
+                        sx={{
+                            width: 13,
+                            height: 13,
+                            borderRadius: '50%',
+                            backgroundColor: theme.palette.text.disabled,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}
+                    />
+                )
+            default: // Pending - Xám
+                return (
+                    <Box
+                        sx={{
+                            width: 13,
+                            height: 13,
+                            borderRadius: '50%',
+                            backgroundColor: theme.palette.text.disabled,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }}
+                    />
+                )
+        }
+    }
+
+    return (
+        <Box
+            sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 24,
+                height: 24,
+                borderRadius: '50%',
+                backgroundColor: 'transparent'
+            }}
+        >
+            {getStepIcon(step.status)}
+        </Box>
+    )
+}
+
+const ProcessSteps = ({ registrationRecordId, onStepClick, selectedStepIndex }: ProcessStepsProps) => {
     const [steps, setSteps] = useState<GetStepsDto[]>([])
     const [loading, setLoading] = useState(true)
+    const theme = useTheme()
 
     useEffect(() => {
         const fetchSteps = async () => {
@@ -39,31 +125,18 @@ const ProcessSteps = ({ registrationRecordId }: ProcessStepsProps) => {
         }
     }, [registrationRecordId])
 
-    const getStepIcon = (status: number | undefined) => {
-        switch (status) {
-            case 0: // Completed
-                return <IconCircleCheck size={20} color="#2E7D32" />
-            case 1: // In Progress
-                return <IconRadio size={20} color="#ED6C02" />
-            case 2: // Next
-                return <IconCircle size={20} color="#2E7D32" />
-            default:
-                return <IconCircle size={20} color="#9E9E9E" />
+    const handleStepClick = (step: GetStepsDto, stepIndex: number) => {
+        if (onStepClick) {
+            onStepClick(step, stepIndex)
         }
     }
 
-    const getStepColor = (status: number | undefined) => {
-        switch (status) {
-            case 0: // Completed
-                return '#2E7D32'
-            case 1: // In Progress
-                return '#ED6C02'
-            case 2: // Next
-                return '#2E7D32'
-            default:
-                return '#9E9E9E'
+    // Auto-select first step if no step is selected
+    useEffect(() => {
+        if (steps.length > 0 && selectedStepIndex === undefined && onStepClick) {
+            onStepClick(steps[0], 0)
         }
-    }
+    }, [steps, selectedStepIndex, onStepClick])
 
     if (loading) {
         return (
@@ -76,64 +149,75 @@ const ProcessSteps = ({ registrationRecordId }: ProcessStepsProps) => {
     }
 
     return (
-        <Paper elevation={1} sx={{ p: 2, height: 'fit-content' }}>
-            <Typography variant='h6' sx={{ mb: 2, fontWeight: 600 }}>
-                Quy trình xử lý
+        steps.length === 0 ? (
+            <Typography variant='body2' color="text.secondary">
+                Chưa có dữ liệu
             </Typography>
+        ) : (
+            <Box className={styles.processStepsContainer}>
+                <StepperWrapper>
+                    <Stepper activeStep={selectedStepIndex} orientation="vertical" className='p-4'>
+                        {steps.map((step, index) => {
+                            const labelProps: {
+                                error?: boolean
+                            } = {}
 
-            {/* Steps List */}
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-                {steps.length === 0 ? (
-                    <Typography variant='body2' color="text.secondary">
-                        Chưa có dữ liệu
-                    </Typography>
-                ) : (
-                    steps.map((step, idx) => (
-                        <Box key={`${step?.id || step?.name}-${idx}`}>
-                            {/* Step Item */}
-                            <Box sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: 2,
-                                py: 1.5,
-                                px: 1,
-                                position: 'relative'
-                            }}>
-                                {/* Step Icon */}
-                                <Box sx={{ flexShrink: 0 }}>
-                                    {getStepIcon(step?.status)}
-                                </Box>
+                            const getTextColor = (status: number | undefined) => {
+                                switch (status) {
+                                    case CONFIG.StepStatus.Completed: // Completed
+                                        return theme.palette.success.main
+                                    case CONFIG.StepStatus.InProgress: // In Progress
+                                        return theme.palette.warning.main
+                                    case CONFIG.StepStatus.Pending: // Pending
+                                        return theme.palette.text.disabled
+                                    default: // Pending
+                                        return theme.palette.text.disabled
+                                }
+                            }
 
-                                {/* Step Name */}
-                                <Typography
-                                    variant='body2'
-                                    sx={{
-                                        fontSize: 13,
-                                        color: getStepColor(step?.status),
-                                        fontWeight: step?.status === 1 ? 600 : 400,
-                                        flex: 1
-                                    }}
+                            const isSelected = index === selectedStepIndex
+
+                            return (
+                                <Step
+                                    key={index}
+                                    completed={step.status === CONFIG.StepStatus.Completed}
+                                    active={step.status === CONFIG.StepStatus.InProgress}
+                                    data-active={isSelected}
+                                    data-status={step.status}
                                 >
-                                    {step?.name || 'Không xác định'}
-                                </Typography>
-                            </Box>
-
-                            {/* Connecting Line (except for last item) */}
-                            {idx < steps.length - 1 && (
-                                <Box sx={{
-                                    width: 2,
-                                    height: 20,
-                                    backgroundColor: 'grey.300',
-                                    marginLeft: '9px', // Center the line with the icon
-                                    marginTop: '-8px',
-                                    marginBottom: '-8px'
-                                }} />
-                            )}
-                        </Box>
-                    ))
-                )}
+                                    <StepLabel
+                                        {...labelProps}
+                                        slots={{
+                                            stepIcon: () => <CustomStepIcon step={step} index={index} />
+                                        }}
+                                        sx={{
+                                            '& .MuiStepLabel-labelContainer': {
+                                                '& .step-label': {
+                                                    color: getTextColor(step.status),
+                                                    fontSize: '14px'
+                                                }
+                                            }
+                                        }}
+                                    >
+                                        <div
+                                            className='step-label'
+                                            style={{
+                                                color: getTextColor(step.status),
+                                                cursor: 'pointer',
+                                                fontWeight: isSelected ? 600 : 400
+                                            }}
+                                            onClick={() => handleStepClick(step, index)}
+                                        >
+                                            {step.name}
+                                        </div>
+                                    </StepLabel>
+                                </Step>
+                            )
+                        })}
+                    </Stepper>
+                </StepperWrapper>
             </Box>
-        </Paper>
+        )
     )
 }
 
