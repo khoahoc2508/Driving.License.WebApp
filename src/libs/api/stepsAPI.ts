@@ -2,7 +2,8 @@ import axiosInstance from '../axios'
 import type {
   GetStepByStepIdOverviewQueryParams,
   GetStepsQueryParams,
-  GetTaskByStepIdQueryParams
+  GetTaskByStepIdQueryParams,
+  UpdateTaskCommand
 } from '@/types/stepsTypes'
 
 const GetStepsByRegistrationRecordId = async (params: GetStepsQueryParams) => {
@@ -25,10 +26,15 @@ const GetTaskByStepId = async (params: GetTaskByStepIdQueryParams) => {
   })
 }
 
+const UpdateTask = async (id: string, data: UpdateTaskCommand) => {
+  return await axiosInstance.put(`/api/tasks/${id}`, data)
+}
+
 const stepsAPI = {
   GetStepsByRegistrationRecordId,
   GetStepByStepIdOverview,
-  GetTaskByStepId
+  GetTaskByStepId,
+  UpdateTask
 }
 
 export default stepsAPI

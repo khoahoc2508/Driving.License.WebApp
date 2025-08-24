@@ -52,6 +52,7 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
 
     const handleEditSuccess = () => {
         fetchTasks() // Refresh tasks after successful edit
+        handleEditDialogClose()
     }
 
     const getStatusText = (status: number | undefined) => {

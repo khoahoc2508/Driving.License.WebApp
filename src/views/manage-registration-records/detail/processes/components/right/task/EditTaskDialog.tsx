@@ -20,10 +20,12 @@ import {
     FormHelperText
 } from '@mui/material'
 import { toast } from 'react-toastify'
-import type { GetTaskDto } from '@/types/stepsTypes'
+import type { GetTaskDto, TaskStatusType, UpdateTaskCommand } from '@/types/stepsTypes'
 import type { AssigneeType } from '@/types/assigneeTypes'
 import CONFIG from '@/configs/config'
 import assigneeAPI from '@/libs/api/assigneeAPI'
+import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
+import stepsAPI from '@/libs/api/stepsAPI'
 
 type EditTaskDialogProps = {
     open: boolean
@@ -35,7 +37,8 @@ type EditTaskDialogProps = {
 type FormData = {
     [key: string]: any
     note?: string
-    assigneeId?: string
+    assigneeId?: string,
+    status?: number
 }
 
 type AssigneeOption = {
@@ -50,7 +53,8 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
     const { control, handleSubmit, reset, setValue, formState: { errors } } = useForm<FormData>({
         defaultValues: {
             note: '',
-            assigneeId: ''
+            assigneeId: '',
+            status: CONFIG.TaskStatusOptions[0].value
         }
     })
 
@@ -89,13 +93,13 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
         reset()
         const defaultValues: FormData = {
             note: task.note || '',
-            assigneeId: task.assignee?.id || ''
+            assigneeId: task.assignee?.id || '',
+            status: task.status || CONFIG.TaskStatusOptions[0].value
         }
 
         // Set values from taskFieldTemplateConfig
         task.taskFieldTemplateConfig?.forEach(field => {
             if (field.key) {
-                // Find existing value from submissions
                 const submission = task.taskFieldInstanceSubmissions?.find(
                     sub => sub.taskFieldTemplateConfigId === field.id
                 )
@@ -103,7 +107,6 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
             }
         })
 
-        // Set form values
         Object.keys(defaultValues).forEach(key => {
             setValue(key, defaultValues[key])
         })
@@ -117,17 +120,25 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
 
     const onSubmit = async (data: FormData) => {
         setIsSubmitting(true)
-
+        if (!task?.id) return
         try {
-            // TODO: Implement API call to update task
-            console.log('Updating task with data:', data)
+            const updateData: UpdateTaskCommand = {
+                assigneeId: data.assigneeId,
+                status: data.status as TaskStatusType,
+                note: data.note,
+                taskFieldInstanceSubmissions: task?.taskFieldTemplateConfig
+                    ?.filter(field => field.key && data[field.key] !== undefined)
+                    .map(field => ({
+                        taskFieldTemplateConfigId: field.id,
+                        value: data[field.key!]
+                    })) || []
+            }
 
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 1000))
-
-            toast.success('Cập nhật công việc thành công')
-            handleClose()
-            onSuccess()
+            const res = await stepsAPI.UpdateTask(task.id, updateData)
+            if (res?.data?.data) {
+                toast.success('Cập nhật công việc thành công')
+                onSuccess()
+            }
         } catch (error: any) {
             toast.error(error?.message || 'Có lỗi xảy ra khi cập nhật công việc')
         } finally {
@@ -190,22 +201,55 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
                         name={fieldKey}
                         control={control}
                         rules={isRequired ? { required: `${label} là bắt buộc` } : {}}
-                        render={({ field: { onChange, value } }) => (
-                            <TextField
-                                label={isRequired ? `${label} (*)` : label}
-                                fullWidth
-                                variant="outlined"
-                                type="date"
-                                value={value || ''}
-                                onChange={onChange}
-                                InputLabelProps={{ shrink: true }}
-                                error={!!errors[fieldKey]}
-                                helperText={errors[fieldKey]?.message || hint || description}
-                            />
-                        )}
+                        render={({ field }) => {
+                            const parseDateValue = (value: string) => {
+                                if (!value) return null
+                                try {
+                                    if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+                                        return new Date(value)
+                                    }
+                                    if (/^\d{2}\/\d{2}\/\d{4}$/.test(value)) {
+                                        const [day, month, year] = value.split('/')
+                                        return new Date(parseInt(year), parseInt(month) - 1, parseInt(day))
+                                    }
+                                    return null
+                                } catch {
+                                    return null
+                                }
+                            }
+                            const formatDateToString = (date: Date | null) => {
+                                if (!date) return ''
+                                const day = String(date.getDate()).padStart(2, '0')
+                                const month = String(date.getMonth() + 1).padStart(2, '0')
+                                const year = date.getFullYear()
+                                return `${day}/${month}/${year}`
+                            }
+                            return (
+                                <AppReactDatepicker
+                                    boxProps={{ className: 'is-full' }}
+                                    selected={parseDateValue(field.value)}
+                                    showYearDropdown
+                                    showMonthDropdown
+                                    dateFormat='dd/MM/yyyy'
+                                    placeholderText={hint || `Chọn ${label.toLowerCase()}`}
+                                    onChange={(date) => {
+                                        const dateString = formatDateToString(date)
+                                        field.onChange(dateString)
+                                    }}
+                                    customInput={<TextField
+                                        fullWidth
+                                        size='medium'
+                                        label={isRequired ? <span>{label} <span style={{ color: 'red' }}>(*)</span></span> : label}
+                                        {...(errors[fieldKey] && {
+                                            error: true,
+                                            helperText: String(errors[fieldKey]?.message || '')
+                                        })}
+                                    />}
+                                />
+                            )
+                        }}
                     />
                 )
-
             case CONFIG.InputType.SingleSelect: // Select dropdown
                 return (
                     <Controller
@@ -348,16 +392,23 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
                     </FormControl>
 
                     {/* Status field */}
-                    <FormControl fullWidth>
-                        <InputLabel>Trạng thái (*)</InputLabel>
-                        <Select
-                            value={task.status || 0}
-                            label={<span>Trạng thái <span style={{ color: 'red' }}>(*)</span></span>}
-                        >
-                            <MenuItem value={0}>Chưa xử lý</MenuItem>
-                            <MenuItem value={1}>Đang xử lý</MenuItem>
-                            <MenuItem value={2}>Hoàn thành</MenuItem>
-                        </Select>
+                    <FormControl fullWidth error={!!errors.status}>
+                        <InputLabel>Trạng thái <span style={{ color: 'red' }}>(*)</span></InputLabel>
+                        <Controller
+                            name="status"
+                            control={control}
+                            rules={{ required: 'Vui lòng chọn trạng thái' }}
+                            render={({ field }) => (
+                                <Select {...field} label='Trạng thái (*)'>
+                                    {CONFIG.TaskStatusOptions.map(status => (
+                                        <MenuItem key={status.value} value={status.value}>{status.label}</MenuItem>
+                                    ))}
+                                </Select>
+                            )}
+                        />
+                        {errors.status && (
+                            <FormHelperText>{String(errors.status.message || 'Có lỗi xảy ra')}</FormHelperText>
+                        )}
                     </FormControl>
                 </Box>
             </DialogContent>

@@ -287,6 +287,12 @@ const InputType = {
   Password: 10
 }
 
+const TaskStatusOptions = [
+  { label: 'Chưa xử lý', value: 0 },
+  { label: 'Đang xử lý', value: 1 },
+  { label: 'Hoàn thành', value: 2 }
+]
+
 const CONFIG = {
   LicenseRegistrationStatus,
   LicenseRegistrationStatusMappingText,
@@ -328,7 +334,8 @@ const CONFIG = {
   RegistrationRecordsTableColumns,
   ExamResultStatusMappingText,
   StepStatus,
-  InputType
+  InputType,
+  TaskStatusOptions
 }
 
 export default CONFIG
