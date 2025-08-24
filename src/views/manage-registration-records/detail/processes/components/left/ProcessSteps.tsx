@@ -176,6 +176,7 @@ const ProcessSteps = ({ registrationRecordId, onStepClick, selectedStepIndex }: 
                             }
 
                             const isSelected = index === selectedStepIndex
+                            const isStepClickable = step.status !== CONFIG.StepStatus.Pending
 
                             return (
                                 <Step
@@ -203,10 +204,15 @@ const ProcessSteps = ({ registrationRecordId, onStepClick, selectedStepIndex }: 
                                             className='step-label'
                                             style={{
                                                 color: getTextColor(step.status),
-                                                cursor: 'pointer',
-                                                fontWeight: isSelected ? 600 : 400
+                                                cursor: isStepClickable ? 'pointer' : 'not-allowed',
+                                                fontWeight: isSelected ? 600 : 400,
+                                                opacity: isStepClickable ? 1 : 0.6
                                             }}
-                                            onClick={() => handleStepClick(step, index)}
+                                            onClick={() => {
+                                                if (isStepClickable) {
+                                                    handleStepClick(step, index)
+                                                }
+                                            }}
                                         >
                                             {step.name}
                                         </div>

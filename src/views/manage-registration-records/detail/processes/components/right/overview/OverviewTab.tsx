@@ -89,7 +89,7 @@ const OverviewTab = ({ selectedStep }: OverviewTabProps) => {
                                 {item.label}
                             </Typography>
                             <Typography variant="body1" sx={{ fontWeight: 600 }}>
-                                {item.value}
+                                {item?.value || 'Chưa có'}
                             </Typography>
                         </Box>
                     ))
