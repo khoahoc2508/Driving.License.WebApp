@@ -1,8 +1,11 @@
 import type {
   GetRegistrationRecordsQueryParams,
   CreateRegistrationRecordCommand,
-  UpdateRegistrationRecordCommand
-, CreatePaymentCommand, UpdatePaymentCommand } from '@/types/registrationRecords'
+  UpdateRegistrationRecordCommand,
+  CreatePaymentCommand,
+  UpdatePaymentCommand,
+  ApproveRegistrationRecordCommand
+} from '@/types/registrationRecords'
 import axiosInstance from '../axios'
 import { customParamsSerializer } from './commonAPI'
 
@@ -88,6 +91,12 @@ const UpdateRegistrationRecord = async (id: string, data: UpdateRegistrationReco
   return await axiosInstance.put(`/api/registration-records/${id}`, data)
 }
 
+const UpdateRegistrationRecordIsApproved = async (data: ApproveRegistrationRecordCommand) => {
+  return await axiosInstance.put(`/api/registration-records/${data.id}/approve`, {
+    IsApproved: data.isApproved
+  })
+}
+
 const DeleteRegistrationRecord = async (id: string) => {
   return await axiosInstance.delete(`/api/registration-records/${id}`)
 }
@@ -109,7 +118,8 @@ const registrationRecordsAPI = {
   DeletePaymentHistory,
   CreateRegistrationRecord,
   UpdateRegistrationRecord,
-  DeleteRegistrationRecord
+  DeleteRegistrationRecord,
+  UpdateRegistrationRecordIsApproved
 }
 
 export default registrationRecordsAPI

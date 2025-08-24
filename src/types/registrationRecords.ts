@@ -4,6 +4,7 @@ export type GetRegistrationRecordsDto = components['schemas']['GetRegistrationRe
 export type GetRegistrationRecordsListType = components['schemas']['PaginatedListOfGetRegistrationRecordsDto']['data']
 export type CreateRegistrationRecordCommand = components['schemas']['CreateRegistrationRecordCommand']
 export type UpdateRegistrationRecordCommand = components['schemas']['UpdateRegistrationRecordCommand']
+export type ApproveRegistrationRecordCommand = components['schemas']['ApproveRegistrationRecordCommand']
 export type RegistrationRecordStatus = components['schemas']['RegistrationRecordStatus']
 export type GenderType = components['schemas']['GenderType']
 export type PaymentStatus = components['schemas']['PaymentStatus']

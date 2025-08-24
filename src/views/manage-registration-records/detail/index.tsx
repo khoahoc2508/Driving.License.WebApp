@@ -14,6 +14,7 @@ import type { RegistrationRecordBasicInfoDto, RegistrationRecordOverviewDto } fr
 import OverviewTab from "./overview/OverviewTab";
 import PaymentsTab from "./payments/PaymentsTab";
 import ProcessingTab from "./processes/ProcessingTab";
+import { toast } from "react-toastify";
 
 
 type RegistrationRecordDetailProps = {
@@ -52,6 +53,7 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
             ])
 
             setBasicInfo(basicRes?.data?.data || null)
+            setIsApproved(basicRes?.data?.data?.isApproved || false)
             setOverview(overviewRes?.data?.data || null)
         } catch (error) {
             setBasicInfo(null)
@@ -62,7 +64,20 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
     }
 
 
-    const handleApprovedChange = (_: any, checked: boolean) => setIsApproved(checked)
+    const handleApprovedChange = async (_: any, checked: boolean) => {
+        setIsApproved(checked)
+        if (id) {
+            try {
+                await registrationRecordsAPI.UpdateRegistrationRecordIsApproved({
+                    id,
+                    isApproved: checked
+                })
+                toast.success('Cập nhật thành công')
+            } catch (error) {
+                toast.error((error as any).response.data.message)
+            }
+        }
+    }
 
     const headerFullName = basicInfo?.fullName || ''
     const headerLicenseType = basicInfo?.licenseTypeName ? ` - Hạng ${basicInfo.licenseTypeName}` : ''
@@ -95,7 +110,6 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
                         checked={isApproved}
                         onChange={handleApprovedChange}
                         color="primary"
-                        disabled={true}
                     />
                     <Typography variant="body1" sx={{ opacity: 0.5 }}>
                         Duyệt hồ sơ
@@ -191,6 +205,6 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
 
         </div>
     );
-}
+};
 
 export default RegistrationRecordDetail
