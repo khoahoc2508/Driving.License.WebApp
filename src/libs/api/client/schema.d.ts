@@ -4,3888 +4,3919 @@
  */
 
 export interface paths {
-  '/api/assignees': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['Assignees_GetAssignees']
-    put: operations['Assignees_UpsertBrandSetting']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/assignees/{id}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['Assignees_GetAssigneeById']
-    put?: never
-    post?: never
-    delete: operations['Assignees_DeleteAssigneeById']
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/connect/token': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    post: operations['Authorization_Exchange']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/connect/userinfo': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['Authorization_UserinfoGET']
-    put?: never
-    post: operations['Authorization_UserinfoPOST']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/brandsettings/by-user': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['BrandSettings_GetBrandSettingByUserId']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/brandsettings/by-owner': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['BrandSettings_GetBrandSettingByOwnerId']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/brandsettings/upsert': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    post: operations['BrandSettings_UpsertBrandSetting']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/cars': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['Cars_GetCarsWithPagination']
-    put?: never
-    post: operations['Cars_CreateCar']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/cars/{id}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['Cars_GetCarById']
-    put: operations['Cars_UpdateCar']
-    post?: never
-    delete: operations['Cars_DeleteCar']
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/cars/all': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['Cars_GetAllCars']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/constants/exam-results': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['Constants_GetExamResults']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/contacts': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    post: operations['Contacts_CreateContact']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/dat-devices': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['DATDevices_GetDATDevicesWithPagination']
-    put?: never
-    post: operations['DATDevices_CreateDATDevice']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/dat-devices/{id}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['DATDevices_GetDATDeviceById']
-    put: operations['DATDevices_UpdateDATDevice']
-    post?: never
-    delete: operations['DATDevices_DeleteDATDevice']
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/dat-devices/all': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['DATDevices_GetAllDATDevices']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/exam-centers': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['ExamCenters_GetExamCentersWithPagination']
-    put?: never
-    post: operations['ExamCenters_CreateExamCenter']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/exam-centers/{id}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['ExamCenters_GetExamCenterById']
-    put: operations['ExamCenters_UpdateExamCenter']
-    post?: never
-    delete: operations['ExamCenters_DeleteExamCenter']
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/exam-centers/all': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['ExamCenters_GetAllExamCenters']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/exams/by-group/{id}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['Exams_GetExamsByGroupExamId']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/exams/generate-exam': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    post: operations['Exams_GenerateExam']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/exams/full-critical': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    post: operations['Exams_GenerationExamFullCritical']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/exams/full': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    post: operations['Exams_GenerationExamFull']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/exams/generate-random-exam': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    post: operations['Exams_GenerateExam2']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/examsubmissions/{id}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['ExamSubmissions_GetExamSubmissionById']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/examsubmissions/start-exam': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    post: operations['ExamSubmissions_StartExam']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/examsubmissions/submit': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    post: operations['ExamSubmissions_SubmitExam']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/exam-yards': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['ExamYards_GetExamYardsWithPagination']
-    put?: never
-    post: operations['ExamYards_CreateExamYard']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/exam-yards/{id}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['ExamYards_GetExamYardById']
-    put: operations['ExamYards_UpdateExamYard']
-    post?: never
-    delete: operations['ExamYards_DeleteExamYard']
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/exam-yards/all': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['ExamYards_GetAllExamYards']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/feetypes': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['FeeTypes_GetFeeTypes']
-    put: operations['FeeTypes_UpsertFeeType']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/feetypes/{id}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['FeeTypes_GetFeeTypeById']
-    put?: never
-    post?: never
-    delete: operations['FeeTypes_DeleteFeeTypeById']
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/group-exams': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['GroupExams_GetAllGroupExams']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/license-types': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['LicenseTypes_GetAllLicenseTypes']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/payment-histories': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    post: operations['PaymentHistories_CreatePaymentHistory']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/payment-histories/{id}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['PaymentHistories_GetPaymentHistoryById']
-    put: operations['PaymentHistories_UpdatePaymentHistory']
-    post?: never
-    delete: operations['PaymentHistories_DeletePaymentHistoryById']
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/payment-histories/all': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['PaymentHistories_GetPaymentHistoriesByRegistrationRecordId']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/payments/all': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['Payments_GetPaymentsByRegistrationRecordId']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/payments/{id}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['Payments_GetPaymentById']
-    put: operations['Payments_UpdatePayment']
-    post?: never
-    delete: operations['Payments_DeletePaymentById']
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/payments': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    post: operations['Payments_CreatePayment']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/persons/recognition/citizen-by-files': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    post: operations['Persons_RecognizeCitizenByFile']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/persons/export/pdf': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    post: operations['Persons_ExportCitizenInfoToPdf']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/questions/by-exam/{id}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['Questions_GetExamsByGroupExamId']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/questions/import': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    post: operations['Questions_ExportCitizenInfoToPdf']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/questions/change-url-image': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    post: operations['Questions_ChangeQuestionImageUrl']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/questions/detail': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['Questions_GetQuestionDetailById']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/registration-records': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['RegistrationRecords_GetRegistrationRecordsWithPagination']
-    put?: never
-    post: operations['RegistrationRecords_CreateRegistrationRecord']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/registration-records/{id}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['RegistrationRecords_GetRegistrationRecordDetailQuery']
-    put: operations['RegistrationRecords_UpdateRegistrationRecord']
-    post?: never
-    delete: operations['RegistrationRecords_DeleteRegistrationRecordById']
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/registration-records/{id}/basic-infor': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['RegistrationRecords_GetBasicInfo']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/registration-records/{id}/overview': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['RegistrationRecords_GetRegistrationRecordOverview']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/samples': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['Samples_GetSecretResources']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/uploads/file': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    post: operations['Uploads_UploadFile']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/uploads/files': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    post: operations['Uploads_UploadFiles']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/user-page-config/{pageKey}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['UserPageConfigs_GetConfig']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/user-page-config/upsert': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    post: operations['UserPageConfigs_UpsertConfig']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/users': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['Users_GetUserInfoByReferenceToken']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/users/register': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put?: never
-    post: operations['Users_Register']
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/vehicle-types': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['VehicleTypes_GetAllLicenseTypes']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/steps': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['Steps_GetStepsByRegistrationRecordIdQuery']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/tasks/all': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get: operations['Tasks_GetTasksByRegistrationRecordIdQuery']
-    put?: never
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
-  '/api/tasks/{id}': {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    get?: never
-    put: operations['Tasks_UpdateTask']
-    post?: never
-    delete?: never
-    options?: never
-    head?: never
-    patch?: never
-    trace?: never
-  }
+    "/api/assignees": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Assignees_GetAssignees"];
+        put: operations["Assignees_UpsertBrandSetting"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/assignees/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Assignees_GetAssigneeById"];
+        put?: never;
+        post?: never;
+        delete: operations["Assignees_DeleteAssigneeById"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/connect/token": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Authorization_Exchange"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/connect/userinfo": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Authorization_UserinfoGET"];
+        put?: never;
+        post: operations["Authorization_UserinfoPOST"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/brandsettings/by-user": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["BrandSettings_GetBrandSettingByUserId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/brandsettings/by-owner": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["BrandSettings_GetBrandSettingByOwnerId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/brandsettings/upsert": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["BrandSettings_UpsertBrandSetting"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/cars": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Cars_GetCarsWithPagination"];
+        put?: never;
+        post: operations["Cars_CreateCar"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/cars/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Cars_GetCarById"];
+        put: operations["Cars_UpdateCar"];
+        post?: never;
+        delete: operations["Cars_DeleteCar"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/cars/all": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Cars_GetAllCars"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/constants/exam-results": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Constants_GetExamResults"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/contacts": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Contacts_CreateContact"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/dat-devices": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["DATDevices_GetDATDevicesWithPagination"];
+        put?: never;
+        post: operations["DATDevices_CreateDATDevice"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/dat-devices/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["DATDevices_GetDATDeviceById"];
+        put: operations["DATDevices_UpdateDATDevice"];
+        post?: never;
+        delete: operations["DATDevices_DeleteDATDevice"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/dat-devices/all": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["DATDevices_GetAllDATDevices"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/exam-centers": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ExamCenters_GetExamCentersWithPagination"];
+        put?: never;
+        post: operations["ExamCenters_CreateExamCenter"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/exam-centers/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ExamCenters_GetExamCenterById"];
+        put: operations["ExamCenters_UpdateExamCenter"];
+        post?: never;
+        delete: operations["ExamCenters_DeleteExamCenter"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/exam-centers/all": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ExamCenters_GetAllExamCenters"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/exams/by-group/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Exams_GetExamsByGroupExamId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/exams/generate-exam": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Exams_GenerateExam"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/exams/full-critical": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Exams_GenerationExamFullCritical"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/exams/full": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Exams_GenerationExamFull"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/exams/generate-random-exam": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Exams_GenerateExam2"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/examsubmissions/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ExamSubmissions_GetExamSubmissionById"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/examsubmissions/start-exam": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ExamSubmissions_StartExam"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/examsubmissions/submit": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["ExamSubmissions_SubmitExam"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/exam-yards": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ExamYards_GetExamYardsWithPagination"];
+        put?: never;
+        post: operations["ExamYards_CreateExamYard"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/exam-yards/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ExamYards_GetExamYardById"];
+        put: operations["ExamYards_UpdateExamYard"];
+        post?: never;
+        delete: operations["ExamYards_DeleteExamYard"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/exam-yards/all": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ExamYards_GetAllExamYards"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/feetypes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["FeeTypes_GetFeeTypes"];
+        put: operations["FeeTypes_UpsertFeeType"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/feetypes/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["FeeTypes_GetFeeTypeById"];
+        put?: never;
+        post?: never;
+        delete: operations["FeeTypes_DeleteFeeTypeById"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/group-exams": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["GroupExams_GetAllGroupExams"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/license-types": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["LicenseTypes_GetAllLicenseTypes"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/payment-histories": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["PaymentHistories_CreatePaymentHistory"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/payment-histories/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PaymentHistories_GetPaymentHistoryById"];
+        put: operations["PaymentHistories_UpdatePaymentHistory"];
+        post?: never;
+        delete: operations["PaymentHistories_DeletePaymentHistoryById"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/payment-histories/all": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["PaymentHistories_GetPaymentHistoriesByRegistrationRecordId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/payments/all": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Payments_GetPaymentsByRegistrationRecordId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/payments/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Payments_GetPaymentById"];
+        put: operations["Payments_UpdatePayment"];
+        post?: never;
+        delete: operations["Payments_DeletePaymentById"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/payments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Payments_CreatePayment"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/persons/recognition/citizen-by-files": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Persons_RecognizeCitizenByFile"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/persons/export/pdf": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Persons_ExportCitizenInfoToPdf"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/questions/by-exam/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Questions_GetExamsByGroupExamId"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/questions/import": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Questions_ExportCitizenInfoToPdf"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/questions/change-url-image": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Questions_ChangeQuestionImageUrl"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/questions/detail": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Questions_GetQuestionDetailById"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/registration-records": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["RegistrationRecords_GetRegistrationRecordsWithPagination"];
+        put?: never;
+        post: operations["RegistrationRecords_CreateRegistrationRecord"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/registration-records/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["RegistrationRecords_GetRegistrationRecordDetailQuery"];
+        put: operations["RegistrationRecords_UpdateRegistrationRecord"];
+        post?: never;
+        delete: operations["RegistrationRecords_DeleteRegistrationRecordById"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/registration-records/{id}/basic-infor": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["RegistrationRecords_GetBasicInfo"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/registration-records/{id}/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["RegistrationRecords_GetRegistrationRecordOverview"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/registration-records/{id}/approve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["RegistrationRecords_ApproveRegistrationRecord"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/samples": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Samples_GetSecretResources"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/uploads/file": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Uploads_UploadFile"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/uploads/files": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Uploads_UploadFiles"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/user-page-config/{pageKey}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["UserPageConfigs_GetConfig"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/user-page-config/upsert": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["UserPageConfigs_UpsertConfig"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/users": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Users_GetUserInfoByReferenceToken"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/users/register": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Users_Register"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/vehicle-types": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["VehicleTypes_GetAllLicenseTypes"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/steps": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Steps_GetStepsByRegistrationRecordIdQuery"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/steps/{id}/overview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Steps_GetStepOverviewQuery"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/steps/initialize": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Steps_InitializeStepsByRegistrationRecordIdCommand"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/tasks/all": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Tasks_GetTasksByRegistrationRecordIdQuery"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/tasks/key/{key}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Tasks_GetSingleTaskByKeyQuery"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/tasks/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["Tasks_UpdateTask"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
-export type webhooks = Record<string, never>
+export type webhooks = Record<string, never>;
 export interface components {
-  schemas: {
-    PaginatedListOfAssigneeDto: {
-      data?: components['schemas']['AssigneeDto'][]
-
-      /** Format: int32 */
-      pageNumber?: number
-
-      /** Format: int32 */
-      totalPages?: number
-
-      /** Format: int32 */
-      totalCount?: number
-      hasPreviousPage?: boolean
-      hasNextPage?: boolean
-    }
-    AssigneeDto: {
-      id?: string
-      fullName?: string
-      phone?: string
-      description?: string
-      active?: boolean
-      assigneeType?: components['schemas']['AssigneeType']
-    }
-
-    /** @enum {integer} */
-    AssigneeType: 1 | 2 | 3
-    BaseResponseOfAssigneeDto: components['schemas']['BaseResponse'] & {
-      data?: components['schemas']['AssigneeDto'] | null
-    }
-    BaseResponse: {
-      success?: boolean
-      message?: string | null
-      statusCode?: components['schemas']['HttpStatusCode']
-    }
-
-    /** @enum {integer} */
-    HttpStatusCode:
-      | 100
-      | 101
-      | 102
-      | 103
-      | 200
-      | 201
-      | 202
-      | 203
-      | 204
-      | 205
-      | 206
-      | 207
-      | 208
-      | 226
-      | 300
-      | 300
-      | 301
-      | 301
-      | 302
-      | 302
-      | 303
-      | 303
-      | 304
-      | 305
-      | 306
-      | 307
-      | 307
-      | 308
-      | 400
-      | 401
-      | 402
-      | 403
-      | 404
-      | 405
-      | 406
-      | 407
-      | 408
-      | 409
-      | 410
-      | 411
-      | 412
-      | 413
-      | 414
-      | 415
-      | 416
-      | 417
-      | 421
-      | 422
-      | 422
-      | 423
-      | 424
-      | 426
-      | 428
-      | 429
-      | 431
-      | 451
-      | 500
-      | 501
-      | 502
-      | 503
-      | 504
-      | 505
-      | 506
-      | 507
-      | 508
-      | 510
-      | 511
-    BaseResponseOfBoolean: components['schemas']['BaseResponse'] & {
-      data?: boolean
-    }
-    UpsertAssigneeCommand: {
-      id?: string | null
-      fullName?: string
-      phone?: string
-      description?: string
-      active?: boolean
-      assigneeType?: components['schemas']['AssigneeType']
-    }
-    BaseResponseOfBrandSettingDto: components['schemas']['BaseResponse'] & {
-      data?: components['schemas']['BrandSettingDto'] | null
-    }
-    BrandSettingDto: {
-      avatarUrl?: string
-      name?: string
-      shortDescription?: string | null
-      description?: string | null
-      email?: string | null
-      phoneNumber?: string | null
-      address?: string | null
-      images?: string[] | null
-    }
-    UpsertBrandSettingCommand: {
-      avatarUrl?: string
-      name?: string
-      shortDescription?: string | null
-      description?: string | null
-      email?: string | null
-      phoneNumber?: string | null
-      address?: string | null
-      images?: string[] | null
-    }
-    PaginatedListOfGetCarsDto: {
-      data?: components['schemas']['GetCarsDto'][]
-
-      /** Format: int32 */
-      pageNumber?: number
-
-      /** Format: int32 */
-      totalPages?: number
-
-      /** Format: int32 */
-      totalCount?: number
-      hasPreviousPage?: boolean
-      hasNextPage?: boolean
-    }
-    GetCarsDto: {
-      id?: string
-      name?: string
-      description?: string
-      active?: boolean
-    }
-    BaseResponseOfGetCarDetailDto: components['schemas']['BaseResponse'] & {
-      data?: components['schemas']['GetCarDetailDto'] | null
-    }
-    GetCarDetailDto: {
-      id?: string
-      name?: string
-      description?: string
-      active?: boolean
-    }
-    BaseResponseOfString: components['schemas']['BaseResponse'] & {
-      data?: string | null
-    }
-    CreateCarCommand: {
-      name?: string
-      description?: string
-      active?: boolean
-    }
-    UpdateCarCommand: {
-      id?: string
-      name?: string
-      description?: string
-      active?: boolean
-    }
-    BaseResponseOfListOfGetAllCarsDto: components['schemas']['BaseResponse'] & {
-      data?: components['schemas']['GetAllCarsDto'][] | null
-    }
-    GetAllCarsDto: {
-      id?: string
-      name?: string
-      description?: string
-      active?: boolean
-    }
-    BaseResponseOfListOfConstantDto: components['schemas']['BaseResponse'] & {
-      data?: components['schemas']['ConstantDto'][] | null
-    }
-    ConstantDto: {
-      value?: string
-      label?: string
-    }
-    CreateContactCommand: {
-      fullName?: string
-      email?: string
-      message?: string
-    }
-    PaginatedListOfGetDATDevicesDto: {
-      data?: components['schemas']['GetDATDevicesDto'][]
-
-      /** Format: int32 */
-      pageNumber?: number
-
-      /** Format: int32 */
-      totalPages?: number
-
-      /** Format: int32 */
-      totalCount?: number
-      hasPreviousPage?: boolean
-      hasNextPage?: boolean
-    }
-    GetDATDevicesDto: {
-      id?: string
-      name?: string
-      description?: string
-      active?: boolean
-    }
-    BaseResponseOfGetDATDeviceDetailDto: components['schemas']['BaseResponse'] & {
-      data?: components['schemas']['GetDATDeviceDetailDto'] | null
-    }
-    GetDATDeviceDetailDto: {
-      id?: string
-      name?: string
-      description?: string
-      active?: boolean
-    }
-    CreateDATDeviceCommand: {
-      name?: string
-      description?: string
-      active?: boolean
-    }
-    UpdateDATDeviceCommand: {
-      id?: string
-      name?: string
-      description?: string
-      active?: boolean
-    }
-    BaseResponseOfListOfGetAllDATDevicesDto: components['schemas']['BaseResponse'] & {
-      data?: components['schemas']['GetAllDATDevicesDto'][] | null
-    }
-    GetAllDATDevicesDto: {
-      id?: string
-      name?: string
-      description?: string
-      active?: boolean
-    }
-    PaginatedListOfGetExamCentersDto: {
-      data?: components['schemas']['GetExamCentersDto'][]
-
-      /** Format: int32 */
-      pageNumber?: number
-
-      /** Format: int32 */
-      totalPages?: number
-
-      /** Format: int32 */
-      totalCount?: number
-      hasPreviousPage?: boolean
-      hasNextPage?: boolean
-    }
-    GetExamCentersDto: {
-      id?: string
-      name?: string
-      description?: string
-      active?: boolean
-    }
-    BaseResponseOfGetExamCenterDetailDto: components['schemas']['BaseResponse'] & {
-      data?: components['schemas']['GetExamCenterDetailDto'] | null
-    }
-    GetExamCenterDetailDto: {
-      id?: string
-      name?: string
-      description?: string
-      active?: boolean
-    }
-    CreateExamCenterCommand: {
-      name?: string
-      description?: string
-      active?: boolean
-    }
-    UpdateExamCenterCommand: {
-      id?: string
-      name?: string
-      description?: string
-      active?: boolean
-    }
-    BaseResponseOfListOfGetAllExamCentersDto: components['schemas']['BaseResponse'] & {
-      data?: components['schemas']['GetAllExamCentersDto'][] | null
-    }
-    GetAllExamCentersDto: {
-      id?: string
-      name?: string
-      description?: string
-      active?: boolean
-    }
-    BaseResponseOfListOfExamDto: components['schemas']['BaseResponse'] & {
-      data?: components['schemas']['ExamDto'][] | null
-    }
-    ExamDto: {
-      id?: string
-      name?: string
-      description?: string
-
-      /** Format: int32 */
-      totalQuestions?: number
-
-      /** Format: int32 */
-      passingScore?: number
-
-      /** Format: int32 */
-      durationMinutes?: number
-
-      /** Format: int32 */
-      order?: number
-      examType?: components['schemas']['ExamType']
-      groupExamType?: components['schemas']['GroupExamType'] | null
-      licenseTypeCode?: string
-      groupExamId?: string
-    }
-
-    /** @enum {integer} */
-    ExamType: 1 | 2
-
-    /** @enum {integer} */
-    GroupExamType: 0 | 1 | 2
-    GenerateExamsCommand: {
-      groupExamId?: string
-      licenseTypeCode?: string
-      questionNumbers?: number[]
-      criticalQuestionNumbers?: number[]
-
-      /** Format: int32 */
-      numberOfExams?: number
-
-      /** Format: int32 */
-      questionsPerExam?: number
-
-      /** Format: int32 */
-      criticalQuestionsPerExam?: number
-
-      /** Format: int32 */
-      durationMinutes?: number
-
-      /** Format: int32 */
-      passingScore?: number
-    }
-    GenerationExamFullCriticalCommand: {
-      groupExamId?: string
-      licenseTypeCode?: string
-      criticalQuestionNumbers?: number[]
-    }
-    GenerationExamFullCommand: {
-      groupExamId?: string
-      licenseTypeCode?: string
-      questionNumbers?: number[]
-      criticalQuestionNumbers?: number[]
-    }
-    BaseResponseOfExamDto: components['schemas']['BaseResponse'] & {
-      data?: components['schemas']['ExamDto'] | null
-    }
-    GenerateRandomExamsCommand: {
-      groupExamId?: string
-      licenseTypeCode?: string
-    }
-    BaseResponseOfExamSubmissionResultDto: components['schemas']['BaseResponse'] & {
-      data?: components['schemas']['ExamSubmissionResultDto'] | null
-    }
-    ExamSubmissionResultDto: {
-      id?: string
-      licenseTypeDto?: components['schemas']['LicenseTypeDto']
-
-      /** Format: duration */
-      duration?: string
-
-      /** Format: int32 */
-      totalQuestions?: number
-
-      /** Format: int32 */
-      correctAnswerCount?: number
-      hasCriticalMistake?: boolean
-      isPassed?: boolean
-      groupExamType?: components['schemas']['GroupExamType']
-      exam?: components['schemas']['ExamDto']
-      userAnswers?: components['schemas']['ExamSubmissionAnswerDto'][]
-    }
-    LicenseTypeDto: {
-      code?: string
-      name?: string
-      description?: string
-    }
-    ExamSubmissionAnswerDto: {
-      selectedAnswerId?: string | null
-      question?: components['schemas']['SubmitQuestionDto']
-    }
-    SubmitQuestionDto: {
-      id?: string
-      explanation?: string | null
-
-      /** Format: int32 */
-      order?: number
-      content?: string
-      imageUrl?: string | null
-      isCriticalQuestion?: boolean
-      answers?: components['schemas']['SubmitAnswerDto'][]
-    }
-    SubmitAnswerDto: {
-      id?: string
-
-      /** Format: int32 */
-      order?: number
-      isCorrect?: boolean
-      content?: string
-    }
-    BaseResponseOfCreateExamSubmissionResultDto: components['schemas']['BaseResponse'] & {
-      data?: components['schemas']['CreateExamSubmissionResultDto'] | null
-    }
-    CreateExamSubmissionResultDto: {
-      examSubmissionId?: string
-    }
-    CreateExamSubmissionCommand: {
-      examId?: string
-    }
-    SubmitExamCommand: {
-      examSubmissionId?: string
-      answers?: components['schemas']['AnswerSubmissionRequestDto'][]
-    }
-    AnswerSubmissionRequestDto: {
-      questionId?: string
-      selectedAnswerId?: string | null
-    }
-    PaginatedListOfGetExamYardsDto: {
-      data?: components['schemas']['GetExamYardsDto'][]
-
-      /** Format: int32 */
-      pageNumber?: number
-
-      /** Format: int32 */
-      totalPages?: number
-
-      /** Format: int32 */
-      totalCount?: number
-      hasPreviousPage?: boolean
-      hasNextPage?: boolean
-    }
-    GetExamYardsDto: {
-      id?: string
-      name?: string
-      description?: string
-      active?: boolean
-    }
-    BaseResponseOfGetExamYardDetailDto: components['schemas']['BaseResponse'] & {
-      data?: components['schemas']['GetExamYardDetailDto'] | null
-    }
-    GetExamYardDetailDto: {
-      id?: string
-      name?: string
-      description?: string
-      active?: boolean
-    }
-    CreateExamYardCommand: {
-      name?: string
-      description?: string
-      active?: boolean
-    }
-    UpdateExamYardCommand: {
-      id?: string
-      name?: string
-      description?: string
-      active?: boolean
-    }
-    BaseResponseOfListOfGetAllExamYardsDto: components['schemas']['BaseResponse'] & {
-      data?: components['schemas']['GetAllExamYardsDto'][] | null
-    }
-    GetAllExamYardsDto: {
-      id?: string
-      name?: string
-      description?: string
-      active?: boolean
-    }
-    PaginatedListOfFeeTypeDto: {
-      data?: components['schemas']['FeeTypeDto'][]
-
-      /** Format: int32 */
-      pageNumber?: number
-
-      /** Format: int32 */
-      totalPages?: number
-
-      /** Format: int32 */
-      totalCount?: number
-      hasPreviousPage?: boolean
-      hasNextPage?: boolean
-    }
-    FeeTypeDto: {
-      id?: string
-      name?: string
-      description?: string
-      active?: boolean
-    }
-    BaseResponseOfFeeTypeDto: components['schemas']['BaseResponse'] & {
-      data?: components['schemas']['FeeTypeDto'] | null
-    }
-    UpsertFeeTypeCommand: {
-      id?: string | null
-      name?: string
-      description?: string
-      active?: boolean
-    }
-    BaseResponseOfListOfGroupExamDto: components['schemas']['BaseResponse'] & {
-      data?: components['schemas']['GroupExamDto'][] | null
-    }
-    GroupExamDto: {
-      id?: string
-      name?: string
-      description?: string
-      iconUrl?: string | null
-
-      /** Format: int32 */
-      order?: number
-      licenseTypeCode?: string | null
-      parentId?: string | null
-      slug?: string
-      type?: components['schemas']['GroupExamType'] | null
-      children?: components['schemas']['GroupExamDto'][]
-    }
-    GetAllGroupExamQuery: Record<string, never>
-    BaseResponseOfListOfLicenseTypeDto: components['schemas']['BaseResponse'] & {
-      data?: components['schemas']['LicenseTypeDto'][] | null
-    }
-    CreatePaymentHistoryCommand: {
-      paymentId?: string
-
-      /** Format: decimal */
-      amount?: number
-
-      /** Format: date-time */
-      paymentDate?: string
-      note?: string
-    }
-    UpdatePaymentHistoryCommand: {
-      id?: string
-      paymentId?: string
-      description?: string
-
-      /** Format: decimal */
-      amount?: number
-
-      /** Format: date-time */
-      paymentDate?: string
-      note?: string
-    }
-    BaseResponseOfListOfGetPaymentHistoryDto: components['schemas']['BaseResponse'] & {
-      data?: components['schemas']['GetPaymentHistoryDto'][] | null
-    }
-    GetPaymentHistoryDto: {
-      id?: string
-
-      /** Format: decimal */
-      amount?: number
-
-      /** Format: date-time */
-      paymentDate?: string
-      note?: string
-      feeTypeName?: string
-    }
-    BaseResponseOfGetPaymentHistoryDetailDto: components['schemas']['BaseResponse'] & {
-      data?: components['schemas']['GetPaymentHistoryDetailDto'] | null
-    }
-    GetPaymentHistoryDetailDto: {
-      id?: string
-      paymentId?: string
-
-      /** Format: decimal */
-      amount?: number
-
-      /** Format: date-time */
-      paymentDate?: string
-      note?: string
-    }
-    BaseResponseOfListOfGetPaymentDto: components['schemas']['BaseResponse'] & {
-      data?: components['schemas']['GetPaymentDto'][] | null
-    }
-    GetPaymentDto: {
-      id?: string
-      feeTypeName?: string
-
-      /** Format: decimal */
-      amount?: number
-      note?: string
-      status?: components['schemas']['PaymentStatus']
-    }
-
-    /** @enum {integer} */
-    PaymentStatus: 0 | 1 | 2 | 3
-    BaseResponseOfGetPaymentDetailDto: components['schemas']['BaseResponse'] & {
-      data?: components['schemas']['GetPaymentDetailDto'] | null
-    }
-    GetPaymentDetailDto: {
-      feeTypeId?: string
-      registrationRecordId?: string
-
-      /** Format: decimal */
-      amount?: number | null
-      note?: string
-    }
-    CreatePaymentCommand: {
-      feeTypeId?: string
-      registrationRecordId?: string
-
-      /** Format: decimal */
-      amount?: number
-      note?: string
-    }
-    UpdatePaymentCommand: {
-      id?: string
-      feeTypeId?: string
-      registrationRecordId?: string
-
-      /** Format: decimal */
-      amount?: number
-      note?: string
-    }
-    BaseResponseOfListOfCitizenCardDto: components['schemas']['BaseResponse'] & {
-      data?: components['schemas']['CitizenCardDto'][] | null
-    }
-    CitizenCardDto: {
-      id?: string
-      front?: components['schemas']['FrontCitizenCardDto'] | null
-      back?: components['schemas']['BackCitizenCardDto'] | null
-      isRecognitionByAi?: boolean
-      isConfirmedByHuman?: boolean
-    }
-    FrontCitizenCardDto: {
-      fullName?: string
-
-      /** Format: date */
-      birthday?: string
-      gender?: components['schemas']['GenderType']
-      placeOfOrigin?: components['schemas']['Address']
-      placeOfResidence?: components['schemas']['Address']
-      nationality?: string
-      imageUrl?: string | null
-    }
-
-    /** @enum {integer} */
-    GenderType: 0 | 1 | 2
-    Address: {
-      provinceCode?: string
-      districtCode?: string
-      wardCode?: string
-    }
-    BackCitizenCardDto: {
-      /** Format: date */
-      issuedDate?: string
-      issuedBy?: string
-      imageUrl?: string | null
-    }
-    BaseResponseOfCitizenCardPdfResult: components['schemas']['BaseResponse'] & {
-      data?: components['schemas']['CitizenCardPdfResult'] | null
-    }
-    CitizenCardPdfResult: {
-      pdfUrls?: string[]
-    }
-    CitizenCardPdfRequest: {
-      id?: string
-      fullName?: string
-
-      /** Format: date */
-      birthday?: string
-      placeOfOrigin?: string
-      placeOfResidence?: string
-      nationality?: string
-
-      /** Format: date */
-      issuedDate?: string
-      issuedBy?: string
-      imagePath?: string
-    }
-    BaseResponseOfQuestionByExamDto: components['schemas']['BaseResponse'] & {
-      data?: components['schemas']['QuestionByExamDto'] | null
-    }
-    QuestionByExamDto: {
-      examSubmissionId?: string | null
-      examDto?: components['schemas']['ExamDto'] | null
-      questions?: components['schemas']['QuestionDto'][]
-    }
-    QuestionDto: {
-      id?: string
-
-      /** Format: int32 */
-      order?: number
-      content?: string
-      imageUrl?: string | null
-      isCriticalQuestion?: boolean
-      answers?: components['schemas']['AnswerDto'][]
-    }
-    AnswerDto: {
-      id?: string
-
-      /** Format: int32 */
-      order?: number
-      content?: string
-    }
-    ChangeQuestionImageUrlCommand: Record<string, never>
-    BaseResponseOfQuestionDetailDto: components['schemas']['BaseResponse'] & {
-      data?: components['schemas']['QuestionDetailDto'] | null
-    }
-    QuestionDetailDto: {
-      id?: string
-
-      /** Format: int32 */
-      order?: number
-      content?: string
-      imageUrl?: string | null
-      answers?: components['schemas']['AnswerDto2'][]
-      explanation?: string | null
-      isCritical?: boolean
-    }
-    AnswerDto2: {
-      id?: string
-
-      /** Format: int32 */
-      order?: number
-      isCorrect?: boolean
-      content?: string
-    }
-    CreateRegistrationRecordCommand: {
-      licenseTypeCode?: string
-      avatarUrl?: string
-      fullname?: string
-
-      /** Format: date */
-      birthday?: string
-      gender?: components['schemas']['GenderType']
-      phone?: string
-      email?: string | null
-      address?: string | null
-      citizenIdNumber?: string
-      citizenIdFrontImageUrl?: string
-      citizenIdBackImageUrl?: string
-
-      /** Format: date-time */
-      receivedDate?: string
-
-      /** Format: date-time */
-      healthCheckDate?: string | null
-      staffAssigneeId?: string | null
-      collaboratorId?: string | null
-      note?: string | null
-    }
-    UpdateRegistrationRecordCommand: {
-      id?: string
-      licenseTypeCode?: string
-      avatarUrl?: string
-      fullname?: string
-
-      /** Format: date */
-      birthday?: string
-      gender?: components['schemas']['GenderType']
-      phone?: string
-      email?: string | null
-      address?: string | null
-      citizenIdNumber?: string
-      citizenIdFrontImageUrl?: string
-      citizenIdBackImageUrl?: string
-
-      /** Format: date-time */
-      receivedDate?: string
-
-      /** Format: date-time */
-      healthCheckDate?: string | null
-      staffAssigneeId?: string | null
-      collaboratorId?: string | null
-      note?: string | null
-    }
-    PaginatedListOfGetRegistrationRecordsDto: {
-      data?: components['schemas']['GetRegistrationRecordsDto'][]
-
-      /** Format: int32 */
-      pageNumber?: number
-
-      /** Format: int32 */
-      totalPages?: number
-
-      /** Format: int32 */
-      totalCount?: number
-      hasPreviousPage?: boolean
-      hasNextPage?: boolean
-    }
-    GetRegistrationRecordsDto: {
-      id?: string
-      licenseType?: components['schemas']['GetRegistrationRecordsLicenseTypeDto']
-      avatarUrl?: string
-      fullname?: string
-      phone?: string
-
-      /** Format: date */
-      birthday?: string
-      citizenIdNumber?: string
-
-      /** Format: date-time */
-      receivedDate?: string
-
-      /** Format: date-time */
-      healthCheckDate?: string | null
-      payment?: components['schemas']['GetRegistrationRecordsPaymentDto']
-      status?: components['schemas']['RegistrationRecordStatus']
-      staffAssigneeName?: string | null
-      collaboratorName?: string | null
-      note?: string | null
-    }
-    GetRegistrationRecordsLicenseTypeDto: {
-      code?: string
-      name?: string
-    }
-    GetRegistrationRecordsPaymentDto: {
-      /** Format: decimal */
-      totalAmount?: number | null
-
-      /** Format: decimal */
-      paidAmount?: number | null
-
-      /** Format: decimal */
-      remainingAmount?: number | null
-    }
-
-    /** @enum {integer} */
-    RegistrationRecordStatus: 0 | 1 | 2
-    BaseResponseOfGetRegistrationRecordDetailDto: components['schemas']['BaseResponse'] & {
-      data?: components['schemas']['GetRegistrationRecordDetailDto'] | null
-    }
-    GetRegistrationRecordDetailDto: {
-      id?: string
-      licenseTypeCode?: string
-      licenseTypeName?: string
-      avatarUrl?: string
-      fullname?: string
-
-      /** Format: date */
-      birthday?: string
-      gender?: components['schemas']['GenderType']
-      phone?: string
-      email?: string | null
-      address?: string | null
-      citizenIdNumber?: string
-      citizenIdFrontImageUrl?: string
-      citizenIdBackImageUrl?: string
-
-      /** Format: date-time */
-      receivedDate?: string
-
-      /** Format: date-time */
-      healthCheckDate?: string | null
-      staffAssigneeId?: string | null
-      staffAssigneeName?: string | null
-      collaboratorId?: string | null
-      collaboratorName?: string | null
-      note?: string | null
-    }
-    BaseResponseOfRegistrationRecordBasicInfoDto: components['schemas']['BaseResponse'] & {
-      data?: components['schemas']['RegistrationRecordBasicInfoDto'] | null
-    }
-    RegistrationRecordBasicInfoDto: {
-      avatarUrl?: string
-      fullName?: string
-      licenseTypeName?: string
-      phone?: string
-
-      /** Format: decimal */
-      totalAmount?: number | null
-
-      /** Format: decimal */
-      paidAmount?: number | null
-
-      /** Format: decimal */
-      remainingAmount?: number | null
-    }
-    BaseResponseOfRegistrationRecordOverviewDto: components['schemas']['BaseResponse'] & {
-      data?: components['schemas']['RegistrationRecordOverviewDto'] | null
-    }
-    RegistrationRecordOverviewDto: {
-      processing?: components['schemas']['ProcessingDto']
-      paymentSummary?: components['schemas']['PaymentSummaryDto']
-      generalInfo?: components['schemas']['GeneralInfoDto']
-      collaborator?: components['schemas']['CollaboratorDto'] | null
-    }
-    ProcessingDto: {
-      steps?: components['schemas']['ProcessingStepDto'][]
-      examResultStatus?: components['schemas']['ExamResultStatusType']
-    }
-    ProcessingStepDto: {
-      name?: string
-      status?: components['schemas']['StepStatusType']
-      assignee?: components['schemas']['ProcessingStepAssigneeDto'] | null
-    }
-
-    /** @enum {integer} */
-    StepStatusType: 0 | 1 | 2
-    ProcessingStepAssigneeDto: {
-      name?: string
-      phone?: string
-    }
-
-    /** @enum {integer} */
-    ExamResultStatusType: 1 | 2 | 3
-    PaymentSummaryDto: {
-      /** Format: decimal */
-      totalAmount?: number | null
-
-      /** Format: decimal */
-      paidAmount?: number | null
-
-      /** Format: decimal */
-      remainingAmount?: number | null
-    }
-    GeneralInfoDto: {
-      phone?: string
-
-      /** Format: date-time */
-      healthCheckDate?: string | null
-
-      /** Format: date-time */
-      receivedDate?: string | null
-      note?: string | null
-    }
-    CollaboratorDto: {
-      fullName?: string
-      phone?: string
-      avatarUrl?: string | null
-    }
-    BaseResponseOfUploadFileResult: components['schemas']['BaseResponse'] & {
-      data?: components['schemas']['UploadFileResult'] | null
-    }
-    UploadFileResult: {
-      fileNameOrigin?: string | null
-      fileName?: string | null
-      relativeUrl?: string | null
-    }
-    BaseResponseOfListOfUploadFileResult: components['schemas']['BaseResponse'] & {
-      data?: components['schemas']['UploadFileResult'][] | null
-    }
-    UpsertUserPageConfigCommand: {
-      pageKey?: string
-      columns?: components['schemas']['ColumnConfigDto'][]
-    }
-    ColumnConfigDto: {
-      column?: string
-      visible?: boolean
-      label?: string
-    }
-    RegisterUserRequest: {
-      userName?: string
-      email?: string
-      password?: string
-      avatarUrl?: string
-    }
-    BaseResponseOfListOfVehicleTypeDto: components['schemas']['BaseResponse'] & {
-      data?: components['schemas']['VehicleTypeDto'][] | null
-    }
-    VehicleTypeDto: {
-      code?: string
-      name?: string
-      description?: string
-    }
-    GetAllVehicleTypesQuery: Record<string, never>
-    BaseResponseOfListOfGetStepsDto: components['schemas']['BaseResponse'] & {
-      data?: components['schemas']['GetStepsDto'][] | null
-    }
-    GetStepsDto: {
-      id?: string
-      name?: string
-
-      /** Format: int32 */
-      order?: number
-      status?: components['schemas']['StepStatusType']
-      assigneeId?: string | null
-    }
-    BaseResponseOfListOfGetTaskDto: components['schemas']['BaseResponse'] & {
-      data?: components['schemas']['GetTaskDto'][] | null
-    }
-    GetTaskDto: {
-      id?: string
-      name?: string
-      assigneeId?: string | null
-      status?: components['schemas']['TaskStatusType']
-      note?: string | null
-      taskFieldTemplateConfig?: components['schemas']['TaskFieldTemplateConfigDto'][]
-      taskFieldInstanceSubmissions?: components['schemas']['TaskFieldInstanceSubmissionDto'][]
-    }
-
-    /** @enum {integer} */
-    TaskStatusType: 0 | 1 | 2
-    TaskFieldTemplateConfigDto: {
-      id?: string
-      label?: string
-      isRequired?: boolean
-      isVisible?: boolean
-      inputType?: components['schemas']['InputType']
-      defaultValue?: string
-      hint?: string
-      description?: string
-      active?: boolean
-      readOnly?: boolean
-      key?: string
-
-      /** Format: int32 */
-      order?: number
-      dataSourceConfig?: components['schemas']['DataSourceConfigDto'] | null
-    }
-
-    /** @enum {integer} */
-    InputType: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10
-    DataSourceConfigDto: {
-      apiUrl?: string
-      valueField?: string
-      labelField?: string
-    }
-    TaskFieldInstanceSubmissionDto: {
-      taskFieldTemplateConfigId?: string
-      value?: string | null
-    }
-    UpdateTaskCommand: {
-      id?: string
-      assigneeId?: string | null
-      status?: components['schemas']['TaskStatusType']
-      note?: string | null
-      taskFieldInstanceSubmissions?: components['schemas']['TaskFieldInstanceSubmissionDto2'][]
-    }
-    TaskFieldInstanceSubmissionDto2: {
-      taskFieldTemplateConfigId?: string
-      value?: string | null
-    }
-  }
-  responses: never
-  parameters: never
-  requestBodies: never
-  headers: never
-  pathItems: never
+    schemas: {
+        PaginatedListOfAssigneeDto: {
+            data?: components["schemas"]["AssigneeDto"][];
+            /** Format: int32 */
+            pageNumber?: number;
+            /** Format: int32 */
+            totalPages?: number;
+            /** Format: int32 */
+            totalCount?: number;
+            hasPreviousPage?: boolean;
+            hasNextPage?: boolean;
+        };
+        AssigneeDto: {
+            id?: string;
+            fullName?: string;
+            phone?: string;
+            description?: string;
+            active?: boolean;
+            assigneeType?: components["schemas"]["AssigneeType"];
+        };
+        /** @enum {integer} */
+        AssigneeType: 1 | 2 | 3;
+        BaseResponseOfAssigneeDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["AssigneeDto"] | null;
+        };
+        BaseResponse: {
+            success?: boolean;
+            message?: string | null;
+            statusCode?: components["schemas"]["HttpStatusCode"];
+        };
+        /** @enum {integer} */
+        HttpStatusCode: 100 | 101 | 102 | 103 | 200 | 201 | 202 | 203 | 204 | 205 | 206 | 207 | 208 | 226 | 300 | 300 | 301 | 301 | 302 | 302 | 303 | 303 | 304 | 305 | 306 | 307 | 307 | 308 | 400 | 401 | 402 | 403 | 404 | 405 | 406 | 407 | 408 | 409 | 410 | 411 | 412 | 413 | 414 | 415 | 416 | 417 | 421 | 422 | 422 | 423 | 424 | 426 | 428 | 429 | 431 | 451 | 500 | 501 | 502 | 503 | 504 | 505 | 506 | 507 | 508 | 510 | 511;
+        BaseResponseOfBoolean: components["schemas"]["BaseResponse"] & {
+            data?: boolean;
+        };
+        UpsertAssigneeCommand: {
+            id?: string | null;
+            fullName?: string;
+            phone?: string;
+            description?: string;
+            active?: boolean;
+            assigneeType?: components["schemas"]["AssigneeType"];
+        };
+        BaseResponseOfBrandSettingDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["BrandSettingDto"] | null;
+        };
+        BrandSettingDto: {
+            avatarUrl?: string;
+            name?: string;
+            shortDescription?: string | null;
+            description?: string | null;
+            email?: string | null;
+            phoneNumber?: string | null;
+            address?: string | null;
+            images?: string[] | null;
+        };
+        UpsertBrandSettingCommand: {
+            avatarUrl?: string;
+            name?: string;
+            shortDescription?: string | null;
+            description?: string | null;
+            email?: string | null;
+            phoneNumber?: string | null;
+            address?: string | null;
+            images?: string[] | null;
+        };
+        PaginatedListOfGetCarsDto: {
+            data?: components["schemas"]["GetCarsDto"][];
+            /** Format: int32 */
+            pageNumber?: number;
+            /** Format: int32 */
+            totalPages?: number;
+            /** Format: int32 */
+            totalCount?: number;
+            hasPreviousPage?: boolean;
+            hasNextPage?: boolean;
+        };
+        GetCarsDto: {
+            id?: string;
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        BaseResponseOfGetCarDetailDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetCarDetailDto"] | null;
+        };
+        GetCarDetailDto: {
+            id?: string;
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        BaseResponseOfString: components["schemas"]["BaseResponse"] & {
+            data?: string | null;
+        };
+        CreateCarCommand: {
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        UpdateCarCommand: {
+            id?: string;
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        BaseResponseOfListOfGetAllCarsDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetAllCarsDto"][] | null;
+        };
+        GetAllCarsDto: {
+            id?: string;
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        BaseResponseOfListOfConstantDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["ConstantDto"][] | null;
+        };
+        ConstantDto: {
+            value?: string;
+            label?: string;
+        };
+        CreateContactCommand: {
+            fullName?: string;
+            email?: string;
+            message?: string;
+        };
+        PaginatedListOfGetDATDevicesDto: {
+            data?: components["schemas"]["GetDATDevicesDto"][];
+            /** Format: int32 */
+            pageNumber?: number;
+            /** Format: int32 */
+            totalPages?: number;
+            /** Format: int32 */
+            totalCount?: number;
+            hasPreviousPage?: boolean;
+            hasNextPage?: boolean;
+        };
+        GetDATDevicesDto: {
+            id?: string;
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        BaseResponseOfGetDATDeviceDetailDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetDATDeviceDetailDto"] | null;
+        };
+        GetDATDeviceDetailDto: {
+            id?: string;
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        CreateDATDeviceCommand: {
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        UpdateDATDeviceCommand: {
+            id?: string;
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        BaseResponseOfListOfGetAllDATDevicesDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetAllDATDevicesDto"][] | null;
+        };
+        GetAllDATDevicesDto: {
+            id?: string;
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        PaginatedListOfGetExamCentersDto: {
+            data?: components["schemas"]["GetExamCentersDto"][];
+            /** Format: int32 */
+            pageNumber?: number;
+            /** Format: int32 */
+            totalPages?: number;
+            /** Format: int32 */
+            totalCount?: number;
+            hasPreviousPage?: boolean;
+            hasNextPage?: boolean;
+        };
+        GetExamCentersDto: {
+            id?: string;
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        BaseResponseOfGetExamCenterDetailDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetExamCenterDetailDto"] | null;
+        };
+        GetExamCenterDetailDto: {
+            id?: string;
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        CreateExamCenterCommand: {
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        UpdateExamCenterCommand: {
+            id?: string;
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        BaseResponseOfListOfGetAllExamCentersDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetAllExamCentersDto"][] | null;
+        };
+        GetAllExamCentersDto: {
+            id?: string;
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        BaseResponseOfListOfExamDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["ExamDto"][] | null;
+        };
+        ExamDto: {
+            id?: string;
+            name?: string;
+            description?: string;
+            /** Format: int32 */
+            totalQuestions?: number;
+            /** Format: int32 */
+            passingScore?: number;
+            /** Format: int32 */
+            durationMinutes?: number;
+            /** Format: int32 */
+            order?: number;
+            examType?: components["schemas"]["ExamType"];
+            groupExamType?: components["schemas"]["GroupExamType"] | null;
+            licenseTypeCode?: string;
+            groupExamId?: string;
+        };
+        /** @enum {integer} */
+        ExamType: 1 | 2;
+        /** @enum {integer} */
+        GroupExamType: 0 | 1 | 2;
+        GenerateExamsCommand: {
+            groupExamId?: string;
+            licenseTypeCode?: string;
+            questionNumbers?: number[];
+            criticalQuestionNumbers?: number[];
+            /** Format: int32 */
+            numberOfExams?: number;
+            /** Format: int32 */
+            questionsPerExam?: number;
+            /** Format: int32 */
+            criticalQuestionsPerExam?: number;
+            /** Format: int32 */
+            durationMinutes?: number;
+            /** Format: int32 */
+            passingScore?: number;
+        };
+        GenerationExamFullCriticalCommand: {
+            groupExamId?: string;
+            licenseTypeCode?: string;
+            criticalQuestionNumbers?: number[];
+        };
+        GenerationExamFullCommand: {
+            groupExamId?: string;
+            licenseTypeCode?: string;
+            questionNumbers?: number[];
+            criticalQuestionNumbers?: number[];
+        };
+        BaseResponseOfExamDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["ExamDto"] | null;
+        };
+        GenerateRandomExamsCommand: {
+            groupExamId?: string;
+            licenseTypeCode?: string;
+        };
+        BaseResponseOfExamSubmissionResultDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["ExamSubmissionResultDto"] | null;
+        };
+        ExamSubmissionResultDto: {
+            id?: string;
+            licenseTypeDto?: components["schemas"]["LicenseTypeDto"];
+            /** Format: duration */
+            duration?: string;
+            /** Format: int32 */
+            totalQuestions?: number;
+            /** Format: int32 */
+            correctAnswerCount?: number;
+            hasCriticalMistake?: boolean;
+            isPassed?: boolean;
+            groupExamType?: components["schemas"]["GroupExamType"];
+            exam?: components["schemas"]["ExamDto"];
+            userAnswers?: components["schemas"]["ExamSubmissionAnswerDto"][];
+        };
+        LicenseTypeDto: {
+            code?: string;
+            name?: string;
+            description?: string;
+        };
+        ExamSubmissionAnswerDto: {
+            selectedAnswerId?: string | null;
+            question?: components["schemas"]["SubmitQuestionDto"];
+        };
+        SubmitQuestionDto: {
+            id?: string;
+            explanation?: string | null;
+            /** Format: int32 */
+            order?: number;
+            content?: string;
+            imageUrl?: string | null;
+            isCriticalQuestion?: boolean;
+            answers?: components["schemas"]["SubmitAnswerDto"][];
+        };
+        SubmitAnswerDto: {
+            id?: string;
+            /** Format: int32 */
+            order?: number;
+            isCorrect?: boolean;
+            content?: string;
+        };
+        BaseResponseOfCreateExamSubmissionResultDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["CreateExamSubmissionResultDto"] | null;
+        };
+        CreateExamSubmissionResultDto: {
+            examSubmissionId?: string;
+        };
+        CreateExamSubmissionCommand: {
+            examId?: string;
+        };
+        SubmitExamCommand: {
+            examSubmissionId?: string;
+            answers?: components["schemas"]["AnswerSubmissionRequestDto"][];
+        };
+        AnswerSubmissionRequestDto: {
+            questionId?: string;
+            selectedAnswerId?: string | null;
+        };
+        PaginatedListOfGetExamYardsDto: {
+            data?: components["schemas"]["GetExamYardsDto"][];
+            /** Format: int32 */
+            pageNumber?: number;
+            /** Format: int32 */
+            totalPages?: number;
+            /** Format: int32 */
+            totalCount?: number;
+            hasPreviousPage?: boolean;
+            hasNextPage?: boolean;
+        };
+        GetExamYardsDto: {
+            id?: string;
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        BaseResponseOfGetExamYardDetailDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetExamYardDetailDto"] | null;
+        };
+        GetExamYardDetailDto: {
+            id?: string;
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        CreateExamYardCommand: {
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        UpdateExamYardCommand: {
+            id?: string;
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        BaseResponseOfListOfGetAllExamYardsDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetAllExamYardsDto"][] | null;
+        };
+        GetAllExamYardsDto: {
+            id?: string;
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        PaginatedListOfFeeTypeDto: {
+            data?: components["schemas"]["FeeTypeDto"][];
+            /** Format: int32 */
+            pageNumber?: number;
+            /** Format: int32 */
+            totalPages?: number;
+            /** Format: int32 */
+            totalCount?: number;
+            hasPreviousPage?: boolean;
+            hasNextPage?: boolean;
+        };
+        FeeTypeDto: {
+            id?: string;
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        BaseResponseOfFeeTypeDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["FeeTypeDto"] | null;
+        };
+        UpsertFeeTypeCommand: {
+            id?: string | null;
+            name?: string;
+            description?: string;
+            active?: boolean;
+        };
+        BaseResponseOfListOfGroupExamDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GroupExamDto"][] | null;
+        };
+        GroupExamDto: {
+            id?: string;
+            name?: string;
+            description?: string;
+            iconUrl?: string | null;
+            /** Format: int32 */
+            order?: number;
+            licenseTypeCode?: string | null;
+            parentId?: string | null;
+            slug?: string;
+            type?: components["schemas"]["GroupExamType"] | null;
+            children?: components["schemas"]["GroupExamDto"][];
+        };
+        GetAllGroupExamQuery: Record<string, never>;
+        BaseResponseOfListOfLicenseTypeDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["LicenseTypeDto"][] | null;
+        };
+        CreatePaymentHistoryCommand: {
+            paymentId?: string;
+            /** Format: decimal */
+            amount?: number;
+            /** Format: date-time */
+            paymentDate?: string;
+            note?: string;
+        };
+        UpdatePaymentHistoryCommand: {
+            id?: string;
+            paymentId?: string;
+            description?: string;
+            /** Format: decimal */
+            amount?: number;
+            /** Format: date-time */
+            paymentDate?: string;
+            note?: string;
+        };
+        BaseResponseOfListOfGetPaymentHistoryDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetPaymentHistoryDto"][] | null;
+        };
+        GetPaymentHistoryDto: {
+            id?: string;
+            /** Format: decimal */
+            amount?: number;
+            /** Format: date-time */
+            paymentDate?: string;
+            note?: string;
+            feeTypeName?: string;
+        };
+        BaseResponseOfGetPaymentHistoryDetailDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetPaymentHistoryDetailDto"] | null;
+        };
+        GetPaymentHistoryDetailDto: {
+            id?: string;
+            paymentId?: string;
+            /** Format: decimal */
+            amount?: number;
+            /** Format: date-time */
+            paymentDate?: string;
+            note?: string;
+        };
+        BaseResponseOfListOfGetPaymentDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetPaymentDto"][] | null;
+        };
+        GetPaymentDto: {
+            id?: string;
+            feeTypeName?: string;
+            /** Format: decimal */
+            amount?: number;
+            note?: string;
+            status?: components["schemas"]["PaymentStatus"];
+        };
+        /** @enum {integer} */
+        PaymentStatus: 0 | 1 | 2 | 3;
+        BaseResponseOfGetPaymentDetailDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetPaymentDetailDto"] | null;
+        };
+        GetPaymentDetailDto: {
+            feeTypeId?: string;
+            registrationRecordId?: string;
+            /** Format: decimal */
+            amount?: number | null;
+            note?: string;
+        };
+        CreatePaymentCommand: {
+            feeTypeId?: string;
+            registrationRecordId?: string;
+            /** Format: decimal */
+            amount?: number;
+            note?: string;
+        };
+        UpdatePaymentCommand: {
+            id?: string;
+            feeTypeId?: string;
+            registrationRecordId?: string;
+            /** Format: decimal */
+            amount?: number;
+            note?: string;
+        };
+        BaseResponseOfListOfCitizenCardDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["CitizenCardDto"][] | null;
+        };
+        CitizenCardDto: {
+            id?: string;
+            front?: components["schemas"]["FrontCitizenCardDto"] | null;
+            back?: components["schemas"]["BackCitizenCardDto"] | null;
+            isRecognitionByAi?: boolean;
+            isConfirmedByHuman?: boolean;
+        };
+        FrontCitizenCardDto: {
+            fullName?: string;
+            /** Format: date */
+            birthday?: string;
+            gender?: components["schemas"]["GenderType"];
+            placeOfOrigin?: components["schemas"]["Address"];
+            placeOfResidence?: components["schemas"]["Address"];
+            nationality?: string;
+            imageUrl?: string | null;
+        };
+        /** @enum {integer} */
+        GenderType: 0 | 1 | 2;
+        Address: {
+            provinceCode?: string;
+            districtCode?: string;
+            wardCode?: string;
+        };
+        BackCitizenCardDto: {
+            /** Format: date */
+            issuedDate?: string;
+            issuedBy?: string;
+            imageUrl?: string | null;
+        };
+        BaseResponseOfCitizenCardPdfResult: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["CitizenCardPdfResult"] | null;
+        };
+        CitizenCardPdfResult: {
+            pdfUrls?: string[];
+        };
+        CitizenCardPdfRequest: {
+            id?: string;
+            fullName?: string;
+            /** Format: date */
+            birthday?: string;
+            placeOfOrigin?: string;
+            placeOfResidence?: string;
+            nationality?: string;
+            /** Format: date */
+            issuedDate?: string;
+            issuedBy?: string;
+            imagePath?: string;
+        };
+        BaseResponseOfQuestionByExamDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["QuestionByExamDto"] | null;
+        };
+        QuestionByExamDto: {
+            examSubmissionId?: string | null;
+            examDto?: components["schemas"]["ExamDto"] | null;
+            questions?: components["schemas"]["QuestionDto"][];
+        };
+        QuestionDto: {
+            id?: string;
+            /** Format: int32 */
+            order?: number;
+            content?: string;
+            imageUrl?: string | null;
+            isCriticalQuestion?: boolean;
+            answers?: components["schemas"]["AnswerDto"][];
+        };
+        AnswerDto: {
+            id?: string;
+            /** Format: int32 */
+            order?: number;
+            content?: string;
+        };
+        ChangeQuestionImageUrlCommand: Record<string, never>;
+        BaseResponseOfQuestionDetailDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["QuestionDetailDto"] | null;
+        };
+        QuestionDetailDto: {
+            id?: string;
+            /** Format: int32 */
+            order?: number;
+            content?: string;
+            imageUrl?: string | null;
+            answers?: components["schemas"]["AnswerDto2"][];
+            explanation?: string | null;
+            isCritical?: boolean;
+        };
+        AnswerDto2: {
+            id?: string;
+            /** Format: int32 */
+            order?: number;
+            isCorrect?: boolean;
+            content?: string;
+        };
+        CreateRegistrationRecordCommand: {
+            licenseTypeCode?: string;
+            avatarUrl?: string;
+            fullname?: string;
+            /** Format: date */
+            birthday?: string;
+            gender?: components["schemas"]["GenderType"];
+            phone?: string;
+            email?: string | null;
+            address?: string | null;
+            citizenIdNumber?: string;
+            citizenIdFrontImageUrl?: string;
+            citizenIdBackImageUrl?: string;
+            /** Format: date-time */
+            receivedDate?: string;
+            /** Format: date-time */
+            healthCheckDate?: string | null;
+            staffAssigneeId?: string | null;
+            collaboratorId?: string | null;
+            note?: string | null;
+        };
+        UpdateRegistrationRecordCommand: {
+            id?: string;
+            licenseTypeCode?: string;
+            avatarUrl?: string;
+            fullname?: string;
+            /** Format: date */
+            birthday?: string;
+            gender?: components["schemas"]["GenderType"];
+            phone?: string;
+            email?: string | null;
+            address?: string | null;
+            citizenIdNumber?: string;
+            citizenIdFrontImageUrl?: string;
+            citizenIdBackImageUrl?: string;
+            /** Format: date-time */
+            receivedDate?: string;
+            /** Format: date-time */
+            healthCheckDate?: string | null;
+            staffAssigneeId?: string | null;
+            collaboratorId?: string | null;
+            note?: string | null;
+        };
+        PaginatedListOfGetRegistrationRecordsDto: {
+            data?: components["schemas"]["GetRegistrationRecordsDto"][];
+            /** Format: int32 */
+            pageNumber?: number;
+            /** Format: int32 */
+            totalPages?: number;
+            /** Format: int32 */
+            totalCount?: number;
+            hasPreviousPage?: boolean;
+            hasNextPage?: boolean;
+        };
+        GetRegistrationRecordsDto: {
+            id?: string;
+            licenseType?: components["schemas"]["GetRegistrationRecordsLicenseTypeDto"];
+            avatarUrl?: string;
+            fullname?: string;
+            phone?: string;
+            /** Format: date */
+            birthday?: string;
+            citizenIdNumber?: string;
+            /** Format: date-time */
+            receivedDate?: string;
+            /** Format: date-time */
+            healthCheckDate?: string | null;
+            payment?: components["schemas"]["GetRegistrationRecordsPaymentDto"];
+            status?: components["schemas"]["RegistrationRecordStatus"];
+            staffAssigneeName?: string | null;
+            collaboratorName?: string | null;
+            note?: string | null;
+        };
+        GetRegistrationRecordsLicenseTypeDto: {
+            code?: string;
+            name?: string;
+        };
+        GetRegistrationRecordsPaymentDto: {
+            /** Format: decimal */
+            totalAmount?: number | null;
+            /** Format: decimal */
+            paidAmount?: number | null;
+            /** Format: decimal */
+            remainingAmount?: number | null;
+        };
+        /** @enum {integer} */
+        RegistrationRecordStatus: 0 | 1 | 2;
+        BaseResponseOfGetRegistrationRecordDetailDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetRegistrationRecordDetailDto"] | null;
+        };
+        GetRegistrationRecordDetailDto: {
+            id?: string;
+            licenseTypeCode?: string;
+            licenseTypeName?: string;
+            avatarUrl?: string;
+            fullname?: string;
+            /** Format: date */
+            birthday?: string;
+            gender?: components["schemas"]["GenderType"];
+            phone?: string;
+            email?: string | null;
+            address?: string | null;
+            citizenIdNumber?: string;
+            citizenIdFrontImageUrl?: string;
+            citizenIdBackImageUrl?: string;
+            /** Format: date-time */
+            receivedDate?: string;
+            /** Format: date-time */
+            healthCheckDate?: string | null;
+            staffAssigneeId?: string | null;
+            staffAssigneeName?: string | null;
+            collaboratorId?: string | null;
+            collaboratorName?: string | null;
+            note?: string | null;
+        };
+        BaseResponseOfRegistrationRecordBasicInfoDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["RegistrationRecordBasicInfoDto"] | null;
+        };
+        RegistrationRecordBasicInfoDto: {
+            avatarUrl?: string;
+            fullName?: string;
+            licenseTypeName?: string;
+            phone?: string;
+            /** Format: decimal */
+            totalAmount?: number | null;
+            /** Format: decimal */
+            paidAmount?: number | null;
+            /** Format: decimal */
+            remainingAmount?: number | null;
+            isApproved?: boolean;
+        };
+        BaseResponseOfRegistrationRecordOverviewDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["RegistrationRecordOverviewDto"] | null;
+        };
+        RegistrationRecordOverviewDto: {
+            processing?: components["schemas"]["ProcessingDto"];
+            paymentSummary?: components["schemas"]["PaymentSummaryDto"];
+            generalInfo?: components["schemas"]["GeneralInfoDto"];
+            collaborator?: components["schemas"]["CollaboratorDto"] | null;
+        };
+        ProcessingDto: {
+            steps?: components["schemas"]["ProcessingStepDto"][];
+            examResultStatus?: components["schemas"]["ExamResultStatusType"];
+        };
+        ProcessingStepDto: {
+            name?: string;
+            status?: components["schemas"]["StepStatusType"];
+            assignee?: components["schemas"]["ProcessingStepAssigneeDto"] | null;
+        };
+        /** @enum {integer} */
+        StepStatusType: 0 | 1 | 2;
+        ProcessingStepAssigneeDto: {
+            name?: string;
+            phone?: string;
+        };
+        /** @enum {integer} */
+        ExamResultStatusType: 1 | 2 | 3;
+        PaymentSummaryDto: {
+            /** Format: decimal */
+            totalAmount?: number | null;
+            /** Format: decimal */
+            paidAmount?: number | null;
+            /** Format: decimal */
+            remainingAmount?: number | null;
+        };
+        GeneralInfoDto: {
+            phone?: string;
+            /** Format: date-time */
+            healthCheckDate?: string | null;
+            /** Format: date-time */
+            receivedDate?: string | null;
+            note?: string | null;
+        };
+        CollaboratorDto: {
+            fullName?: string;
+            phone?: string;
+            avatarUrl?: string | null;
+        };
+        ApproveRegistrationRecordCommand: {
+            id?: string;
+            isApproved?: boolean;
+        };
+        BaseResponseOfUploadFileResult: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["UploadFileResult"] | null;
+        };
+        UploadFileResult: {
+            fileNameOrigin?: string | null;
+            fileName?: string | null;
+            relativeUrl?: string | null;
+        };
+        BaseResponseOfListOfUploadFileResult: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["UploadFileResult"][] | null;
+        };
+        UpsertUserPageConfigCommand: {
+            pageKey?: string;
+            columns?: components["schemas"]["ColumnConfigDto"][];
+        };
+        ColumnConfigDto: {
+            column?: string;
+            visible?: boolean;
+            label?: string;
+        };
+        RegisterUserRequest: {
+            userName?: string;
+            email?: string;
+            password?: string;
+            avatarUrl?: string;
+        };
+        BaseResponseOfListOfVehicleTypeDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["VehicleTypeDto"][] | null;
+        };
+        VehicleTypeDto: {
+            code?: string;
+            name?: string;
+            description?: string;
+        };
+        GetAllVehicleTypesQuery: Record<string, never>;
+        BaseResponseOfListOfGetStepsDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetStepsDto"][] | null;
+        };
+        GetStepsDto: {
+            id?: string;
+            name?: string;
+            /** Format: int32 */
+            order?: number;
+            status?: components["schemas"]["StepStatusType"];
+            assigneeId?: string | null;
+        };
+        BaseResponseOfStepOverviewDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["StepOverviewDto"] | null;
+        };
+        StepOverviewDto: {
+            processing?: components["schemas"]["ProcessingDto2"];
+            generalInfo?: components["schemas"]["GeneralInfoDto2"];
+        };
+        ProcessingDto2: {
+            status?: components["schemas"]["StepStatusType"];
+        };
+        GeneralInfoDto2: {
+            items?: components["schemas"]["GeneralInfoItemDto"][];
+        };
+        GeneralInfoItemDto: {
+            label?: string;
+            value?: string;
+        };
+        InitializeStepsByRegistrationRecordIdCommand: {
+            registrationRecordId?: string;
+        };
+        BaseResponseOfListOfGetTaskDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetTaskDto"][] | null;
+        };
+        GetTaskDto: {
+            id?: string;
+            title?: string;
+            assigneeId?: string | null;
+            status?: components["schemas"]["TaskStatusType"];
+            note?: string | null;
+            taskFieldTemplateConfig?: components["schemas"]["TaskFieldTemplateConfigDto"][];
+            taskFieldInstanceSubmissions?: components["schemas"]["TaskFieldInstanceSubmissionDto"][];
+        };
+        /** @enum {integer} */
+        TaskStatusType: 0 | 1 | 2;
+        TaskFieldTemplateConfigDto: {
+            id?: string;
+            label?: string;
+            isRequired?: boolean;
+            isVisible?: boolean;
+            inputType?: components["schemas"]["InputType"];
+            defaultValue?: string;
+            hint?: string;
+            description?: string;
+            active?: boolean;
+            readOnly?: boolean;
+            key?: string;
+            /** Format: int32 */
+            order?: number;
+            dataSourceConfig?: components["schemas"]["DataSourceConfigDto"] | null;
+        };
+        /** @enum {integer} */
+        InputType: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+        DataSourceConfigDto: {
+            apiUrl?: string;
+            valueField?: string;
+            labelField?: string;
+        };
+        TaskFieldInstanceSubmissionDto: {
+            taskFieldTemplateConfigId?: string;
+            value?: string | null;
+        };
+        BaseResponseOfGetTaskDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetTaskDto"] | null;
+        };
+        UpdateTaskCommand: {
+            id?: string;
+            assigneeId?: string | null;
+            status?: components["schemas"]["TaskStatusType"];
+            note?: string | null;
+            taskFieldInstanceSubmissions?: components["schemas"]["TaskFieldInstanceSubmissionDto2"][];
+        };
+        TaskFieldInstanceSubmissionDto2: {
+            taskFieldTemplateConfigId?: string;
+            value?: string | null;
+        };
+    };
+    responses: never;
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
 }
-export type $defs = Record<string, never>
+export type $defs = Record<string, never>;
 export interface operations {
-  Assignees_GetAssignees: {
-    parameters: {
-      query?: {
-        Search?: string | null
-        AssigneeType?: components['schemas']['AssigneeType'] | null
-        PageNumber?: number
-        PageSize?: number
-        Active?: boolean | null
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['PaginatedListOfAssigneeDto']
-        }
-      }
-    }
-  }
-  Assignees_UpsertBrandSetting: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['UpsertAssigneeCommand']
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfBoolean']
-        }
-      }
-    }
-  }
-  Assignees_GetAssigneeById: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfAssigneeDto']
-        }
-      }
-    }
-  }
-  Assignees_DeleteAssigneeById: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfBoolean']
-        }
-      }
-    }
-  }
-  Authorization_Exchange: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/octet-stream': string
-        }
-      }
-    }
-  }
-  Authorization_UserinfoGET: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/octet-stream': string
-        }
-      }
-    }
-  }
-  Authorization_UserinfoPOST: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/octet-stream': string
-        }
-      }
-    }
-  }
-  BrandSettings_GetBrandSettingByUserId: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfBrandSettingDto']
-        }
-      }
-    }
-  }
-  BrandSettings_GetBrandSettingByOwnerId: {
-    parameters: {
-      query?: {
-        OwnerId?: string
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfBrandSettingDto']
-        }
-      }
-    }
-  }
-  BrandSettings_UpsertBrandSetting: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['UpsertBrandSettingCommand']
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfBoolean']
-        }
-      }
-    }
-  }
-  Cars_GetCarsWithPagination: {
-    parameters: {
-      query?: {
-        Search?: string | null
-        Active?: boolean | null
-        PageNumber?: number
-        PageSize?: number
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['PaginatedListOfGetCarsDto']
-        }
-      }
-    }
-  }
-  Cars_CreateCar: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CreateCarCommand']
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfString']
-        }
-      }
-    }
-  }
-  Cars_GetCarById: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfGetCarDetailDto']
-        }
-      }
-    }
-  }
-  Cars_UpdateCar: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['UpdateCarCommand']
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfBoolean']
-        }
-      }
-    }
-  }
-  Cars_DeleteCar: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfBoolean']
-        }
-      }
-    }
-  }
-  Cars_GetAllCars: {
-    parameters: {
-      query?: {
-        Active?: boolean | null
-        Search?: string | null
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfListOfGetAllCarsDto']
-        }
-      }
-    }
-  }
-  Constants_GetExamResults: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfListOfConstantDto']
-        }
-      }
-    }
-  }
-  Contacts_CreateContact: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CreateContactCommand']
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfBoolean']
-        }
-      }
-    }
-  }
-  DATDevices_GetDATDevicesWithPagination: {
-    parameters: {
-      query?: {
-        Search?: string | null
-        Active?: boolean | null
-        PageNumber?: number
-        PageSize?: number
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['PaginatedListOfGetDATDevicesDto']
-        }
-      }
-    }
-  }
-  DATDevices_CreateDATDevice: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CreateDATDeviceCommand']
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfString']
-        }
-      }
-    }
-  }
-  DATDevices_GetDATDeviceById: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfGetDATDeviceDetailDto']
-        }
-      }
-    }
-  }
-  DATDevices_UpdateDATDevice: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['UpdateDATDeviceCommand']
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfBoolean']
-        }
-      }
-    }
-  }
-  DATDevices_DeleteDATDevice: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfBoolean']
-        }
-      }
-    }
-  }
-  DATDevices_GetAllDATDevices: {
-    parameters: {
-      query?: {
-        Active?: boolean | null
-        Search?: string | null
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfListOfGetAllDATDevicesDto']
-        }
-      }
-    }
-  }
-  ExamCenters_GetExamCentersWithPagination: {
-    parameters: {
-      query?: {
-        Search?: string | null
-        Active?: boolean | null
-        PageNumber?: number
-        PageSize?: number
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['PaginatedListOfGetExamCentersDto']
-        }
-      }
-    }
-  }
-  ExamCenters_CreateExamCenter: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CreateExamCenterCommand']
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfString']
-        }
-      }
-    }
-  }
-  ExamCenters_GetExamCenterById: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfGetExamCenterDetailDto']
-        }
-      }
-    }
-  }
-  ExamCenters_UpdateExamCenter: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['UpdateExamCenterCommand']
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfBoolean']
-        }
-      }
-    }
-  }
-  ExamCenters_DeleteExamCenter: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfBoolean']
-        }
-      }
-    }
-  }
-  ExamCenters_GetAllExamCenters: {
-    parameters: {
-      query?: {
-        Active?: boolean | null
-        Search?: string | null
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfListOfGetAllExamCentersDto']
-        }
-      }
-    }
-  }
-  Exams_GetExamsByGroupExamId: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfListOfExamDto']
-        }
-      }
-    }
-  }
-  Exams_GenerateExam: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['GenerateExamsCommand']
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfBoolean']
-        }
-      }
-    }
-  }
-  Exams_GenerationExamFullCritical: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['GenerationExamFullCriticalCommand']
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfBoolean']
-        }
-      }
-    }
-  }
-  Exams_GenerationExamFull: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['GenerationExamFullCommand']
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfBoolean']
-        }
-      }
-    }
-  }
-  Exams_GenerateExam2: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['GenerateRandomExamsCommand']
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfExamDto']
-        }
-      }
-    }
-  }
-  ExamSubmissions_GetExamSubmissionById: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfExamSubmissionResultDto']
-        }
-      }
-    }
-  }
-  ExamSubmissions_StartExam: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CreateExamSubmissionCommand']
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfCreateExamSubmissionResultDto']
-        }
-      }
-    }
-  }
-  ExamSubmissions_SubmitExam: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['SubmitExamCommand']
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfExamSubmissionResultDto']
-        }
-      }
-    }
-  }
-  ExamYards_GetExamYardsWithPagination: {
-    parameters: {
-      query?: {
-        Search?: string | null
-        Active?: boolean | null
-        PageNumber?: number
-        PageSize?: number
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['PaginatedListOfGetExamYardsDto']
-        }
-      }
-    }
-  }
-  ExamYards_CreateExamYard: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CreateExamYardCommand']
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfString']
-        }
-      }
-    }
-  }
-  ExamYards_GetExamYardById: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfGetExamYardDetailDto']
-        }
-      }
-    }
-  }
-  ExamYards_UpdateExamYard: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['UpdateExamYardCommand']
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfBoolean']
-        }
-      }
-    }
-  }
-  ExamYards_DeleteExamYard: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfBoolean']
-        }
-      }
-    }
-  }
-  ExamYards_GetAllExamYards: {
-    parameters: {
-      query?: {
-        Active?: boolean | null
-        Search?: string | null
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfListOfGetAllExamYardsDto']
-        }
-      }
-    }
-  }
-  FeeTypes_GetFeeTypes: {
-    parameters: {
-      query?: {
-        Search?: string | null
-        PageNumber?: number
-        PageSize?: number
-        Active?: boolean | null
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['PaginatedListOfFeeTypeDto']
-        }
-      }
-    }
-  }
-  FeeTypes_UpsertFeeType: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['UpsertFeeTypeCommand']
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfBoolean']
-        }
-      }
-    }
-  }
-  FeeTypes_GetFeeTypeById: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfFeeTypeDto']
-        }
-      }
-    }
-  }
-  FeeTypes_DeleteFeeTypeById: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfBoolean']
-        }
-      }
-    }
-  }
-  GroupExams_GetAllGroupExams: {
-    parameters: {
-      query?: {
-        query?: components['schemas']['GetAllGroupExamQuery']
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfListOfGroupExamDto']
-        }
-      }
-    }
-  }
-  LicenseTypes_GetAllLicenseTypes: {
-    parameters: {
-      query?: {
-        VehicleTypeCode?: string
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfListOfLicenseTypeDto']
-        }
-      }
-    }
-  }
-  PaymentHistories_CreatePaymentHistory: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CreatePaymentHistoryCommand']
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfString']
-        }
-      }
-    }
-  }
-  PaymentHistories_GetPaymentHistoryById: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfGetPaymentHistoryDetailDto']
-        }
-      }
-    }
-  }
-  PaymentHistories_UpdatePaymentHistory: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['UpdatePaymentHistoryCommand']
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfBoolean']
-        }
-      }
-    }
-  }
-  PaymentHistories_DeletePaymentHistoryById: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfBoolean']
-        }
-      }
-    }
-  }
-  PaymentHistories_GetPaymentHistoriesByRegistrationRecordId: {
-    parameters: {
-      query?: {
-        RegistrationRecordId?: string
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfListOfGetPaymentHistoryDto']
-        }
-      }
-    }
-  }
-  Payments_GetPaymentsByRegistrationRecordId: {
-    parameters: {
-      query?: {
-        RegistrationRecordId?: string
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfListOfGetPaymentDto']
-        }
-      }
-    }
-  }
-  Payments_GetPaymentById: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfGetPaymentDetailDto']
-        }
-      }
-    }
-  }
-  Payments_UpdatePayment: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['UpdatePaymentCommand']
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfBoolean']
-        }
-      }
-    }
-  }
-  Payments_DeletePaymentById: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfBoolean']
-        }
-      }
-    }
-  }
-  Payments_CreatePayment: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CreatePaymentCommand']
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfString']
-        }
-      }
-    }
-  }
-  Persons_RecognizeCitizenByFile: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: {
-      content: {
-        'multipart/form-data': {
-          formFile?: string[] | null
-        }
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfListOfCitizenCardDto']
-        }
-      }
-    }
-  }
-  Persons_ExportCitizenInfoToPdf: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CitizenCardPdfRequest'][]
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfCitizenCardPdfResult']
-        }
-      }
-    }
-  }
-  Questions_GetExamsByGroupExamId: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfQuestionByExamDto']
-        }
-      }
-    }
-  }
-  Questions_ExportCitizenInfoToPdf: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: {
-      content: {
-        'multipart/form-data': {
-          /** Format: binary */
-          FormFile?: string | null
-        }
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfBoolean']
-        }
-      }
-    }
-  }
-  Questions_ChangeQuestionImageUrl: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: {
-      content: {
-        'multipart/form-data': {
-          command?: components['schemas']['ChangeQuestionImageUrlCommand'] | null
-        }
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfBoolean']
-        }
-      }
-    }
-  }
-  Questions_GetQuestionDetailById: {
-    parameters: {
-      query?: {
-        QuestionId?: string
-        ExamId?: string
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfQuestionDetailDto']
-        }
-      }
-    }
-  }
-  RegistrationRecords_GetRegistrationRecordsWithPagination: {
-    parameters: {
-      query?: {
-        LicenseTypeCode?: string[]
-        PaymentStatus?: components['schemas']['PaymentStatus'][]
-        Status?: components['schemas']['RegistrationRecordStatus'][]
-        StaffAssigneeId?: string[]
-        CollaboratorId?: string[]
-        Search?: string | null
-        PageNumber?: number
-        PageSize?: number
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['PaginatedListOfGetRegistrationRecordsDto']
-        }
-      }
-    }
-  }
-  RegistrationRecords_CreateRegistrationRecord: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CreateRegistrationRecordCommand']
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfString']
-        }
-      }
-    }
-  }
-  RegistrationRecords_GetRegistrationRecordDetailQuery: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfGetRegistrationRecordDetailDto']
-        }
-      }
-    }
-  }
-  RegistrationRecords_UpdateRegistrationRecord: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['UpdateRegistrationRecordCommand']
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfString']
-        }
-      }
-    }
-  }
-  RegistrationRecords_DeleteRegistrationRecordById: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfBoolean']
-        }
-      }
-    }
-  }
-  RegistrationRecords_GetBasicInfo: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfRegistrationRecordBasicInfoDto']
-        }
-      }
-    }
-  }
-  RegistrationRecords_GetRegistrationRecordOverview: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfRegistrationRecordOverviewDto']
-        }
-      }
-    }
-  }
-  Samples_GetSecretResources: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/octet-stream': string
-        }
-      }
-    }
-  }
-  Uploads_UploadFile: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: {
-      content: {
-        'multipart/form-data': {
-          /** Format: binary */
-          File?: string | null
-        }
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfUploadFileResult']
-        }
-      }
-    }
-  }
-  Uploads_UploadFiles: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: {
-      content: {
-        'multipart/form-data': {
-          Files?: string[] | null
-        }
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfListOfUploadFileResult']
-        }
-      }
-    }
-  }
-  UserPageConfigs_GetConfig: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        pageKey: string
-      }
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/octet-stream': string
-        }
-      }
-    }
-  }
-  UserPageConfigs_UpsertConfig: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['UpsertUserPageConfigCommand']
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/octet-stream': string
-        }
-      }
-    }
-  }
-  Users_GetUserInfoByReferenceToken: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/octet-stream': string
-        }
-      }
-    }
-  }
-  Users_Register: {
-    parameters: {
-      query?: never
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['RegisterUserRequest']
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/octet-stream': string
-        }
-      }
-    }
-  }
-  VehicleTypes_GetAllLicenseTypes: {
-    parameters: {
-      query?: {
-        query?: components['schemas']['GetAllVehicleTypesQuery']
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfListOfVehicleTypeDto']
-        }
-      }
-    }
-  }
-  Steps_GetStepsByRegistrationRecordIdQuery: {
-    parameters: {
-      query?: {
-        RegistrationRecordId?: string
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfListOfGetStepsDto']
-        }
-      }
-    }
-  }
-  Tasks_GetTasksByRegistrationRecordIdQuery: {
-    parameters: {
-      query?: {
-        StepId?: string
-      }
-      header?: never
-      path?: never
-      cookie?: never
-    }
-    requestBody?: never
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfListOfGetTaskDto']
-        }
-      }
-    }
-  }
-  Tasks_UpdateTask: {
-    parameters: {
-      query?: never
-      header?: never
-      path: {
-        id: string
-      }
-      cookie?: never
-    }
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['UpdateTaskCommand']
-      }
-    }
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown
-        }
-        content: {
-          'application/json': components['schemas']['BaseResponseOfBoolean']
-        }
-      }
-    }
-  }
+    Assignees_GetAssignees: {
+        parameters: {
+            query?: {
+                Search?: string | null;
+                AssigneeType?: components["schemas"]["AssigneeType"] | null;
+                PageNumber?: number;
+                PageSize?: number;
+                Active?: boolean | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedListOfAssigneeDto"];
+                };
+            };
+        };
+    };
+    Assignees_UpsertBrandSetting: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpsertAssigneeCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    Assignees_GetAssigneeById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfAssigneeDto"];
+                };
+            };
+        };
+    };
+    Assignees_DeleteAssigneeById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    Authorization_Exchange: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+        };
+    };
+    Authorization_UserinfoGET: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+        };
+    };
+    Authorization_UserinfoPOST: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+        };
+    };
+    BrandSettings_GetBrandSettingByUserId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBrandSettingDto"];
+                };
+            };
+        };
+    };
+    BrandSettings_GetBrandSettingByOwnerId: {
+        parameters: {
+            query?: {
+                OwnerId?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBrandSettingDto"];
+                };
+            };
+        };
+    };
+    BrandSettings_UpsertBrandSetting: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpsertBrandSettingCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    Cars_GetCarsWithPagination: {
+        parameters: {
+            query?: {
+                Search?: string | null;
+                Active?: boolean | null;
+                PageNumber?: number;
+                PageSize?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedListOfGetCarsDto"];
+                };
+            };
+        };
+    };
+    Cars_CreateCar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateCarCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfString"];
+                };
+            };
+        };
+    };
+    Cars_GetCarById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfGetCarDetailDto"];
+                };
+            };
+        };
+    };
+    Cars_UpdateCar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateCarCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    Cars_DeleteCar: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    Cars_GetAllCars: {
+        parameters: {
+            query?: {
+                Active?: boolean | null;
+                Search?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfGetAllCarsDto"];
+                };
+            };
+        };
+    };
+    Constants_GetExamResults: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfConstantDto"];
+                };
+            };
+        };
+    };
+    Contacts_CreateContact: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateContactCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    DATDevices_GetDATDevicesWithPagination: {
+        parameters: {
+            query?: {
+                Search?: string | null;
+                Active?: boolean | null;
+                PageNumber?: number;
+                PageSize?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedListOfGetDATDevicesDto"];
+                };
+            };
+        };
+    };
+    DATDevices_CreateDATDevice: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateDATDeviceCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfString"];
+                };
+            };
+        };
+    };
+    DATDevices_GetDATDeviceById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfGetDATDeviceDetailDto"];
+                };
+            };
+        };
+    };
+    DATDevices_UpdateDATDevice: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateDATDeviceCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    DATDevices_DeleteDATDevice: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    DATDevices_GetAllDATDevices: {
+        parameters: {
+            query?: {
+                Active?: boolean | null;
+                Search?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfGetAllDATDevicesDto"];
+                };
+            };
+        };
+    };
+    ExamCenters_GetExamCentersWithPagination: {
+        parameters: {
+            query?: {
+                Search?: string | null;
+                Active?: boolean | null;
+                PageNumber?: number;
+                PageSize?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedListOfGetExamCentersDto"];
+                };
+            };
+        };
+    };
+    ExamCenters_CreateExamCenter: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateExamCenterCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfString"];
+                };
+            };
+        };
+    };
+    ExamCenters_GetExamCenterById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfGetExamCenterDetailDto"];
+                };
+            };
+        };
+    };
+    ExamCenters_UpdateExamCenter: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateExamCenterCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    ExamCenters_DeleteExamCenter: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    ExamCenters_GetAllExamCenters: {
+        parameters: {
+            query?: {
+                Active?: boolean | null;
+                Search?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfGetAllExamCentersDto"];
+                };
+            };
+        };
+    };
+    Exams_GetExamsByGroupExamId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfExamDto"];
+                };
+            };
+        };
+    };
+    Exams_GenerateExam: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GenerateExamsCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    Exams_GenerationExamFullCritical: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GenerationExamFullCriticalCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    Exams_GenerationExamFull: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GenerationExamFullCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    Exams_GenerateExam2: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GenerateRandomExamsCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfExamDto"];
+                };
+            };
+        };
+    };
+    ExamSubmissions_GetExamSubmissionById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfExamSubmissionResultDto"];
+                };
+            };
+        };
+    };
+    ExamSubmissions_StartExam: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateExamSubmissionCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfCreateExamSubmissionResultDto"];
+                };
+            };
+        };
+    };
+    ExamSubmissions_SubmitExam: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubmitExamCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfExamSubmissionResultDto"];
+                };
+            };
+        };
+    };
+    ExamYards_GetExamYardsWithPagination: {
+        parameters: {
+            query?: {
+                Search?: string | null;
+                Active?: boolean | null;
+                PageNumber?: number;
+                PageSize?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedListOfGetExamYardsDto"];
+                };
+            };
+        };
+    };
+    ExamYards_CreateExamYard: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateExamYardCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfString"];
+                };
+            };
+        };
+    };
+    ExamYards_GetExamYardById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfGetExamYardDetailDto"];
+                };
+            };
+        };
+    };
+    ExamYards_UpdateExamYard: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateExamYardCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    ExamYards_DeleteExamYard: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    ExamYards_GetAllExamYards: {
+        parameters: {
+            query?: {
+                Active?: boolean | null;
+                Search?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfGetAllExamYardsDto"];
+                };
+            };
+        };
+    };
+    FeeTypes_GetFeeTypes: {
+        parameters: {
+            query?: {
+                Search?: string | null;
+                PageNumber?: number;
+                PageSize?: number;
+                Active?: boolean | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedListOfFeeTypeDto"];
+                };
+            };
+        };
+    };
+    FeeTypes_UpsertFeeType: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpsertFeeTypeCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    FeeTypes_GetFeeTypeById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfFeeTypeDto"];
+                };
+            };
+        };
+    };
+    FeeTypes_DeleteFeeTypeById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    GroupExams_GetAllGroupExams: {
+        parameters: {
+            query?: {
+                query?: components["schemas"]["GetAllGroupExamQuery"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfGroupExamDto"];
+                };
+            };
+        };
+    };
+    LicenseTypes_GetAllLicenseTypes: {
+        parameters: {
+            query?: {
+                VehicleTypeCode?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfLicenseTypeDto"];
+                };
+            };
+        };
+    };
+    PaymentHistories_CreatePaymentHistory: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreatePaymentHistoryCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfString"];
+                };
+            };
+        };
+    };
+    PaymentHistories_GetPaymentHistoryById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfGetPaymentHistoryDetailDto"];
+                };
+            };
+        };
+    };
+    PaymentHistories_UpdatePaymentHistory: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdatePaymentHistoryCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    PaymentHistories_DeletePaymentHistoryById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    PaymentHistories_GetPaymentHistoriesByRegistrationRecordId: {
+        parameters: {
+            query?: {
+                RegistrationRecordId?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfGetPaymentHistoryDto"];
+                };
+            };
+        };
+    };
+    Payments_GetPaymentsByRegistrationRecordId: {
+        parameters: {
+            query?: {
+                RegistrationRecordId?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfGetPaymentDto"];
+                };
+            };
+        };
+    };
+    Payments_GetPaymentById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfGetPaymentDetailDto"];
+                };
+            };
+        };
+    };
+    Payments_UpdatePayment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdatePaymentCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    Payments_DeletePaymentById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    Payments_CreatePayment: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreatePaymentCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfString"];
+                };
+            };
+        };
+    };
+    Persons_RecognizeCitizenByFile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "multipart/form-data": {
+                    formFile?: string[] | null;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfCitizenCardDto"];
+                };
+            };
+        };
+    };
+    Persons_ExportCitizenInfoToPdf: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CitizenCardPdfRequest"][];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfCitizenCardPdfResult"];
+                };
+            };
+        };
+    };
+    Questions_GetExamsByGroupExamId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfQuestionByExamDto"];
+                };
+            };
+        };
+    };
+    Questions_ExportCitizenInfoToPdf: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "multipart/form-data": {
+                    /** Format: binary */
+                    FormFile?: string | null;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    Questions_ChangeQuestionImageUrl: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "multipart/form-data": {
+                    command?: components["schemas"]["ChangeQuestionImageUrlCommand"] | null;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    Questions_GetQuestionDetailById: {
+        parameters: {
+            query?: {
+                QuestionId?: string;
+                ExamId?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfQuestionDetailDto"];
+                };
+            };
+        };
+    };
+    RegistrationRecords_GetRegistrationRecordsWithPagination: {
+        parameters: {
+            query?: {
+                LicenseTypeCode?: string[];
+                PaymentStatus?: components["schemas"]["PaymentStatus"][];
+                Status?: components["schemas"]["RegistrationRecordStatus"][];
+                StaffAssigneeId?: string[];
+                CollaboratorId?: string[];
+                Search?: string | null;
+                PageNumber?: number;
+                PageSize?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedListOfGetRegistrationRecordsDto"];
+                };
+            };
+        };
+    };
+    RegistrationRecords_CreateRegistrationRecord: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateRegistrationRecordCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfString"];
+                };
+            };
+        };
+    };
+    RegistrationRecords_GetRegistrationRecordDetailQuery: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfGetRegistrationRecordDetailDto"];
+                };
+            };
+        };
+    };
+    RegistrationRecords_UpdateRegistrationRecord: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateRegistrationRecordCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfString"];
+                };
+            };
+        };
+    };
+    RegistrationRecords_DeleteRegistrationRecordById: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    RegistrationRecords_GetBasicInfo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfRegistrationRecordBasicInfoDto"];
+                };
+            };
+        };
+    };
+    RegistrationRecords_GetRegistrationRecordOverview: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfRegistrationRecordOverviewDto"];
+                };
+            };
+        };
+    };
+    RegistrationRecords_ApproveRegistrationRecord: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ApproveRegistrationRecordCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfString"];
+                };
+            };
+        };
+    };
+    Samples_GetSecretResources: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+        };
+    };
+    Uploads_UploadFile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "multipart/form-data": {
+                    /** Format: binary */
+                    File?: string | null;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfUploadFileResult"];
+                };
+            };
+        };
+    };
+    Uploads_UploadFiles: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "multipart/form-data": {
+                    Files?: string[] | null;
+                };
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfUploadFileResult"];
+                };
+            };
+        };
+    };
+    UserPageConfigs_GetConfig: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                pageKey: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+        };
+    };
+    UserPageConfigs_UpsertConfig: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpsertUserPageConfigCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+        };
+    };
+    Users_GetUserInfoByReferenceToken: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+        };
+    };
+    Users_Register: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RegisterUserRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/octet-stream": string;
+                };
+            };
+        };
+    };
+    VehicleTypes_GetAllLicenseTypes: {
+        parameters: {
+            query?: {
+                query?: components["schemas"]["GetAllVehicleTypesQuery"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfVehicleTypeDto"];
+                };
+            };
+        };
+    };
+    Steps_GetStepsByRegistrationRecordIdQuery: {
+        parameters: {
+            query?: {
+                RegistrationRecordId?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfGetStepsDto"];
+                };
+            };
+        };
+    };
+    Steps_GetStepOverviewQuery: {
+        parameters: {
+            query?: {
+                StepId?: string;
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfStepOverviewDto"];
+                };
+            };
+        };
+    };
+    Steps_InitializeStepsByRegistrationRecordIdCommand: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["InitializeStepsByRegistrationRecordIdCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    Tasks_GetTasksByRegistrationRecordIdQuery: {
+        parameters: {
+            query?: {
+                StepId?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfGetTaskDto"];
+                };
+            };
+        };
+    };
+    Tasks_GetSingleTaskByKeyQuery: {
+        parameters: {
+            query?: {
+                Key?: string;
+                RegistrationRecordId?: string;
+            };
+            header?: never;
+            path: {
+                key: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfGetTaskDto"];
+                };
+            };
+        };
+    };
+    Tasks_UpdateTask: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateTaskCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
 }

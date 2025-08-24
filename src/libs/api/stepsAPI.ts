@@ -1,5 +1,5 @@
 import axiosInstance from '../axios'
-import type { GetStepsQueryParams } from '@/types/stepsTypes'
+import type { GetStepByStepIdOverviewQueryParams, GetStepsQueryParams } from '@/types/stepsTypes'
 
 const GetStepsByRegistrationRecordId = async (params: GetStepsQueryParams) => {
   return await axiosInstance.get('/api/steps', {
@@ -9,8 +9,13 @@ const GetStepsByRegistrationRecordId = async (params: GetStepsQueryParams) => {
   })
 }
 
+const GetStepByStepIdOverview = async (params: GetStepByStepIdOverviewQueryParams) => {
+  return await axiosInstance.get(`/api/steps/${params.id}/overview`)
+}
+
 const stepsAPI = {
-  GetStepsByRegistrationRecordId
+  GetStepsByRegistrationRecordId,
+  GetStepByStepIdOverview
 }
 
 export default stepsAPI

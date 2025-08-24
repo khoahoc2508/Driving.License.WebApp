@@ -168,7 +168,7 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
                         <PaymentsTab registrationRecordId={id} onDataChange={refreshData} />
                     )}
                     {!isLoading && activeTab === 2 && (
-                        <ProcessingTab overview={overview} registrationRecordId={id} />
+                        <ProcessingTab registrationRecordId={id} />
                     )}
                     {isLoading && (
                         <Box sx={{ mt: 4, display: 'flex', flexDirection: 'column', gap: 3 }}>

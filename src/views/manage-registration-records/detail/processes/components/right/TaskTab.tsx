@@ -2,6 +2,7 @@
 
 import { Box, Typography, Chip, Divider, Button } from '@mui/material'
 import type { GetStepsDto } from '@/types/stepsTypes'
+import CONFIG from '@/configs/config'
 
 type TaskTabProps = {
     selectedStep: GetStepsDto | null
@@ -20,11 +21,11 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
 
     const getStatusText = (status: number) => {
         switch (status) {
-            case 0:
+            case CONFIG.StepStatus.Pending:
                 return 'Chưa xử lý'
-            case 1:
+            case CONFIG.StepStatus.InProgress:
                 return 'Đang xử lý'
-            case 2:
+            case CONFIG.StepStatus.Completed:
                 return 'Hoàn thành'
             default:
                 return 'Không xác định'
@@ -33,11 +34,11 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
 
     const getStatusColor = (status: number) => {
         switch (status) {
-            case 0:
+            case CONFIG.StepStatus.Pending:
                 return 'default'
-            case 1:
+            case CONFIG.StepStatus.InProgress:
                 return 'warning'
-            case 2:
+            case CONFIG.StepStatus.Completed:
                 return 'success'
             default:
                 return 'default'
@@ -45,15 +46,15 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
     }
 
     const canUpdateStatus = (status: number) => {
-        return status === 0 || status === 1
+        return status === CONFIG.StepStatus.Pending || status === CONFIG.StepStatus.InProgress
     }
 
     const getNextStatus = (currentStatus: number) => {
         switch (currentStatus) {
-            case 0:
-                return 1
-            case 1:
-                return 2
+            case CONFIG.StepStatus.Pending:
+                return CONFIG.StepStatus.InProgress
+            case CONFIG.StepStatus.InProgress:
+                return CONFIG.StepStatus.Completed
             default:
                 return currentStatus
         }
@@ -123,15 +124,15 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
                             size="small"
                             onClick={() => handleStatusUpdate(getNextStatus(selectedStep.status || 0))}
                         >
-                            {selectedStep.status === 0 ? 'Bắt đầu xử lý' : 'Hoàn thành'}
+                            {selectedStep.status === CONFIG.StepStatus.Pending ? 'Bắt đầu xử lý' : 'Hoàn thành'}
                         </Button>
                     )}
 
-                    {selectedStep.status === 0 && (
+                    {selectedStep.status === CONFIG.StepStatus.Pending && (
                         <Button
                             variant="outlined"
                             size="small"
-                            onClick={() => handleStatusUpdate(1)}
+                            onClick={() => handleStatusUpdate(CONFIG.StepStatus.InProgress)}
                         >
                             Giao việc
                         </Button>

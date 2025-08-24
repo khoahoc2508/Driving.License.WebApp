@@ -8,12 +8,10 @@ import OverviewTab from './OverviewTab'
 import TaskTab from './TaskTab'
 
 type MainContentProps = {
-    overview: RegistrationRecordOverviewDto | null
     selectedStep: GetStepsDto | null
-    selectedStepIndex: number
 }
 
-const MainContent = ({ overview, selectedStep, selectedStepIndex }: MainContentProps) => {
+const MainContent = ({ selectedStep }: MainContentProps) => {
     const [tabValue, setTabValue] = useState(0)
 
     const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -31,13 +29,6 @@ const MainContent = ({ overview, selectedStep, selectedStepIndex }: MainContentP
                 <Tabs
                     value={tabValue}
                     onChange={handleTabChange}
-                    sx={{
-                        '& .MuiTab-root': {
-                            textTransform: 'none',
-                            fontWeight: 600,
-                            fontSize: '1rem'
-                        }
-                    }}
                 >
                     <Tab label="Tổng quan" />
                     <Tab label="Công việc" />
@@ -46,7 +37,7 @@ const MainContent = ({ overview, selectedStep, selectedStepIndex }: MainContentP
 
             <Box>
                 {tabValue === 0 && (
-                    <OverviewTab selectedStep={selectedStep} overview={overview} />
+                    <OverviewTab selectedStep={selectedStep} />
                 )}
                 {tabValue === 1 && (
                     <TaskTab selectedStep={selectedStep} />

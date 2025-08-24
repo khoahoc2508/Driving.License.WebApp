@@ -1,15 +1,30 @@
 'use client'
 
 import { Box, Typography, Chip, Divider } from '@mui/material'
-import type { GetStepsDto } from '@/types/stepsTypes'
-import type { RegistrationRecordOverviewDto } from '@/types/registrationRecords'
+import type { GetStepsDto, StepOverviewDto } from '@/types/stepsTypes'
+import CONFIG from '@/configs/config'
+import { useEffect, useState } from 'react'
+import stepsAPI from '@/libs/api/stepsAPI'
 
 type OverviewTabProps = {
     selectedStep: GetStepsDto | null
-    overview?: RegistrationRecordOverviewDto | null
 }
 
-const OverviewTab = ({ selectedStep, overview }: OverviewTabProps) => {
+const OverviewTab = ({ selectedStep }: OverviewTabProps) => {
+
+    const [stepOverview, setStepOverview] = useState<StepOverviewDto | null>(null)
+
+    useEffect(() => {
+        if (selectedStep?.id) {
+            fetchStepOverview(selectedStep.id)
+        }
+    }, [selectedStep])
+
+    const fetchStepOverview = async (id: string) => {
+        const response = await stepsAPI.GetStepByStepIdOverview({ id })
+        setStepOverview(response?.data?.data)
+    }
+
     if (!selectedStep) {
         return (
             <Box sx={{ textAlign: 'center', py: 4 }}>
@@ -22,11 +37,11 @@ const OverviewTab = ({ selectedStep, overview }: OverviewTabProps) => {
 
     const getStatusText = (status: number) => {
         switch (status) {
-            case 0:
+            case CONFIG.StepStatus.Pending:
                 return 'Chưa xử lý'
-            case 1:
+            case CONFIG.StepStatus.InProgress:
                 return 'Đang xử lý'
-            case 2:
+            case CONFIG.StepStatus.Completed:
                 return 'Hoàn thành'
             default:
                 return 'Không xác định'
@@ -35,11 +50,11 @@ const OverviewTab = ({ selectedStep, overview }: OverviewTabProps) => {
 
     const getStatusColor = (status: number) => {
         switch (status) {
-            case 0:
+            case CONFIG.StepStatus.Pending:
                 return 'default'
-            case 1:
+            case CONFIG.StepStatus.InProgress:
                 return 'warning'
-            case 2:
+            case CONFIG.StepStatus.Completed:
                 return 'success'
             default:
                 return 'default'
@@ -48,81 +63,32 @@ const OverviewTab = ({ selectedStep, overview }: OverviewTabProps) => {
 
     return (
         <Box>
-            <Typography variant="h6" sx={{ mb: 3 }}>
-                Thông tin tổng quan - {selectedStep.name}
-            </Typography>
-
-            <Box sx={{ mb: 2 }}>
+            <Box sx={{ mb: 2, p: 4, display: 'grid', gridTemplateColumns: '180px 1fr', rowGap: 3 }}>
                 <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
                     Trạng thái:
                 </Typography>
                 <Chip
-                    label={getStatusText(selectedStep.status || 0)}
-                    color={getStatusColor(selectedStep.status || 0)}
+                    label={getStatusText(stepOverview?.processing?.status || 0)}
+                    color={getStatusColor(stepOverview?.processing?.status || 0)}
                     size="small"
+                    sx={{ width: 'fit-content' }}
                 />
             </Box>
-
             <Divider sx={{ my: 2 }} />
-
-            <Box sx={{ mb: 2 }}>
-                <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
-                    Tên bước:
-                </Typography>
-                <Typography variant="body1">
-                    {selectedStep.name || 'Không có tên'}
-                </Typography>
-            </Box>
-
-            <Box sx={{ mb: 2 }}>
-                <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
-                    Thứ tự:
-                </Typography>
-                <Typography variant="body1">
-                    {selectedStep.order || 'Không có thứ tự'}
-                </Typography>
-            </Box>
-
-            <Box sx={{ mb: 2 }}>
-                <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
-                    Người được giao:
-                </Typography>
-                <Typography variant="body1">
-                    {selectedStep.assigneeId || 'Chưa được giao'}
-                </Typography>
-            </Box>
-
-            {overview && (
-                <>
-                    <Divider sx={{ my: 2 }} />
-
-                    <Typography variant="h6" sx={{ mb: 2 }}>
-                        Thông tin chung
-                    </Typography>
-
-                    {overview.generalInfo && (
-                        <Box sx={{ mb: 2 }}>
+            <Box sx={{ p: 4 }}>
+                {
+                    stepOverview?.generalInfo?.items?.map((item) => (
+                        <Box key={item.label} sx={{ display: 'grid', gridTemplateColumns: '180px 1fr', rowGap: 3, mb: 2 }}>
                             <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
-                                Số điện thoại:
+                                {item.label}
                             </Typography>
-                            <Typography variant="body1">
-                                {overview.generalInfo.phone || 'Không có'}
+                            <Typography variant="body1" sx={{ fontWeight: 600 }}>
+                                {item.value}
                             </Typography>
                         </Box>
-                    )}
-
-                    {overview.processing && (
-                        <Box sx={{ mb: 2 }}>
-                            <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
-                                Trạng thái kết quả thi:
-                            </Typography>
-                            <Typography variant="body1">
-                                {overview.processing.examResultStatus || 'Chưa có'}
-                            </Typography>
-                        </Box>
-                    )}
-                </>
-            )}
+                    ))
+                }
+            </Box>
         </Box>
     )
 }
