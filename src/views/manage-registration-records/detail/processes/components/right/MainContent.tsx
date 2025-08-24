@@ -4,8 +4,8 @@ import type { RegistrationRecordOverviewDto } from '@/types/registrationRecords'
 import type { GetStepsDto } from '@/types/stepsTypes'
 import { Box, Tabs, Tab } from '@mui/material'
 import { useState } from 'react'
-import OverviewTab from './OverviewTab'
-import TaskTab from './TaskTab'
+import OverviewTab from './overview/OverviewTab'
+import TaskTab from './task/TaskTab'
 
 type MainContentProps = {
     selectedStep: GetStepsDto | null

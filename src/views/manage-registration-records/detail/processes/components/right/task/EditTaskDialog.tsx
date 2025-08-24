@@ -21,7 +21,9 @@ import {
 } from '@mui/material'
 import { toast } from 'react-toastify'
 import type { GetTaskDto } from '@/types/stepsTypes'
+import type { AssigneeType } from '@/types/assigneeTypes'
 import CONFIG from '@/configs/config'
+import assigneeAPI from '@/libs/api/assigneeAPI'
 
 type EditTaskDialogProps = {
     open: boolean
@@ -32,41 +34,76 @@ type EditTaskDialogProps = {
 
 type FormData = {
     [key: string]: any
+    note?: string
+    assigneeId?: string
+}
+
+type AssigneeOption = {
+    value: string
+    label: string
 }
 
 const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps) => {
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const [assigneeOptions, setAssigneeOptions] = useState<AssigneeOption[]>([])
 
     const { control, handleSubmit, reset, setValue, formState: { errors } } = useForm<FormData>({
-        defaultValues: {}
+        defaultValues: {
+            note: '',
+            assigneeId: ''
+        }
     })
+
+    // Fetch assignee options (danh sách nhân viên)
+    const fetchAssigneeOptions = async () => {
+        try {
+            const res = await assigneeAPI.GetAssignees({
+                assigneeType: CONFIG.AssigneeTypes.Employee as AssigneeType,
+                pageNumber: 1,
+                pageSize: 9999
+            })
+
+            if (res?.data?.data) {
+                const options = res.data.data.map((assignee: any) => ({
+                    label: assignee.fullName || 'Unknown',
+                    value: assignee.id || ''
+                }))
+                setAssigneeOptions(options)
+            }
+        } catch (error: any) {
+            console.error('Error fetching assignee options:', error)
+            setAssigneeOptions([])
+        }
+    }
+
+    useEffect(() => {
+        if (open) {
+            fetchAssigneeOptions()
+        }
+    }, [open])
 
     useEffect(() => {
         if (!open || !task) return
 
         // Reset form and set default values from taskFieldTemplateConfig
         reset()
-        const defaultValues: FormData = {}
+        const defaultValues: FormData = {
+            note: task.note || '',
+            assigneeId: task.assignee?.id || ''
+        }
 
+        // Set values from taskFieldTemplateConfig
         task.taskFieldTemplateConfig?.forEach(field => {
-            if (field.key && field.defaultValue) {
-                defaultValues[field.key] = field.defaultValue
-            } else if (field.key) {
-                defaultValues[field.key] = ''
+            if (field.key) {
+                // Find existing value from submissions
+                const submission = task.taskFieldInstanceSubmissions?.find(
+                    sub => sub.taskFieldTemplateConfigId === field.id
+                )
+                defaultValues[field.key] = submission?.value || field.defaultValue || ''
             }
         })
 
-        // Set values from existing submissions if any
-        task.taskFieldInstanceSubmissions?.forEach(submission => {
-            if (submission.taskFieldTemplateConfigId && submission.value) {
-                // Find the field key from taskFieldTemplateConfig
-                const field = task.taskFieldTemplateConfig?.find(f => f.id === submission.taskFieldTemplateConfigId)
-                if (field?.key) {
-                    defaultValues[field.key] = submission.value
-                }
-            }
-        })
-
+        // Set form values
         Object.keys(defaultValues).forEach(key => {
             setValue(key, defaultValues[key])
         })
@@ -260,6 +297,17 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
             <Divider />
             <DialogContent>
                 <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                    {/* Dynamic fields from taskFieldTemplateConfig */}
+                    {task.taskFieldTemplateConfig
+                        ?.filter(field => field.isVisible && field.active)
+                        .sort((a, b) => (a.order || 0) - (b.order || 0))
+                        .map(field => (
+                            <Box key={field.id}>
+                                {renderField(field)}
+                            </Box>
+                        ))
+                    }
+
                     {/* Note field */}
                     <Controller
                         name="note"
@@ -277,29 +325,26 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
                         )}
                     />
 
-                    {/* Dynamic fields from taskFieldTemplateConfig */}
-                    {task.taskFieldTemplateConfig
-                        ?.filter(field => field.isVisible && field.active)
-                        .sort((a, b) => (a.order || 0) - (b.order || 0))
-                        .map(field => (
-                            <Box key={field.id}>
-                                {renderField(field)}
-                            </Box>
-                        ))
-                    }
+                    <Divider sx={{ my: 2 }} />
 
                     {/* Assignee field */}
-                    <FormControl fullWidth>
-                        <InputLabel>Người phụ trách (*)</InputLabel>
-                        <Select
-                            value={task.assignee?.id || ''}
-                            label="Người phụ trách (*)"
-                            disabled
-                        >
-                            <MenuItem value={task.assignee?.id || '' as string}>
-                                {task.assignee?.fullName || 'Chưa được giao'}
-                            </MenuItem>
-                        </Select>
+                    <FormControl fullWidth error={!!errors.assigneeId}>
+                        <InputLabel>Người phụ trách <span style={{ color: 'red' }}>(*)</span></InputLabel>
+                        <Controller
+                            name="assigneeId"
+                            control={control}
+                            rules={{ required: 'Vui lòng chọn người phụ trách' }}
+                            render={({ field }) => (
+                                <Select {...field} label="Người phụ trách (*)">
+                                    {assigneeOptions.map(opt => (
+                                        <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
+                                    ))}
+                                </Select>
+                            )}
+                        />
+                        {errors.assigneeId && (
+                            <FormHelperText>{String(errors.assigneeId.message || 'Có lỗi xảy ra')}</FormHelperText>
+                        )}
                     </FormControl>
 
                     {/* Status field */}
@@ -307,8 +352,7 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
                         <InputLabel>Trạng thái (*)</InputLabel>
                         <Select
                             value={task.status || 0}
-                            label="Trạng thái (*)"
-                            disabled
+                            label={<span>Trạng thái <span style={{ color: 'red' }}>(*)</span></span>}
                         >
                             <MenuItem value={0}>Chưa xử lý</MenuItem>
                             <MenuItem value={1}>Đang xử lý</MenuItem>
