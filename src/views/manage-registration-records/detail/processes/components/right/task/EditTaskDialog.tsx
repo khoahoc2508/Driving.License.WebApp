@@ -26,6 +26,7 @@ import CONFIG from '@/configs/config'
 import assigneeAPI from '@/libs/api/assigneeAPI'
 import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
 import stepsAPI from '@/libs/api/stepsAPI'
+import axiosInstance from '@/libs/axios'
 
 type EditTaskDialogProps = {
     open: boolean
@@ -49,6 +50,7 @@ type AssigneeOption = {
 const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps) => {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [assigneeOptions, setAssigneeOptions] = useState<AssigneeOption[]>([])
+    const [fieldOptionsMap, setFieldOptionsMap] = useState<Record<string, AssigneeOption[]>>({})
 
     const { control, handleSubmit, reset, setValue, formState: { errors } } = useForm<FormData>({
         defaultValues: {
@@ -110,6 +112,41 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
         Object.keys(defaultValues).forEach(key => {
             setValue(key, defaultValues[key])
         })
+
+        // Fetch options for fields with dataSourceConfig
+        const fieldsWithDataSource = task.taskFieldTemplateConfigs?.filter((f: any) => f?.dataSourceConfig?.apiUrl)
+        if (fieldsWithDataSource && fieldsWithDataSource.length > 0) {
+            const loadingMap: Record<string, boolean> = {}
+            fieldsWithDataSource.forEach((f: any) => { loadingMap[String(f.id)] = true })
+
+            Promise.all(
+                fieldsWithDataSource.map(async (field: any) => {
+                    try {
+                        const ds = field.dataSourceConfig as { apiUrl: string; valueField?: string; labelField?: string }
+                        const apiUrl: string = String(ds.apiUrl)
+                        const valueField: string = ds?.valueField ? String(ds.valueField) : 'id'
+                        const labelField: string = ds?.labelField ? String(ds.labelField) : 'name'
+                        const res = await axiosInstance.get(apiUrl)
+                        const items = res?.data?.data ?? res?.data ?? []
+                        const options: AssigneeOption[] = Array.isArray(items)
+                            ? items.map((it: any) => ({ value: String(it?.[valueField] ?? ''), label: String(it?.[labelField] ?? '') }))
+                            : []
+                        return { fieldId: String(field.id), options }
+                    } catch (err) {
+                        console.error('Failed to fetch options for field', field?.key, err)
+                        return { fieldId: String(field.id), options: [] as AssigneeOption[] }
+                    }
+                })
+            ).then(results => {
+                const nextMap: Record<string, AssigneeOption[]> = {}
+                const nextLoading: Record<string, boolean> = {}
+                results.forEach(({ fieldId, options }) => {
+                    nextMap[fieldId] = options
+                    nextLoading[fieldId] = false
+                })
+                setFieldOptionsMap(prev => ({ ...prev, ...nextMap }))
+            })
+        }
     }, [open, task, reset, setValue])
 
     const handleClose = () => {
@@ -256,22 +293,29 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
                         name={fieldKey}
                         control={control}
                         rules={isRequired ? { required: `${label} là bắt buộc` } : {}}
-                        render={({ field: { onChange, value } }) => (
-                            <FormControl fullWidth error={!!errors[fieldKey]}>
-                                <InputLabel>{isRequired ? `${label} (*)` : label}</InputLabel>
-                                <Select
-                                    value={value || ''}
-                                    onChange={onChange}
-                                    label={isRequired ? `${label} (*)` : label}
-                                >
-                                    {/* TODO: Add options based on dataSourceConfig */}
-                                    <MenuItem value="">Chọn...</MenuItem>
-                                </Select>
-                                {errors[fieldKey] && (
-                                    <FormHelperText>{String(errors[fieldKey]?.message || 'Có lỗi xảy ra')}</FormHelperText>
-                                )}
-                            </FormControl>
-                        )}
+                        render={({ field: { onChange, value } }) => {
+                            const fieldId = String(field.id)
+                            const options = fieldOptionsMap[fieldId] || []
+                            const hasDataSource = !!field?.dataSourceConfig?.apiUrl
+                            const labelText = isRequired ? <span>{label} <span style={{ color: 'red' }}>(*)</span></span> : label
+                            return (
+                                <FormControl fullWidth error={!!errors[fieldKey]}>
+                                    <InputLabel>{labelText}</InputLabel>
+                                    <Select
+                                        value={value || ''}
+                                        onChange={onChange}
+                                        label={labelText}
+                                    >
+                                        {(hasDataSource ? options : []).map(opt => (
+                                            <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
+                                        ))}
+                                    </Select>
+                                    {errors[fieldKey] && (
+                                        <FormHelperText>{String(errors[fieldKey]?.message || 'Có lỗi xảy ra')}</FormHelperText>
+                                    )}
+                                </FormControl>
+                            )
+                        }}
                     />
                 )
 
