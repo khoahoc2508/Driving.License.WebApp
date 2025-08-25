@@ -996,6 +996,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/tasks/actions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Tasks_GetTaskActionTemplatesByStepIdQuery"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/tasks/key/{key}": {
         parameters: {
             query?: never;
@@ -1022,6 +1038,22 @@ export interface paths {
         get?: never;
         put: operations["Tasks_UpdateTask"];
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/tasks/create-from-template": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Tasks_CreateTaskFromTemplateCommand"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1895,7 +1927,7 @@ export interface components {
             status?: components["schemas"]["TaskStatusType"];
             note?: string | null;
             summaryItems?: components["schemas"]["SummaryItemDto"][];
-            taskFieldTemplateConfig?: components["schemas"]["TaskFieldTemplateConfigDto"][];
+            taskFieldTemplateConfigs?: components["schemas"]["TaskFieldTemplateConfigDto"][];
             taskFieldInstanceSubmissions?: components["schemas"]["TaskFieldInstanceSubmissionDto"][];
         };
         AssigneeDto2: {
@@ -1936,6 +1968,26 @@ export interface components {
             taskFieldTemplateConfigId?: string;
             value?: string | null;
         };
+        BaseResponseOfListOfTaskActionTemplateDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["TaskActionTemplateDto"][] | null;
+        };
+        TaskActionTemplateDto: {
+            id?: string;
+            name?: string;
+            /** Format: int32 */
+            order?: number;
+            taskTemplate?: components["schemas"]["TaskTemplateDto"];
+        };
+        TaskTemplateDto: {
+            id?: string;
+            key?: string;
+            name?: string;
+            /** Format: int32 */
+            order?: number;
+            note?: string;
+            isTaskAction?: boolean;
+            taskFieldTemplateConfigs?: components["schemas"]["TaskFieldTemplateConfigDto"][];
+        };
         BaseResponseOfGetTaskDto: components["schemas"]["BaseResponse"] & {
             data?: components["schemas"]["GetTaskDto"] | null;
         };
@@ -1949,6 +2001,10 @@ export interface components {
         TaskFieldInstanceSubmissionDto2: {
             taskFieldTemplateConfigId?: string;
             value?: string | null;
+        };
+        CreateTaskFromTemplateCommand: {
+            taskTemplateId?: string;
+            stepId?: string;
         };
     };
     responses: never;
@@ -3880,6 +3936,27 @@ export interface operations {
             };
         };
     };
+    Tasks_GetTaskActionTemplatesByStepIdQuery: {
+        parameters: {
+            query?: {
+                StepId?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfTaskActionTemplateDto"];
+                };
+            };
+        };
+    };
     Tasks_GetSingleTaskByKeyQuery: {
         parameters: {
             query?: {
@@ -3925,6 +4002,29 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    Tasks_CreateTaskFromTemplateCommand: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateTaskFromTemplateCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfGetTaskDto"];
                 };
             };
         };

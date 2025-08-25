@@ -98,7 +98,7 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
         }
 
         // Set values from taskFieldTemplateConfig
-        task.taskFieldTemplateConfig?.forEach(field => {
+        task.taskFieldTemplateConfigs?.forEach(field => {
             if (field.key) {
                 const submission = task.taskFieldInstanceSubmissions?.find(
                     sub => sub.taskFieldTemplateConfigId === field.id
@@ -126,7 +126,7 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
                 assigneeId: data.assigneeId,
                 status: data.status as TaskStatusType,
                 note: data.note,
-                taskFieldInstanceSubmissions: task?.taskFieldTemplateConfig
+                taskFieldInstanceSubmissions: task?.taskFieldTemplateConfigs
                     ?.filter(field => field.key && data[field.key] !== undefined)
                     .map(field => ({
                         taskFieldTemplateConfigId: field.id,
@@ -327,8 +327,12 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
             onClose={handleClose}
             fullWidth
             PaperProps={{
-                style: { borderRadius: '5px', minWidth: '30%' }
+                sx: {
+                    borderRadius: 2,
+                    overflowY: "initial"
+                }
             }}
+            className='custom-scrollbar'
         >
             <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pb: 2 }}>
                 <Typography variant="h5" fontWeight={600} component="div">
@@ -342,7 +346,7 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
             <DialogContent>
                 <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                     {/* Dynamic fields from taskFieldTemplateConfig */}
-                    {task.taskFieldTemplateConfig
+                    {task.taskFieldTemplateConfigs
                         ?.filter(field => field.isVisible && field.active)
                         .sort((a, b) => (a.order || 0) - (b.order || 0))
                         .map(field => (
