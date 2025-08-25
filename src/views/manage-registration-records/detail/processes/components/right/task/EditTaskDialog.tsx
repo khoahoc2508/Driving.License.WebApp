@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+
 import { useForm, Controller } from 'react-hook-form'
 import {
     Dialog,
@@ -20,6 +21,7 @@ import {
     FormHelperText
 } from '@mui/material'
 import { toast } from 'react-toastify'
+
 import type { GetTaskDto, TaskStatusType, UpdateTaskCommand } from '@/types/stepsTypes'
 import type { AssigneeType } from '@/types/assigneeTypes'
 import CONFIG from '@/configs/config'
@@ -74,6 +76,7 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
                     label: assignee.fullName || 'Unknown',
                     value: assignee.id || ''
                 }))
+
                 setAssigneeOptions(options)
             }
         } catch (error: any) {
@@ -93,6 +96,7 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
 
         // Reset form and set default values from taskFieldTemplateConfig
         reset()
+
         const defaultValues: FormData = {
             note: task.note || '',
             assigneeId: task.assignee?.id || '',
@@ -105,6 +109,7 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
                 const submission = task.taskFieldInstanceSubmissions?.find(
                     sub => sub.taskFieldTemplateConfigId === field.id
                 )
+
                 defaultValues[field.key] = submission?.value || field.defaultValue || ''
             }
         })
@@ -115,8 +120,10 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
 
         // Fetch options for fields with dataSourceConfig
         const fieldsWithDataSource = task.taskFieldTemplateConfigs?.filter((f: any) => f?.dataSourceConfig?.apiUrl)
+
         if (fieldsWithDataSource && fieldsWithDataSource.length > 0) {
             const loadingMap: Record<string, boolean> = {}
+
             fieldsWithDataSource.forEach((f: any) => { loadingMap[String(f.id)] = true })
 
             Promise.all(
@@ -128,18 +135,23 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
                         const labelField: string = ds?.labelField ? String(ds.labelField) : 'name'
                         const res = await axiosInstance.get(apiUrl)
                         const items = res?.data?.data ?? res?.data ?? []
+
                         const options: AssigneeOption[] = Array.isArray(items)
                             ? items.map((it: any) => ({ value: String(it?.[valueField] ?? ''), label: String(it?.[labelField] ?? '') }))
                             : []
-                        return { fieldId: String(field.id), options }
+
+                        
+return { fieldId: String(field.id), options }
                     } catch (err) {
                         console.error('Failed to fetch options for field', field?.key, err)
-                        return { fieldId: String(field.id), options: [] as AssigneeOption[] }
+                        
+return { fieldId: String(field.id), options: [] as AssigneeOption[] }
                     }
                 })
             ).then(results => {
                 const nextMap: Record<string, AssigneeOption[]> = {}
                 const nextLoading: Record<string, boolean> = {}
+
                 results.forEach(({ fieldId, options }) => {
                     nextMap[fieldId] = options
                     nextLoading[fieldId] = false
@@ -158,6 +170,7 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
     const onSubmit = async (data: FormData) => {
         setIsSubmitting(true)
         if (!task?.id) return
+
         try {
             const updateData: UpdateTaskCommand = {
                 assigneeId: data.assigneeId,
@@ -172,6 +185,7 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
             }
 
             const res = await stepsAPI.UpdateTask(task.id, updateData)
+
             if (res?.data?.data) {
                 toast.success('Cập nhật công việc thành công')
                 onSuccess()
@@ -241,27 +255,38 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
                         render={({ field }) => {
                             const parseDateValue = (value: string) => {
                                 if (!value) return null
+
                                 try {
                                     if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
                                         return new Date(value)
                                     }
+
                                     if (/^\d{2}\/\d{2}\/\d{4}$/.test(value)) {
                                         const [day, month, year] = value.split('/')
-                                        return new Date(parseInt(year), parseInt(month) - 1, parseInt(day))
+
+                                        
+return new Date(parseInt(year), parseInt(month) - 1, parseInt(day))
                                     }
-                                    return null
+
+                                    
+return null
                                 } catch {
                                     return null
                                 }
                             }
+
                             const formatDateToString = (date: Date | null) => {
                                 if (!date) return ''
                                 const day = String(date.getDate()).padStart(2, '0')
                                 const month = String(date.getMonth() + 1).padStart(2, '0')
                                 const year = date.getFullYear()
-                                return `${day}/${month}/${year}`
+
+                                
+return `${day}/${month}/${year}`
                             }
-                            return (
+
+                            
+return (
                                 <AppReactDatepicker
                                     boxProps={{ className: 'is-full' }}
                                     selected={parseDateValue(field.value)}
@@ -271,6 +296,7 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
                                     placeholderText={hint || `Chọn ${label.toLowerCase()}`}
                                     onChange={(date) => {
                                         const dateString = formatDateToString(date)
+
                                         field.onChange(dateString)
                                     }}
                                     customInput={<TextField
@@ -298,7 +324,9 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
                             const options = fieldOptionsMap[fieldId] || []
                             const hasDataSource = !!field?.dataSourceConfig?.apiUrl
                             const labelText = isRequired ? <span>{label} <span style={{ color: 'red' }}>(*)</span></span> : label
-                            return (
+
+                            
+return (
                                 <FormControl fullWidth error={!!errors[fieldKey]}>
                                     <InputLabel>{labelText}</InputLabel>
                                     <Select

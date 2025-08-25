@@ -1,9 +1,11 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+
 import { Box, Typography, Chip, Divider } from '@mui/material'
+
 import type { GetStepsDto, StepOverviewDto } from '@/types/stepsTypes'
 import CONFIG from '@/configs/config'
-import { useEffect, useState } from 'react'
 import stepsAPI from '@/libs/api/stepsAPI'
 
 type OverviewTabProps = {
@@ -22,6 +24,7 @@ const OverviewTab = ({ selectedStep }: OverviewTabProps) => {
 
     const fetchStepOverview = async (id: string) => {
         const response = await stepsAPI.GetStepByStepIdOverview({ id })
+
         setStepOverview(response?.data?.data)
     }
 
@@ -39,6 +42,7 @@ const OverviewTab = ({ selectedStep }: OverviewTabProps) => {
         if (status === undefined) {
             return ''
         }
+
         switch (status) {
             case CONFIG.StepStatus.Pending:
                 return 'Chưa xử lý'
@@ -55,6 +59,7 @@ const OverviewTab = ({ selectedStep }: OverviewTabProps) => {
         if (status === undefined) {
             return 'default'
         }
+
         switch (status) {
             case CONFIG.StepStatus.Pending:
                 return 'default'

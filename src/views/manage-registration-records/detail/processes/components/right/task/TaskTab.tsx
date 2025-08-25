@@ -1,10 +1,15 @@
 'use client'
 
+import { useEffect, useState, useMemo } from 'react'
+
+import { Box, Typography, Chip, IconButton, Avatar } from '@mui/material'
+
+import { createColumnHelper, flexRender, getCoreRowModel, useReactTable, type FilterFn } from '@tanstack/react-table'
+
 import stepsAPI from '@/libs/api/stepsAPI'
 import type { GetStepsDto, GetTaskDto } from '@/types/stepsTypes'
-import { Box, Typography, Chip, IconButton, Avatar } from '@mui/material'
-import { useEffect, useState, useMemo } from 'react'
-import { createColumnHelper, flexRender, getCoreRowModel, useReactTable, type FilterFn, type Column } from '@tanstack/react-table'
+
+
 import styles from '@core/styles/table.module.css'
 import CONFIG from '@/configs/config'
 import EditTaskDialog from './EditTaskDialog'
@@ -18,30 +23,13 @@ const columnHelper = createColumnHelper<GetTaskDto>()
 // Add fuzzy filter function
 const fuzzyFilter: FilterFn<any> = (row, columnId, value) => {
     const itemValue = row.getValue(columnId)
+
     if (typeof itemValue === 'string' && typeof value === 'string') {
         return itemValue.toLowerCase().includes(value.toLowerCase())
     }
+
+
     return true
-}
-
-// Thêm function để xử lý pinning styles
-const getCommonPinningStyles = (column: Column<any>): React.CSSProperties => {
-    const isPinned = column.getIsPinned()
-    const isLastLeftPinnedColumn = isPinned === 'left' && column.getIsLastColumn('left')
-    const isFirstRightPinnedColumn = isPinned === 'right' && column.getIsFirstColumn('right')
-
-    return {
-        boxShadow: isLastLeftPinnedColumn
-            ? '-4px 0 4px -4px gray inset'
-            : isFirstRightPinnedColumn
-                ? '4px 0 4px -4px gray inset'
-                : undefined,
-        left: isPinned === 'left' ? `${column.getStart('left')}px` : undefined,
-        right: isPinned === 'right' ? `${column.getAfter('right')}px` : undefined,
-        position: isPinned ? 'sticky' : 'relative',
-        width: column.getSize(),
-        zIndex: isPinned ? 1 : 0,
-    }
 }
 
 const TaskTab = ({ selectedStep }: TaskTabProps) => {
@@ -53,6 +41,7 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
     const fetchTasks = async () => {
         if (selectedStep?.id) {
             const response = await stepsAPI.GetTaskByStepId({ id: selectedStep.id })
+
             setTasks(response.data?.data || [])
         }
     }
@@ -78,6 +67,7 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
 
     const getStatusText = (status: number | undefined) => {
         if (status === undefined) return 'Không xác định'
+
         switch (status) {
             case CONFIG.StepStatus.Pending:
                 return 'Chưa xử lý'
@@ -92,6 +82,7 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
 
     const getStatusColor = (status: number | undefined) => {
         if (status === undefined) return 'default'
+
         switch (status) {
             case CONFIG.StepStatus.Pending:
                 return 'default'
@@ -224,6 +215,7 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
     useEffect(() => {
         if (table.getAllColumns().length > 0) {
             const thaoTacColumn = table.getColumn('actions')
+
             if (thaoTacColumn) {
                 thaoTacColumn.pin('right')
             }
@@ -255,6 +247,8 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
                             <tr key={headerGroup.id} className="h-9">
                                 {headerGroup.headers.map(header => {
                                     const isPinned = header.column.getIsPinned()
+
+
                                     return (
                                         <th
                                             key={header.id}
@@ -292,6 +286,8 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
                                 <tr key={`${row.id}-${index}`} className="hover:bg-gray-50">
                                     {row.getVisibleCells().map((cell, cellIndex) => {
                                         const isPinned = cell.column.getIsPinned()
+
+
                                         return (
                                             <td
                                                 key={`${cell.id}-${cellIndex}`}

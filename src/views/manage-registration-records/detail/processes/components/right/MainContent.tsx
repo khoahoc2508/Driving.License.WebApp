@@ -1,9 +1,11 @@
 'use client'
 
-import type { RegistrationRecordOverviewDto } from '@/types/registrationRecords'
-import type { GetStepsDto } from '@/types/stepsTypes'
-import { Box, Tabs, Tab } from '@mui/material'
 import { useState } from 'react'
+
+import { Box, Tabs, Tab } from '@mui/material'
+
+import type { GetStepsDto } from '@/types/stepsTypes'
+
 import OverviewTab from './overview/OverviewTab'
 import TaskTab from './task/TaskTab'
 

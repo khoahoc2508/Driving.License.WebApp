@@ -1,9 +1,9 @@
 'use client'
 
-import { Box, Grid } from '@mui/material'
 import { useState } from 'react'
 
-import type { RegistrationRecordOverviewDto } from '@/types/registrationRecords'
+import { Box, Grid } from '@mui/material'
+
 import type { GetStepsDto } from '@/types/stepsTypes'
 import ProcessSteps from './components/left/ProcessSteps'
 import MainContent from './components/right/MainContent'

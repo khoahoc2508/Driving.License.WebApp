@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 
 import { Avatar, Box, Button, Card, CardContent, Switch, Tab, Tabs, Typography, useTheme } from "@mui/material";
 
+import { toast } from "react-toastify";
+
 import CONFIG from "@/configs/config";
 
 
@@ -14,7 +16,6 @@ import type { RegistrationRecordBasicInfoDto, RegistrationRecordOverviewDto } fr
 import OverviewTab from "./overview/OverviewTab";
 import PaymentsTab from "./payments/PaymentsTab";
 import ProcessingTab from "./processes/ProcessingTab";
-import { toast } from "react-toastify";
 
 
 type RegistrationRecordDetailProps = {
@@ -66,6 +67,7 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
 
     const handleApprovedChange = async (_: any, checked: boolean) => {
         setIsApproved(checked)
+
         if (id) {
             try {
                 await registrationRecordsAPI.UpdateRegistrationRecordIsApproved({

@@ -1,7 +1,8 @@
 'use client'
 
-import { Box, Paper, Typography, CircularProgress, Stepper, Step, StepLabel, useTheme } from '@mui/material'
 import { useEffect, useState } from 'react'
+
+import { Box, Paper, Typography, CircularProgress, Stepper, Step, StepLabel, useTheme } from '@mui/material'
 
 import type { GetStepsDto } from '@/types/stepsTypes'
 import stepsAPI from '@/libs/api/stepsAPI'
@@ -15,7 +16,7 @@ type ProcessStepsProps = {
     selectedStepIndex?: number
 }
 
-const CustomStepIcon = ({ step, index }: { step: GetStepsDto; index: number }) => {
+const CustomStepIcon = ({ step }: { step: GetStepsDto; index: number }) => {
     const theme = useTheme()
 
     const getStepIcon = (status: number | undefined) => {
@@ -104,8 +105,10 @@ const ProcessSteps = ({ registrationRecordId, onStepClick, selectedStepIndex }: 
     useEffect(() => {
         const fetchSteps = async () => {
             if (!registrationRecordId) return
+
             try {
                 setLoading(true)
+
                 const response = await stepsAPI.GetStepsByRegistrationRecordId({
                     registrationRecordId
                 })
