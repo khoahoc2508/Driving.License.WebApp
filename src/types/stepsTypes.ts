@@ -6,6 +6,9 @@ export type StepsListType = components['schemas']['GetStepsDto'][]
 export type GetTaskDto = components['schemas']['GetTaskDto']
 export type UpdateTaskCommand = components['schemas']['UpdateTaskCommand']
 export type TaskStatusType = components['schemas']['TaskStatusType']
+export type TaskActionTemplateDto = components['schemas']['TaskActionTemplateDto']
+export type BaseResponseOfListOfTaskActionTemplateDto =
+  components['schemas']['BaseResponseOfListOfTaskActionTemplateDto']
 
 export type StepOverviewDto = components['schemas']['StepOverviewDto']
 

@@ -2,12 +2,12 @@
 
 import { useEffect, useState, useMemo } from 'react'
 
-import { Box, Typography, Chip, IconButton, Avatar } from '@mui/material'
+import { Box, Typography, Chip, IconButton, Avatar, Button } from '@mui/material'
 
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable, type FilterFn } from '@tanstack/react-table'
 
 import stepsAPI from '@/libs/api/stepsAPI'
-import type { GetStepsDto, GetTaskDto } from '@/types/stepsTypes'
+import type { GetStepsDto, GetTaskDto, TaskActionTemplateDto } from '@/types/stepsTypes'
 
 
 import styles from '@core/styles/table.module.css'
@@ -37,6 +37,7 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
     const [selectedTask, setSelectedTask] = useState<GetTaskDto | null>(null)
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
     const [columnPinning, setColumnPinning] = useState({})
+    const [taskActions, setTaskActions] = useState<TaskActionTemplateDto[]>([])
 
     const fetchTasks = async () => {
         if (selectedStep?.id) {
@@ -48,7 +49,15 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
 
     useEffect(() => {
         fetchTasks()
+        fetchTaskActions()
     }, [selectedStep?.id])
+
+    const fetchTaskActions = async () => {
+        if (selectedStep?.id) {
+            const response = await stepsAPI.GetTaskActionsByStepId(selectedStep.id)
+            setTaskActions(response.data?.data || [])
+        }
+    }
 
     const handleEditTask = (task: GetTaskDto) => {
         setSelectedTask(task)
@@ -63,6 +72,23 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
     const handleEditSuccess = () => {
         fetchTasks() // Refresh tasks after successful edit
         handleEditDialogClose()
+    }
+
+    const handleCreateTaskFromAction = async (action: TaskActionTemplateDto) => {
+        try {
+            if (selectedStep?.id && action.taskTemplate?.id) {
+                const response = await stepsAPI.CreateTaskFromTemplate({
+                    taskTemplateId: action.taskTemplate.id,
+                    stepId: selectedStep.id
+                })
+
+                if (response.data?.success) {
+                    fetchTasks()
+                }
+            }
+        } catch (error) {
+            console.error('Error creating task from action:', error)
+        }
     }
 
     const getStatusText = (status: number | undefined) => {
@@ -234,6 +260,30 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
 
     return (
         <Box>
+            {taskActions.length > 0 && (
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                        gap: 2,
+                        mb: 3,
+                        px: 1
+                    }}
+                >
+                    {taskActions
+                        .sort((a, b) => (b.order || 0) - (a.order || 0))
+                        .map((action) => (
+                            <Button
+                                key={action.id}
+                                variant='outlined'
+                                color='primary'
+                            >
+                                {action.name}
+                            </Button>
+                        ))}
+                </Box>
+            )}
+
             <div className='overflow-x-auto custom-scrollbar'>
                 <table
                     className={styles.table}

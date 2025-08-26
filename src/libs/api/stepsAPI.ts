@@ -3,7 +3,8 @@ import type {
   GetStepByStepIdOverviewQueryParams,
   GetStepsQueryParams,
   GetTaskByStepIdQueryParams,
-  UpdateTaskCommand
+  UpdateTaskCommand,
+  BaseResponseOfListOfTaskActionTemplateDto
 } from '@/types/stepsTypes'
 
 const GetStepsByRegistrationRecordId = async (params: GetStepsQueryParams) => {
@@ -18,12 +19,26 @@ const GetStepByStepIdOverview = async (params: GetStepByStepIdOverviewQueryParam
   return await axiosInstance.get(`/api/steps/${params.id}/overview`)
 }
 
+// task
+
 const GetTaskByStepId = async (params: GetTaskByStepIdQueryParams) => {
   return await axiosInstance.get(`/api/tasks/all`, {
     params: {
       StepId: params.id
     }
   })
+}
+
+const GetTaskActionsByStepId = async (stepId: string) => {
+  return await axiosInstance.get<BaseResponseOfListOfTaskActionTemplateDto>('/api/tasks/actions', {
+    params: {
+      StepId: stepId
+    }
+  })
+}
+
+const CreateTaskFromTemplate = async (data: { taskTemplateId: string; stepId: string }) => {
+  return await axiosInstance.post('/api/tasks/create-from-template', data)
 }
 
 const UpdateTask = async (id: string, data: UpdateTaskCommand) => {
@@ -34,6 +49,8 @@ const stepsAPI = {
   GetStepsByRegistrationRecordId,
   GetStepByStepIdOverview,
   GetTaskByStepId,
+  GetTaskActionsByStepId,
+  CreateTaskFromTemplate,
   UpdateTask
 }
 

@@ -133,19 +133,22 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
                         const apiUrl: string = String(ds.apiUrl)
                         const valueField: string = ds?.valueField ? String(ds.valueField) : 'id'
                         const labelField: string = ds?.labelField ? String(ds.labelField) : 'name'
+                        debugger
+
                         const res = await axiosInstance.get(apiUrl)
                         const items = res?.data?.data ?? res?.data ?? []
+                        debugger
 
                         const options: AssigneeOption[] = Array.isArray(items)
                             ? items.map((it: any) => ({ value: String(it?.[valueField] ?? ''), label: String(it?.[labelField] ?? '') }))
                             : []
 
-                        
-return { fieldId: String(field.id), options }
+
+                        return { fieldId: String(field.id), options }
                     } catch (err) {
                         console.error('Failed to fetch options for field', field?.key, err)
-                        
-return { fieldId: String(field.id), options: [] as AssigneeOption[] }
+
+                        return { fieldId: String(field.id), options: [] as AssigneeOption[] }
                     }
                 })
             ).then(results => {
@@ -264,12 +267,12 @@ return { fieldId: String(field.id), options: [] as AssigneeOption[] }
                                     if (/^\d{2}\/\d{2}\/\d{4}$/.test(value)) {
                                         const [day, month, year] = value.split('/')
 
-                                        
-return new Date(parseInt(year), parseInt(month) - 1, parseInt(day))
+
+                                        return new Date(parseInt(year), parseInt(month) - 1, parseInt(day))
                                     }
 
-                                    
-return null
+
+                                    return null
                                 } catch {
                                     return null
                                 }
@@ -281,12 +284,12 @@ return null
                                 const month = String(date.getMonth() + 1).padStart(2, '0')
                                 const year = date.getFullYear()
 
-                                
-return `${day}/${month}/${year}`
+
+                                return `${day}/${month}/${year}`
                             }
 
-                            
-return (
+
+                            return (
                                 <AppReactDatepicker
                                     boxProps={{ className: 'is-full' }}
                                     selected={parseDateValue(field.value)}
@@ -325,8 +328,8 @@ return (
                             const hasDataSource = !!field?.dataSourceConfig?.apiUrl
                             const labelText = isRequired ? <span>{label} <span style={{ color: 'red' }}>(*)</span></span> : label
 
-                            
-return (
+
+                            return (
                                 <FormControl fullWidth error={!!errors[fieldKey]}>
                                     <InputLabel>{labelText}</InputLabel>
                                     <Select
