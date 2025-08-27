@@ -1991,6 +1991,7 @@ export interface components {
             /** Format: int32 */
             order?: number;
             prefix?: string | null;
+            isCurrency?: boolean;
             dataSourceConfig?: components["schemas"]["DataSourceConfigDto"] | null;
         };
         DataSourceConfigDto: {

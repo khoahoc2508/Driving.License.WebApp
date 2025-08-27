@@ -30,13 +30,14 @@ import assigneeAPI from '@/libs/api/assigneeAPI'
 import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
 import stepsAPI from '@/libs/api/stepsAPI'
 import axiosInstance from '@/libs/axios'
-import { formatCurrencyVNDInput } from '@/utils/currency'
+import { formatCurrencyVNDInput, getInputBehavior } from '@/utils/helpers'
 
 type EditTaskDialogProps = {
     open: boolean
     onClose: () => void
     onSuccess: () => void
-    task: GetTaskDto | null
+    task: GetTaskDto | null,
+    isCreate: boolean
 }
 
 type FormData = {
@@ -51,7 +52,7 @@ type AssigneeOption = {
     label: string
 }
 
-const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps) => {
+const EditTaskDialog = ({ open, onClose, onSuccess, task, isCreate }: EditTaskDialogProps) => {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [assigneeOptions, setAssigneeOptions] = useState<AssigneeOption[]>([])
     const [fieldOptionsMap, setFieldOptionsMap] = useState<Record<string, AssigneeOption[]>>({})
@@ -138,24 +139,18 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
 
                         const res = await axiosInstance.get(apiUrl)
                         const items = res?.data?.data ?? res?.data ?? []
-                        debugger
                         const options: AssigneeOption[] = Array.isArray(items)
                             ? items.map((it: any) => ({ value: String(it?.[valueField] ?? ''), label: String(it?.[labelField] ?? '') }))
                             : []
 
-
                         return { fieldId: String(field.id), options }
                     } catch (err) {
-                        console.error('Failed to fetch options for field', field?.key, err)
-
                         return { fieldId: String(field.id), options: [] as AssigneeOption[] }
                     }
                 })
             ).then(results => {
                 const nextMap: Record<string, AssigneeOption[]> = {}
                 const nextLoading: Record<string, boolean> = {}
-                debugger
-
                 results.forEach(({ fieldId, options }) => {
                     nextMap[fieldId] = options
                     nextLoading[fieldId] = false
@@ -216,7 +211,7 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
                         control={control}
                         rules={isRequired ? { required: `${label} là bắt buộc` } : {}}
                         render={({ field: { onChange, value } }) => {
-                            const isVnd = String(field?.prefix || '').toUpperCase() === 'VND'
+                            const behavior = getInputBehavior(field)
 
                             return (
                                 <TextField
@@ -224,7 +219,7 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
                                     fullWidth
                                     variant="outlined"
                                     value={value || ''}
-                                    onChange={e => onChange(isVnd ? formatCurrencyVNDInput(e.target.value) : e.target.value)}
+                                    onChange={e => onChange(behavior.format(e.target.value))}
                                     error={!!errors[fieldKey]}
                                     helperText={errors[fieldKey]?.message || hint || description}
                                     InputProps={{
@@ -245,16 +240,16 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
                         control={control}
                         rules={isRequired ? { required: `${label} là bắt buộc` } : {}}
                         render={({ field: { onChange, value } }) => {
-                            const isVnd = String(field?.prefix || '').toUpperCase() === 'VND'
+                            const behavior = getInputBehavior(field)
 
                             return (
                                 <TextField
                                     label={isRequired ? `${label} (*)` : label}
                                     fullWidth
                                     variant="outlined"
-                                    type={isVnd ? 'text' : 'number'}
+                                    type={behavior.forceTextType ? 'text' : 'number'}
                                     value={value || ''}
-                                    onChange={e => onChange(isVnd ? formatCurrencyVNDInput(e.target.value) : e.target.value)}
+                                    onChange={e => onChange(behavior.format(e.target.value))}
                                     error={!!errors[fieldKey]}
                                     helperText={errors[fieldKey]?.message || hint || description}
                                     InputProps={{
@@ -398,7 +393,7 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
                         control={control}
                         rules={isRequired ? { required: `${label} là bắt buộc` } : {}}
                         render={({ field: { onChange, value } }) => {
-                            const isVnd = String(field?.prefix || '').toUpperCase() === 'VND'
+                            const behavior = getInputBehavior(field)
 
                             return (
                                 <TextField
@@ -406,7 +401,7 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
                                     fullWidth
                                     variant="outlined"
                                     value={value || ''}
-                                    onChange={e => onChange(isVnd ? formatCurrencyVNDInput(e.target.value) : e.target.value)}
+                                    onChange={e => onChange(behavior.format(e.target.value))}
                                     error={!!errors[fieldKey]}
                                     helperText={errors[fieldKey]?.message || hint || description}
                                     InputProps={{
@@ -439,7 +434,7 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
         >
             <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pb: 2 }}>
                 <Typography variant="h5" fontWeight={600} component="div">
-                    <span className='opacity-70'>Cập nhật</span> - {task.title}
+                    <span className='opacity-70'>{isCreate ? 'Thêm mới' : 'Cập nhật'}</span> - {task.title}
                 </Typography>
                 <IconButton aria-label="close" onClick={handleClose} sx={{ color: theme => theme.palette.grey[500] }}>
                     <i className="ri-close-line" />

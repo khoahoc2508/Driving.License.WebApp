@@ -38,6 +38,7 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
     const [columnPinning, setColumnPinning] = useState({})
     const [taskActions, setTaskActions] = useState<TaskActionTemplateDto[]>([])
+    const [isCreateDialog, setIsCreateDialog] = useState(false)
 
     const fetchTasks = async () => {
         if (selectedStep?.id) {
@@ -61,12 +62,14 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
 
     const handleEditTask = (task: GetTaskDto) => {
         setSelectedTask(task)
+        setIsCreateDialog(false)
         setIsEditDialogOpen(true)
     }
 
     const handleEditDialogClose = () => {
         setIsEditDialogOpen(false)
         setSelectedTask(null)
+        setIsCreateDialog(false)
     }
 
     const handleEditSuccess = () => {
@@ -85,6 +88,7 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
                 if (response.data?.success && response.data?.data) {
                     // Open edit dialog with the created task to allow user to fill fields
                     setSelectedTask(response.data.data)
+                    setIsCreateDialog(true)
                     setIsEditDialogOpen(true)
                 }
             }
@@ -370,6 +374,7 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
                 onClose={handleEditDialogClose}
                 onSuccess={handleEditSuccess}
                 task={selectedTask}
+                isCreate={isCreateDialog}
             />
         </Box>
     )

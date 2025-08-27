@@ -26,7 +26,7 @@ import { toast } from 'react-toastify'
 import type { CreatePaymentCommand } from '@/types/registrationRecords'
 import registrationRecordsAPI from '@/libs/api/registrationRecordsAPI'
 import feeTypeAPI from '@/libs/api/feeTypeAPI'
-import { formatCurrencyVNDInput } from '@/utils/currency'
+import { formatCurrencyVNDInput } from '@/utils/helpers'
 
 export enum DialogMode {
     ADD = 0,

@@ -13,3 +13,13 @@ export const parseVNDToNumber = (value: string): number | null => {
   if (!digitsOnly) return null
   return Number(digitsOnly)
 }
+
+export const getInputBehavior = (field: any) => {
+  const isCurrency = !!field?.isCurrency
+
+  return {
+    shouldFormat: isCurrency,
+    forceTextType: isCurrency,
+    format: (value: string) => (isCurrency ? formatCurrencyVNDInput(value) : value || '')
+  }
+}
