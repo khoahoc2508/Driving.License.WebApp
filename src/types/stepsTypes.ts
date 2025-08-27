@@ -9,6 +9,7 @@ export type TaskStatusType = components['schemas']['TaskStatusType']
 export type TaskActionTemplateDto = components['schemas']['TaskActionTemplateDto']
 export type BaseResponseOfListOfTaskActionTemplateDto =
   components['schemas']['BaseResponseOfListOfTaskActionTemplateDto']
+export type BaseResponseOfGetTaskDto = components['schemas']['BaseResponseOfGetTaskDto']
 
 export type StepOverviewDto = components['schemas']['StepOverviewDto']
 

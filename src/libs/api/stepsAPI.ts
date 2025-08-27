@@ -4,7 +4,8 @@ import type {
   GetStepsQueryParams,
   GetTaskByStepIdQueryParams,
   UpdateTaskCommand,
-  BaseResponseOfListOfTaskActionTemplateDto
+  BaseResponseOfListOfTaskActionTemplateDto,
+  BaseResponseOfGetTaskDto
 } from '@/types/stepsTypes'
 
 const GetStepsByRegistrationRecordId = async (params: GetStepsQueryParams) => {
@@ -38,7 +39,7 @@ const GetTaskActionsByStepId = async (stepId: string) => {
 }
 
 const CreateTaskFromTemplate = async (data: { taskTemplateId: string; stepId: string }) => {
-  return await axiosInstance.post('/api/tasks/create-from-template', data)
+  return await axiosInstance.post<BaseResponseOfGetTaskDto>('/api/tasks/create-from-template', data)
 }
 
 const UpdateTask = async (id: string, data: UpdateTaskCommand) => {

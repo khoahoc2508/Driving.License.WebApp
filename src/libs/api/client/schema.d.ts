@@ -1201,8 +1201,8 @@ export interface components {
             data?: components["schemas"]["ConstantDto"][] | null;
         };
         ConstantDto: {
-            value?: string;
             label?: string;
+            value?: string;
         };
         CreateContactCommand: {
             fullName?: string;
@@ -1920,19 +1920,35 @@ export interface components {
             data?: components["schemas"]["StepOverviewDto"] | null;
         };
         StepOverviewDto: {
-            processing?: components["schemas"]["ProcessingDto2"];
-            generalInfo?: components["schemas"]["GeneralInfoDto2"];
-        };
-        ProcessingDto2: {
+            id?: string;
             status?: components["schemas"]["StepStatusType"];
+            stepFieldInstanceSubmissions?: components["schemas"]["StepFieldInstanceSubmissionDto"][];
+            taskInfos?: components["schemas"]["TaskDto"][];
         };
-        GeneralInfoDto2: {
-            items?: components["schemas"]["GeneralInfoItemDto"][];
-        };
-        GeneralInfoItemDto: {
-            label?: string;
+        StepFieldInstanceSubmissionDto: {
+            stepFieldTemplateConfig?: components["schemas"]["StepFieldTemplateConfigDto"];
             value?: string;
         };
+        StepFieldTemplateConfigDto: components["schemas"]["FieldTemplateConfigBaseDto"] & Record<string, never>;
+        FieldTemplateConfigBaseDto: {
+            id?: string;
+            label?: string;
+            canEditInline?: boolean;
+            prefix?: string | null;
+            inputType?: components["schemas"]["InputType"];
+            defaultValue?: string;
+        };
+        /** @enum {integer} */
+        InputType: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+        TaskDto: {
+            id?: string;
+            taskFieldInstanceSubmissions?: components["schemas"]["TaskFieldInstanceSubmissionDto"][];
+        };
+        TaskFieldInstanceSubmissionDto: {
+            taskFieldTemplateConfig?: components["schemas"]["TaskFieldTemplateConfigDto"];
+            value?: string;
+        };
+        TaskFieldTemplateConfigDto: components["schemas"]["FieldTemplateConfigBaseDto"] & Record<string, never>;
         InitializeStepsByRegistrationRecordIdCommand: {
             registrationRecordId?: string;
         };
@@ -1946,8 +1962,8 @@ export interface components {
             status?: components["schemas"]["TaskStatusType"];
             note?: string | null;
             summaryItems?: components["schemas"]["SummaryItemDto"][];
-            taskFieldTemplateConfigs?: components["schemas"]["TaskFieldTemplateConfigDto"][];
-            taskFieldInstanceSubmissions?: components["schemas"]["TaskFieldInstanceSubmissionDto"][];
+            taskFieldTemplateConfigs?: components["schemas"]["TaskFieldTemplateConfigDto2"][];
+            taskFieldInstanceSubmissions?: components["schemas"]["TaskFieldInstanceSubmissionDto2"][];
         };
         AssigneeDto2: {
             id?: string;
@@ -1960,7 +1976,7 @@ export interface components {
             label?: string;
             value?: string;
         };
-        TaskFieldTemplateConfigDto: {
+        TaskFieldTemplateConfigDto2: {
             id?: string;
             label?: string;
             isRequired?: boolean;
@@ -1974,16 +1990,15 @@ export interface components {
             key?: string;
             /** Format: int32 */
             order?: number;
+            prefix?: string | null;
             dataSourceConfig?: components["schemas"]["DataSourceConfigDto"] | null;
         };
-        /** @enum {integer} */
-        InputType: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
         DataSourceConfigDto: {
             apiUrl?: string;
             valueField?: string;
             labelField?: string;
         };
-        TaskFieldInstanceSubmissionDto: {
+        TaskFieldInstanceSubmissionDto2: {
             taskFieldTemplateConfigId?: string;
             value?: string | null;
         };
@@ -2005,7 +2020,7 @@ export interface components {
             order?: number;
             note?: string;
             isTaskAction?: boolean;
-            taskFieldTemplateConfigs?: components["schemas"]["TaskFieldTemplateConfigDto"][];
+            taskFieldTemplateConfigs?: components["schemas"]["TaskFieldTemplateConfigDto2"][];
         };
         BaseResponseOfGetTaskDto: components["schemas"]["BaseResponse"] & {
             data?: components["schemas"]["GetTaskDto"] | null;
@@ -2015,9 +2030,9 @@ export interface components {
             assigneeId?: string | null;
             status?: components["schemas"]["TaskStatusType"];
             note?: string | null;
-            taskFieldInstanceSubmissions?: components["schemas"]["TaskFieldInstanceSubmissionDto2"][];
+            taskFieldInstanceSubmissions?: components["schemas"]["TaskFieldInstanceSubmissionDto3"][];
         };
-        TaskFieldInstanceSubmissionDto2: {
+        TaskFieldInstanceSubmissionDto3: {
             taskFieldTemplateConfigId?: string;
             value?: string | null;
         };
@@ -4066,7 +4081,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BaseResponseOfListOfGetTaskDto"];
+                    "application/json": components["schemas"]["BaseResponseOfGetTaskDto"];
                 };
             };
         };

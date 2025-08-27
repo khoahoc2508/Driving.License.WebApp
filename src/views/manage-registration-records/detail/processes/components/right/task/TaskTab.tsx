@@ -82,12 +82,15 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
                     stepId: selectedStep.id
                 })
 
-                if (response.data?.success) {
-                    fetchTasks()
+                if (response.data?.success && response.data?.data) {
+                    // Open edit dialog with the created task to allow user to fill fields
+                    setSelectedTask(response.data.data)
+                    setIsEditDialogOpen(true)
                 }
             }
         } catch (error) {
             console.error('Error creating task from action:', error)
+            // You can add an error notification here
         }
     }
 
@@ -183,7 +186,7 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
         columnHelper.accessor('summaryItems', {
             header: 'NỘI DUNG',
             cell: ({ row }) => (
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5, alignItems: "start", }}>
                     {row.original.summaryItems?.map((item, index) => (
                         <Typography
                             key={index}
@@ -277,6 +280,7 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
                                 key={action.id}
                                 variant='outlined'
                                 color='primary'
+                                onClick={() => handleCreateTaskFromAction(action)}
                             >
                                 {action.name}
                             </Button>

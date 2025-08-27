@@ -133,12 +133,10 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
                         const apiUrl: string = String(ds.apiUrl)
                         const valueField: string = ds?.valueField ? String(ds.valueField) : 'id'
                         const labelField: string = ds?.labelField ? String(ds.labelField) : 'name'
-                        debugger
 
                         const res = await axiosInstance.get(apiUrl)
                         const items = res?.data?.data ?? res?.data ?? []
                         debugger
-
                         const options: AssigneeOption[] = Array.isArray(items)
                             ? items.map((it: any) => ({ value: String(it?.[valueField] ?? ''), label: String(it?.[labelField] ?? '') }))
                             : []
@@ -154,6 +152,7 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
             ).then(results => {
                 const nextMap: Record<string, AssigneeOption[]> = {}
                 const nextLoading: Record<string, boolean> = {}
+                debugger
 
                 results.forEach(({ fieldId, options }) => {
                     nextMap[fieldId] = options
