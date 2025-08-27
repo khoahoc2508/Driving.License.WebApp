@@ -18,7 +18,8 @@ import {
     Typography,
     Button,
     Divider,
-    FormHelperText
+    FormHelperText,
+    InputAdornment
 } from '@mui/material'
 import { toast } from 'react-toastify'
 
@@ -29,6 +30,7 @@ import assigneeAPI from '@/libs/api/assigneeAPI'
 import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
 import stepsAPI from '@/libs/api/stepsAPI'
 import axiosInstance from '@/libs/axios'
+import { formatCurrencyVNDInput } from '@/utils/currency'
 
 type EditTaskDialogProps = {
     open: boolean
@@ -213,17 +215,26 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
                         name={fieldKey}
                         control={control}
                         rules={isRequired ? { required: `${label} là bắt buộc` } : {}}
-                        render={({ field: { onChange, value } }) => (
-                            <TextField
-                                label={isRequired ? `${label} (*)` : label}
-                                fullWidth
-                                variant="outlined"
-                                value={value || ''}
-                                onChange={onChange}
-                                error={!!errors[fieldKey]}
-                                helperText={errors[fieldKey]?.message || hint || description}
-                            />
-                        )}
+                        render={({ field: { onChange, value } }) => {
+                            const isVnd = String(field?.prefix || '').toUpperCase() === 'VND'
+
+                            return (
+                                <TextField
+                                    label={isRequired ? `${label} (*)` : label}
+                                    fullWidth
+                                    variant="outlined"
+                                    value={value || ''}
+                                    onChange={e => onChange(isVnd ? formatCurrencyVNDInput(e.target.value) : e.target.value)}
+                                    error={!!errors[fieldKey]}
+                                    helperText={errors[fieldKey]?.message || hint || description}
+                                    InputProps={{
+                                        startAdornment: field?.prefix ? (
+                                            <InputAdornment position="start">{String(field.prefix)}</InputAdornment>
+                                        ) : undefined
+                                    }}
+                                />
+                            )
+                        }}
                     />
                 )
 
@@ -233,18 +244,27 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
                         name={fieldKey}
                         control={control}
                         rules={isRequired ? { required: `${label} là bắt buộc` } : {}}
-                        render={({ field: { onChange, value } }) => (
-                            <TextField
-                                label={isRequired ? `${label} (*)` : label}
-                                fullWidth
-                                variant="outlined"
-                                type="number"
-                                value={value || ''}
-                                onChange={onChange}
-                                error={!!errors[fieldKey]}
-                                helperText={errors[fieldKey]?.message || hint || description}
-                            />
-                        )}
+                        render={({ field: { onChange, value } }) => {
+                            const isVnd = String(field?.prefix || '').toUpperCase() === 'VND'
+
+                            return (
+                                <TextField
+                                    label={isRequired ? `${label} (*)` : label}
+                                    fullWidth
+                                    variant="outlined"
+                                    type={isVnd ? 'text' : 'number'}
+                                    value={value || ''}
+                                    onChange={e => onChange(isVnd ? formatCurrencyVNDInput(e.target.value) : e.target.value)}
+                                    error={!!errors[fieldKey]}
+                                    helperText={errors[fieldKey]?.message || hint || description}
+                                    InputProps={{
+                                        startAdornment: field?.prefix ? (
+                                            <InputAdornment position="start">{String(field.prefix)}</InputAdornment>
+                                        ) : undefined
+                                    }}
+                                />
+                            )
+                        }}
                     />
                 )
 
@@ -377,17 +397,26 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task }: EditTaskDialogProps)
                         name={fieldKey}
                         control={control}
                         rules={isRequired ? { required: `${label} là bắt buộc` } : {}}
-                        render={({ field: { onChange, value } }) => (
-                            <TextField
-                                label={isRequired ? `${label} (*)` : label}
-                                fullWidth
-                                variant="outlined"
-                                value={value || ''}
-                                onChange={onChange}
-                                error={!!errors[fieldKey]}
-                                helperText={errors[fieldKey]?.message || hint || description}
-                            />
-                        )}
+                        render={({ field: { onChange, value } }) => {
+                            const isVnd = String(field?.prefix || '').toUpperCase() === 'VND'
+
+                            return (
+                                <TextField
+                                    label={isRequired ? `${label} (*)` : label}
+                                    fullWidth
+                                    variant="outlined"
+                                    value={value || ''}
+                                    onChange={e => onChange(isVnd ? formatCurrencyVNDInput(e.target.value) : e.target.value)}
+                                    error={!!errors[fieldKey]}
+                                    helperText={errors[fieldKey]?.message || hint || description}
+                                    InputProps={{
+                                        startAdornment: field?.prefix ? (
+                                            <InputAdornment position="start">{String(field.prefix)}</InputAdornment>
+                                        ) : undefined
+                                    }}
+                                />
+                            )
+                        }}
                     />
                 )
         }

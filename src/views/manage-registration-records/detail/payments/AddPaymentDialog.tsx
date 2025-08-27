@@ -26,6 +26,7 @@ import { toast } from 'react-toastify'
 import type { CreatePaymentCommand } from '@/types/registrationRecords'
 import registrationRecordsAPI from '@/libs/api/registrationRecordsAPI'
 import feeTypeAPI from '@/libs/api/feeTypeAPI'
+import { formatCurrencyVNDInput } from '@/utils/currency'
 
 export enum DialogMode {
     ADD = 0,
@@ -110,15 +111,13 @@ const AddPaymentDialog = ({ open, onClose, onSuccess, registrationRecordId, mode
     const parseAmount = (input: string): number => {
         const numeric = input.replace(/[^\d]/g, '')
 
-        
-return numeric ? Number(numeric) : 0
+
+        return numeric ? Number(numeric) : 0
     }
 
     const formatAmount = (value: string): string => {
         const num = value.replace(/[^\d]/g, '')
-
-        
-return num ? new Intl.NumberFormat('vi-VN').format(Number(num)) : ''
+        return num ? new Intl.NumberFormat('vi-VN').format(Number(num)) : ''
     }
 
     const onSubmit = async (data: FormData) => {
@@ -144,8 +143,8 @@ return num ? new Intl.NumberFormat('vi-VN').format(Number(num)) : ''
                     toast.error(response.data.message || 'Có lỗi xảy ra khi cập nhật khoản phí')
                 }
 
-                
-return
+
+                return
             }
 
             const payload: CreatePaymentCommand = {
@@ -223,7 +222,7 @@ return
                                 label={<span>Số tiền <span style={{ color: 'red' }}>(*)</span></span>}
                                 fullWidth
                                 variant="outlined"
-                                onChange={e => field.onChange(formatAmount(e.target.value))}
+                                onChange={e => field.onChange(formatCurrencyVNDInput(e.target.value))}
                                 InputProps={{
                                     startAdornment: <InputAdornment position="start">VND</InputAdornment>
                                 }}
