@@ -111,13 +111,8 @@ const AddPaymentDialog = ({ open, onClose, onSuccess, registrationRecordId, mode
     const parseAmount = (input: string): number => {
         const numeric = input.replace(/[^\d]/g, '')
 
-
-        return numeric ? Number(numeric) : 0
-    }
-
-    const formatAmount = (value: string): string => {
-        const num = value.replace(/[^\d]/g, '')
-        return num ? new Intl.NumberFormat('vi-VN').format(Number(num)) : ''
+        
+return numeric ? Number(numeric) : 0
     }
 
     const onSubmit = async (data: FormData) => {

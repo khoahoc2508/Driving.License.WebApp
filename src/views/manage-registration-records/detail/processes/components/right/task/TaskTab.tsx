@@ -56,6 +56,7 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
     const fetchTaskActions = async () => {
         if (selectedStep?.id) {
             const response = await stepsAPI.GetTaskActionsByStepId(selectedStep.id)
+
             setTaskActions(response.data?.data || [])
         }
     }
@@ -94,6 +95,7 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
             }
         } catch (error) {
             console.error('Error creating task from action:', error)
+
             // You can add an error notification here
         }
     }

@@ -1,6 +1,8 @@
 export const formatCurrencyVNDInput = (value: string): string => {
   const digitsOnly = (value || '').replace(/[^\d]/g, '')
+
   if (!digitsOnly) return ''
+
   try {
     return new Intl.NumberFormat('vi-VN').format(Number(digitsOnly))
   } catch {
@@ -10,8 +12,10 @@ export const formatCurrencyVNDInput = (value: string): string => {
 
 export const parseVNDToNumber = (value: string): number | null => {
   const digitsOnly = (value || '').replace(/[^\d]/g, '')
+
   if (!digitsOnly) return null
-  return Number(digitsOnly)
+  
+return Number(digitsOnly)
 }
 
 export const getInputBehavior = (field: any) => {

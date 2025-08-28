@@ -34,6 +34,7 @@ const OverviewTab = ({ selectedStep }: OverviewTabProps) => {
 
     const startEdit = (item: components['schemas']['StepFieldInstanceSubmissionDto']) => {
         const fieldId = String(item.stepFieldTemplateConfig?.id || '')
+
         setEditingFieldId(fieldId)
         setEditingValue(String(item?.value ?? ''))
     }
@@ -48,6 +49,7 @@ const OverviewTab = ({ selectedStep }: OverviewTabProps) => {
         item: components['schemas']['StepFieldInstanceSubmissionDto']
     ) => {
         const stepFieldTemplateConfigId = String(item.stepFieldTemplateConfig?.id || '')
+
         await stepsAPI.UpdateStepFieldInline({
             stepId,
             stepFieldInstanceSubmissions: [
@@ -136,6 +138,7 @@ const OverviewTab = ({ selectedStep }: OverviewTabProps) => {
                                                     inputType: item.stepFieldTemplateConfig?.inputType,
                                                     prefix: item.stepFieldTemplateConfig?.prefix
                                                 } as any)
+
                                                 setEditingValue(behavior.format(e.target.value))
                                             }}
                                             fullWidth

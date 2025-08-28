@@ -30,7 +30,7 @@ import assigneeAPI from '@/libs/api/assigneeAPI'
 import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
 import stepsAPI from '@/libs/api/stepsAPI'
 import axiosInstance from '@/libs/axios'
-import { formatCurrencyVNDInput, getInputBehavior } from '@/utils/helpers'
+import { getInputBehavior } from '@/utils/helpers'
 
 type EditTaskDialogProps = {
     open: boolean
@@ -139,6 +139,7 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task, isCreate }: EditTaskDi
 
                         const res = await axiosInstance.get(apiUrl)
                         const items = res?.data?.data ?? res?.data ?? []
+
                         const options: AssigneeOption[] = Array.isArray(items)
                             ? items.map((it: any) => ({ value: String(it?.[valueField] ?? ''), label: String(it?.[labelField] ?? '') }))
                             : []
@@ -151,6 +152,7 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task, isCreate }: EditTaskDi
             ).then(results => {
                 const nextMap: Record<string, AssigneeOption[]> = {}
                 const nextLoading: Record<string, boolean> = {}
+
                 results.forEach(({ fieldId, options }) => {
                     nextMap[fieldId] = options
                     nextLoading[fieldId] = false
