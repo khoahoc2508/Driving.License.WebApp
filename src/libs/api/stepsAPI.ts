@@ -30,6 +30,15 @@ const GetTaskByStepId = async (params: GetTaskByStepIdQueryParams) => {
   })
 }
 
+const UpdateStepFieldInline = async (data: {
+  stepId: string
+  stepFieldInstanceSubmissions: { stepFieldTemplateConfigId: string; value: string }[]
+}) => {
+  return await axiosInstance.put(`/api/steps/${data.stepId}`, {
+    stepFieldInstanceSubmissions: data.stepFieldInstanceSubmissions
+  })
+}
+
 const GetTaskActionsByStepId = async (stepId: string) => {
   return await axiosInstance.get<BaseResponseOfListOfTaskActionTemplateDto>('/api/tasks/actions', {
     params: {
@@ -52,7 +61,8 @@ const stepsAPI = {
   GetTaskByStepId,
   GetTaskActionsByStepId,
   CreateTaskFromTemplate,
-  UpdateTask
+  UpdateTask,
+  UpdateStepFieldInline
 }
 
 export default stepsAPI

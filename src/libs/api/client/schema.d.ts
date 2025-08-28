@@ -996,6 +996,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/steps/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["Steps_UpdateStepCommand"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/tasks/all": {
         parameters: {
             query?: never;
@@ -1951,6 +1967,16 @@ export interface components {
         TaskFieldTemplateConfigDto: components["schemas"]["FieldTemplateConfigBaseDto"] & Record<string, never>;
         InitializeStepsByRegistrationRecordIdCommand: {
             registrationRecordId?: string;
+        };
+        UpdateStepCommand: {
+            id?: string;
+            assigneeId?: string | null;
+            note?: string | null;
+            stepFieldInstanceSubmissions?: components["schemas"]["StepFieldInstanceSubmissionDto2"][];
+        };
+        StepFieldInstanceSubmissionDto2: {
+            stepFieldTemplateConfigId?: string;
+            value?: string | null;
         };
         BaseResponseOfListOfGetTaskDto: components["schemas"]["BaseResponse"] & {
             data?: components["schemas"]["GetTaskDto"][] | null;
@@ -3960,6 +3986,31 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["InitializeStepsByRegistrationRecordIdCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    Steps_UpdateStepCommand: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateStepCommand"];
             };
         };
         responses: {
