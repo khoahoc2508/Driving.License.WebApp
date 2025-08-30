@@ -2,7 +2,7 @@
 
 // React Imports
 import type { CSSProperties } from 'react';
-import { useMemo, useState, useEffect, useLayoutEffect } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 
 // MUI Imports
 import { useRouter } from 'next/navigation'
@@ -362,20 +362,6 @@ const Table = ({
         [data]
     )
 
-    const getTotalColumns = () => {
-        let total = 0
-
-        columns.forEach(column => {
-            if ('columns' in column && column.columns) {
-                total += column.columns.length
-            } else {
-                total += 1
-            }
-        })
-
-        return total
-    }
-
     const handleOpenDeleteDialog = (id: string | undefined) => {
         if (id) {
             setItemIdToDelete(id);
@@ -441,24 +427,28 @@ const Table = ({
         if (table.getAllColumns().length > 0) {
             // Pin STT column to left
             const sttColumn = table.getColumn(CONFIG.RegistrationRecordsTableColumns.STT)
+
             if (sttColumn) {
                 sttColumn.pin('left')
             }
 
             // Pin HẠNG column to left
             const hangColumn = table.getColumn(CONFIG.RegistrationRecordsTableColumns.HANG)
+
             if (hangColumn) {
                 hangColumn.pin('left')
             }
 
             // Pin HỒ SƠ column to left
             const hoSoColumn = table.getColumn(CONFIG.RegistrationRecordsTableColumns.HO_SO)
+
             if (hoSoColumn) {
                 hoSoColumn.pin('left')
             }
 
             // Pin THAO TÁC column to right
             const thaoTacColumn = table.getColumn(CONFIG.RegistrationRecordsTableColumns.THAO_TAC)
+
             if (thaoTacColumn) {
                 thaoTacColumn.pin('right')
             }
@@ -531,6 +521,7 @@ const Table = ({
                             {isLoading ? (
                                 (() => {
                                     const visibleColumns = table.getVisibleFlatColumns()
+
                                     const filteredColumns = visibleColumns.filter(col => {
                                         return !('columns' in col.columnDef) || !col.columnDef.columns || col.columnDef.columns.length === 0
                                     })

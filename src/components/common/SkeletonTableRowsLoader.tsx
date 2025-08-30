@@ -21,7 +21,9 @@ const SkeletonTableRowsLoader = ({
       <tr key={index}>
         {columns.map((column, colIndex) => {
           const pinningStyles = customGetCommonPinningStyles(column)
-          return (
+
+          
+return (
             <td
               key={colIndex}
               style={{
