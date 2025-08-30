@@ -118,10 +118,11 @@ const OverviewTab = ({ selectedStep }: OverviewTabProps) => {
                 />
                 {stepOverview?.stepFieldInstanceSubmissions?.map(
                     (
-                        item: components['schemas']['StepFieldInstanceSubmissionDto']
+                        item: components['schemas']['StepFieldInstanceSubmissionDto'],
+                        index: number
                     ) => (
                         <Box
-                            key={item.stepFieldTemplateConfig?.id || item.stepFieldTemplateConfig?.label}
+                            key={`step-field-${item.stepFieldTemplateConfig?.id || 'unknown'}-${index}`}
                             sx={{ display: 'grid', gridTemplateColumns: '180px 1fr', rowGap: 3, alignItems: 'center' }}
                         >
                             <Typography variant="subtitle2" color="text.secondary">
@@ -177,14 +178,14 @@ const OverviewTab = ({ selectedStep }: OverviewTabProps) => {
             <Box sx={{ p: 4 }}>
                 {stepOverview?.taskInfos
                     ?.flatMap(
-                        (task) =>
+                        (task, taskIndex) =>
                             task.taskFieldInstanceSubmissions?.map(
                                 (
-                                    tItem: components['schemas']['TaskFieldInstanceSubmissionDto']
+                                    tItem: components['schemas']['TaskFieldInstanceSubmissionDto'],
+                                    fieldIndex
                                 ) => ({
                                     key:
-                                        `${task.id}-${tItem.taskFieldTemplateConfig?.id}` ||
-                                        tItem.taskFieldTemplateConfig?.label,
+                                        `task-${taskIndex}-${tItem.taskFieldTemplateConfig?.id || 'unknown'}-${fieldIndex}`,
                                     label: tItem.taskFieldTemplateConfig?.label,
                                     value: tItem.value,
                                     canEditInline:

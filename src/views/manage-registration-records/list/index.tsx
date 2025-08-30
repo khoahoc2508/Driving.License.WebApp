@@ -363,11 +363,14 @@ const ManageRegistrationRecords = () => {
                                 isOptionEqualToValue={(opt, val) => opt.value === val.value}
                                 renderInput={params => <TextField {...params} label='Hạng' />}
                                 renderTags={(tagValue, getTagProps) =>
-                                    tagValue.map((option, index) => (
-                                        <Tooltip key={index} title={option.label} arrow>
-                                            <Chip label={option.label} {...(getTagProps({ index }) as {})} size='small' />
-                                        </Tooltip>
-                                    ))
+                                    tagValue.map((option, index) => {
+                                        const { key, ...chipProps } = getTagProps({ index }) as any;
+                                        return (
+                                            <Tooltip key={index} title={option.label} arrow>
+                                                <Chip label={option.label} {...chipProps} size='small' />
+                                            </Tooltip>
+                                        );
+                                    })
                                 }
                                 noOptionsText='Không có dữ liệu'
                             />
@@ -384,17 +387,18 @@ const ManageRegistrationRecords = () => {
                                 isOptionEqualToValue={(opt, val) => opt.value === val.value}
                                 renderInput={params => <TextField {...params} label='Thanh toán' />}
                                 renderTags={(tagValue, getTagProps) =>
-                                    tagValue.map((option, index) => (
-                                        <Tooltip key={index} title={option.label} arrow>
-                                            <Chip label={option.label} {...(getTagProps({ index }) as {})} size='small' />
-                                        </Tooltip>
-                                    ))
+                                    tagValue.map((option, index) => {
+                                        const { key, ...chipProps } = getTagProps({ index }) as any;
+                                        return (
+                                            <Tooltip key={index} title={option.label} arrow>
+                                                <Chip label={option.label} {...chipProps} size='small' />
+                                            </Tooltip>
+                                        );
+                                    })
                                 }
                                 sx={{
                                     '& .MuiAutocomplete-tag': {
-                                        margin: 0,
-                                        marginLeft: 0.5,
-                                        maxWidth: '69%',
+                                        margin: 0.5,
                                         '& .MuiChip-label': {
                                             overflow: 'hidden',
                                             textOverflow: 'ellipsis',
@@ -417,17 +421,18 @@ const ManageRegistrationRecords = () => {
                                 isOptionEqualToValue={(opt, val) => opt.value === val.value}
                                 renderInput={params => <TextField {...params} label='Trạng thái' />}
                                 renderTags={(tagValue, getTagProps) =>
-                                    tagValue.map((option, index) => (
-                                        <Tooltip key={index} title={option.label} arrow>
-                                            <Chip label={option.label} {...(getTagProps({ index }) as {})} size='small' />
-                                        </Tooltip>
-                                    ))
+                                    tagValue.map((option, index) => {
+                                        const { key, ...chipProps } = getTagProps({ index }) as any;
+                                        return (
+                                            <Tooltip key={index} title={option.label} arrow>
+                                                <Chip label={option.label} {...chipProps} size='small' />
+                                            </Tooltip>
+                                        );
+                                    })
                                 }
                                 sx={{
                                     '& .MuiAutocomplete-tag': {
-                                        margin: 0,
-                                        marginLeft: 0.5,
-                                        maxWidth: '69%',
+                                        margin: 0.5,
                                         '& .MuiChip-label': {
                                             overflow: 'hidden',
                                             textOverflow: 'ellipsis',
@@ -451,17 +456,18 @@ const ManageRegistrationRecords = () => {
                                 isOptionEqualToValue={(opt, val) => opt.value === val.value}
                                 renderInput={params => <TextField {...params} label='Người phụ trách' />}
                                 renderTags={(tagValue, getTagProps) =>
-                                    tagValue.map((option, index) => (
-                                        <Tooltip key={index} title={option.label} arrow>
-                                            <Chip label={option.label} {...(getTagProps({ index }) as {})} size='small' />
-                                        </Tooltip>
-                                    ))
+                                    tagValue.map((option, index) => {
+                                        const { key, ...chipProps } = getTagProps({ index }) as any;
+                                        return (
+                                            <Tooltip key={index} title={option.label} arrow>
+                                                <Chip label={option.label} {...chipProps} size='small' />
+                                            </Tooltip>
+                                        );
+                                    })
                                 }
                                 sx={{
                                     '& .MuiAutocomplete-tag': {
-                                        margin: 0,
-                                        marginLeft: 0.5,
-                                        maxWidth: '69%',
+                                        margin: 0.5,
                                         '& .MuiChip-label': {
                                             overflow: 'hidden',
                                             textOverflow: 'ellipsis',
@@ -487,17 +493,18 @@ const ManageRegistrationRecords = () => {
                                 isOptionEqualToValue={(opt, val) => opt.value === val.value}
                                 renderInput={params => <TextField {...params} label='Cộng tác viên' />}
                                 renderTags={(tagValue, getTagProps) =>
-                                    tagValue.map((option, index) => (
-                                        <Tooltip key={index} title={option.label} arrow>
-                                            <Chip label={option.label} {...(getTagProps({ index }) as {})} size='small' />
-                                        </Tooltip>
-                                    ))
+                                    tagValue.map((option, index) => {
+                                        const { key, ...chipProps } = getTagProps({ index }) as any;
+                                        return (
+                                            <Tooltip key={index} title={option.label} arrow>
+                                                <Chip label={option.label} {...chipProps} size='small' />
+                                            </Tooltip>
+                                        );
+                                    })
                                 }
                                 sx={{
                                     '& .MuiAutocomplete-tag': {
-                                        margin: 0,
-                                        marginLeft: 0.5,
-                                        maxWidth: '69%',
+                                        margin: 0.5,
                                         '& .MuiChip-label': {
                                             overflow: 'hidden',
                                             textOverflow: 'ellipsis',
@@ -610,7 +617,7 @@ const ManageRegistrationRecords = () => {
                                 column.column.toLowerCase().includes(columnVisibilitySearch.toLowerCase()) ||
                                 removeAccents(column.column.toLowerCase()).includes(removeAccents(columnVisibilitySearch.toLowerCase()))
                             )
-                            .map((column) => {
+                            .map((column, index) => {
                                 if (column.column === CONFIG.RegistrationRecordsTableColumns.TONG || column.column === CONFIG.RegistrationRecordsTableColumns.DA_NOP || column.column === CONFIG.RegistrationRecordsTableColumns.CON_THIEU) {
                                     if (column.column === CONFIG.RegistrationRecordsTableColumns.TONG) {
                                         const tongVisible = columnVisibility[CONFIG.RegistrationRecordsTableColumns.TONG] !== false;
@@ -620,7 +627,7 @@ const ManageRegistrationRecords = () => {
                                         const someVisible = tongVisible || daNopVisible || conThieuVisible;
 
                                         return (
-                                            <Box key="payment-group" sx={{ mb: 2 }}>
+                                            <Box key={`payment-group-${index}`} sx={{ mb: 2 }}>
                                                 <FormControlLabel
                                                     control={
                                                         <Checkbox
@@ -651,7 +658,7 @@ const ManageRegistrationRecords = () => {
 
                                 return (
                                     <FormControlLabel
-                                        key={column.column}
+                                        key={`${column.column}-${index}`}
                                         control={
                                             <Checkbox
                                                 checked={columnVisibility[column.column] !== false}
