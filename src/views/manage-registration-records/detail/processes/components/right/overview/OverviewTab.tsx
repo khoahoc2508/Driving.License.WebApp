@@ -106,7 +106,7 @@ const OverviewTab = ({ selectedStep }: OverviewTabProps) => {
 
     return (
         <Box>
-            <Box sx={{ mb: 2, p: 4, display: 'grid', gridTemplateColumns: '180px 1fr', rowGap: 3 }}>
+            <Box sx={{ p: 4, display: 'grid', gridTemplateColumns: '180px 1fr', rowGap: 3 }}>
                 <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
                     Trạng thái:
                 </Typography>
@@ -122,7 +122,7 @@ const OverviewTab = ({ selectedStep }: OverviewTabProps) => {
                     ) => (
                         <Box
                             key={item.stepFieldTemplateConfig?.id || item.stepFieldTemplateConfig?.label}
-                            sx={{ display: 'grid', gridTemplateColumns: '180px 1fr', rowGap: 3, mb: 2, alignItems: 'center' }}
+                            sx={{ display: 'grid', gridTemplateColumns: '180px 1fr', rowGap: 3, alignItems: 'center' }}
                         >
                             <Typography variant="subtitle2" color="text.secondary">
                                 {item.stepFieldTemplateConfig?.label}
@@ -173,8 +173,8 @@ const OverviewTab = ({ selectedStep }: OverviewTabProps) => {
                     )
                 )}
             </Box>
-            <Divider sx={{ my: 2 }} />
-            <Box sx={{ p: 4, pt: 2 }}>
+            {(stepOverview?.taskInfos ?? []).length > 0 && <Divider sx={{ my: 2 }} />}
+            <Box sx={{ p: 4 }}>
                 {stepOverview?.taskInfos
                     ?.flatMap(
                         (task) =>
