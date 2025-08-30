@@ -2,7 +2,7 @@
 
 // React Imports
 import type { CSSProperties } from 'react';
-import { useMemo, useState, useEffect } from 'react'
+import { useMemo, useState, useEffect, useLayoutEffect } from 'react'
 
 // MUI Imports
 import { useRouter } from 'next/navigation'
@@ -72,25 +72,7 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
     return itemRank.passed
 }
 
-// These are the important styles to make sticky column pinning work!
-const getCommonPinningStyles = (column: Column<any>): CSSProperties => {
-    const isPinned = column.getIsPinned()
-    const isLastLeftPinnedColumn = isPinned === 'left' && column.getIsLastColumn('left')
-    const isFirstRightPinnedColumn = isPinned === 'right' && column.getIsFirstColumn('right')
 
-    return {
-        boxShadow: isLastLeftPinnedColumn
-            ? '-4px 0 4px -4px gray inset'
-            : isFirstRightPinnedColumn
-                ? '4px 0 4px -4px gray inset'
-                : undefined,
-        left: isPinned === 'left' ? `${column.getStart('left')}px` : undefined,
-        right: isPinned === 'right' ? `${column.getAfter('right')}px` : undefined,
-        position: isPinned ? 'sticky' : 'relative',
-        width: column.getSize(),
-        zIndex: isPinned ? 1 : 0,
-    }
-}
 
 const Table = ({
     data = [],
@@ -121,8 +103,30 @@ const Table = ({
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null);
     const [columnPinning, setColumnPinning] = useState({})
+    const [pinningApplied, setPinningApplied] = useState(false)
 
     const router = useRouter()
+
+    // These are the important styles to make sticky column pinning work!
+    const getCommonPinningStyles = (column: Column<any>): CSSProperties => {
+        const isPinned = column.getIsPinned()
+        const isLastLeftPinnedColumn = isPinned === 'left' && column.getIsLastColumn('left')
+        const isFirstRightPinnedColumn = isPinned === 'right' && column.getIsFirstColumn('right')
+
+
+        return {
+            boxShadow: isLastLeftPinnedColumn
+                ? '-4px 0 4px -4px gray inset'
+                : isFirstRightPinnedColumn
+                    ? '4px 0 4px -4px gray inset'
+                    : undefined,
+            left: isPinned === 'left' ? `${column.getStart('left')}px` : undefined,
+            right: isPinned === 'right' ? `${column.getAfter('right')}px` : undefined,
+            position: isPinned ? 'sticky' : 'relative',
+            width: column.getSize(),
+            zIndex: isPinned ? 1 : 0,
+        }
+    }
 
     const getStatusChip = (status: RegistrationRecordStatus | undefined) => {
         let label = ''
@@ -436,38 +440,148 @@ const Table = ({
         enableColumnResizing: true
     })
 
+    // Memoize pinned columns to ensure they're available for skeleton
+    const pinnedColumns = useMemo(() => {
+        if (table.getAllColumns().length > 0) {
+            return {
+                left: table.getAllColumns().filter(col => col.getIsPinned() === 'left'),
+                right: table.getAllColumns().filter(col => col.getIsPinned() === 'right')
+            }
+        }
+        return { left: [], right: [] }
+    }, [table, pinningApplied])
+
     // Pin columns when component mounts
     useEffect(() => {
-        if (table.getAllColumns().length > 0) {
+        const applyPinning = () => {
+            if (table.getAllColumns().length > 0) {
+                // Pin STT column to left
+                const sttColumn = table.getColumn(CONFIG.RegistrationRecordsTableColumns.STT)
+                if (sttColumn) {
+                    sttColumn.pin('left')
+                    console.log('STT column pinned:', sttColumn.getIsPinned())
+                } else {
+                    console.log('STT column not found!')
+                }
+
+                // Pin HẠNG column to left
+                const hangColumn = table.getColumn(CONFIG.RegistrationRecordsTableColumns.HANG)
+                if (hangColumn) {
+                    hangColumn.pin('left')
+                    console.log('HẠNG column pinned:', hangColumn.getIsPinned())
+                } else {
+                    console.log('HẠNG column not found!')
+                }
+
+                // Pin HỒ SƠ column to left
+                const hoSoColumn = table.getColumn(CONFIG.RegistrationRecordsTableColumns.HO_SO)
+                if (hoSoColumn) {
+                    hoSoColumn.pin('left')
+                    console.log('HỒ SƠ column pinned:', hoSoColumn.getIsPinned())
+                } else {
+                    console.log('HỒ SƠ column not found!')
+                }
+
+                // Pin THAO TÁC column to right
+                const thaoTacColumn = table.getColumn(CONFIG.RegistrationRecordsTableColumns.THAO_TAC)
+                if (thaoTacColumn) {
+                    thaoTacColumn.pin('right')
+                    console.log('THAO TÁC column pinned:', thaoTacColumn.getIsPinned())
+                } else {
+                    console.log('THAO TÁC column not found!')
+                }
+
+                // Force table to re-render after pinning
+                table.setColumnPinning(prev => ({ ...prev }))
+
+                // Mark pinning as applied
+                setPinningApplied(true)
+
+                // Debug: Log all columns and their pinning status
+                console.log('All columns after pinning:', table.getAllColumns().map(col => ({
+                    id: col.id,
+                    isPinned: col.getIsPinned(),
+                    position: col.getIsPinned()
+                })))
+
+                // Debug: Log visible flat columns specifically
+                console.log('Visible flat columns for skeleton:', table.getVisibleFlatColumns().map(col => ({
+                    id: col.id,
+                    isPinned: col.getIsPinned(),
+                    position: col.getIsPinned()
+                })))
+            }
+        }
+
+        // Try to apply pinning immediately
+        applyPinning()
+
+        // Also try after a short delay to ensure table is fully initialized
+        const timer = setTimeout(applyPinning, 100)
+
+        return () => clearTimeout(timer)
+    }, [table, columns])
+
+    // Effect to ensure pinning is applied after columns are created
+    useEffect(() => {
+        if (columns.length > 0 && table.getAllColumns().length > 0 && !pinningApplied) {
+            console.log('Columns created, applying pinning...')
+
             // Pin STT column to left
             const sttColumn = table.getColumn(CONFIG.RegistrationRecordsTableColumns.STT)
-
-            if (sttColumn) {
-                sttColumn.pin('left')
-            }
+            if (sttColumn) sttColumn.pin('left')
 
             // Pin HẠNG column to left
             const hangColumn = table.getColumn(CONFIG.RegistrationRecordsTableColumns.HANG)
-
-            if (hangColumn) {
-                hangColumn.pin('left')
-            }
+            if (hangColumn) hangColumn.pin('left')
 
             // Pin HỒ SƠ column to left
             const hoSoColumn = table.getColumn(CONFIG.RegistrationRecordsTableColumns.HO_SO)
-
-            if (hoSoColumn) {
-                hoSoColumn.pin('left')
-            }
+            if (hoSoColumn) hoSoColumn.pin('left')
 
             // Pin THAO TÁC column to right
             const thaoTacColumn = table.getColumn(CONFIG.RegistrationRecordsTableColumns.THAO_TAC)
+            if (thaoTacColumn) thaoTacColumn.pin('right')
 
-            if (thaoTacColumn) {
-                thaoTacColumn.pin('right')
-            }
+            // Force re-render
+            table.setColumnPinning(prev => ({ ...prev }))
+
+            // Mark pinning as applied
+            setPinningApplied(true)
         }
-    }, [table])
+    }, [columns, table, pinningApplied])
+
+    // Additional effect to ensure pinning is applied when needed
+    useEffect(() => {
+        if (table.getAllColumns().length > 0 && !pinningApplied) {
+            // Re-apply pinning to ensure it's working
+            const sttColumn = table.getColumn(CONFIG.RegistrationRecordsTableColumns.STT)
+            if (sttColumn) sttColumn.pin('left')
+
+            const hangColumn = table.getColumn(CONFIG.RegistrationRecordsTableColumns.HANG)
+            if (hangColumn) hangColumn.pin('left')
+
+            const hoSoColumn = table.getColumn(CONFIG.RegistrationRecordsTableColumns.HO_SO)
+            if (hoSoColumn) hoSoColumn.pin('left')
+
+            const thaoTacColumn = table.getColumn(CONFIG.RegistrationRecordsTableColumns.THAO_TAC)
+            if (thaoTacColumn) thaoTacColumn.pin('right')
+
+            // Force re-render
+            table.setColumnPinning(prev => ({ ...prev }))
+
+            // Mark pinning as applied
+            setPinningApplied(true)
+
+            // Debug: Log pinning status
+            console.log('Pinning reapplied:', {
+                stt: sttColumn?.getIsPinned(),
+                hang: hangColumn?.getIsPinned(),
+                hoSo: hoSoColumn?.getIsPinned(),
+                thaoTac: thaoTacColumn?.getIsPinned()
+            })
+        }
+    }, [table, pinningApplied])
 
 
 
@@ -534,13 +648,44 @@ const Table = ({
                             ))}
                         </thead>
                         <tbody>
-                            {isLoading ? (
+                            {!isLoading ? (
+                                // Show skeleton with proper pinning only when pinning is applied
+                                pinningApplied ? (
+                                    (() => {
+                                        // Use visible flat columns but filter out grouped columns
+                                        const visibleColumns = table.getVisibleFlatColumns()
+                                        const filteredColumns = visibleColumns.filter(col => {
+                                            // Filter out grouped columns that might cause issues
+                                            return !col.columnDef.columns || col.columnDef.columns.length === 0
+                                        })
 
-                                // Show skeleton loading when data is loading
-                                <SkeletonTableRowsLoader
-                                    rowsNum={Math.min(pageSize, 5)} // Show max 5 skeleton rows
-                                    columnsNum={getTotalColumns()}
-                                />
+                                        console.log('Skeleton columns count:', filteredColumns.length)
+                                        console.log('Skeleton columns:', filteredColumns.map(col => ({
+                                            id: col.id,
+                                            isPinned: col.getIsPinned(),
+                                            position: col.getIsPinned()
+                                        })))
+
+                                        return (
+                                            <SkeletonTableRowsLoader
+                                                rowsNum={Math.min(pageSize, 5)} // Show max 5 skeleton rows
+                                                columns={filteredColumns}
+                                                getCommonPinningStyles={getCommonPinningStyles}
+                                            />
+                                        )
+                                    })()
+                                ) : (
+                                    // Show simple loading while waiting for pinning
+                                    [...Array(Math.min(pageSize, 5))].map((row, index) => (
+                                        <tr key={index}>
+                                            {[...Array(getTotalColumns())].map((col, colIndex) => (
+                                                <td key={colIndex}>
+                                                    <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
+                                                </td>
+                                            ))}
+                                        </tr>
+                                    ))
+                                )
                             ) : table.getRowModel().rows.length === 0 ? (
 
                                 // Show no data message when no rows
