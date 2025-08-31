@@ -1,11 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 
 import { Box, Grid } from '@mui/material'
 
 import type { GetStepsDto } from '@/types/stepsTypes'
-import ProcessSteps from './components/left/ProcessSteps'
+import ProcessSteps, { type ProcessStepsRef } from './components/left/ProcessSteps'
 import MainContent from './components/right/MainContent'
 
 type ProcessingTabProps = {
@@ -15,10 +15,18 @@ type ProcessingTabProps = {
 const ProcessingTab = ({ registrationRecordId }: ProcessingTabProps) => {
     const [selectedStep, setSelectedStep] = useState<GetStepsDto | null>(null)
     const [selectedStepIndex, setSelectedStepIndex] = useState<number>(-1)
+    const processStepsRef = useRef<ProcessStepsRef>(null)
 
     const handleStepClick = (step: GetStepsDto, stepIndex: number) => {
         setSelectedStep(step)
         setSelectedStepIndex(stepIndex)
+    }
+
+    const handleRefreshSteps = () => {
+        if (processStepsRef.current) {
+            processStepsRef.current.refreshSteps()
+            setSelectedStepIndex(prev => prev + 1)
+        }
     }
 
     return (
@@ -26,6 +34,7 @@ const ProcessingTab = ({ registrationRecordId }: ProcessingTabProps) => {
             <Grid container spacing={3}>
                 <Grid item xs={12} md={4}>
                     <ProcessSteps
+                        ref={processStepsRef}
                         registrationRecordId={registrationRecordId}
                         onStepClick={handleStepClick}
                         selectedStepIndex={selectedStepIndex}
@@ -35,6 +44,8 @@ const ProcessingTab = ({ registrationRecordId }: ProcessingTabProps) => {
                 <Grid item xs={12} md={8}>
                     <MainContent
                         selectedStep={selectedStep}
+                        registrationRecordId={registrationRecordId}
+                        onRefreshSteps={handleRefreshSteps}
                     />
                 </Grid>
             </Grid>

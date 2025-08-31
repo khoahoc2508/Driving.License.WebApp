@@ -1012,6 +1012,38 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/steps/{id}/actions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Steps_GetTaskActionTemplatesByStepIdQuery"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/steps/create-from-template": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Steps_CreateTaskFromTemplateCommand"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/tasks/all": {
         parameters: {
             query?: never;
@@ -1036,22 +1068,6 @@ export interface paths {
             cookie?: never;
         };
         get: operations["Tasks_GetTaskActionTemplatesByStepIdQuery"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/tasks/key/{key}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["Tasks_GetSingleTaskByKeyQuery"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1098,13 +1114,10 @@ export interface components {
     schemas: {
         PaginatedListOfAssigneeDto: {
             data?: components["schemas"]["AssigneeDto"][];
-
             /** Format: int32 */
             pageNumber?: number;
-
             /** Format: int32 */
             totalPages?: number;
-
             /** Format: int32 */
             totalCount?: number;
             hasPreviousPage?: boolean;
@@ -1118,7 +1131,6 @@ export interface components {
             active?: boolean;
             assigneeType?: components["schemas"]["AssigneeType"];
         };
-
         /** @enum {integer} */
         AssigneeType: 1 | 2 | 3;
         BaseResponseOfListOfAssigneeDto: components["schemas"]["BaseResponse"] & {
@@ -1129,7 +1141,6 @@ export interface components {
             message?: string | null;
             statusCode?: components["schemas"]["HttpStatusCode"];
         };
-
         /** @enum {integer} */
         HttpStatusCode: 100 | 101 | 102 | 103 | 200 | 201 | 202 | 203 | 204 | 205 | 206 | 207 | 208 | 226 | 300 | 300 | 301 | 301 | 302 | 302 | 303 | 303 | 304 | 305 | 306 | 307 | 307 | 308 | 400 | 401 | 402 | 403 | 404 | 405 | 406 | 407 | 408 | 409 | 410 | 411 | 412 | 413 | 414 | 415 | 416 | 417 | 421 | 422 | 422 | 423 | 424 | 426 | 428 | 429 | 431 | 451 | 500 | 501 | 502 | 503 | 504 | 505 | 506 | 507 | 508 | 510 | 511;
         BaseResponseOfAssigneeDto: components["schemas"]["BaseResponse"] & {
@@ -1171,13 +1182,10 @@ export interface components {
         };
         PaginatedListOfGetCarsDto: {
             data?: components["schemas"]["GetCarsDto"][];
-
             /** Format: int32 */
             pageNumber?: number;
-
             /** Format: int32 */
             totalPages?: number;
-
             /** Format: int32 */
             totalCount?: number;
             hasPreviousPage?: boolean;
@@ -1235,13 +1243,10 @@ export interface components {
         };
         PaginatedListOfGetDATDevicesDto: {
             data?: components["schemas"]["GetDATDevicesDto"][];
-
             /** Format: int32 */
             pageNumber?: number;
-
             /** Format: int32 */
             totalPages?: number;
-
             /** Format: int32 */
             totalCount?: number;
             hasPreviousPage?: boolean;
@@ -1284,13 +1289,10 @@ export interface components {
         };
         PaginatedListOfGetExamCentersDto: {
             data?: components["schemas"]["GetExamCentersDto"][];
-
             /** Format: int32 */
             pageNumber?: number;
-
             /** Format: int32 */
             totalPages?: number;
-
             /** Format: int32 */
             totalCount?: number;
             hasPreviousPage?: boolean;
@@ -1338,16 +1340,12 @@ export interface components {
             id?: string;
             name?: string;
             description?: string;
-
             /** Format: int32 */
             totalQuestions?: number;
-
             /** Format: int32 */
             passingScore?: number;
-
             /** Format: int32 */
             durationMinutes?: number;
-
             /** Format: int32 */
             order?: number;
             examType?: components["schemas"]["ExamType"];
@@ -1355,10 +1353,8 @@ export interface components {
             licenseTypeCode?: string;
             groupExamId?: string;
         };
-
         /** @enum {integer} */
         ExamType: 1 | 2;
-
         /** @enum {integer} */
         GroupExamType: 0 | 1 | 2;
         GenerateExamsCommand: {
@@ -1366,19 +1362,14 @@ export interface components {
             licenseTypeCode?: string;
             questionNumbers?: number[];
             criticalQuestionNumbers?: number[];
-
             /** Format: int32 */
             numberOfExams?: number;
-
             /** Format: int32 */
             questionsPerExam?: number;
-
             /** Format: int32 */
             criticalQuestionsPerExam?: number;
-
             /** Format: int32 */
             durationMinutes?: number;
-
             /** Format: int32 */
             passingScore?: number;
         };
@@ -1406,13 +1397,10 @@ export interface components {
         ExamSubmissionResultDto: {
             id?: string;
             licenseTypeDto?: components["schemas"]["LicenseTypeDto"];
-
             /** Format: duration */
             duration?: string;
-
             /** Format: int32 */
             totalQuestions?: number;
-
             /** Format: int32 */
             correctAnswerCount?: number;
             hasCriticalMistake?: boolean;
@@ -1433,7 +1421,6 @@ export interface components {
         SubmitQuestionDto: {
             id?: string;
             explanation?: string | null;
-
             /** Format: int32 */
             order?: number;
             content?: string;
@@ -1443,7 +1430,6 @@ export interface components {
         };
         SubmitAnswerDto: {
             id?: string;
-
             /** Format: int32 */
             order?: number;
             isCorrect?: boolean;
@@ -1468,13 +1454,10 @@ export interface components {
         };
         PaginatedListOfGetExamYardsDto: {
             data?: components["schemas"]["GetExamYardsDto"][];
-
             /** Format: int32 */
             pageNumber?: number;
-
             /** Format: int32 */
             totalPages?: number;
-
             /** Format: int32 */
             totalCount?: number;
             hasPreviousPage?: boolean;
@@ -1517,13 +1500,10 @@ export interface components {
         };
         PaginatedListOfFeeTypeDto: {
             data?: components["schemas"]["FeeTypeDto"][];
-
             /** Format: int32 */
             pageNumber?: number;
-
             /** Format: int32 */
             totalPages?: number;
-
             /** Format: int32 */
             totalCount?: number;
             hasPreviousPage?: boolean;
@@ -1552,7 +1532,6 @@ export interface components {
             name?: string;
             description?: string;
             iconUrl?: string | null;
-
             /** Format: int32 */
             order?: number;
             licenseTypeCode?: string | null;
@@ -1567,10 +1546,8 @@ export interface components {
         };
         CreatePaymentHistoryCommand: {
             paymentId?: string;
-
             /** Format: decimal */
             amount?: number;
-
             /** Format: date-time */
             paymentDate?: string;
             note?: string;
@@ -1579,10 +1556,8 @@ export interface components {
             id?: string;
             paymentId?: string;
             description?: string;
-
             /** Format: decimal */
             amount?: number;
-
             /** Format: date-time */
             paymentDate?: string;
             note?: string;
@@ -1592,10 +1567,8 @@ export interface components {
         };
         GetPaymentHistoryDto: {
             id?: string;
-
             /** Format: decimal */
             amount?: number;
-
             /** Format: date-time */
             paymentDate?: string;
             note?: string;
@@ -1607,10 +1580,8 @@ export interface components {
         GetPaymentHistoryDetailDto: {
             id?: string;
             paymentId?: string;
-
             /** Format: decimal */
             amount?: number;
-
             /** Format: date-time */
             paymentDate?: string;
             note?: string;
@@ -1621,13 +1592,11 @@ export interface components {
         GetPaymentDto: {
             id?: string;
             feeTypeName?: string;
-
             /** Format: decimal */
             amount?: number;
             note?: string;
             status?: components["schemas"]["PaymentStatus"];
         };
-
         /** @enum {integer} */
         PaymentStatus: 0 | 1 | 2 | 3;
         BaseResponseOfGetPaymentDetailDto: components["schemas"]["BaseResponse"] & {
@@ -1636,7 +1605,6 @@ export interface components {
         GetPaymentDetailDto: {
             feeTypeId?: string;
             registrationRecordId?: string;
-
             /** Format: decimal */
             amount?: number | null;
             note?: string;
@@ -1644,7 +1612,6 @@ export interface components {
         CreatePaymentCommand: {
             feeTypeId?: string;
             registrationRecordId?: string;
-
             /** Format: decimal */
             amount?: number;
             note?: string;
@@ -1653,7 +1620,6 @@ export interface components {
             id?: string;
             feeTypeId?: string;
             registrationRecordId?: string;
-
             /** Format: decimal */
             amount?: number;
             note?: string;
@@ -1670,7 +1636,6 @@ export interface components {
         };
         FrontCitizenCardDto: {
             fullName?: string;
-
             /** Format: date */
             birthday?: string;
             gender?: components["schemas"]["GenderType"];
@@ -1679,7 +1644,6 @@ export interface components {
             nationality?: string;
             imageUrl?: string | null;
         };
-
         /** @enum {integer} */
         GenderType: 0 | 1 | 2;
         Address: {
@@ -1688,7 +1652,6 @@ export interface components {
             wardCode?: string;
         };
         BackCitizenCardDto: {
-
             /** Format: date */
             issuedDate?: string;
             issuedBy?: string;
@@ -1703,13 +1666,11 @@ export interface components {
         CitizenCardPdfRequest: {
             id?: string;
             fullName?: string;
-
             /** Format: date */
             birthday?: string;
             placeOfOrigin?: string;
             placeOfResidence?: string;
             nationality?: string;
-
             /** Format: date */
             issuedDate?: string;
             issuedBy?: string;
@@ -1725,7 +1686,6 @@ export interface components {
         };
         QuestionDto: {
             id?: string;
-
             /** Format: int32 */
             order?: number;
             content?: string;
@@ -1735,7 +1695,6 @@ export interface components {
         };
         AnswerDto: {
             id?: string;
-
             /** Format: int32 */
             order?: number;
             content?: string;
@@ -1746,7 +1705,6 @@ export interface components {
         };
         QuestionDetailDto: {
             id?: string;
-
             /** Format: int32 */
             order?: number;
             content?: string;
@@ -1757,7 +1715,6 @@ export interface components {
         };
         AnswerDto2: {
             id?: string;
-
             /** Format: int32 */
             order?: number;
             isCorrect?: boolean;
@@ -1767,7 +1724,6 @@ export interface components {
             licenseTypeCode?: string;
             avatarUrl?: string;
             fullname?: string;
-
             /** Format: date */
             birthday?: string;
             gender?: components["schemas"]["GenderType"];
@@ -1777,10 +1733,8 @@ export interface components {
             citizenIdNumber?: string;
             citizenIdFrontImageUrl?: string;
             citizenIdBackImageUrl?: string;
-
             /** Format: date-time */
             receivedDate?: string;
-
             /** Format: date-time */
             healthCheckDate?: string | null;
             staffAssigneeId?: string | null;
@@ -1792,7 +1746,6 @@ export interface components {
             licenseTypeCode?: string;
             avatarUrl?: string;
             fullname?: string;
-
             /** Format: date */
             birthday?: string;
             gender?: components["schemas"]["GenderType"];
@@ -1802,10 +1755,8 @@ export interface components {
             citizenIdNumber?: string;
             citizenIdFrontImageUrl?: string;
             citizenIdBackImageUrl?: string;
-
             /** Format: date-time */
             receivedDate?: string;
-
             /** Format: date-time */
             healthCheckDate?: string | null;
             staffAssigneeId?: string | null;
@@ -1814,13 +1765,10 @@ export interface components {
         };
         PaginatedListOfGetRegistrationRecordsDto: {
             data?: components["schemas"]["GetRegistrationRecordsDto"][];
-
             /** Format: int32 */
             pageNumber?: number;
-
             /** Format: int32 */
             totalPages?: number;
-
             /** Format: int32 */
             totalCount?: number;
             hasPreviousPage?: boolean;
@@ -1832,14 +1780,11 @@ export interface components {
             avatarUrl?: string;
             fullname?: string;
             phone?: string;
-
             /** Format: date */
             birthday?: string;
             citizenIdNumber?: string;
-
             /** Format: date-time */
             receivedDate?: string;
-
             /** Format: date-time */
             healthCheckDate?: string | null;
             payment?: components["schemas"]["GetRegistrationRecordsPaymentDto"];
@@ -1853,17 +1798,13 @@ export interface components {
             name?: string;
         };
         GetRegistrationRecordsPaymentDto: {
-
             /** Format: decimal */
             totalAmount?: number | null;
-
             /** Format: decimal */
             paidAmount?: number | null;
-
             /** Format: decimal */
             remainingAmount?: number | null;
         };
-
         /** @enum {integer} */
         RegistrationRecordStatus: 0 | 1 | 2;
         BaseResponseOfGetRegistrationRecordDetailDto: components["schemas"]["BaseResponse"] & {
@@ -1875,7 +1816,6 @@ export interface components {
             licenseTypeName?: string;
             avatarUrl?: string;
             fullname?: string;
-
             /** Format: date */
             birthday?: string;
             gender?: components["schemas"]["GenderType"];
@@ -1885,10 +1825,8 @@ export interface components {
             citizenIdNumber?: string;
             citizenIdFrontImageUrl?: string;
             citizenIdBackImageUrl?: string;
-
             /** Format: date-time */
             receivedDate?: string;
-
             /** Format: date-time */
             healthCheckDate?: string | null;
             staffAssigneeId?: string | null;
@@ -1905,13 +1843,10 @@ export interface components {
             fullName?: string;
             licenseTypeName?: string;
             phone?: string;
-
             /** Format: decimal */
             totalAmount?: number | null;
-
             /** Format: decimal */
             paidAmount?: number | null;
-
             /** Format: decimal */
             remainingAmount?: number | null;
             isApproved?: boolean;
@@ -1934,33 +1869,26 @@ export interface components {
             status?: components["schemas"]["StepStatusType"];
             assignee?: components["schemas"]["ProcessingStepAssigneeDto"] | null;
         };
-
         /** @enum {integer} */
         StepStatusType: 0 | 1 | 2;
         ProcessingStepAssigneeDto: {
             name?: string;
             phone?: string;
         };
-
         /** @enum {integer} */
         ExamResultStatusType: 1 | 2 | 3;
         PaymentSummaryDto: {
-
             /** Format: decimal */
             totalAmount?: number | null;
-
             /** Format: decimal */
             paidAmount?: number | null;
-
             /** Format: decimal */
             remainingAmount?: number | null;
         };
         GeneralInfoDto: {
             phone?: string;
-
             /** Format: date-time */
             healthCheckDate?: string | null;
-
             /** Format: date-time */
             receivedDate?: string | null;
             note?: string | null;
@@ -2015,7 +1943,6 @@ export interface components {
         GetStepsDto: {
             id?: string;
             name?: string;
-
             /** Format: int32 */
             order?: number;
             status?: components["schemas"]["StepStatusType"];
@@ -2031,30 +1958,44 @@ export interface components {
             taskInfos?: components["schemas"]["TaskDto"][];
         };
         StepFieldInstanceSubmissionDto: {
-            stepFieldTemplateConfig?: components["schemas"]["StepFieldTemplateConfigDto"];
+            stepFieldTemplateConfig?: components["schemas"]["FieldTemplateConfigBaseDto"];
             value?: string;
         };
-        StepFieldTemplateConfigDto: components["schemas"]["FieldTemplateConfigBaseDto"] & Record<string, never>;
         FieldTemplateConfigBaseDto: {
             id?: string;
-            label?: string;
             canEditInline?: boolean;
-            prefix?: string | null;
+            label?: string;
+            isRequired?: boolean;
+            isVisible?: boolean;
             inputType?: components["schemas"]["InputType"];
             defaultValue?: string;
+            hint?: string;
+            description?: string;
+            active?: boolean;
+            readOnly?: boolean;
+            key?: string;
+            /** Format: int32 */
+            order?: number;
+            prefix?: string | null;
+            dataSourceConfig?: components["schemas"]["DataSourceConfigDto"] | null;
+            isShowOverview?: boolean;
+            isCurrency?: boolean;
         };
-
         /** @enum {integer} */
         InputType: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+        DataSourceConfigDto: {
+            apiUrl?: string;
+            valueField?: string;
+            labelField?: string;
+        };
         TaskDto: {
             id?: string;
             taskFieldInstanceSubmissions?: components["schemas"]["TaskFieldInstanceSubmissionDto"][];
         };
         TaskFieldInstanceSubmissionDto: {
-            taskFieldTemplateConfig?: components["schemas"]["TaskFieldTemplateConfigDto"];
+            taskFieldTemplateConfig?: components["schemas"]["FieldTemplateConfigBaseDto"];
             value?: string;
         };
-        TaskFieldTemplateConfigDto: components["schemas"]["FieldTemplateConfigBaseDto"] & Record<string, never>;
         InitializeStepsByRegistrationRecordIdCommand: {
             registrationRecordId?: string;
         };
@@ -2068,6 +2009,41 @@ export interface components {
             stepFieldTemplateConfigId?: string;
             value?: string | null;
         };
+        BaseResponseOfListOfStepActionTemplateDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["StepActionTemplateDto"][] | null;
+        };
+        StepActionTemplateDto: {
+            id?: string;
+            name?: string;
+            /** Format: int32 */
+            order?: number;
+            stepTemplates?: components["schemas"]["StepTemplateDto"][];
+        };
+        StepTemplateDto: {
+            id?: string;
+            key?: string;
+            name?: string;
+            /** Format: int32 */
+            order?: number;
+            note?: string;
+            isStepAction?: boolean;
+            stepFieldTemplateConfigs?: components["schemas"]["FieldTemplateConfigBaseDto"][];
+        };
+        BaseResponseOfGetStepDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetStepDto"] | null;
+        };
+        GetStepDto: {
+            id?: string;
+            name?: string;
+            /** Format: int32 */
+            order?: number;
+            status?: components["schemas"]["StepStatusType"];
+            assigneeId?: string | null;
+        };
+        CreateStepFromTemplateCommand: {
+            stepTemplateId?: string;
+            recordRegistrationId?: string;
+        };
         BaseResponseOfListOfGetTaskDto: components["schemas"]["BaseResponse"] & {
             data?: components["schemas"]["GetTaskDto"][] | null;
         };
@@ -2077,8 +2053,8 @@ export interface components {
             assignee?: components["schemas"]["AssigneeDto2"] | null;
             status?: components["schemas"]["TaskStatusType"];
             note?: string | null;
-            summaryItems?: components["schemas"]["SummaryItemDto"][];
-            taskFieldTemplateConfigs?: components["schemas"]["TaskFieldTemplateConfigDto2"][];
+            summaryItems?: components["schemas"]["ConstantDto"][];
+            taskFieldTemplateConfigs?: components["schemas"]["FieldTemplateConfigBaseDto"][];
             taskFieldInstanceSubmissions?: components["schemas"]["TaskFieldInstanceSubmissionDto2"][];
         };
         AssigneeDto2: {
@@ -2086,37 +2062,8 @@ export interface components {
             fullName?: string;
             avatarUrl?: string;
         };
-
         /** @enum {integer} */
         TaskStatusType: 0 | 1 | 2;
-        SummaryItemDto: {
-            label?: string;
-            value?: string;
-        };
-        TaskFieldTemplateConfigDto2: {
-            id?: string;
-            label?: string;
-            isRequired?: boolean;
-            isVisible?: boolean;
-            inputType?: components["schemas"]["InputType"];
-            defaultValue?: string;
-            hint?: string;
-            description?: string;
-            active?: boolean;
-            readOnly?: boolean;
-            key?: string;
-
-            /** Format: int32 */
-            order?: number;
-            prefix?: string | null;
-            isCurrency?: boolean;
-            dataSourceConfig?: components["schemas"]["DataSourceConfigDto"] | null;
-        };
-        DataSourceConfigDto: {
-            apiUrl?: string;
-            valueField?: string;
-            labelField?: string;
-        };
         TaskFieldInstanceSubmissionDto2: {
             taskFieldTemplateConfigId?: string;
             value?: string | null;
@@ -2127,7 +2074,6 @@ export interface components {
         TaskActionTemplateDto: {
             id?: string;
             name?: string;
-
             /** Format: int32 */
             order?: number;
             taskTemplate?: components["schemas"]["TaskTemplateDto"];
@@ -2136,15 +2082,11 @@ export interface components {
             id?: string;
             key?: string;
             name?: string;
-
             /** Format: int32 */
             order?: number;
             note?: string;
             isTaskAction?: boolean;
-            taskFieldTemplateConfigs?: components["schemas"]["TaskFieldTemplateConfigDto2"][];
-        };
-        BaseResponseOfGetTaskDto: components["schemas"]["BaseResponse"] & {
-            data?: components["schemas"]["GetTaskDto"] | null;
+            taskFieldTemplateConfigs?: components["schemas"]["FieldTemplateConfigBaseDto"][];
         };
         UpdateTaskCommand: {
             id?: string;
@@ -2154,6 +2096,28 @@ export interface components {
             taskFieldInstanceSubmissions?: components["schemas"]["TaskFieldInstanceSubmissionDto3"][];
         };
         TaskFieldInstanceSubmissionDto3: {
+            taskFieldTemplateConfigId?: string;
+            value?: string | null;
+        };
+        BaseResponseOfGetTaskDto: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["GetTaskDto2"] | null;
+        };
+        GetTaskDto2: {
+            id?: string;
+            title?: string;
+            assignee?: components["schemas"]["AssigneeDto3"] | null;
+            status?: components["schemas"]["TaskStatusType"];
+            note?: string | null;
+            summaryItems?: components["schemas"]["ConstantDto"][];
+            taskFieldTemplateConfigs?: components["schemas"]["FieldTemplateConfigBaseDto"][];
+            taskFieldInstanceSubmissions?: components["schemas"]["TaskFieldInstanceSubmissionDto4"][];
+        };
+        AssigneeDto3: {
+            id?: string;
+            fullName?: string;
+            avatarUrl?: string;
+        };
+        TaskFieldInstanceSubmissionDto4: {
             taskFieldTemplateConfigId?: string;
             value?: string | null;
         };
@@ -3601,7 +3565,6 @@ export interface operations {
         requestBody?: {
             content: {
                 "multipart/form-data": {
-
                     /** Format: binary */
                     FormFile?: string | null;
                 };
@@ -3879,7 +3842,6 @@ export interface operations {
         requestBody?: {
             content: {
                 "multipart/form-data": {
-
                     /** Format: binary */
                     File?: string | null;
                 };
@@ -4120,6 +4082,52 @@ export interface operations {
             };
         };
     };
+    Steps_GetTaskActionTemplatesByStepIdQuery: {
+        parameters: {
+            query?: {
+                StepId?: string;
+            };
+            header?: never;
+            path: {
+                id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfListOfStepActionTemplateDto"];
+                };
+            };
+        };
+    };
+    Steps_CreateTaskFromTemplateCommand: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateStepFromTemplateCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfGetStepDto"];
+                };
+            };
+        };
+    };
     Tasks_GetTasksByRegistrationRecordIdQuery: {
         parameters: {
             query?: {
@@ -4158,30 +4166,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BaseResponseOfListOfTaskActionTemplateDto"];
-                };
-            };
-        };
-    };
-    Tasks_GetSingleTaskByKeyQuery: {
-        parameters: {
-            query?: {
-                Key?: string;
-                RegistrationRecordId?: string;
-            };
-            header?: never;
-            path: {
-                key: string;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BaseResponseOfGetTaskDto"];
                 };
             };
         };

@@ -2,34 +2,46 @@
 
 import { useEffect, useState } from 'react'
 
-import { Box, Typography, Chip, Divider, IconButton, TextField, InputAdornment } from '@mui/material'
+import { Box, Typography, Chip, Divider, IconButton, TextField, InputAdornment, Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material'
 
-import type { GetStepsDto, StepOverviewDto } from '@/types/stepsTypes'
+import type { GetStepsDto, StepActionTemplateDto, StepOverviewDto } from '@/types/stepsTypes'
 import type { components } from '@/libs/api/client/schema'
 import { getInputBehavior } from '@/utils/helpers'
 import CONFIG from '@/configs/config'
 import stepsAPI from '@/libs/api/stepsAPI'
+import { toast } from 'react-toastify'
 
 type OverviewTabProps = {
     selectedStep: GetStepsDto | null
+    registrationRecordId: string | undefined
+    onRefreshSteps: () => void
 }
 
-const OverviewTab = ({ selectedStep }: OverviewTabProps) => {
+const OverviewTab = ({ selectedStep, registrationRecordId, onRefreshSteps }: OverviewTabProps) => {
 
     const [stepOverview, setStepOverview] = useState<StepOverviewDto | null>(null)
     const [editingFieldId, setEditingFieldId] = useState<string | null>(null)
     const [editingValue, setEditingValue] = useState<string>('')
+    const [stepActions, setStepActions] = useState<StepActionTemplateDto[]>([])
+    const [isCreatingStep, setIsCreatingStep] = useState(false)
+    const [showConfirmDialog, setShowConfirmDialog] = useState(false)
+    const [selectedAction, setSelectedAction] = useState<StepActionTemplateDto | null>(null)
 
     useEffect(() => {
         if (selectedStep?.id) {
             fetchStepOverview(selectedStep.id)
+            fetchStepActions(selectedStep.id)
         }
     }, [selectedStep])
 
     const fetchStepOverview = async (id: string) => {
         const response = await stepsAPI.GetStepByStepIdOverview({ id })
-
         setStepOverview(response?.data?.data)
+    }
+
+    const fetchStepActions = async (id: string) => {
+        const response = await stepsAPI.GetStepActionsByStepId(id)
+        setStepActions(response?.data?.data || [])
     }
 
     const startEdit = (item: components['schemas']['StepFieldInstanceSubmissionDto']) => {
@@ -102,6 +114,57 @@ const OverviewTab = ({ selectedStep }: OverviewTabProps) => {
             default:
                 return 'default'
         }
+    }
+
+    const handleCreateStepFromAction = async (action: StepActionTemplateDto) => {
+        try {
+            if (registrationRecordId && action.stepTemplates && action.stepTemplates.length > 0) {
+                setSelectedAction(action)
+                setShowConfirmDialog(true)
+            }
+        } catch (error) {
+            console.error('Error preparing step creation:', error)
+            // Có thể thêm thông báo lỗi ở đây
+        }
+    }
+
+    const handleConfirmCreate = async () => {
+        if (selectedAction && registrationRecordId && selectedAction.stepTemplates) {
+            setIsCreatingStep(true)
+
+            try {
+                // Tạo tất cả các step từ templates
+                for (const stepTemplate of selectedAction.stepTemplates) {
+                    if (stepTemplate.id) {
+                        const response = await stepsAPI.CreateStepFromTemplate({
+                            stepTemplateId: stepTemplate.id,
+                            recordRegistrationId: registrationRecordId
+                        })
+
+                        if (response.data?.success && response.data?.data) {
+                            console.log(`Đã tạo step từ template: ${stepTemplate.name}`)
+                        } else {
+                            console.error(`Lỗi khi tạo step từ template: ${stepTemplate.name}`)
+                        }
+                    }
+                }
+
+                onRefreshSteps()
+                toast.success(`Đã tạo bước "${selectedAction?.name}" thành công`)
+                setShowConfirmDialog(false)
+                setSelectedAction(null)
+            } catch (error) {
+                // Có thể thêm thông báo lỗi ở đây
+                toast.error(`Lỗi khi tạo bước "${selectedAction?.name}"`)
+            } finally {
+                setIsCreatingStep(false)
+            }
+        }
+    }
+
+    const handleCancelCreate = () => {
+        setShowConfirmDialog(false)
+        setSelectedAction(null)
     }
 
     return (
@@ -214,6 +277,53 @@ const OverviewTab = ({ selectedStep }: OverviewTabProps) => {
                         </Box>
                     ))}
             </Box>
+            {stepActions.length > 0 && <Divider sx={{ my: 2 }} />}
+            {stepActions.length > 0 && (
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'flex-end',
+                        gap: 2,
+                        my: 4
+                    }}
+                >
+                    {stepActions
+                        .sort((a, b) => (b.order || 0) - (a.order || 0))
+                        .map((action) => (
+                            <Button
+                                key={action.id}
+                                variant='contained'
+                                color='primary'
+                                onClick={() => handleCreateStepFromAction(action)}
+                                disabled={isCreatingStep}
+                            >
+                                {isCreatingStep ? 'Đang tạo...' : action.name}
+                            </Button>
+                        ))}
+                </Box>
+            )}
+            {/* Confirmation Dialog */}
+            <Dialog open={showConfirmDialog} onClose={handleCancelCreate}>
+                <DialogTitle>Xác nhận?</DialogTitle>
+                <DialogContent>
+                    <Typography>
+                        Bạn đang thêm bước "{selectedAction?.name}" cho học viên. Xác nhận tiếp tục?
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCancelCreate} color="error" variant="outlined">
+                        HỦY
+                    </Button>
+                    <Button
+                        onClick={handleConfirmCreate}
+                        color="primary"
+                        variant="contained"
+                        disabled={isCreatingStep}
+                    >
+                        {isCreatingStep ? 'Đang tạo...' : 'XÁC NHẬN'}
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     )
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, forwardRef, useImperativeHandle } from 'react'
 
 import { Box, Paper, Typography, CircularProgress, Stepper, Step, StepLabel, useTheme } from '@mui/material'
 
@@ -14,6 +14,10 @@ type ProcessStepsProps = {
     registrationRecordId: string | undefined
     onStepClick?: (step: GetStepsDto, stepIndex: number) => void
     selectedStepIndex?: number
+}
+
+export type ProcessStepsRef = {
+    refreshSteps: () => void
 }
 
 const CustomStepIcon = ({ step }: { step: GetStepsDto; index: number }) => {
@@ -97,36 +101,41 @@ const CustomStepIcon = ({ step }: { step: GetStepsDto; index: number }) => {
     )
 }
 
-const ProcessSteps = ({ registrationRecordId, onStepClick, selectedStepIndex }: ProcessStepsProps) => {
+const ProcessSteps = forwardRef<ProcessStepsRef, ProcessStepsProps>(({ registrationRecordId, onStepClick, selectedStepIndex }, ref) => {
     const [steps, setSteps] = useState<GetStepsDto[]>([])
     const [loading, setLoading] = useState(true)
     const theme = useTheme()
 
-    useEffect(() => {
-        const fetchSteps = async () => {
-            if (!registrationRecordId) return
+    const fetchSteps = async () => {
+        if (!registrationRecordId) return
 
-            try {
-                setLoading(true)
+        try {
+            setLoading(true)
 
-                const response = await stepsAPI.GetStepsByRegistrationRecordId({
-                    registrationRecordId
-                })
+            const response = await stepsAPI.GetStepsByRegistrationRecordId({
+                registrationRecordId
+            })
 
-                if (response.data?.success && response.data?.data) {
-                    setSteps(response.data.data)
-                }
-            } catch (error) {
-                console.error('Error fetching steps:', error)
-            } finally {
-                setLoading(false)
+            if (response.data?.success && response.data?.data) {
+                setSteps(response.data.data)
             }
+        } catch (error) {
+            console.error('Error fetching steps:', error)
+        } finally {
+            setLoading(false)
         }
+    }
 
+    useEffect(() => {
         if (registrationRecordId) {
             fetchSteps()
         }
     }, [registrationRecordId])
+
+    // Expose fetchSteps function to parent component
+    useImperativeHandle(ref, () => ({
+        refreshSteps: fetchSteps
+    }), [registrationRecordId])
 
     const handleStepClick = (step: GetStepsDto, stepIndex: number) => {
         if (onStepClick) {
@@ -134,9 +143,9 @@ const ProcessSteps = ({ registrationRecordId, onStepClick, selectedStepIndex }: 
         }
     }
 
-    // Auto-select first step if no step is selected
     useEffect(() => {
         if (steps.length > 0 && selectedStepIndex === undefined && onStepClick) {
+            debugger
             onStepClick(steps[0], 0)
         }
     }, [steps, selectedStepIndex, onStepClick])
@@ -179,7 +188,8 @@ const ProcessSteps = ({ registrationRecordId, onStepClick, selectedStepIndex }: 
                             }
 
                             const isSelected = index === selectedStepIndex
-                            const isStepClickable = step.status !== CONFIG.StepStatus.Pending
+                            //const isStepClickable = step.status !== CONFIG.StepStatus.Pending
+                            const isStepClickable = true
 
                             return (
                                 <Step
@@ -228,6 +238,6 @@ const ProcessSteps = ({ registrationRecordId, onStepClick, selectedStepIndex }: 
             </Box>
         )
     )
-}
+})
 
 export default ProcessSteps

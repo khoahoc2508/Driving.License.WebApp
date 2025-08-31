@@ -366,8 +366,8 @@ const ManageRegistrationRecords = () => {
                                     tagValue.map((option, index) => {
                                         const { key, ...chipProps } = getTagProps({ index }) as any;
 
-                                        
-return (
+
+                                        return (
                                             <Tooltip key={key} title={option.label} arrow>
                                                 <Chip label={option.label} {...chipProps} size='small' />
                                             </Tooltip>
@@ -392,8 +392,8 @@ return (
                                     tagValue.map((option, index) => {
                                         const { key, ...chipProps } = getTagProps({ index }) as any;
 
-                                        
-return (
+
+                                        return (
                                             <Tooltip key={key} title={option.label} arrow>
                                                 <Chip label={option.label} {...chipProps} size='small' />
                                             </Tooltip>
@@ -428,8 +428,8 @@ return (
                                     tagValue.map((option, index) => {
                                         const { key, ...chipProps } = getTagProps({ index }) as any;
 
-                                        
-return (
+
+                                        return (
                                             <Tooltip key={key} title={option.label} arrow>
                                                 <Chip label={option.label} {...chipProps} size='small' />
                                             </Tooltip>
@@ -465,8 +465,8 @@ return (
                                     tagValue.map((option, index) => {
                                         const { key, ...chipProps } = getTagProps({ index }) as any;
 
-                                        
-return (
+
+                                        return (
                                             <Tooltip key={key} title={option.label} arrow>
                                                 <Chip label={option.label} {...chipProps} size='small' />
                                             </Tooltip>
@@ -503,9 +503,7 @@ return (
                                 renderTags={(tagValue, getTagProps) =>
                                     tagValue.map((option, index) => {
                                         const { key, ...chipProps } = getTagProps({ index }) as any;
-
-                                        
-return (
+                                        return (
                                             <Tooltip key={key} title={option.label} arrow>
                                                 <Chip label={option.label} {...chipProps} size='small' />
                                             </Tooltip>

@@ -11,9 +11,11 @@ import TaskTab from './task/TaskTab'
 
 type MainContentProps = {
     selectedStep: GetStepsDto | null
+    registrationRecordId: string | undefined
+    onRefreshSteps: () => void
 }
 
-const MainContent = ({ selectedStep }: MainContentProps) => {
+const MainContent = ({ selectedStep, registrationRecordId, onRefreshSteps }: MainContentProps) => {
     const [tabValue, setTabValue] = useState(0)
 
     const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -39,7 +41,7 @@ const MainContent = ({ selectedStep }: MainContentProps) => {
 
             <Box>
                 {tabValue === 0 && (
-                    <OverviewTab selectedStep={selectedStep} />
+                    <OverviewTab selectedStep={selectedStep} registrationRecordId={registrationRecordId} onRefreshSteps={onRefreshSteps} />
                 )}
                 {tabValue === 1 && (
                     <TaskTab selectedStep={selectedStep} />
