@@ -179,63 +179,65 @@ const OverviewTab = ({ selectedStep, registrationRecordId, onRefreshSteps }: Ove
                     size="small"
                     sx={{ width: 'fit-content' }}
                 />
-                {stepOverview?.stepFieldInstanceSubmissions?.map(
-                    (
-                        item: components['schemas']['StepFieldInstanceSubmissionDto'],
-                        index: number
-                    ) => (
-                        <Box
-                            key={`step-field-${item.stepFieldTemplateConfig?.id || 'unknown'}-${index}`}
-                            sx={{ display: 'grid', gridTemplateColumns: '180px 1fr', rowGap: 3, alignItems: 'center' }}
-                        >
-                            <Typography variant="subtitle2" color="text.secondary">
-                                {item.stepFieldTemplateConfig?.label}
-                            </Typography>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                {editingFieldId === item.stepFieldTemplateConfig?.id ? (
-                                    <>
-                                        <TextField
-                                            size="small"
-                                            value={editingValue}
-                                            onChange={(e) => {
-                                                const behavior = getInputBehavior({
-                                                    inputType: item.stepFieldTemplateConfig?.inputType,
-                                                    prefix: item.stepFieldTemplateConfig?.prefix
-                                                } as any)
+                <Box className='flex flex-col gap-3'>
+                    {stepOverview?.stepFieldInstanceSubmissions?.map(
+                        (
+                            item: components['schemas']['StepFieldInstanceSubmissionDto'],
+                            index: number
+                        ) => (
+                            <Box
+                                key={`step-field-${item.stepFieldTemplateConfig?.id || 'unknown'}-${index}`}
+                                sx={{ display: 'grid', gridTemplateColumns: '180px 1fr', rowGap: 3, alignItems: 'center' }}
+                            >
+                                <Typography variant="subtitle2" color="text.secondary">
+                                    {item.stepFieldTemplateConfig?.label}
+                                </Typography>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                    {editingFieldId === item.stepFieldTemplateConfig?.id ? (
+                                        <>
+                                            <TextField
+                                                size="small"
+                                                value={editingValue}
+                                                onChange={(e) => {
+                                                    const behavior = getInputBehavior({
+                                                        inputType: item.stepFieldTemplateConfig?.inputType,
+                                                        prefix: item.stepFieldTemplateConfig?.prefix
+                                                    } as any)
 
-                                                setEditingValue(behavior.format(e.target.value))
-                                            }}
-                                            fullWidth
-                                            sx={{ width: { xs: 100, sm: 300 } }}
-                                            InputProps={{
-                                                startAdornment: item.stepFieldTemplateConfig?.prefix ? (
-                                                    <InputAdornment position="start">{String(item.stepFieldTemplateConfig?.prefix)}</InputAdornment>
-                                                ) : undefined
-                                            }}
-                                        />
-                                        <IconButton size="small" aria-label="save" onClick={() => selectedStep?.id && saveEdit(selectedStep.id, item)}>
-                                            <i className="ri-check-line" style={{ color: '#11a600' }} />
-                                        </IconButton>
-                                        <IconButton size="small" aria-label="cancel" onClick={cancelEdit}>
-                                            <i className="ri-close-circle-line" />
-                                        </IconButton>
-                                    </>
-                                ) : (
-                                    <>
-                                        <Typography variant="body1" sx={{ fontWeight: 600 }}>
-                                            {item?.value ?? 'Chưa có'}
-                                        </Typography>
-                                        {item.stepFieldTemplateConfig?.canEditInline ? (
-                                            <IconButton size="small" aria-label="edit" onClick={() => startEdit(item)}>
-                                                <i className="ri-edit-box-line text-textSecondary" />
+                                                    setEditingValue(behavior.format(e.target.value))
+                                                }}
+                                                fullWidth
+                                                sx={{ width: { xs: 100, sm: 300 } }}
+                                                InputProps={{
+                                                    startAdornment: item.stepFieldTemplateConfig?.prefix ? (
+                                                        <InputAdornment position="start">{String(item.stepFieldTemplateConfig?.prefix)}</InputAdornment>
+                                                    ) : undefined
+                                                }}
+                                            />
+                                            <IconButton size="small" aria-label="save" onClick={() => selectedStep?.id && saveEdit(selectedStep.id, item)}>
+                                                <i className="ri-check-line" style={{ color: '#11a600' }} />
                                             </IconButton>
-                                        ) : null}
-                                    </>
-                                )}
+                                            <IconButton size="small" aria-label="cancel" onClick={cancelEdit}>
+                                                <i className="ri-close-circle-line" />
+                                            </IconButton>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Typography variant="body1" sx={{ fontWeight: 600 }}>
+                                                {item?.value ?? 'Chưa có'}
+                                            </Typography>
+                                            {item.stepFieldTemplateConfig?.canEditInline ? (
+                                                <IconButton size="small" aria-label="edit" onClick={() => startEdit(item)}>
+                                                    <i className="ri-edit-box-line text-textSecondary" />
+                                                </IconButton>
+                                            ) : null}
+                                        </>
+                                    )}
+                                </Box>
                             </Box>
-                        </Box>
-                    )
-                )}
+                        )
+                    )}
+                </Box>
             </Box>
             {(stepOverview?.taskInfos ?? []).length > 0 && <Divider sx={{ my: 2 }} />}
             <Box sx={{ p: 4 }}>
