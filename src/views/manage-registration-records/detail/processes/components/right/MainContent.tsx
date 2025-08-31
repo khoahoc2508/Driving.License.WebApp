@@ -12,7 +12,7 @@ import TaskTab from './task/TaskTab'
 type MainContentProps = {
     selectedStep: GetStepsDto | null
     registrationRecordId: string | undefined
-    onRefreshSteps: () => void
+    onRefreshSteps: (newStepsCount?: number) => void
 }
 
 const MainContent = ({ selectedStep, registrationRecordId, onRefreshSteps }: MainContentProps) => {

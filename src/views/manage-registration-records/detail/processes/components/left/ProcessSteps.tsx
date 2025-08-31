@@ -145,7 +145,6 @@ const ProcessSteps = forwardRef<ProcessStepsRef, ProcessStepsProps>(({ registrat
 
     useEffect(() => {
         if (steps.length > 0 && selectedStepIndex === undefined && onStepClick) {
-            debugger
             onStepClick(steps[0], 0)
         }
     }, [steps, selectedStepIndex, onStepClick])

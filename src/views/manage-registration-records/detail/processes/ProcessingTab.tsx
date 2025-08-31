@@ -22,10 +22,10 @@ const ProcessingTab = ({ registrationRecordId }: ProcessingTabProps) => {
         setSelectedStepIndex(stepIndex)
     }
 
-    const handleRefreshSteps = () => {
+    const handleRefreshSteps = (newStepsCount: number = 1) => {
         if (processStepsRef.current) {
             processStepsRef.current.refreshSteps()
-            setSelectedStepIndex(prev => prev + 1)
+            setSelectedStepIndex(prev => prev + newStepsCount)
         }
     }
 

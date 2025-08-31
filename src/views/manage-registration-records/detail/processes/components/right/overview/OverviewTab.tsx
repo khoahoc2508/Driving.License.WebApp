@@ -14,7 +14,7 @@ import { toast } from 'react-toastify'
 type OverviewTabProps = {
     selectedStep: GetStepsDto | null
     registrationRecordId: string | undefined
-    onRefreshSteps: () => void
+    onRefreshSteps: (count: number) => void
 }
 
 const OverviewTab = ({ selectedStep, registrationRecordId, onRefreshSteps }: OverviewTabProps) => {
@@ -149,7 +149,7 @@ const OverviewTab = ({ selectedStep, registrationRecordId, onRefreshSteps }: Ove
                     }
                 }
 
-                onRefreshSteps()
+                onRefreshSteps(selectedAction.stepTemplates.length)
                 toast.success(`Đã tạo bước "${selectedAction?.name}" thành công`)
                 setShowConfirmDialog(false)
                 setSelectedAction(null)
