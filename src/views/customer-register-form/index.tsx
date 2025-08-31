@@ -51,13 +51,10 @@ import PersonalInfoStep from './PersonalInfoStep';
 
 
 import CONFIG from '@/configs/config';
-import LicenseRegistrationAPI from '@/libs/api/licenseRegistrationAPI';
-import UploadAPI from '@/libs/api/uploadAPI';
-import type { LicenseRegistrationCustomerResquest } from '@/types/LicensesRegistrations';
-import CitizendCard from './CitizenCard';
 import BrandSettingPreview from '../account-settings/brand-setting/right-side/BrandSettingPreview';
 import brandSettingAPI from '@/libs/api/brandSettingAPI';
 import type { GetBrandSettingByOwnerIdQueryParams } from '@/types/brandSettingTypes';
+import CitizenCard from './CitizenCard';
 
 // Define a consistent Step type used across components
 export type Step = {
@@ -485,59 +482,7 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
   }
 
   const onSubmit = async (data: FormValues) => {
-    try {
-      const [avatarResult, frontImgResult, backImgResult] = await Promise.all([
-        data.avatarUrl?.length > 0 ? UploadAPI.uploadFiles(data.avatarUrl) : Promise.resolve(null),
-        data.citizenCardFrontImgUrl?.length > 0 ? UploadAPI.uploadFiles(data.citizenCardFrontImgUrl) : Promise.resolve(null),
-        data.citizenCardBackImgUrl?.length > 0 ? UploadAPI.uploadFiles(data.citizenCardBackImgUrl) : Promise.resolve(null)
-      ]);
-
-      const apiData: LicenseRegistrationCustomerResquest = {
-        licenseTypeCode: data.licenseType,
-        hasCarLicense: data.hasCarLicense,
-        hasCompletedHealthCheck: data.hasCompletedHealthCheck,
-        hasApproved: false,
-        ownerId: urlOwnerId || '',
-        person: {
-          avatarUrl: avatarResult?.data[0]?.relativeUrl || '',
-          fullName: data.fullName,
-          birthday: data.birthday ? `${data.birthday.getFullYear()}-${(data.birthday.getMonth() + 1).toString().padStart(2, '0')}-${data.birthday.getDate().toString().padStart(2, '0')}` : '',
-          sex: data.gender === CONFIG.SexTypeMappingText[1] ? 1 :
-            data.gender === CONFIG.SexTypeMappingText[0] ? 0 :
-              2,
-          phoneNumber: data.phoneNumber,
-          email: data.email,
-          address: {
-            provinceCode: data.province,
-            districtCode: data.district,
-            wardCode: data.ward,
-            addressDetail: data.street
-          },
-          citizenCardId: data.citizenCardId,
-          citizenCardDateOfIssue: data.citizenCardDateOfIssue ? `${data.citizenCardDateOfIssue.getFullYear()}-${(data.citizenCardDateOfIssue.getMonth() + 1).toString().padStart(2, '0')}-${data.citizenCardDateOfIssue.getDate().toString().padStart(2, '0')}` : '',
-          citizenCardPlaceOfIssue: data.citizenCardPlaceOfIssue,
-          citizenCardFrontImgUrl: frontImgResult?.data[0]?.relativeUrl || '',
-          citizenCardBackImgUrl: backImgResult?.data[0]?.relativeUrl || ''
-        },
-        note: data.note,
-        isPaid: data.isPaid,
-        amount: data.amount ?? undefined,
-        vehicleTypeCode: vehicleTypePage
-      };
-
-      const response = await LicenseRegistrationAPI.createLicensesRegistrationsForCustomer(apiData);
-
-      if (response.data?.success) {
-        toast.success('Đăng ký thành công!');
-        setOpenSuccessDialog(true);
-      } else {
-        toast.error(response.data?.message || 'Đăng ký thất bại.');
-      }
-
-    } catch (error) {
-      console.error('API call failed:', error);
-      toast.error('Đã xảy ra lỗi khi đăng ký.');
-    }
+    console.log(data)
   };
 
   const handleCloseSuccessDialog = () => {
@@ -550,7 +495,7 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
       case 0:
         return (
           <FormProvider {...citizenCardFormMethods}>
-            <CitizendCard steps={steps} handleNext={handleNext} />
+            <CitizenCard steps={steps} handleNext={handleNext} />
           </FormProvider>
         )
       case 1:

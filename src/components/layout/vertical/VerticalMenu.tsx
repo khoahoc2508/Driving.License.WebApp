@@ -78,9 +78,6 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
         <MenuItem href='/admin/dashboard' icon={<i className="ri-bar-chart-line"></i>}>
           Dashboard
         </MenuItem>
-        <MenuItem href={`${CONFIG.Routers.ExamSchedule}/list`} icon={<i className="ri-calendar-line"></i>}>
-          Lịch thi
-        </MenuItem>
         {/* Quản lý hồ sơ */}
         <SubMenu label={"Quản lý hồ sơ"} icon={<i className='ri-file-list-line' />}>
           <MenuItem href={`${CONFIG.Routers.ManageRegistrationRecords}/list`}>{"Danh sách hồ sơ"}</MenuItem>

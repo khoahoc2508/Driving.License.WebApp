@@ -2,7 +2,7 @@ import UpsertRegistrationRecord from "@/views/manage-registration-records/form"
 
 
 const page = async () => {
-    return <UpsertRegistrationRecord screenType={'CREATE'} />
+    return <UpsertRegistrationRecord />
 }
 
 export default page
