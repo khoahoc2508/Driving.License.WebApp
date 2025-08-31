@@ -15,7 +15,8 @@ import CONFIG from '@/configs/config'
 import EditTaskDialog from './EditTaskDialog'
 
 type TaskTabProps = {
-    selectedStep: GetStepsDto | null
+    selectedStep: GetStepsDto | null,
+    onRefreshSteps: (count: number) => void
 }
 
 const columnHelper = createColumnHelper<GetTaskDto>()
@@ -32,7 +33,7 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value) => {
     return true
 }
 
-const TaskTab = ({ selectedStep }: TaskTabProps) => {
+const TaskTab = ({ selectedStep, onRefreshSteps }: TaskTabProps) => {
     const [tasks, setTasks] = useState<GetTaskDto[]>([])
     const [selectedTask, setSelectedTask] = useState<GetTaskDto | null>(null)
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
@@ -74,7 +75,8 @@ const TaskTab = ({ selectedStep }: TaskTabProps) => {
     }
 
     const handleEditSuccess = () => {
-        fetchTasks() // Refresh tasks after successful edit
+        fetchTasks()
+        onRefreshSteps(0)
         handleEditDialogClose()
     }
 

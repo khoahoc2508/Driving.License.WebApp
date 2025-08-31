@@ -44,7 +44,7 @@ const MainContent = ({ selectedStep, registrationRecordId, onRefreshSteps }: Mai
                     <OverviewTab selectedStep={selectedStep} registrationRecordId={registrationRecordId} onRefreshSteps={onRefreshSteps} />
                 )}
                 {tabValue === 1 && (
-                    <TaskTab selectedStep={selectedStep} />
+                    <TaskTab selectedStep={selectedStep} onRefreshSteps={onRefreshSteps} />
                 )}
             </Box>
         </Box>
