@@ -4,12 +4,13 @@ import { useEffect, useState } from 'react'
 
 import { Box, Typography, Chip, Divider, IconButton, TextField, InputAdornment, Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material'
 
+import { toast } from 'react-toastify'
+
 import type { GetStepsDto, StepActionTemplateDto, StepOverviewDto } from '@/types/stepsTypes'
 import type { components } from '@/libs/api/client/schema'
 import { getInputBehavior } from '@/utils/helpers'
 import CONFIG from '@/configs/config'
 import stepsAPI from '@/libs/api/stepsAPI'
-import { toast } from 'react-toastify'
 
 type OverviewTabProps = {
     selectedStep: GetStepsDto | null
@@ -36,11 +37,13 @@ const OverviewTab = ({ selectedStep, registrationRecordId, onRefreshSteps }: Ove
 
     const fetchStepOverview = async (id: string) => {
         const response = await stepsAPI.GetStepByStepIdOverview({ id })
+
         setStepOverview(response?.data?.data)
     }
 
     const fetchStepActions = async (id: string) => {
         const response = await stepsAPI.GetStepActionsByStepId(id)
+
         setStepActions(response?.data?.data || [])
     }
 
@@ -124,6 +127,7 @@ const OverviewTab = ({ selectedStep, registrationRecordId, onRefreshSteps }: Ove
             }
         } catch (error) {
             console.error('Error preparing step creation:', error)
+
             // Có thể thêm thông báo lỗi ở đây
         }
     }
@@ -309,7 +313,7 @@ const OverviewTab = ({ selectedStep, registrationRecordId, onRefreshSteps }: Ove
                 <DialogTitle>Xác nhận?</DialogTitle>
                 <DialogContent>
                     <Typography>
-                        Bạn đang thêm bước "{selectedAction?.name}" cho học viên. Xác nhận tiếp tục?
+                        {`Bạn đang thêm bước "${selectedAction?.name}" cho học viên. Xác nhận tiếp tục?`}
                     </Typography>
                 </DialogContent>
                 <DialogActions>
