@@ -410,7 +410,7 @@ const ManageRegistrationRecords = () => {
                                         }
                                     },
                                     '& .MuiOutlinedInput-root': {
-                                        paddingRight: '64px !important'
+                                        paddingRight: '11px !important'
                                     }
                                 }}
                                 noOptionsText='Không có dữ liệu'

@@ -188,8 +188,7 @@ const ProcessSteps = forwardRef<ProcessStepsRef, ProcessStepsProps>(({ registrat
 
                             const isSelected = index === selectedStepIndex
 
-                            //const isStepClickable = step.status !== CONFIG.StepStatus.Pending
-                            const isStepClickable = true
+                            const isStepClickable = step.status !== CONFIG.StepStatus.Pending
 
                             return (
                                 <Step
