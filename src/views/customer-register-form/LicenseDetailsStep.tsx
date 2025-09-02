@@ -47,7 +47,7 @@ const LicenseDetailsStep = ({ steps, handleBack, handleNext, vehicleTypePage }: 
       if (!vehicleTypePage) return;
 
       try {
-        const response = await LicenseTypeAPI.getAllLicenseTypes({
+        const response = await LicenseTypeAPI.getAllLicenseTypesAvailable({
           VehicleTypeCode: vehicleTypePage
         });
 

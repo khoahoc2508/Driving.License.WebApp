@@ -126,7 +126,7 @@ const ManageRegistrationRecords = () => {
 
     const fetchLicenseTypes = async () => {
         try {
-            const res = await licenseTypeAPI.getAllLicenseTypes({})
+            const res = await licenseTypeAPI.getAllLicenseTypesAvailable({})
 
             if (res?.data?.data) {
                 const options = res.data.data.map((licenseType: any) => ({

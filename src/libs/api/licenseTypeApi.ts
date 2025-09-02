@@ -10,8 +10,16 @@ const getAllLicenseTypes = async (params: GetAllLicenseTypesParams) => {
   })
 }
 
+const getAllLicenseTypesAvailable = async (params: GetAllLicenseTypesParams) => {
+  return await axiosInstance.get('/api/license-types/available', {
+    params,
+    paramsSerializer: customParamsSerializer
+  })
+}
+
 const LicenseTypeAPI = {
-  getAllLicenseTypes
+  getAllLicenseTypes,
+  getAllLicenseTypesAvailable
 }
 
 export default LicenseTypeAPI

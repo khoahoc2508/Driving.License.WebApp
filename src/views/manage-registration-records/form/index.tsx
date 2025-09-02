@@ -111,7 +111,7 @@ const UpsertRegistrationRecord = ({ id }: UpsertRegistrationRecordProps) => {
     const fetchLicenseTypes = async () => {
 
       try {
-        const response = await LicenseTypeAPI.getAllLicenseTypes({
+        const response = await LicenseTypeAPI.getAllLicenseTypesAvailable({
         });
 
         if (response.data.success) {
