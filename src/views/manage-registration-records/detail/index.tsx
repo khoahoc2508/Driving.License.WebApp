@@ -56,6 +56,7 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
     useEffect(() => {
         const tabParam = searchParams.get('tab') || CONFIG.RegistrationRecordDetailTabs.Overview
         const idx = tabKeys.indexOf(tabParam as typeof tabKeys[number])
+
         setActiveTab(idx >= 0 ? idx : 0)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchParams])
@@ -90,6 +91,7 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
                     id,
                     isApproved: checked
                 })
+
                 if (checked) {
                     toast.success('Duyệt hồ sơ thành công')
                 } else {
@@ -175,6 +177,7 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
                         setActiveTab(v)
                         const nextTab = tabKeys[v] || CONFIG.RegistrationRecordDetailTabs.Overview
                         const qs = new URLSearchParams(Array.from(searchParams.entries()))
+
                         qs.set('tab', nextTab)
                         router.replace(`${pathname}?${qs.toString()}`)
                     }} sx={{ mt: 4 }}>

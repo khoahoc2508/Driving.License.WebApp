@@ -121,7 +121,8 @@ export const authOptions: NextAuthOptions = {
         token.accessToken = user.access_token
         token.refreshToken = user.refresh_token
         token.accessTokenExpires = Date.now() + (user.expires_in ? Number(user.expires_in) * 1000 : 60 * 60 * 1000)
-        return token
+        
+return token
       }
 
       // If the access token has not expired yet, return it
@@ -132,6 +133,7 @@ export const authOptions: NextAuthOptions = {
       // Access token has expired, try to update it using refresh token
       try {
         const params = new URLSearchParams()
+
         params.append('client_id', process.env.NEXT_PUBLIC_CLIENT_ID!)
         params.append('client_secret', process.env.NEXT_PUBLIC_CLIENT_SECRET!)
         params.append('grant_type', 'refresh_token')
@@ -153,14 +155,17 @@ export const authOptions: NextAuthOptions = {
         token.refreshToken = refreshed.refresh_token ?? token.refreshToken
         token.accessTokenExpires = Date.now() + Number(refreshed.expires_in ?? 3600) * 1000
         delete token.error
-        return token
+        
+return token
       } catch (error) {
         token.error = 'Mời bạn đăng nhập lại'
-        return token
+        
+return token
       }
     },
     async session({ session, token }) {
       session.accessToken = (token.accessToken as string) + ''
+
       // @ts-ignore
       session.error = token.error
 

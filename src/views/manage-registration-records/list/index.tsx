@@ -507,7 +507,9 @@ const ManageRegistrationRecords = () => {
                                 renderTags={(tagValue, getTagProps) =>
                                     tagValue.map((option, index) => {
                                         const { key, ...chipProps } = getTagProps({ index }) as any;
-                                        return (
+
+                                        
+return (
                                             <Tooltip key={key} title={option.label} arrow>
                                                 <Chip label={option.label} {...chipProps} size='small' />
                                             </Tooltip>

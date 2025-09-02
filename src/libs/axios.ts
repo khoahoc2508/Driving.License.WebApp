@@ -25,9 +25,12 @@ axiosInstance.interceptors.response.use(
   response => response,
   async error => {
     const status = error?.response?.status
+
     if (status === 401) {
       await signOut({ callbackUrl: '/login' })
     }
-    return Promise.reject(error)
+
+    
+return Promise.reject(error)
   }
 )

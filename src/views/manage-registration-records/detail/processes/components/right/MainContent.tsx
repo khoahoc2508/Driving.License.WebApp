@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from 'react'
 
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+
 import { Box, Tabs, Tab } from '@mui/material'
 
 import type { GetStepsDto } from '@/types/stepsTypes'
 import CONFIG from '@/configs/config'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 import OverviewTab from './overview/OverviewTab'
 import TaskTab from './task/TaskTab'
@@ -28,6 +29,7 @@ const MainContent = ({ selectedStep, registrationRecordId, onRefreshSteps }: Mai
     useEffect(() => {
         const tabParam = searchParams.get('processTab') || CONFIG.RegistrationRecordProcessTabs.Overview
         const isValid = tabKeys.includes(tabParam as typeof tabKeys[number])
+
         setTabValue(isValid ? tabParam : CONFIG.RegistrationRecordProcessTabs.Overview)
     }, [searchParams])
 
@@ -35,6 +37,7 @@ const MainContent = ({ selectedStep, registrationRecordId, onRefreshSteps }: Mai
         setTabValue(newValue)
         const nextTab = tabKeys.includes(newValue as typeof tabKeys[number]) ? newValue : CONFIG.RegistrationRecordProcessTabs.Overview
         const qs = new URLSearchParams(Array.from(searchParams.entries()))
+
         qs.set('processTab', nextTab)
         router.replace(`${pathname}?${qs.toString()}`)
     }
