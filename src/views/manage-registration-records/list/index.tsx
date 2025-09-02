@@ -243,30 +243,31 @@ const ManageRegistrationRecords = () => {
 
     const handleLicenseTypeSelect = (_event: any, newValue: { label: string; value: string }[]) => {
         setLicenseTypeValue(newValue)
+        setAppliedLicenseTypeValue(newValue)
+        setPageNumber(1)
     }
 
     const handlePaymentStatusSelect = (_event: any, newValue: { label: string; value: number }[]) => {
         setPaymentStatusValue(newValue)
+        setAppliedPaymentStatusValue(newValue)
+        setPageNumber(1)
     }
 
     const handleRegistrationRecordStatusSelect = (_event: any, newValue: { label: string; value: number }[]) => {
         setRegistrationRecordStatusValue(newValue)
+        setAppliedRegistrationRecordStatusValue(newValue)
+        setPageNumber(1)
     }
 
     const handleStaffAssigneeSelect = (_event: any, newValue: { label: string; value: string }[]) => {
         setStaffAssigneeValue(newValue)
+        setAppliedStaffAssigneeValue(newValue)
+        setPageNumber(1)
     }
 
     const handleCollaboratorSelect = (_event: any, newValue: { label: string; value: string }[]) => {
         setCollaboratorValue(newValue)
-    }
-
-    const applyFilters = () => {
-        setAppliedLicenseTypeValue(licenseTypeValue)
-        setAppliedPaymentStatusValue(paymentStatusValue)
-        setAppliedRegistrationRecordStatusValue(registrationRecordStatusValue)
-        setAppliedStaffAssigneeValue(staffAssigneeValue)
-        setAppliedCollaboratorValue(collaboratorValue)
+        setAppliedCollaboratorValue(newValue)
         setPageNumber(1)
     }
 
@@ -537,14 +538,11 @@ const ManageRegistrationRecords = () => {
                             (staffAssigneeValue?.length || 0) > 0 ||
                             (collaboratorValue?.length || 0) > 0
 
-                        return (
+                        return hasAnySelected ? (
                             <Grid size={{ xs: 12, sm: 8, md: 9 }} className='flex items-center gap-3'>
-                                <Button variant='contained' color='primary' className='min-w-[170px]' onClick={applyFilters}>LỌC</Button>
-                                {hasAnySelected && (
-                                    <Button variant='outlined' color='error' className='min-w-[170px]' onClick={clearAllFilters}>XÓA TẤT CẢ</Button>
-                                )}
+                                <Button variant='outlined' color='error' className='min-w-[170px]' onClick={clearAllFilters}>XÓA TẤT CẢ</Button>
                             </Grid>
-                        )
+                        ) : null
                     })()}
                 </CardContent>
                 <Divider />
@@ -585,8 +583,8 @@ const ManageRegistrationRecords = () => {
                 anchorEl={columnVisibilityAnchorEl}
                 onClose={handleCloseColumnVisibilityPopover}
                 anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
+                    vertical: 'bottom',
+                    horizontal: 'left',
                 }}
                 transformOrigin={{
                     vertical: 'top',
@@ -610,7 +608,7 @@ const ManageRegistrationRecords = () => {
                         onChange={(e) => setColumnVisibilitySearch(e.target.value)}
                     />
                 </Box>
-                <Box sx={{ maxHeight: 250, overflow: 'auto', p: 3 }} className='custom-scrollbar'>
+                <Box sx={{ maxHeight: 200, overflow: 'auto', p: 3 }} className='custom-scrollbar'>
                     <FormControlLabel
                         control={
                             <Checkbox

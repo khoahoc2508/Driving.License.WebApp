@@ -73,10 +73,7 @@ const ManageCarsList = () => {
 
     const handleStatusSelect = (_event: any, newValue: { label: string; value: boolean } | null) => {
         setStatusValue(newValue)
-    }
-
-    const applyFilters = () => {
-        setAppliedStatusValue(statusValue)
+        setAppliedStatusValue(newValue)
         setPageNumber(1)
     }
 
@@ -154,7 +151,6 @@ const ManageCarsList = () => {
             </CardContent>
             <CardContent>
                 <Grid size={{ xs: 12, sm: 8, md: 9 }} className='flex items-center gap-3'>
-                    <Button variant='contained' color='primary' className='min-w-[170px]' onClick={applyFilters}>LỌC</Button>
                     {statusValue && (
                         <Button variant='outlined' color='error' className='min-w-[170px]' onClick={clearAllFilters}>XÓA TẤT CẢ</Button>
                     )}
