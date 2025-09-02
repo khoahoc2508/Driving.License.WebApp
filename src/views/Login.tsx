@@ -21,7 +21,7 @@ import { signIn } from 'next-auth/react'
 import type { SubmitHandler } from 'react-hook-form'
 import { Controller, useForm } from 'react-hook-form'
 import type { InferInput } from 'valibot'
-import { email, minLength, nonEmpty, object, pipe, string } from 'valibot'
+import { minLength, nonEmpty, object, pipe, string } from 'valibot'
 
 // Type Imports
 
@@ -46,11 +46,11 @@ type ErrorType = {
 type FormData = InferInput<typeof schema>
 
 const schema = object({
-  email: pipe(string(), minLength(1, 'This field is required'), email('Please enter a valid email address')),
+  username: pipe(string(), minLength(1, 'Trường này là bắt buộc')),
   password: pipe(
     string(),
-    nonEmpty('This field is required'),
-    minLength(5, 'Password must be at least 5 characters long')
+    nonEmpty('Trường này là bắt buộc'),
+    minLength(5, 'Mật khẩu phải có ít nhất 5 ký tự')
   )
 })
 
@@ -80,7 +80,7 @@ const Login = ({ mode }: { mode: Mode }) => {
   } = useForm<FormData>({
     resolver: valibotResolver(schema),
     defaultValues: {
-      email: 'Ngotrungkien2k2@gmail.com',
+      username: 'Ngotrungkien2k2',
       password: 'Kiennt@123'
     }
   })
@@ -101,7 +101,7 @@ const Login = ({ mode }: { mode: Mode }) => {
     setLoading(true)
 
     const res = await signIn('credentials', {
-      email: data.email,
+      username: data.username,
       password: data.password,
       redirect: false
     })
@@ -115,7 +115,7 @@ const Login = ({ mode }: { mode: Mode }) => {
       router.replace(redirectURL)
     } else {
       if (res?.error) {
-        setErrorState({ message: ['Email hoặc mật khẩu không hợp lệ!'] })
+        setErrorState({ message: ['Tên đăng nhập hoặc mật khẩu không hợp lệ!'] })
       }
 
       setLoading(false)
@@ -160,7 +160,7 @@ const Login = ({ mode }: { mode: Mode }) => {
           </div>
           <Alert icon={false} className='bg-primaryLight'>
             <Typography variant='body2' color='primary.main'>
-              Email: <span className='font-medium'>Ngotrungkien2k2@gmail.com</span> / Pass:{' '}
+              Username: <span className='font-medium'>Ngotrungkien2k2</span> / Pass:{' '}
               <span className='font-medium'>Kiennt@123</span>
             </Typography>
           </Alert>
@@ -173,7 +173,7 @@ const Login = ({ mode }: { mode: Mode }) => {
             className='flex flex-col gap-5'
           >
             <Controller
-              name='email'
+              name='username'
               control={control}
               rules={{ required: true }}
               render={({ field }) => (
@@ -181,15 +181,15 @@ const Login = ({ mode }: { mode: Mode }) => {
                   {...field}
                   fullWidth
                   autoFocus
-                  type='email'
-                  label='Email'
+                  type='text'
+                  label='Username'
                   onChange={e => {
                     field.onChange(e.target.value)
                     errorState !== null && setErrorState(null)
                   }}
-                  {...((errors.email || errorState !== null) && {
+                  {...((errors.username || errorState !== null) && {
                     error: true,
-                    helperText: errors?.email?.message || errorState?.message[0]
+                    helperText: errors?.username?.message || errorState?.message[0]
                   })}
                 />
               )}

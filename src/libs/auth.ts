@@ -24,12 +24,12 @@ export const authOptions: NextAuthOptions = {
          * For e.g. return { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
          * You can also use the `req` object to obtain additional parameters (i.e., the request IP address)
          */
-        const { email, password } = credentials as { email: string; password: string }
+        const { username, password } = credentials as { username: string; password: string }
 
         try {
           const params = new URLSearchParams()
 
-          params.append('username', email)
+          params.append('username', username)
           params.append('password', password)
           params.append('client_id', process.env.NEXT_PUBLIC_CLIENT_ID!)
           params.append('client_secret', process.env.NEXT_PUBLIC_CLIENT_SECRET!)
