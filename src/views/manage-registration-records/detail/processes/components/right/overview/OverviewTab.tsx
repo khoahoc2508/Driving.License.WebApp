@@ -51,7 +51,13 @@ const OverviewTab = ({ selectedStep, registrationRecordId, onRefreshSteps }: Ove
         const fieldId = String(item.stepFieldTemplateConfig?.id || '')
 
         setEditingFieldId(fieldId)
-        setEditingValue(String(item?.value ?? ''))
+        setEditingValue(
+            String(
+                (item?.value !== undefined && item?.value !== null && String(item?.value).trim() !== '')
+                    ? item?.value
+                    : (item.stepFieldTemplateConfig?.defaultValue ?? '')
+            )
+        )
     }
 
     const cancelEdit = () => {
@@ -228,7 +234,9 @@ const OverviewTab = ({ selectedStep, registrationRecordId, onRefreshSteps }: Ove
                                     ) : (
                                         <>
                                             <Typography variant="body1" sx={{ fontWeight: 600 }}>
-                                                {item?.value ?? 'Chưa có'}
+                                                {(item?.value !== undefined && item?.value !== null && String(item?.value).trim() !== '')
+                                                    ? item?.value
+                                                    : (item.stepFieldTemplateConfig?.defaultValue ?? 'Chưa có')}
                                             </Typography>
                                             {item.stepFieldTemplateConfig?.canEditInline ? (
                                                 <IconButton size="small" aria-label="edit" onClick={() => startEdit(item)}>

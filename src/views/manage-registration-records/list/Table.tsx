@@ -35,7 +35,7 @@ import {
 import classnames from 'classnames'
 
 // Icon Imports
-import { IconButton, Typography } from '@mui/material'
+import { IconButton, Typography, Tooltip } from '@mui/material'
 
 import { toast } from 'react-toastify'
 
@@ -183,7 +183,7 @@ const Table = ({
                         </Typography>
                     </div>
                 ),
-                size: 100,
+                size: 150,
             }),
             columnHelper.accessor('fullname', {
                 id: CONFIG.RegistrationRecordsTableColumns.HO_SO,
@@ -329,9 +329,16 @@ const Table = ({
                 header: 'GHI CHÚ',
                 cell: ({ row }) => (
                     <div style={{ textAlign: 'center' }}>
-                        <Typography sx={{ maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                            {row.original?.note || ''}
-                        </Typography>
+                        <Tooltip
+                            title={row.original?.note || ''}
+                            placement='top'
+                            arrow
+                            disableHoverListener={!row.original?.note}
+                        >
+                            <Typography sx={{ maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                {row.original?.note || ''}
+                            </Typography>
+                        </Tooltip>
                     </div>
                 ),
                 size: 200,
