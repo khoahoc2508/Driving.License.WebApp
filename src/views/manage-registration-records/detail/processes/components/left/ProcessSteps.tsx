@@ -158,11 +158,9 @@ const ProcessSteps = forwardRef<ProcessStepsRef, ProcessStepsProps>(({ registrat
 
     if (loading) {
         return (
-            <Paper elevation={1} sx={{ p: 2, height: 'fit-content' }}>
-                <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}>
-                    <CircularProgress size={24} />
-                </Box>
-            </Paper>
+            <Box sx={{ display: 'flex', justifyContent: 'center', py: 2, alignItems: 'center' }}>
+                <CircularProgress size={24} />
+            </Box>
         )
     }
 
