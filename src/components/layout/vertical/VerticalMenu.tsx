@@ -80,7 +80,7 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
         </MenuItem>
         {/* Quản lý hồ sơ */}
         <SubMenu label={"Quản lý hồ sơ"} icon={<i className='ri-file-list-line' />}>
-          <MenuItem href={`${CONFIG.Routers.ManageRegistrationRecords}/list`}>{"Danh sách hồ sơ"}</MenuItem>
+          <MenuItem href={`${CONFIG.Routers.ManageRegistrationRecords}/list`} exactMatch={false} activeUrl={`${CONFIG.Routers.ManageRegistrationRecords}`}>{"Danh sách hồ sơ"}</MenuItem>
         </SubMenu>
 
         <SubMenu label={"Quản lý địa điểm"} icon={<i className='ri-map-pin-line' />}>
