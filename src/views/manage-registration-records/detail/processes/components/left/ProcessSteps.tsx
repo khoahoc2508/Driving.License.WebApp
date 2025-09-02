@@ -144,8 +144,15 @@ const ProcessSteps = forwardRef<ProcessStepsRef, ProcessStepsProps>(({ registrat
     }
 
     useEffect(() => {
-        if (steps.length > 0 && selectedStepIndex === undefined && onStepClick) {
-            onStepClick(steps[0], 0)
+        if (steps.length > 0 && (selectedStepIndex === undefined || selectedStepIndex < 0) && onStepClick) {
+            const lastInProgressIndex = steps
+                .map((s, i) => (s.status === CONFIG.StepStatus.InProgress ? i : -1))
+                .filter(i => i >= 0)
+                .pop()
+
+            const defaultIndex = lastInProgressIndex !== undefined ? lastInProgressIndex : 0
+
+            onStepClick(steps[defaultIndex], defaultIndex)
         }
     }, [steps, selectedStepIndex, onStepClick])
 
