@@ -200,7 +200,7 @@ const OverviewTab = ({ selectedStep, registrationRecordId, onRefreshSteps }: Ove
                                 sx={{ display: 'grid', gridTemplateColumns: '180px 1fr', rowGap: 3, alignItems: 'center' }}
                             >
                                 <Typography variant="subtitle2" color="text.secondary">
-                                    {item.stepFieldTemplateConfig?.label}
+                                    {item.stepFieldTemplateConfig?.label}:
                                 </Typography>
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                     {editingFieldId === item.stepFieldTemplateConfig?.id ? (
@@ -276,7 +276,7 @@ const OverviewTab = ({ selectedStep, registrationRecordId, onRefreshSteps }: Ove
                             sx={{ display: 'grid', gridTemplateColumns: '180px 1fr', rowGap: 3, mb: 2 }}
                         >
                             <Typography variant="subtitle2" color="text.secondary">
-                                {field.label}
+                                {field.label}:
                             </Typography>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                 <Typography variant="body1" sx={{ fontWeight: 600 }}>

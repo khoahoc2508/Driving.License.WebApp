@@ -529,10 +529,23 @@ const ManageRegistrationRecords = () => {
                     </Grid>
                 </CardContent>
                 <CardContent>
-                    <Grid size={{ xs: 12, sm: 8, md: 9 }} className='flex items-center gap-3'>
-                        <Button variant='contained' color='primary' className='min-w-[170px]' onClick={applyFilters}>LỌC</Button>
-                        <Button variant='outlined' color='error' className='min-w-[170px]' onClick={clearAllFilters}>XÓA TẤT CẢ</Button>
-                    </Grid>
+                    {(() => {
+                        const hasAnySelected =
+                            (licenseTypeValue?.length || 0) > 0 ||
+                            (paymentStatusValue?.length || 0) > 0 ||
+                            (registrationRecordStatusValue?.length || 0) > 0 ||
+                            (staffAssigneeValue?.length || 0) > 0 ||
+                            (collaboratorValue?.length || 0) > 0
+
+                        return (
+                            <Grid size={{ xs: 12, sm: 8, md: 9 }} className='flex items-center gap-3'>
+                                <Button variant='contained' color='primary' className='min-w-[170px]' onClick={applyFilters}>LỌC</Button>
+                                {hasAnySelected && (
+                                    <Button variant='outlined' color='error' className='min-w-[170px]' onClick={clearAllFilters}>XÓA TẤT CẢ</Button>
+                                )}
+                            </Grid>
+                        )
+                    })()}
                 </CardContent>
                 <Divider />
 

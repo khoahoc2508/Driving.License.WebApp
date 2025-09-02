@@ -88,9 +88,7 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
           <MenuItem href={`${CONFIG.Routers.ManageExamYards}/list`}>{"Sân thi"}</MenuItem>
         </SubMenu>
 
-        <SubMenu label={"Cấu hình cá nhân"} icon={<i className='ri-settings-3-line' />}>
-          <MenuItem href={`${CONFIG.Routers.BrandSetting}/brand-setting`}>{"Thương hiệu"}</MenuItem>
-        </SubMenu>
+
         {/* Quản lý giáo viên */}
         <SubMenu label={"Quản lý giáo viên"} icon={<i className='ri-presentation-line' />}>
           <MenuItem href={`${CONFIG.Routers.ManageTeacher}/list`}>{"Danh sách giáo viên"}</MenuItem>
@@ -116,7 +114,9 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
           <MenuItem href={`${CONFIG.Routers.ManageFeeType}/list`}>{"Danh sách lệ phí"}</MenuItem>
         </SubMenu>
 
-
+        <SubMenu label={"Cấu hình cá nhân"} icon={<i className='ri-settings-3-line' />}>
+          <MenuItem href={`${CONFIG.Routers.BrandSetting}/brand-setting`}>{"Thương hiệu"}</MenuItem>
+        </SubMenu>
       </Menu>
       {/* <Menu
         popoutMenuOffset={{ mainAxis: 10 }}
