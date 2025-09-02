@@ -68,6 +68,8 @@ export const authOptions: NextAuthOptions = {
 
             return {
               access_token: data?.access_token,
+              refresh_token: data?.refresh_token,
+              expires_in: data?.expires_in,
               name: userInfo?.role,
               email: userInfo?.email,
               id: userInfo?.sub
@@ -113,22 +115,54 @@ export const authOptions: NextAuthOptions = {
      * via `jwt()` callback to make them accessible in the `session()` callback
      */
     async jwt({ token, user }: any) {
+      // Initial sign in
       if (user) {
-        /*
-         * For adding custom parameters to user in session, we first need to add those parameters
-         * in token which then will be available in the `session()` callback
-         */
         token.name = user.name
-      }
-
-      if (user) {
         token.accessToken = user.access_token
+        token.refreshToken = user.refresh_token
+        token.accessTokenExpires = Date.now() + (user.expires_in ? Number(user.expires_in) * 1000 : 60 * 60 * 1000)
+        return token
       }
 
-      return token
+      // If the access token has not expired yet, return it
+      if (token.accessToken && token.accessTokenExpires && Date.now() < (token.accessTokenExpires as number)) {
+        return token
+      }
+
+      // Access token has expired, try to update it using refresh token
+      try {
+        const params = new URLSearchParams()
+        params.append('client_id', process.env.NEXT_PUBLIC_CLIENT_ID!)
+        params.append('client_secret', process.env.NEXT_PUBLIC_CLIENT_SECRET!)
+        params.append('grant_type', 'refresh_token')
+        params.append('refresh_token', String(token.refreshToken ?? ''))
+
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/connect/token`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: params.toString()
+        })
+
+        const refreshed = await res.json()
+
+        if (!res.ok) {
+          throw new Error(JSON.stringify(refreshed))
+        }
+
+        token.accessToken = refreshed.access_token
+        token.refreshToken = refreshed.refresh_token ?? token.refreshToken
+        token.accessTokenExpires = Date.now() + Number(refreshed.expires_in ?? 3600) * 1000
+        delete token.error
+        return token
+      } catch (error) {
+        token.error = 'Mời bạn đăng nhập lại'
+        return token
+      }
     },
     async session({ session, token }) {
-      session.accessToken = token.accessToken + ''
+      session.accessToken = (token.accessToken as string) + ''
+      // @ts-ignore
+      session.error = token.error
 
       if (session.user) {
         // ** Add custom params to user in session which are added in `jwt()` callback via `token` parameter
