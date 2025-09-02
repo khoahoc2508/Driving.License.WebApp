@@ -608,7 +608,7 @@ const ManageRegistrationRecords = () => {
                         onChange={(e) => setColumnVisibilitySearch(e.target.value)}
                     />
                 </Box>
-                <Box sx={{ maxHeight: 200, overflow: 'auto', p: 3 }} className='custom-scrollbar'>
+                <Box sx={{ maxHeight: 130, overflow: 'auto', p: 3 }} className='custom-scrollbar'>
                     <FormControlLabel
                         control={
                             <Checkbox

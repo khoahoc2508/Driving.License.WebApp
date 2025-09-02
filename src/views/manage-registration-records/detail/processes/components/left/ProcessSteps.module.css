@@ -36,7 +36,6 @@
 .processStepsContainer :global(.step-label) {
   cursor: pointer;
   padding: 2px 0;
-  transition: all 0.2s ease;
 }
 
 /* .processStepsContainer :global(.step-label:hover) {
@@ -85,7 +84,7 @@
 
 /* Reduce spacing between steps */
 .processStepsContainer :global(.MuiStep-root) {
-  padding: 4px 0 !important;
+  padding: 0 !important;
 }
 
 .processStepsContainer :global(.MuiStepConnector-root) {

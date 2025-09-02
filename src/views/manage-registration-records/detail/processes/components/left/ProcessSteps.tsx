@@ -224,7 +224,6 @@ const ProcessSteps = forwardRef<ProcessStepsRef, ProcessStepsProps>(({ registrat
                                             style={{
                                                 color: getTextColor(step.status),
                                                 cursor: isStepClickable ? 'pointer' : 'not-allowed',
-                                                fontWeight: isSelected ? 600 : 400,
                                                 opacity: isStepClickable ? 1 : 0.6
                                             }}
                                             onClick={() => {
