@@ -293,6 +293,19 @@ const TaskStatusOptions = [
   { label: 'Hoàn thành', value: 2 }
 ]
 
+// Tabs for Registration Record Detail page
+const RegistrationRecordDetailTabs = {
+  Overview: 'overview',
+  Payments: 'payments',
+  Processes: 'processes'
+} as const
+
+// Sub-tabs for Processes (MainContent) in Registration Record Detail page
+const RegistrationRecordProcessTabs = {
+  Overview: 'overview',
+  Tasks: 'tasks'
+} as const
+
 const CONFIG = {
   LicenseRegistrationStatus,
   LicenseRegistrationStatusMappingText,
@@ -335,7 +348,9 @@ const CONFIG = {
   ExamResultStatusMappingText,
   StepStatus,
   InputType,
-  TaskStatusOptions
+  TaskStatusOptions,
+  RegistrationRecordDetailTabs,
+  RegistrationRecordProcessTabs
 }
 
 export default CONFIG

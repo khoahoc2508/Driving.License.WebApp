@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { Avatar, Box, Button, Card, CardContent, Switch, Tab, Tabs, Typography, useTheme } from "@mui/material";
 
@@ -24,9 +24,17 @@ type RegistrationRecordDetailProps = {
 
 const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
     const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
     const theme = useTheme();
     const [isApproved, setIsApproved] = useState(false)
     const [activeTab, setActiveTab] = useState(0)
+
+    const tabKeys = [
+        CONFIG.RegistrationRecordDetailTabs.Overview,
+        CONFIG.RegistrationRecordDetailTabs.Payments,
+        CONFIG.RegistrationRecordDetailTabs.Processes
+    ] as const
 
     const [basicInfo, setBasicInfo] = useState<RegistrationRecordBasicInfoDto | null>(null)
     const [overview, setOverview] = useState<RegistrationRecordOverviewDto | null>(null)
@@ -43,6 +51,14 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
         if (!id) return
         fetchData(id)
     }, [id])
+
+    // Sync active tab from URL query param
+    useEffect(() => {
+        const tabParam = searchParams.get('tab') || CONFIG.RegistrationRecordDetailTabs.Overview
+        const idx = tabKeys.indexOf(tabParam as typeof tabKeys[number])
+        setActiveTab(idx >= 0 ? idx : 0)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [searchParams])
 
     const fetchData = async (id: string) => {
         try {
@@ -155,7 +171,13 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
                         </div>
                     )}
 
-                    <Tabs value={activeTab} onChange={(_, v) => setActiveTab(v)} sx={{ mt: 4 }}>
+                    <Tabs value={activeTab} onChange={(_, v) => {
+                        setActiveTab(v)
+                        const nextTab = tabKeys[v] || CONFIG.RegistrationRecordDetailTabs.Overview
+                        const qs = new URLSearchParams(Array.from(searchParams.entries()))
+                        qs.set('tab', nextTab)
+                        router.replace(`${pathname}?${qs.toString()}`)
+                    }} sx={{ mt: 4 }}>
                         <Tab
                             label={
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
