@@ -74,7 +74,11 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
                     id,
                     isApproved: checked
                 })
-                toast.success('Cập nhật thành công')
+                if (checked) {
+                    toast.success('Duyệt hồ sơ thành công')
+                } else {
+                    toast.success('Bỏ duyệt hồ sơ thành công')
+                }
             } catch (error) {
                 toast.error((error as any).response.data.message)
             }
