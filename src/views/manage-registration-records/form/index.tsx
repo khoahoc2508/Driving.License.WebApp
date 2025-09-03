@@ -381,7 +381,7 @@ const UpsertRegistrationRecord = ({ id }: UpsertRegistrationRecordProps) => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label="Người phụ trách"
+                        label="Nhân viên"
                         error={!!errors.staffAssigneeId}
                         helperText={errors.staffAssigneeId?.message}
                       />

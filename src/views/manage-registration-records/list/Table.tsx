@@ -306,7 +306,7 @@ const Table = ({
             }),
             columnHelper.accessor('staffAssigneeName', {
                 id: CONFIG.RegistrationRecordsTableColumns.NGUOI_PHU_TRACH,
-                header: 'NGƯỜI PHỤ TRÁCH',
+                header: 'Nhân viên',
                 cell: ({ row }) => (
                     <div style={{ textAlign: 'center' }}>
                         <Typography sx={{ maxWidth: 230, overflow: 'hidden', textOverflow: 'ellipsis' }}>{row.original?.staffAssigneeName || ''}</Typography>

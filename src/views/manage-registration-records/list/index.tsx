@@ -464,7 +464,7 @@ const ManageRegistrationRecords = () => {
                                 id='staff-assignee-autocomplete'
                                 getOptionLabel={option => option?.label || ''}
                                 isOptionEqualToValue={(opt, val) => opt.value === val.value}
-                                renderInput={params => <TextField {...params} label='Người phụ trách' />}
+                                renderInput={params => <TextField {...params} label='Nhân viên' />}
                                 renderTags={(tagValue, getTagProps) =>
                                     tagValue.map((option, index) => {
                                         const { key, ...chipProps } = getTagProps({ index }) as any;
@@ -508,8 +508,8 @@ const ManageRegistrationRecords = () => {
                                     tagValue.map((option, index) => {
                                         const { key, ...chipProps } = getTagProps({ index }) as any;
 
-                                        
-return (
+
+                                        return (
                                             <Tooltip key={key} title={option.label} arrow>
                                                 <Chip label={option.label} {...chipProps} size='small' />
                                             </Tooltip>
