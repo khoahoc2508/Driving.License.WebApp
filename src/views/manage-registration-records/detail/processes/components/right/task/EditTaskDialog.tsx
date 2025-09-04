@@ -19,7 +19,8 @@ import {
     Button,
     Divider,
     FormHelperText,
-    InputAdornment
+    InputAdornment,
+    Autocomplete
 } from '@mui/material'
 import { toast } from 'react-toastify'
 
@@ -57,12 +58,13 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task, isCreate }: EditTaskDi
     const [assigneeOptions, setAssigneeOptions] = useState<AssigneeOption[]>([])
     const [fieldOptionsMap, setFieldOptionsMap] = useState<Record<string, AssigneeOption[]>>({})
 
-    const { control, handleSubmit, reset, setValue, formState: { errors } } = useForm<FormData>({
+    const { control, handleSubmit, reset, setValue, clearErrors, formState: { errors } } = useForm<FormData>({
         defaultValues: {
             note: '',
             assigneeId: '',
             status: CONFIG.TaskStatusOptions[0].value
-        }
+        },
+        mode: 'onChange'
     })
 
     // Fetch assignee options (danh sách nhân viên)
@@ -99,6 +101,7 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task, isCreate }: EditTaskDi
 
         // Reset form and set default values from taskFieldTemplateConfig
         reset()
+        clearErrors() // Clear all validation errors
 
         const defaultValues: FormData = {
             note: task.note || '',
@@ -164,6 +167,7 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task, isCreate }: EditTaskDi
 
     const handleClose = () => {
         reset()
+        clearErrors()
         setIsSubmitting(false)
         onClose()
     }
@@ -204,6 +208,8 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task, isCreate }: EditTaskDi
         const label = field.label
         const hint = field.hint
         const description = field.description
+
+
 
         switch (field.inputType) {
             case CONFIG.InputType.Text: // Text input
@@ -343,24 +349,25 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task, isCreate }: EditTaskDi
                             const options = fieldOptionsMap[fieldId] || []
                             const hasDataSource = !!field?.dataSourceConfig?.apiUrl
                             const labelText = isRequired ? <span>{label} <span style={{ color: 'red' }}>(*)</span></span> : label
-
-
                             return (
-                                <FormControl fullWidth error={!!errors[fieldKey]}>
-                                    <InputLabel>{labelText}</InputLabel>
-                                    <Select
-                                        value={value || ''}
-                                        onChange={onChange}
-                                        label={labelText}
-                                    >
-                                        {(hasDataSource ? options : []).map(opt => (
-                                            <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
-                                        ))}
-                                    </Select>
-                                    {errors[fieldKey] && (
-                                        <FormHelperText>{String(errors[fieldKey]?.message || 'Có lỗi xảy ra')}</FormHelperText>
+                                <Autocomplete
+                                    value={options.find(opt => opt.value === value) || null}
+                                    options={hasDataSource ? options : []}
+                                    getOptionLabel={(option) => option.label}
+                                    isOptionEqualToValue={(option, value) => option.value === value.value}
+                                    onChange={(_event, newValue) => {
+                                        onChange(newValue ? newValue.value : '')
+                                    }}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label={labelText}
+                                            error={!!errors[fieldKey]}
+                                            helperText={errors[fieldKey]?.message ? String(errors[fieldKey]?.message) : undefined}
+                                        />
                                     )}
-                                </FormControl>
+                                    noOptionsText='Không có dữ liệu'
+                                />
                             )
                         }}
                     />
@@ -444,7 +451,12 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task, isCreate }: EditTaskDi
             </DialogTitle>
             <Divider />
             <DialogContent>
-                <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                <Box
+                    key={task?.id} // Force re-render when task changes
+                    component="form"
+                    onSubmit={handleSubmit(onSubmit)}
+                    sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}
+                >
                     {/* Dynamic fields from taskFieldTemplateConfig */}
                     {task.taskFieldTemplateConfigs
                         ?.filter(field => field.isVisible && field.active)
