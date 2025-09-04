@@ -197,7 +197,7 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
             <Tab
               label={
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <i className="ri-money-dollar-circle-line" style={{ fontSize: '18px' }} />
+                  <i className="ri-bank-card-line" style={{ fontSize: '18px' }} />
                   THANH TOÁN
                 </Box>
               }
@@ -205,7 +205,7 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
             <Tab
               label={
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <i className="ri-time-line" style={{ fontSize: '18px' }} />
+                  <i className="ri-hourglass-line" style={{ fontSize: '18px' }} />
                   XỬ LÝ HỒ SƠ
                 </Box>
               }

@@ -69,21 +69,21 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
         renderExpandedMenuItemIcon={{ icon: <i className='ri-circle-line' /> }}
         menuSectionStyles={menuSectionStyles(verticalNavOptions, theme)}
       >
-        <MenuItem href='/admin' icon={<i className='ri-home-smile-line' />}>
+        {/* <MenuItem href='/admin' icon={<i className='ri-home-smile-line' />}>
           Home
-        </MenuItem>
-        <MenuItem href='/admin/about' icon={<i className='ri-information-line' />}>
+        </MenuItem> */}
+        {/* <MenuItem href='/admin/about' icon={<i className='ri-information-line' />}>
           About
         </MenuItem>
         <MenuItem href='/admin/dashboard' icon={<i className="ri-bar-chart-line"></i>}>
           Dashboard
-        </MenuItem>
+        </MenuItem> */}
         {/* Quản lý hồ sơ */}
         <SubMenu label={"Quản lý hồ sơ"} icon={<i className='ri-file-list-line' />}>
           <MenuItem href={`${CONFIG.Routers.ManageRegistrationRecords}/list`} exactMatch={false} activeUrl={`${CONFIG.Routers.ManageRegistrationRecords}`}>{"Danh sách hồ sơ"}</MenuItem>
         </SubMenu>
 
-        <SubMenu label={"Quản lý địa điểm"} icon={<i className='ri-map-pin-line' />}>
+        <SubMenu label={"Quản lý địa điểm"} icon={<i className='ri-map-2-line' />}>
           <MenuItem href={`${CONFIG.Routers.ManageExamCenters}/list`}>{"Trường thi"}</MenuItem>
           <MenuItem href={`${CONFIG.Routers.ManageExamYards}/list`}>{"Sân thi"}</MenuItem>
         </SubMenu>
@@ -95,7 +95,7 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
           <MenuItem href={`${CONFIG.Routers.ManageTeacher}/schedule`}>{"Lịch làm việc"}</MenuItem>
         </SubMenu>
         {/* Quản lý CTV */}
-        <SubMenu label={"Quản lý CTV"} icon={<i className='ri-user-shared-2-line' />}>
+        <SubMenu label={"Quản lý CTV"} icon={<i className='ri-user-community-fill' />}>
           <MenuItem href={`${CONFIG.Routers.ManageCTV}/list`}>{"Danh sách CTV"}</MenuItem>
         </SubMenu>
         {/* Quản lý nhân viên */}
@@ -104,13 +104,13 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
         </SubMenu>
 
         {/* Quản lý thiết bị */}
-        <SubMenu label={"Quản lý thiết bị"} icon={<i className='ri-cpu-line' />}>
+        <SubMenu label={"Quản lý thiết bị"} icon={<i className='ri-keyboard-line' />}>
           <MenuItem href={`${CONFIG.Routers.ManageCars}/list`}>{"Ô tô"}</MenuItem>
           <MenuItem href={`${CONFIG.Routers.ManageDATDevices}/list`}>{"Máy DAT"}</MenuItem>
         </SubMenu>
 
         {/* Quản lý loại phí */}
-        <SubMenu label={"Quản lý thanh toán"} icon={<i className='ri-money-cny-circle-line' />}>
+        <SubMenu label={"Quản lý thanh toán"} icon={<i className="ri-bank-card-line"></i>}>
           <MenuItem href={`${CONFIG.Routers.ManageFeeType}/list`}>{"Danh sách lệ phí"}</MenuItem>
         </SubMenu>
 
