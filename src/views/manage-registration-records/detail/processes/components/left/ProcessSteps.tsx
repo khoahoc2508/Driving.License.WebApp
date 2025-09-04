@@ -2,7 +2,7 @@
 
 import { useEffect, useState, forwardRef, useImperativeHandle } from 'react'
 
-import { Box, Paper, Typography, CircularProgress, Stepper, Step, StepLabel, useTheme } from '@mui/material'
+import { Box, Typography, CircularProgress, Stepper, Step, StepLabel, useTheme } from '@mui/material'
 
 import type { GetStepsDto } from '@/types/stepsTypes'
 import stepsAPI from '@/libs/api/stepsAPI'
