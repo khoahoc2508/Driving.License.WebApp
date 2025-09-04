@@ -303,11 +303,12 @@ const UpsertRegistrationRecord = ({ id }: UpsertRegistrationRecordProps) => {
         // Create mode - use CreateRegistrationRecordCommand
         const createPayload: CreateRegistrationRecordCommand = basePayload as CreateRegistrationRecordCommand;
 
-        await registrationRecordsAPI.CreateRegistrationRecord(createPayload);
+        var res = await registrationRecordsAPI.CreateRegistrationRecord(createPayload);
+        id = res.data.data;
       }
 
       toast.success(id ? 'Cập nhật thành công!' : 'Lưu thông tin thành công!');
-      router.push(`${CONFIG.Routers.ManageRegistrationRecords}/list`);
+      router.push(`${CONFIG.Routers.ManageRegistrationRecords}/detail/${id}`);
 
     } catch (error) {
       console.error('Error submitting form:', error);
