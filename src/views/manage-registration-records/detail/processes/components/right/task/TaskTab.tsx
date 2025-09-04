@@ -40,6 +40,7 @@ const TaskTab = ({ selectedStep, onRefreshSteps }: TaskTabProps) => {
     const [columnPinning, setColumnPinning] = useState({})
     const [taskActions, setTaskActions] = useState<TaskActionTemplateDto[]>([])
     const [isCreateDialog, setIsCreateDialog] = useState(false)
+    const [createdTaskId, setCreatedTaskId] = useState<string | null>(null)
 
     const fetchTasks = async () => {
         if (selectedStep?.id) {
@@ -72,12 +73,30 @@ const TaskTab = ({ selectedStep, onRefreshSteps }: TaskTabProps) => {
         setIsEditDialogOpen(false)
         setSelectedTask(null)
         setIsCreateDialog(false)
+        setCreatedTaskId(null)
+    }
+
+    const handleCloseWithoutSave = () => {
+        debugger
+        // Nếu đây là task vừa tạo và người dùng không lưu, xóa task đó
+        if (createdTaskId) {
+            handleDeleteCreatedTask(createdTaskId)
+        }
+        handleEditDialogClose()
+    }
+
+    const handleDeleteCreatedTask = async (taskId: string) => {
+        try {
+            await stepsAPI.DeleteTask(taskId)
+        } catch (error) {
+        }
     }
 
     const handleEditSuccess = () => {
         fetchTasks()
         onRefreshSteps(0)
         handleEditDialogClose()
+        setCreatedTaskId(null) // Reset createdTaskId khi lưu thành công
     }
 
     const handleCreateTaskFromAction = async (action: TaskActionTemplateDto) => {
@@ -87,8 +106,9 @@ const TaskTab = ({ selectedStep, onRefreshSteps }: TaskTabProps) => {
                     taskTemplateId: action.taskTemplate.id,
                     stepId: selectedStep.id
                 })
-
-                if (response.data?.success && response.data?.data) {
+                if (response.data?.success && response.data?.data && response.data.data.id) {
+                    // Lưu ID của task vừa tạo để có thể xóa nếu người dùng không lưu
+                    setCreatedTaskId(response.data.data.id)
                     // Open edit dialog with the created task to allow user to fill fields
                     setSelectedTask(response.data.data)
                     setIsCreateDialog(true)
@@ -377,6 +397,7 @@ const TaskTab = ({ selectedStep, onRefreshSteps }: TaskTabProps) => {
                 open={isEditDialogOpen}
                 onClose={handleEditDialogClose}
                 onSuccess={handleEditSuccess}
+                onCloseWithoutSave={handleCloseWithoutSave}
                 task={selectedTask}
                 isCreate={isCreateDialog}
             />

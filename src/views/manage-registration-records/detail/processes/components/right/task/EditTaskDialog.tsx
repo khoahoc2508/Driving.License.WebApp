@@ -37,6 +37,7 @@ type EditTaskDialogProps = {
     open: boolean
     onClose: () => void
     onSuccess: () => void
+    onCloseWithoutSave?: () => void
     task: GetTaskDto | null,
     isCreate: boolean
 }
@@ -53,7 +54,7 @@ type AssigneeOption = {
     label: string
 }
 
-const EditTaskDialog = ({ open, onClose, onSuccess, task, isCreate }: EditTaskDialogProps) => {
+const EditTaskDialog = ({ open, onClose, onSuccess, onCloseWithoutSave, task, isCreate }: EditTaskDialogProps) => {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [assigneeOptions, setAssigneeOptions] = useState<AssigneeOption[]>([])
     const [fieldOptionsMap, setFieldOptionsMap] = useState<Record<string, AssigneeOption[]>>({})
@@ -169,7 +170,13 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task, isCreate }: EditTaskDi
         reset()
         clearErrors()
         setIsSubmitting(false)
-        onClose()
+
+        // Nếu đây là task mới tạo và có callback onCloseWithoutSave, gọi nó
+        if (isCreate && onCloseWithoutSave) {
+            onCloseWithoutSave()
+        } else {
+            onClose()
+        }
     }
 
     const onSubmit = async (data: FormData) => {

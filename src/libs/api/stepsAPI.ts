@@ -65,6 +65,10 @@ const UpdateTask = async (id: string, data: UpdateTaskCommand) => {
   return await axiosInstance.put(`/api/tasks/${id}`, data)
 }
 
+const DeleteTask = async (id: string) => {
+  return await axiosInstance.delete(`/api/tasks/${id}`)
+}
+
 const stepsAPI = {
   GetStepsByRegistrationRecordId,
   GetStepByStepIdOverview,
@@ -74,6 +78,7 @@ const stepsAPI = {
   GetTaskActionsByStepId,
   CreateTaskFromTemplate,
   UpdateTask,
+  DeleteTask,
   UpdateStepFieldInline
 }
 
