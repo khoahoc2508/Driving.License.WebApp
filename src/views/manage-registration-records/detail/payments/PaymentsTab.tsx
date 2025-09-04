@@ -4,6 +4,9 @@ import { useState, useEffect } from 'react'
 
 import { CardContent, Tab, Tabs } from '@mui/material'
 
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+
+import CONFIG from '@/configs/config'
 import type { GetPaymentDto, GetPaymentHistoryDto } from '@/types/registrationRecords'
 import registrationRecordsAPI from '@/libs/api/registrationRecordsAPI'
 import FeeTab from './FeeTab'
@@ -17,7 +20,11 @@ type PaymentsTabProps = {
 }
 
 const PaymentsTab = ({ registrationRecordId, onDataChange }: PaymentsTabProps) => {
-    const [activeSubTab, setActiveSubTab] = useState(0)
+    const router = useRouter()
+    const pathname = usePathname()
+    const searchParams = useSearchParams()
+
+    const [activeSubTab, setActiveSubTab] = useState<string>(CONFIG.RegistrationRecordPaymentsTabs.Fees)
     const [payments, setPayments] = useState<GetPaymentDto[]>([])
     const [paymentHistories, setPaymentHistories] = useState<GetPaymentHistoryDto[]>([])
     const [isLoading, setIsLoading] = useState(false)
@@ -27,11 +34,23 @@ const PaymentsTab = ({ registrationRecordId, onDataChange }: PaymentsTabProps) =
     const [isHistoryAddOpen, setIsHistoryAddOpen] = useState(false)
     const [editPaymentHistoryId, setEditPaymentHistoryId] = useState<string | null>(null)
 
+    const tabKeys = [
+        CONFIG.RegistrationRecordPaymentsTabs.Fees,
+        CONFIG.RegistrationRecordPaymentsTabs.History
+    ] as const
+
+    useEffect(() => {
+        const tabParam = searchParams.get('paymentsTab') || CONFIG.RegistrationRecordPaymentsTabs.Fees
+        const isValid = tabKeys.includes(tabParam as typeof tabKeys[number])
+        setActiveSubTab(isValid ? tabParam : CONFIG.RegistrationRecordPaymentsTabs.Fees)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [searchParams])
+
     useEffect(() => {
         if (registrationRecordId) {
-            if (activeSubTab === 0) {
+            if (activeSubTab === CONFIG.RegistrationRecordPaymentsTabs.Fees) {
                 fetchPayments()
-            } else if (activeSubTab === 1) {
+            } else if (activeSubTab === CONFIG.RegistrationRecordPaymentsTabs.History) {
                 fetchPaymentHistories()
             }
         }
@@ -79,7 +98,7 @@ const PaymentsTab = ({ registrationRecordId, onDataChange }: PaymentsTabProps) =
     }
 
     const handleRefresh = () => {
-        if (activeSubTab === 0) {
+        if (activeSubTab === CONFIG.RegistrationRecordPaymentsTabs.Fees) {
             fetchPayments()
         } else {
             fetchPaymentHistories()
@@ -88,16 +107,26 @@ const PaymentsTab = ({ registrationRecordId, onDataChange }: PaymentsTabProps) =
         onDataChange()
     }
 
+    const handleTabChange = (_: React.SyntheticEvent, newValue: string) => {
+        setActiveSubTab(newValue)
+        const nextTab = tabKeys.includes(newValue as typeof tabKeys[number])
+            ? newValue
+            : CONFIG.RegistrationRecordPaymentsTabs.Fees
+        const qs = new URLSearchParams(Array.from(searchParams.entries()))
+        qs.set('paymentsTab', nextTab)
+        router.replace(`${pathname}?${qs.toString()}`)
+    }
+
     return (
         <CardContent className='px-0 flex-1 h-full flex flex-col justify-between pb-0'>
             {/* Sub-tabs */}
-            <Tabs value={activeSubTab} onChange={(_, v) => setActiveSubTab(v)} sx={{ mb: 3 }}>
-                <Tab label="Bảng khoản phí" />
-                <Tab label="Lịch sử thanh toán" />
+            <Tabs value={activeSubTab} onChange={handleTabChange} sx={{ mb: 3 }}>
+                <Tab value={CONFIG.RegistrationRecordPaymentsTabs.Fees} label="Bảng khoản phí" />
+                <Tab value={CONFIG.RegistrationRecordPaymentsTabs.History} label="Lịch sử thanh toán" />
             </Tabs>
 
             {/* Fee Table Tab */}
-            {activeSubTab === 0 && (
+            {activeSubTab === CONFIG.RegistrationRecordPaymentsTabs.Fees && (
                 <FeeTab
                     data={payments}
                     isLoading={isLoading}
@@ -108,7 +137,7 @@ const PaymentsTab = ({ registrationRecordId, onDataChange }: PaymentsTabProps) =
             )}
 
             {/* Payment History Tab */}
-            {activeSubTab === 1 && (
+            {activeSubTab === CONFIG.RegistrationRecordPaymentsTabs.History && (
                 <PaymentHistoryTab
                     data={paymentHistories}
                     isLoading={isHistoryLoading}

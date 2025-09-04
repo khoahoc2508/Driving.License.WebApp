@@ -306,6 +306,12 @@ const RegistrationRecordProcessTabs = {
   Tasks: 'tasks'
 } as const
 
+// Sub-tabs for Payments in Registration Record Detail page
+const RegistrationRecordPaymentsTabs = {
+  Fees: 'fees',
+  History: 'history'
+} as const
+
 const CONFIG = {
   LicenseRegistrationStatus,
   LicenseRegistrationStatusMappingText,
@@ -350,7 +356,8 @@ const CONFIG = {
   InputType,
   TaskStatusOptions,
   RegistrationRecordDetailTabs,
-  RegistrationRecordProcessTabs
+  RegistrationRecordProcessTabs,
+  RegistrationRecordPaymentsTabs
 }
 
 export default CONFIG
