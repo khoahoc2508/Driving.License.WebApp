@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from 'react'
 
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+
 import { CardContent, Tab, Tabs } from '@mui/material'
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 import CONFIG from '@/configs/config'
 import type { GetPaymentDto, GetPaymentHistoryDto } from '@/types/registrationRecords'
@@ -42,6 +43,7 @@ const PaymentsTab = ({ registrationRecordId, onDataChange }: PaymentsTabProps) =
     useEffect(() => {
         const tabParam = searchParams.get('paymentsTab') || CONFIG.RegistrationRecordPaymentsTabs.Fees
         const isValid = tabKeys.includes(tabParam as typeof tabKeys[number])
+
         setActiveSubTab(isValid ? tabParam : CONFIG.RegistrationRecordPaymentsTabs.Fees)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchParams])
@@ -109,10 +111,13 @@ const PaymentsTab = ({ registrationRecordId, onDataChange }: PaymentsTabProps) =
 
     const handleTabChange = (_: React.SyntheticEvent, newValue: string) => {
         setActiveSubTab(newValue)
+
         const nextTab = tabKeys.includes(newValue as typeof tabKeys[number])
             ? newValue
             : CONFIG.RegistrationRecordPaymentsTabs.Fees
+
         const qs = new URLSearchParams(Array.from(searchParams.entries()))
+
         qs.set('paymentsTab', nextTab)
         router.replace(`${pathname}?${qs.toString()}`)
     }

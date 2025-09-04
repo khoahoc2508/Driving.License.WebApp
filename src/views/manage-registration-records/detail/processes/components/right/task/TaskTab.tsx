@@ -78,10 +78,13 @@ const TaskTab = ({ selectedStep, onRefreshSteps }: TaskTabProps) => {
 
     const handleCloseWithoutSave = () => {
         debugger
+
+
         // Nếu đây là task vừa tạo và người dùng không lưu, xóa task đó
         if (createdTaskId) {
             handleDeleteCreatedTask(createdTaskId)
         }
+
         handleEditDialogClose()
     }
 
@@ -106,9 +109,11 @@ const TaskTab = ({ selectedStep, onRefreshSteps }: TaskTabProps) => {
                     taskTemplateId: action.taskTemplate.id,
                     stepId: selectedStep.id
                 })
+
                 if (response.data?.success && response.data?.data && response.data.data.id) {
                     // Lưu ID của task vừa tạo để có thể xóa nếu người dùng không lưu
                     setCreatedTaskId(response.data.data.id)
+
                     // Open edit dialog with the created task to allow user to fill fields
                     setSelectedTask(response.data.data)
                     setIsCreateDialog(true)

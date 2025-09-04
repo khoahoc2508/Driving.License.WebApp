@@ -356,7 +356,9 @@ const EditTaskDialog = ({ open, onClose, onSuccess, onCloseWithoutSave, task, is
                             const options = fieldOptionsMap[fieldId] || []
                             const hasDataSource = !!field?.dataSourceConfig?.apiUrl
                             const labelText = isRequired ? <span>{label} <span style={{ color: 'red' }}>(*)</span></span> : label
-                            return (
+
+                            
+return (
                                 <Autocomplete
                                     value={options.find(opt => opt.value === value) || null}
                                     options={hasDataSource ? options : []}

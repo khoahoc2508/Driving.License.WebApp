@@ -303,7 +303,8 @@ const UpsertRegistrationRecord = ({ id }: UpsertRegistrationRecordProps) => {
         // Create mode - use CreateRegistrationRecordCommand
         const createPayload: CreateRegistrationRecordCommand = basePayload as CreateRegistrationRecordCommand;
 
-        var res = await registrationRecordsAPI.CreateRegistrationRecord(createPayload);
+        const res = await registrationRecordsAPI.CreateRegistrationRecord(createPayload);
+
         id = res.data.data;
       }
 
