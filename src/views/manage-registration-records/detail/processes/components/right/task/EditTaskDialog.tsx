@@ -477,13 +477,13 @@ const EditTaskDialog = ({ open, onClose, onSuccess, task, isCreate }: EditTaskDi
 
                     {/* Assignee field */}
                     <FormControl fullWidth error={!!errors.assigneeId}>
-                        <InputLabel>Người phụ trách <span style={{ color: 'red' }}>(*)</span></InputLabel>
+                        <InputLabel>Nhân viên <span style={{ color: 'red' }}>(*)</span></InputLabel>
                         <Controller
                             name="assigneeId"
                             control={control}
-                            rules={{ required: 'Vui lòng chọn người phụ trách' }}
+                            rules={{ required: 'Vui lòng chọn Nhân viên' }}
                             render={({ field }) => (
-                                <Select {...field} label="Người phụ trách (*)">
+                                <Select {...field} label="Nhân viên (*)">
                                     {assigneeOptions.map(opt => (
                                         <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
                                     ))}

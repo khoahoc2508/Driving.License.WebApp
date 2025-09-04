@@ -319,10 +319,8 @@ const UpsertRegistrationRecord = ({ id }: UpsertRegistrationRecordProps) => {
     <Card>
       <CardContent className="flex gap-4 p-4">
         <Button
-          variant='outlined'
-          color='secondary'
+          variant="outlined" color="primary"
           onClick={() => router.push(`${CONFIG.Routers.ManageRegistrationRecords}/list`)}
-          className="w-10 h-10 border-2 border-primary"
         >
           <i className="ri-arrow-left-line" style={{ fontSize: '20px', color: theme.palette.primary.main }} />
         </Button>
@@ -381,7 +379,7 @@ const UpsertRegistrationRecord = ({ id }: UpsertRegistrationRecordProps) => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label="Người phụ trách"
+                        label="Nhân viên"
                         error={!!errors.staffAssigneeId}
                         helperText={errors.staffAssigneeId?.message}
                       />
