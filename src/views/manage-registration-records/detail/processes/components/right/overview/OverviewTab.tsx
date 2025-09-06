@@ -235,8 +235,8 @@ const OverviewTab = ({ selectedStep, registrationRecordId, onRefreshSteps }: Ove
                                         <>
                                             <Typography variant="body1" sx={{ fontWeight: 600 }}>
                                                 {(item?.value !== undefined && item?.value !== null && String(item?.value).trim() !== '')
-                                                    ? item?.value ?? '_'
-                                                    : (item.stepFieldTemplateConfig?.defaultValue ?? '_')}
+                                                    ? item?.value ?? '-'
+                                                    : (item.stepFieldTemplateConfig?.defaultValue ?? '-')}
                                             </Typography>
                                             {item.stepFieldTemplateConfig?.canEditInline ? (
                                                 <IconButton size="small" aria-label="edit" onClick={() => startEdit(item)}>
@@ -282,7 +282,7 @@ const OverviewTab = ({ selectedStep, registrationRecordId, onRefreshSteps }: Ove
                                 <Typography variant="body1" sx={{ fontWeight: 600 }}>
                                     {(field?.value !== undefined && field?.value !== null && String(field?.value).trim() !== '')
                                         ? field?.value
-                                        : '_'}
+                                        : '-'}
                                 </Typography>
                                 {field.canEditInline ? (
                                     <IconButton size="small" aria-label="edit">
