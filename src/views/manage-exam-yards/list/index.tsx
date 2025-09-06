@@ -151,9 +151,7 @@ const ManageExamYardsList = () => {
             </CardContent>
             <CardContent>
                 <Grid size={{ xs: 12, sm: 8, md: 9 }} className='flex items-center gap-3'>
-                    {statusValue && (
-                        <Button variant='outlined' color='error' className='min-w-[170px]' onClick={clearAllFilters}>XÓA TẤT CẢ</Button>
-                    )}
+                    <Button variant='outlined' disabled={!statusValue} color='error' className='min-w-[170px]' onClick={clearAllFilters}>XÓA TẤT CẢ</Button>
                 </Grid>
             </CardContent>
             <Divider />

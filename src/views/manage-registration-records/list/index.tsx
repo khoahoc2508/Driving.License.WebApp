@@ -539,11 +539,9 @@ const ManageRegistrationRecords = () => {
               (staffAssigneeValue?.length || 0) > 0 ||
               (collaboratorValue?.length || 0) > 0
 
-            return hasAnySelected ? (
-              <Grid size={{ xs: 12, sm: 8, md: 9 }} className='flex items-center gap-3'>
-                <Button variant='outlined' color='error' className='min-w-[170px]' onClick={clearAllFilters}>XÓA TẤT CẢ</Button>
-              </Grid>
-            ) : null
+            return (<Grid size={{ xs: 12, sm: 8, md: 9 }} className='flex items-center gap-3'>
+              <Button disabled={!hasAnySelected} variant='outlined' color='error' className='min-w-[170px]' onClick={clearAllFilters}>XÓA TẤT CẢ</Button>
+            </Grid>)
           })()}
         </CardContent>
         <Divider />
