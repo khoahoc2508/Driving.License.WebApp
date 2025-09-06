@@ -300,15 +300,24 @@ const EditTaskDialog = ({ open, onClose, onSuccess, onCloseWithoutSave, task, is
                                 if (!value) return null
 
                                 try {
+                                    // Handle ISO string format (YYYY-MM-DDTHH:mm:ss.sssZ)
+                                    if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(value)) {
+                                        return new Date(value)
+                                    }
+
+                                    // Handle YYYY-MM-DD format
                                     if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
                                         return new Date(value)
                                     }
 
+                                    // Handle Vietnamese dd/MM/yyyy format
                                     if (/^\d{2}\/\d{2}\/\d{4}$/.test(value)) {
                                         return parseVietnameseDate(value)
                                     }
 
-                                    return null
+                                    // Try to parse as Date object for other formats
+                                    const date = new Date(value)
+                                    return isNaN(date.getTime()) ? null : date
                                 } catch {
                                     return null
                                 }
@@ -335,7 +344,6 @@ const EditTaskDialog = ({ open, onClose, onSuccess, onCloseWithoutSave, task, is
                                     placeholderText={hint || `Chọn ${label.toLowerCase()}`}
                                     onChange={(date) => {
                                         const dateString = formatDateToString(date)
-
                                         field.onChange(dateString)
                                     }}
                                     customInput={<TextField

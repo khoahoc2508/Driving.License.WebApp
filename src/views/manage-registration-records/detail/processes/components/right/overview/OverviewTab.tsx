@@ -233,7 +233,7 @@ const OverviewTab = ({ selectedStep, registrationRecordId, onRefreshSteps }: Ove
                                         </>
                                     ) : (
                                         <>
-                                            <Typography variant="body1" sx={{ fontWeight: 600 }}>
+                                            <Typography variant="body1" sx={item?.value !== undefined && item?.value !== null && String(item?.value).trim() !== '' || item.stepFieldTemplateConfig?.defaultValue ? { fontWeight: 600 } : {}}>
                                                 {(item?.value !== undefined && item?.value !== null && String(item?.value).trim() !== '')
                                                     ? item?.value ?? '-'
                                                     : (item.stepFieldTemplateConfig?.defaultValue ?? '-')}
@@ -279,7 +279,7 @@ const OverviewTab = ({ selectedStep, registrationRecordId, onRefreshSteps }: Ove
                                 {field.label}:
                             </Typography>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                <Typography variant="body1" sx={{ fontWeight: 600 }}>
+                                <Typography variant="body1" sx={field?.value !== undefined && field?.value !== null && String(field?.value).trim() !== '' ? { fontWeight: 600 } : {}}>
                                     {(field?.value !== undefined && field?.value !== null && String(field?.value).trim() !== '')
                                         ? field?.value
                                         : '-'}

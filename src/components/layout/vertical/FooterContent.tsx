@@ -21,7 +21,7 @@ const FooterContent = () => {
       className={classnames(verticalLayoutClasses.footerContent, 'flex items-center justify-between flex-wrap gap-4')}
     >
       <p>
-        <span>{`© ${new Date().getFullYear()}, bản quyền `}</span>
+        <span>{`© ${new Date().getFullYear()}, Bản quyền `}</span>
         <span>{`❤️`}</span>
         <Link href='https://banglaixanh.vn' target='_blank' className='text-primary'>
           banglaixanh.vn
