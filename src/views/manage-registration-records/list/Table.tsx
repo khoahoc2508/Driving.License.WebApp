@@ -367,8 +367,8 @@ const Table = ({
             <IconButton onClick={() => router.push(`${CONFIG.Routers.ManageRegistrationRecords}/detail/${row.original.id}`)}>
               <i className='ri-eye-line text-textSecondary' />
             </IconButton>
-            <IconButton onClick={() => router.push(`${CONFIG.Routers.ManageRegistrationRecords}/edit/${row.original.id}`)}>
-              <a href={`${CONFIG.Routers.ManageRegistrationRecords}/edit/${row.original.id}`} className='flex items-center cursor-pointer'>
+            <IconButton onClick={() => router.push(`${CONFIG.Routers.ManageRegistrationRecords}/edit/${row.original.id}?from=list`)}>
+              <a href={`${CONFIG.Routers.ManageRegistrationRecords}/edit/${row.original.id}?from=list`} className='flex items-center cursor-pointer'>
                 <i className="ri-edit-box-line text-textSecondary" />
               </a>
             </IconButton>

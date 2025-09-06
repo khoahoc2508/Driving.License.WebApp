@@ -130,7 +130,7 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
           >
             <i className="ri-arrow-left-line" style={{ fontSize: '20px', color: theme.palette.primary.main }} />
           </Button>
-          <Button variant="outlined" color="primary" onClick={() => id && router.push(`${CONFIG.Routers.ManageRegistrationRecords}/edit/${id}`)}>
+          <Button variant="outlined" color="primary" onClick={() => id && router.push(`${CONFIG.Routers.ManageRegistrationRecords}/edit/${id}?from=detail`)}>
             CHỈNH SỬA
           </Button>
         </div>

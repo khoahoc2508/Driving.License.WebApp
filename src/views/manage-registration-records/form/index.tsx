@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import type { SubmitHandler } from 'react-hook-form';
 import { Controller, useForm } from 'react-hook-form'
@@ -75,6 +75,10 @@ const UpsertRegistrationRecord = ({ id }: UpsertRegistrationRecordProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const theme = useTheme()
   const router = useRouter()
+  const searchParams = useSearchParams()
+
+  // Determine source page (list or detail)
+  const sourcePage = searchParams.get('from') || 'list'
 
   // Hooks
   const {
@@ -322,7 +326,13 @@ const UpsertRegistrationRecord = ({ id }: UpsertRegistrationRecordProps) => {
       <CardContent className="flex gap-4 p-4">
         <Button
           variant="outlined" color="primary"
-          onClick={() => router.push(`${CONFIG.Routers.ManageRegistrationRecords}/list`)}
+          onClick={() => {
+            if (sourcePage === 'detail' && id) {
+              router.push(`${CONFIG.Routers.ManageRegistrationRecords}/detail/${id}`)
+            } else {
+              router.push(`${CONFIG.Routers.ManageRegistrationRecords}/list`)
+            }
+          }}
         >
           <i className="ri-arrow-left-line" style={{ fontSize: '20px', color: theme.palette.primary.main }} />
         </Button>
@@ -428,7 +438,13 @@ const UpsertRegistrationRecord = ({ id }: UpsertRegistrationRecordProps) => {
       </CardContent>
       <Divider />
       <CardContent className="flex gap-4 p-4 justify-end">
-        <Button variant='outlined' color='secondary' onClick={() => router.push(`${CONFIG.Routers.ManageRegistrationRecords}/list`)}>
+        <Button variant='outlined' color='secondary' onClick={() => {
+          if (sourcePage === 'detail' && id) {
+            router.push(`${CONFIG.Routers.ManageRegistrationRecords}/detail/${id}`)
+          } else {
+            router.push(`${CONFIG.Routers.ManageRegistrationRecords}/list`)
+          }
+        }}>
           Hủy
         </Button>
         <Button
