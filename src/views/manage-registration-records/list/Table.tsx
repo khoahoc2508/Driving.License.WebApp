@@ -33,6 +33,7 @@ import {
   useReactTable
 } from '@tanstack/react-table'
 import classnames from 'classnames'
+import { tableHeaderRowSpan } from 'tanstack-table-header-rowspan'
 
 // Icon Imports
 import { IconButton, Typography, Tooltip } from '@mui/material'
@@ -455,46 +456,21 @@ const Table = ({
               {table.getHeaderGroups().map(headerGroup => (
                 <tr key={headerGroup.id} className="h-9">
                   {headerGroup.headers.map(header => {
-                    const isGrouped = header.column.columns && header.column.columns.length > 0
-                    const colSpan = isGrouped ? header.column.columns.length : 1
+                    let rowSpan = tableHeaderRowSpan(header)
+                    if (!rowSpan) {
+                      return null;
+                    }
 
                     return (
                       <th
                         key={header.id}
-                        colSpan={colSpan}
+                        colSpan={header.colSpan}
+                        rowSpan={rowSpan}
                         style={{
                           ...getCommonPinningStyles(header.column),
-                          // backgroundColor: header.column.getIsPinned() ? 'var(--mui-palette-background-paper)' : 'transparent'
                         }}
                       >
-                        {header.isPlaceholder ? null : (
-                          <>
-                            <div
-                              className={classnames({
-                                'flex items-center': header.column.getIsSorted(),
-                                'cursor-pointer select-none': header.column.getCanSort()
-                              })}
-                              onClick={header.column.getToggleSortingHandler()}
-                            >
-                              {flexRender(header.column.columnDef.header, header.getContext())}
-                              {{
-                                asc: <ChevronRight fontSize='1.25rem' className='-rotate-90' />,
-                                desc: <ChevronRight fontSize='1.25rem' className='rotate-90' />
-                              }[header.column.getIsSorted() as 'asc' | 'desc'] ?? null}
-                            </div>
-
-                            {/* Resizer */}
-                            <div
-                              {...{
-                                onDoubleClick: () => header.column.resetSize(),
-                                onMouseDown: header.getResizeHandler(),
-                                onTouchStart: header.getResizeHandler(),
-                                className: `resizer ${header.column.getIsResizing() ? 'isResizing' : ''
-                                  }`,
-                              }}
-                            />
-                          </>
-                        )}
+                        {flexRender(header.column.columnDef.header, header.getContext())}
                       </th>
                     )
                   })}

@@ -98,6 +98,9 @@ importers:
       server-only:
         specifier: 0.0.1
         version: 0.0.1
+      tanstack-table-header-rowspan:
+        specifier: ^1.0.4
+        version: 1.0.4(@tanstack/react-table@8.21.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       valibot:
         specifier: ^1.1.0
         version: 1.1.0(typescript@5.5.4)
@@ -3191,6 +3194,11 @@ packages:
     resolution: {integrity: sha512-w33E2aCvSDP0tW9RZuNXadXlkHXqFzSkQew/aIa2i/Sj8fThxwovwlXHSPXTbAHwEIhBFXAedUhP2tueAKP8Og==}
     engines: {node: '>=14.0.0'}
     hasBin: true
+
+  tanstack-table-header-rowspan@1.0.4:
+    resolution: {integrity: sha512-GSFWcZJ53vIdU8a3qguyXPUTXkAWrYZysb/noylrjMq5dQC/jGaiDKvfIY/GwNamE47kE02zMwnGaNLsgwmXUA==}
+    peerDependencies:
+      '@tanstack/react-table': ^8
 
   tapable@2.2.1:
     resolution: {integrity: sha512-GNzQvQTOIP6RyTfE2Qxb8ZVlNmw0n88vp1szwWRimP02mnTsx3Wtn5qRdqY9w2XduFNUgvOwhNnQsjwCp+kqaQ==}
@@ -6720,6 +6728,10 @@ snapshots:
       sucrase: 3.35.0
     transitivePeerDependencies:
       - ts-node
+
+  tanstack-table-header-rowspan@1.0.4(@tanstack/react-table@8.21.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)):
+    dependencies:
+      '@tanstack/react-table': 8.21.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
   tapable@2.2.1: {}
 

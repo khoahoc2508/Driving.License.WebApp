@@ -83,7 +83,7 @@ const PaymentHistoryTab = ({ data, isLoading, onRefresh, registrationRecordId, o
         () => [
             columnHelper.accessor('id', {
                 id: 'stt',
-                header: () => (<Typography>STT</Typography>),
+                header: 'STT',
                 cell: ({ row, table }) => (
                     <Typography>{table.getRowModel().rows.indexOf(row) + 1}</Typography>
                 ),
