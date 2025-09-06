@@ -13,8 +13,8 @@ import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
-import TablePagination from '@mui/material/TablePagination'
 import Avatar from '@mui/material/Avatar'
+import CustomPagination from '@/components/common/CustomPagination'
 
 // Third-party Imports
 import type { RankingInfo } from '@tanstack/match-sorter-utils'
@@ -573,18 +573,15 @@ const Table = ({
             </tbody>
           </table>
         </div>
-        <TablePagination
-          rowsPerPageOptions={[7, 10, 25]}
-          component='div'
-          className='border-bs'
-          count={totalItems}
-          labelRowsPerPage="Dòng trên trang:"
-          rowsPerPage={pageSize}
-          page={pageNumber - 1}
-          onPageChange={(_, page) => {
-            onPageChange(page + 1)
-          }}
-          onRowsPerPageChange={e => onPageSizeChange(Number(e.target.value))}
+        <CustomPagination
+          totalItems={totalItems}
+          pageSize={pageSize}
+          pageNumber={pageNumber}
+          onPageChange={onPageChange}
+          onPageSizeChange={onPageSizeChange}
+          pageSizeOptions={[7, 10, 25, 50]}
+          showPageSizeSelector={true}
+          showTotalItems={true}
         />
       </div>
 
