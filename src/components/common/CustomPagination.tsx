@@ -1,19 +1,21 @@
 'use client'
 
 // React Imports
-import { useState } from 'react'
 
 // MUI Imports
+import type {
+    SelectChangeEvent
+} from '@mui/material';
 import {
     Box,
     FormControl,
     MenuItem,
     Select,
-    SelectChangeEvent,
     Typography
 } from '@mui/material'
 
 import Pagination from '@mui/material/Pagination'
+
 // Icon Imports - Using Remix Icons like the rest of the project
 
 interface CustomPaginationProps {
@@ -24,7 +26,6 @@ interface CustomPaginationProps {
     onPageSizeChange: (pageSize: number) => void
     pageSizeOptions?: number[]
     showPageSizeSelector?: boolean
-    showTotalItems?: boolean
 }
 
 const CustomPagination = ({
@@ -35,12 +36,12 @@ const CustomPagination = ({
     onPageSizeChange,
     pageSizeOptions = [7, 10, 25, 50],
     showPageSizeSelector = true,
-    showTotalItems = true
 }: CustomPaginationProps) => {
     const totalPages = Math.ceil(totalItems / pageSize)
 
     const handlePageSizeChange = (event: SelectChangeEvent<number>) => {
         const newPageSize = Number(event.target.value)
+
         onPageSizeChange(newPageSize)
     }
 

@@ -14,7 +14,7 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import Avatar from '@mui/material/Avatar'
-import CustomPagination from '@/components/common/CustomPagination'
+
 
 // Third-party Imports
 import type { RankingInfo } from '@tanstack/match-sorter-utils'
@@ -38,6 +38,8 @@ import classnames from 'classnames'
 import { IconButton, Typography, Tooltip } from '@mui/material'
 
 import { toast } from 'react-toastify'
+
+import CustomPagination from '@/components/common/CustomPagination'
 
 import ChevronRight from '@menu/svg/ChevronRight'
 
@@ -581,7 +583,6 @@ const Table = ({
           onPageSizeChange={onPageSizeChange}
           pageSizeOptions={[7, 10, 25, 50]}
           showPageSizeSelector={true}
-          showTotalItems={true}
         />
       </div>
 

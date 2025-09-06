@@ -10,7 +10,6 @@ import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
-import TablePagination from '@mui/material/TablePagination'
 
 // Third-party Imports
 import type { RankingInfo } from '@tanstack/match-sorter-utils'
@@ -319,7 +318,6 @@ const Table = ({
                     onPageSizeChange={onPageSizeChange}
                     pageSizeOptions={[7, 10, 25, 50]}
                     showPageSizeSelector={true}
-                    showTotalItems={true}
                 />
             </div>
             <Dialog

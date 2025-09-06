@@ -28,11 +28,11 @@ import type { GetTaskDto, TaskStatusType, UpdateTaskCommand } from '@/types/step
 import type { AssigneeType } from '@/types/assigneeTypes'
 import CONFIG from '@/configs/config'
 import assigneeAPI from '@/libs/api/assigneeAPI'
-import { formatDateOnlyForAPI, formatDateTimeForAPI, parseVietnameseDate } from '@/utils/helpers'
+import { formatDateOnlyForAPI, formatDateTimeForAPI, parseVietnameseDate , getInputBehavior } from '@/utils/helpers'
 import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
 import stepsAPI from '@/libs/api/stepsAPI'
 import axiosInstance from '@/libs/axios'
-import { getInputBehavior } from '@/utils/helpers'
+
 
 type EditTaskDialogProps = {
     open: boolean
@@ -317,7 +317,9 @@ const EditTaskDialog = ({ open, onClose, onSuccess, onCloseWithoutSave, task, is
 
                                     // Try to parse as Date object for other formats
                                     const date = new Date(value)
-                                    return isNaN(date.getTime()) ? null : date
+
+                                    
+return isNaN(date.getTime()) ? null : date
                                 } catch {
                                     return null
                                 }
@@ -344,6 +346,7 @@ const EditTaskDialog = ({ open, onClose, onSuccess, onCloseWithoutSave, task, is
                                     placeholderText={hint || `Chọn ${label.toLowerCase()}`}
                                     onChange={(date) => {
                                         const dateString = formatDateToString(date)
+
                                         field.onChange(dateString)
                                     }}
                                     customInput={<TextField

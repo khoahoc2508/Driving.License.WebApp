@@ -59,7 +59,8 @@ export const formatDate = (date: Date | string | null | undefined): string => {
     })
   } catch (error) {
     console.error('Error formatting date:', error)
-    return ''
+    
+return ''
   }
 }
 
@@ -81,7 +82,8 @@ export const formatDateTime = (date: Date | string | null | undefined): string =
     })
   } catch (error) {
     console.error('Error formatting date time:', error)
-    return ''
+    
+return ''
   }
 }
 
@@ -99,6 +101,7 @@ export const formatDateOnlyForAPI = (date: Date | string | null | undefined): st
     // If it's a string in dd/MM/yyyy format, parse it correctly
     if (typeof date === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(date)) {
       const parsedDate = parseVietnameseDate(date)
+
       if (!parsedDate) return null
       dateObj = parsedDate
     } else {
@@ -109,10 +112,13 @@ export const formatDateOnlyForAPI = (date: Date | string | null | undefined): st
 
     // Set time to 00:00:00 UTC
     const utcDate = new Date(Date.UTC(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate(), 0, 0, 0, 0))
-    return utcDate.toISOString()
+
+    
+return utcDate.toISOString()
   } catch (error) {
     console.error('Error formatting date only for API:', error)
-    return null
+    
+return null
   }
 }
 
@@ -130,6 +136,7 @@ export const formatDateTimeForAPI = (date: Date | string | null | undefined): st
     // If it's a string in dd/MM/yyyy format, parse it correctly
     if (typeof date === 'string' && /^\d{2}\/\d{2}\/\d{4}$/.test(date)) {
       const parsedDate = parseVietnameseDate(date)
+
       if (!parsedDate) return null
       dateObj = parsedDate
     } else {
@@ -139,7 +146,8 @@ export const formatDateTimeForAPI = (date: Date | string | null | undefined): st
     return dateObj.toISOString()
   } catch (error) {
     console.error('Error formatting date time for API:', error)
-    return null
+    
+return null
   }
 }
 
@@ -153,6 +161,7 @@ export const parseVietnameseDate = (dateString: string): Date | null => {
 
   try {
     const [day, month, year] = dateString.split('/')
+
     if (!day || !month || !year) return null
 
     // Create date in local timezone
@@ -164,6 +173,7 @@ export const parseVietnameseDate = (dateString: string): Date | null => {
     return date
   } catch (error) {
     console.error('Error parsing Vietnamese date:', error)
-    return null
+    
+return null
   }
 }

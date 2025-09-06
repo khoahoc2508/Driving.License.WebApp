@@ -100,6 +100,7 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
         }
       } catch (error: any) {
         setIsApproved(!checked)
+
         if (checked) {
           toast.error(error?.response?.data?.message as string || 'Duyệt hồ sơ thất bại')
         } else {
