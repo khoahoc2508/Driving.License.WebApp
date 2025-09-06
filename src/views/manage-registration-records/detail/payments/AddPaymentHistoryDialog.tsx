@@ -22,6 +22,7 @@ import { toast } from 'react-toastify'
 import type { CreatePaymentHistoryCommand } from '@/types/registrationRecords'
 import registrationRecordsAPI from '@/libs/api/registrationRecordsAPI'
 import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
+import { formatCurrency, formatCurrencyVNDInput, formatDateOnlyForAPI } from '@/utils/helpers'
 
 export enum DialogMode {
   ADD = 'add',
@@ -75,7 +76,7 @@ const AddPaymentHistoryDialog = ({
 
         const options = res?.data?.data?.map((x: any) => ({
           value: x.id,
-          label: `${x.feeTypeName || 'Loại phí'} - ${new Intl.NumberFormat('vi-VN').format(x.amount || 0)} VNĐ`
+          label: `${x.feeTypeName || 'Loại phí'} - ${formatCurrency(x.amount || 0)} VNĐ`
         })) || []
 
         setPaymentOptions(options)
@@ -112,7 +113,7 @@ const AddPaymentHistoryDialog = ({
         reset({
           paymentDate: data.paymentDate ? new Date(data.paymentDate).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
           paymentId: data.paymentId || '',
-          amountInput: new Intl.NumberFormat('vi-VN').format(data.amount ?? 0),
+          amountInput: formatCurrency(data.amount ?? 0) || '',
           note: data.note || ''
         })
       }
@@ -129,13 +130,6 @@ const AddPaymentHistoryDialog = ({
     return numeric ? Number(numeric) : 0
   }
 
-  const formatAmount = (value: string): string => {
-    const num = value.replace(/[^\d]/g, '')
-
-
-    return num ? new Intl.NumberFormat('vi-VN').format(Number(num)) : ''
-  }
-
   const onSubmit = async (data: FormData) => {
     setIsLoading(true)
 
@@ -143,7 +137,7 @@ const AddPaymentHistoryDialog = ({
       const paymentHistoryData: CreatePaymentHistoryCommand = {
         paymentId: data.paymentId,
         amount: parseAmount(data.amountInput),
-        paymentDate: data.paymentDate,
+        paymentDate: formatDateOnlyForAPI(data.paymentDate) || '',
         note: data.note
       }
 
@@ -297,7 +291,7 @@ const AddPaymentHistoryDialog = ({
                 label={<span>Số tiền <span style={{ color: 'red' }}>(*)</span></span>}
                 fullWidth
                 variant="outlined"
-                onChange={e => field.onChange(formatAmount(e.target.value))}
+                onChange={e => field.onChange(formatCurrencyVNDInput(e.target.value))}
                 InputProps={{
                   startAdornment: <InputAdornment position="start">VNĐ</InputAdornment>
                 }}

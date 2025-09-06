@@ -27,6 +27,7 @@ import type { GetPaymentHistoryDto } from '@/types/registrationRecords'
 import registrationRecordsAPI from '@/libs/api/registrationRecordsAPI'
 import SkeletonTableRowsLoader from '@/components/common/SkeletonTableRowsLoader'
 import AddPaymentHistoryDialog, { DialogMode } from './AddPaymentHistoryDialog'
+import { formatCurrency, formatDate } from '@/utils/helpers'
 
 // Column Definitions
 const columnHelper = createColumnHelper<GetPaymentHistoryDto>()
@@ -67,25 +68,6 @@ const PaymentHistoryTab = ({ data, isLoading, onRefresh, registrationRecordId, o
     const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null)
     const [isAddOpen, setIsAddOpen] = useState(false)
     const [editPaymentHistoryId, setEditPaymentHistoryId] = useState<string | null>(null)
-
-    const currency = (value?: number | null) => {
-        if (value === undefined || value === null) return 'Chưa có dữ liệu'
-
-        return new Intl.NumberFormat('vi-VN').format(value)
-    }
-
-    const formatDate = (dateString?: string) => {
-        if (!dateString) return '-'
-
-        try {
-            const date = new Date(dateString)
-
-
-            return date.toLocaleDateString('vi-VN')
-        } catch {
-            return '-'
-        }
-    }
 
     const handleEditPaymentHistory = (paymentHistory: GetPaymentHistoryDto) => {
         if (onEdit) {
@@ -133,7 +115,7 @@ const PaymentHistoryTab = ({ data, isLoading, onRefresh, registrationRecordId, o
                 cell: ({ row }) => (
                     <div style={{ textAlign: 'right' }}>
                         <Typography className='w-full'>
-                            {currency(row.original?.amount)}
+                            {formatCurrency(row.original?.amount)}
                         </Typography>
                     </div>
                 ),

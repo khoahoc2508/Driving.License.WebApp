@@ -27,6 +27,7 @@ import type { GetPaymentDto } from '@/types/registrationRecords'
 import registrationRecordsAPI from '@/libs/api/registrationRecordsAPI'
 import SkeletonTableRowsLoader from '@/components/common/SkeletonTableRowsLoader'
 import CONFIG from '@/configs/config'
+import { formatCurrency } from '@/utils/helpers'
 
 // Column Definitions
 const columnHelper = createColumnHelper<GetPaymentDto>()
@@ -67,11 +68,6 @@ const FeeTab = ({ data, isLoading, onEditPayment, onRefresh, onAdd }: FeeTabProp
 
     // Add handled by parent dialog
 
-    const currency = (value?: number | null) => {
-        if (value === undefined || value === null) return 'Chưa có dữ liệu'
-
-        return new Intl.NumberFormat('vi-VN').format(value)
-    }
 
     const getStatusChip = (status: number | undefined) => {
         const statusOption = CONFIG.paymentStatusOptions.find(option => option.value === status)
@@ -129,7 +125,7 @@ const FeeTab = ({ data, isLoading, onEditPayment, onRefresh, onAdd }: FeeTabProp
                 cell: ({ row }) => (
                     <div style={{ textAlign: 'right' }}>
                         <Typography className='w-full'>
-                            {currency(row.original?.amount)}
+                            {formatCurrency(row.original?.amount)}
                         </Typography>
                     </div>
                 ),

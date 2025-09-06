@@ -78,6 +78,7 @@ const PersonalInformation = ({ control, errors }: PersonalInformationProps) => {
                                         showMonthDropdown
                                         dateFormat='dd/MM/yyyy'
                                         onChange={(date) => field.onChange(date)}
+                                        maxDate={new Date()}
                                         customInput={<TextField fullWidth size='medium' label={
                                             <span>
                                                 Ngày sinh <span style={{ color: 'red' }}>(*)</span>

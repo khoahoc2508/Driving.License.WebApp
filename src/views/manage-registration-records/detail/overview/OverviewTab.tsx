@@ -5,27 +5,13 @@ import { useMemo } from 'react'
 import { Avatar, Box, CardContent, Chip, Divider, Typography } from '@mui/material'
 
 import type { RegistrationRecordOverviewDto } from '@/types/registrationRecords'
+import { formatCurrency, formatDate } from '@/utils/helpers'
 
 type OverviewTabProps = {
     overview: RegistrationRecordOverviewDto | null
 }
 
 const OverviewTab = ({ overview }: OverviewTabProps) => {
-    const currency = (value?: number | null) => {
-        if (value === undefined || value === null) return 'Chưa có dữ liệu'
-
-        return new Intl.NumberFormat('vi-VN').format(value)
-    }
-
-    const formatDate = (value?: string | null) => {
-        if (!value) return 'Chưa có dữ liệu'
-
-        try {
-            return new Date(value).toLocaleDateString('vi-VN')
-        } catch {
-            return 'Chưa có dữ liệu'
-        }
-    }
 
     const processingStepChips = useMemo(() => {
         const steps = overview?.processing?.steps || []
@@ -96,11 +82,11 @@ const OverviewTab = ({ overview }: OverviewTabProps) => {
             <Typography variant="h5" sx={{ mb: 4, fontWeight: 600 }}>Thanh toán</Typography>
             <Box sx={{ display: 'grid', gridTemplateColumns: '180px 1fr', rowGap: 3, alignItems: 'center' }}>
                 <Typography variant="body2" color="text.secondary">Còn thiếu:</Typography>
-                <Typography variant="body2" sx={{ color: 'error.main', fontWeight: 600 }}>{currency(overview?.paymentSummary?.remainingAmount)}</Typography>
+                <Typography variant="body2" sx={{ color: 'error.main', fontWeight: 600 }}>{formatCurrency(overview?.paymentSummary?.remainingAmount)}</Typography>
                 <Typography variant="body2" color="text.secondary">Đã thanh toán:</Typography>
-                <Typography variant="body2" sx={{ fontWeight: 600 }}>{currency(overview?.paymentSummary?.paidAmount)}</Typography>
+                <Typography variant="body2" sx={{ fontWeight: 600 }}>{formatCurrency(overview?.paymentSummary?.paidAmount)}</Typography>
                 <Typography variant="body2" color="text.secondary">Tổng cần thanh toán:</Typography>
-                <Typography variant="body2" sx={{ fontWeight: 600 }}>{currency(overview?.paymentSummary?.totalAmount)}</Typography>
+                <Typography variant="body2" sx={{ fontWeight: 600 }}>{formatCurrency(overview?.paymentSummary?.totalAmount)}</Typography>
             </Box>
 
             <Divider sx={{ my: 5 }} />

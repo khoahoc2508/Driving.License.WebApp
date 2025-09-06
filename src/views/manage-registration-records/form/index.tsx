@@ -42,6 +42,7 @@ import InfomationRegister from "./InfomationRegister";
 
 
 import registrationRecordsAPI from "@/libs/api/registrationRecordsAPI";
+import { formatDateOnlyForAPI } from '@/utils/helpers';
 
 
 type UpsertRegistrationRecordProps = {
@@ -289,8 +290,8 @@ const UpsertRegistrationRecord = ({ id }: UpsertRegistrationRecordProps) => {
         citizenIdNumber: data.citizenIdNumber,
         citizenIdFrontImageUrl: uploadedCitizenIdFrontUrl || '',
         citizenIdBackImageUrl: uploadedCitizenIdBackUrl || '',
-        receivedDate: data.receivedDate ? new Date(data.receivedDate.getFullYear(), data.receivedDate.getMonth(), data.receivedDate.getDate()).toISOString() : '',
-        healthCheckDate: data.healthCheckDate ? new Date(data.healthCheckDate.getFullYear(), data.healthCheckDate.getMonth(), data.healthCheckDate.getDate()).toISOString() : null,
+        receivedDate: formatDateOnlyForAPI(data.receivedDate) || '',
+        healthCheckDate: formatDateOnlyForAPI(data.healthCheckDate),
         staffAssigneeId: data.staffAssigneeId || null,
         collaboratorId: data.collaboratorId || null,
         note: data.note

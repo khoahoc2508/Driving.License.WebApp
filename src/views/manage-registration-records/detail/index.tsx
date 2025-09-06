@@ -16,6 +16,7 @@ import type { RegistrationRecordBasicInfoDto, RegistrationRecordOverviewDto } fr
 import OverviewTab from "./overview/OverviewTab";
 import PaymentsTab from "./payments/PaymentsTab";
 import ProcessingTab from "./processes/ProcessingTab";
+import { formatCurrency } from "@/utils/helpers";
 
 
 type RegistrationRecordDetailProps = {
@@ -113,11 +114,6 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
   const headerLicenseType = basicInfo?.licenseTypeName ? ` - Hạng ${basicInfo.licenseTypeName}` : ''
   const phoneNumber = basicInfo?.phone || ''
 
-  const currency = (value?: number | null) => {
-    if (value === undefined || value === null) return 'Chưa có dữ liệu'
-
-    return new Intl.NumberFormat('vi-VN').format(value)
-  }
 
   return (
     <div className="h-full flex flex-col justify-between">
@@ -171,7 +167,7 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
                   Số điện thoại: <span className="text-primary">{phoneNumber || 'Chưa có dữ liệu'}</span>
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Tổng phí: {currency(basicInfo?.totalAmount)} | Đã thu: {currency(basicInfo?.paidAmount)} | Còn lại: <span className="text-red-500">{currency(basicInfo?.remainingAmount)}</span>
+                  Tổng phí: {formatCurrency(basicInfo?.totalAmount)} | Đã thu: {formatCurrency(basicInfo?.paidAmount)} | Còn lại: <span className="text-red-500">{formatCurrency(basicInfo?.remainingAmount)}</span>
                 </Typography>
               </div>
             </div>

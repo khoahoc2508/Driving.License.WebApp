@@ -77,9 +77,6 @@ const TaskTab = ({ selectedStep, onRefreshSteps }: TaskTabProps) => {
     }
 
     const handleCloseWithoutSave = () => {
-        debugger
-
-
         // Nếu đây là task vừa tạo và người dùng không lưu, xóa task đó
         if (createdTaskId) {
             handleDeleteCreatedTask(createdTaskId)

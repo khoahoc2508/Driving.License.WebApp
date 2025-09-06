@@ -22,7 +22,7 @@ import { toast } from 'react-toastify'
 import type { CreatePaymentCommand } from '@/types/registrationRecords'
 import registrationRecordsAPI from '@/libs/api/registrationRecordsAPI'
 import feeTypeAPI from '@/libs/api/feeTypeAPI'
-import { formatCurrencyVNDInput } from '@/utils/helpers'
+import { formatCurrency, formatCurrencyVNDInput } from '@/utils/helpers'
 
 export enum DialogMode {
   ADD = 0,
@@ -87,7 +87,7 @@ const AddPaymentDialog = ({ open, onClose, onSuccess, registrationRecordId, mode
 
         if (detail) {
           setValue('feeTypeId', detail.feeTypeId || '')
-          setValue('amountInput', new Intl.NumberFormat('vi-VN').format(detail.amount ?? 0))
+          setValue('amountInput', formatCurrency(detail.amount ?? 0) || '')
           setValue('note', detail.note || '')
         }
       } finally {

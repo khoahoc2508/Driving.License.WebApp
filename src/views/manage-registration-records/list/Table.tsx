@@ -48,6 +48,7 @@ import registrationRecordsAPI from '@/libs/api/registrationRecordsAPI'
 import SkeletonTableRowsLoader from '@/components/common/SkeletonTableRowsLoader'
 import type { GetRegistrationRecordsDto, GetRegistrationRecordsListType, RegistrationRecordStatus } from '@/types/registrationRecords'
 import CONFIG from '@/configs/config'
+import { formatCurrency, formatDate } from '@/utils/helpers'
 
 // Column Definitions
 const columnHelper = createColumnHelper<GetRegistrationRecordsDto>()
@@ -152,15 +153,6 @@ const Table = ({
     )
   }
 
-  const formatCurrency = (amount: number | undefined | null) => {
-    if (amount === undefined || amount === null) return null
-
-    return new Intl.NumberFormat('vi-VN', {
-      style: 'decimal',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(amount)
-  }
 
   // Hooks
   const columns = useMemo<ColumnDef<GetRegistrationRecordsDto, any>[]>(
@@ -220,11 +212,7 @@ const Table = ({
         cell: ({ row }) => (
           <div style={{ textAlign: 'center' }}>
             <Typography>
-              {row.original?.birthday ? new Date(row.original.birthday).toLocaleDateString('vi-VN', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
-              }) : ''}
+              {formatDate(row.original?.birthday)}
             </Typography>
           </div>
         ),
@@ -236,11 +224,7 @@ const Table = ({
         cell: ({ row }) => (
           <div style={{ textAlign: 'center' }}>
             <Typography>
-              {row.original?.receivedDate ? new Date(row.original.receivedDate).toLocaleDateString('vi-VN', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
-              }) : ''}
+              {formatDate(row.original?.receivedDate)}
             </Typography>
           </div>
         ),
@@ -252,11 +236,7 @@ const Table = ({
         cell: ({ row }) => (
           <div style={{ textAlign: 'center' }}>
             <Typography>
-              {row.original?.healthCheckDate ? new Date(row.original.healthCheckDate).toLocaleDateString('vi-VN', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric'
-              }) : ''}
+              {formatDate(row.original?.healthCheckDate)}
             </Typography>
           </div>
         ),

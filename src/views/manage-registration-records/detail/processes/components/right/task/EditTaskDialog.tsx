@@ -28,6 +28,7 @@ import type { GetTaskDto, TaskStatusType, UpdateTaskCommand } from '@/types/step
 import type { AssigneeType } from '@/types/assigneeTypes'
 import CONFIG from '@/configs/config'
 import assigneeAPI from '@/libs/api/assigneeAPI'
+import { formatDateOnlyForAPI, formatDateTimeForAPI, parseVietnameseDate } from '@/utils/helpers'
 import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
 import stepsAPI from '@/libs/api/stepsAPI'
 import axiosInstance from '@/libs/axios'
@@ -189,10 +190,21 @@ const EditTaskDialog = ({ open, onClose, onSuccess, onCloseWithoutSave, task, is
                 note: data.note,
                 taskFieldInstanceSubmissions: task?.taskFieldTemplateConfigs
                     ?.filter(field => field.key && data[field.key] !== undefined)
-                    .map(field => ({
-                        taskFieldTemplateConfigId: field.id,
-                        value: data[field.key!]
-                    })) || []
+                    .map(field => {
+                        let value = data[field.key!]
+
+                        // Format date fields based on input type
+                        if (field.inputType === CONFIG.InputType.DateOnly) {
+                            value = formatDateOnlyForAPI(value)
+                        } else if (field.inputType === CONFIG.InputType.DateTime) {
+                            value = formatDateTimeForAPI(value)
+                        }
+
+                        return {
+                            taskFieldTemplateConfigId: field.id,
+                            value: value
+                        }
+                    }) || []
             }
 
             const res = await stepsAPI.UpdateTask(task.id, updateData)
@@ -293,12 +305,8 @@ const EditTaskDialog = ({ open, onClose, onSuccess, onCloseWithoutSave, task, is
                                     }
 
                                     if (/^\d{2}\/\d{2}\/\d{4}$/.test(value)) {
-                                        const [day, month, year] = value.split('/')
-
-
-                                        return new Date(parseInt(year), parseInt(month) - 1, parseInt(day))
+                                        return parseVietnameseDate(value)
                                     }
-
 
                                     return null
                                 } catch {
