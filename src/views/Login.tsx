@@ -111,6 +111,7 @@ const Login = ({ mode }: { mode: Mode }) => {
     if (res && res.ok && res.error === null) {
       // Vars
       const redirectURL = searchParams.get('redirectTo') ?? '/'
+
       // Decode the URL to handle special characters
       const decodedRedirectURL = decodeURIComponent(redirectURL)
 

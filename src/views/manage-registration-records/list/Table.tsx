@@ -32,7 +32,6 @@ import {
   getSortedRowModel,
   useReactTable
 } from '@tanstack/react-table'
-import classnames from 'classnames'
 import { tableHeaderRowSpan } from 'tanstack-table-header-rowspan'
 
 // Icon Imports
@@ -41,8 +40,6 @@ import { IconButton, Typography, Tooltip } from '@mui/material'
 import { toast } from 'react-toastify'
 
 import CustomPagination from '@/components/common/CustomPagination'
-
-import ChevronRight from '@menu/svg/ChevronRight'
 
 // Style Imports
 import styles from '@core/styles/table.module.css'
@@ -456,7 +453,8 @@ const Table = ({
               {table.getHeaderGroups().map(headerGroup => (
                 <tr key={headerGroup.id} className="h-9">
                   {headerGroup.headers.map(header => {
-                    let rowSpan = tableHeaderRowSpan(header)
+                    const rowSpan = tableHeaderRowSpan(header)
+
                     if (!rowSpan) {
                       return null;
                     }
