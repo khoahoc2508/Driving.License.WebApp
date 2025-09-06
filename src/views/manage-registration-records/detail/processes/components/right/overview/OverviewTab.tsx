@@ -240,7 +240,7 @@ const OverviewTab = ({ selectedStep, registrationRecordId, onRefreshSteps }: Ove
                                             </Typography>
                                             {item.stepFieldTemplateConfig?.canEditInline ? (
                                                 <IconButton size="small" aria-label="edit" onClick={() => startEdit(item)}>
-                                                    <i className="ri-edit-box-line text-textSecondary" />
+                                                    <i className="ri-edit-line" />
                                                 </IconButton>
                                             ) : null}
                                         </>
@@ -286,7 +286,7 @@ const OverviewTab = ({ selectedStep, registrationRecordId, onRefreshSteps }: Ove
                                 </Typography>
                                 {field.canEditInline ? (
                                     <IconButton size="small" aria-label="edit">
-                                        <i className="ri-edit-box-line text-textSecondary" />
+                                        <i className="ri-edit-line" />
                                     </IconButton>
                                 ) : null}
                             </Box>

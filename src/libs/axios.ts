@@ -27,10 +27,11 @@ axiosInstance.interceptors.response.use(
     const status = error?.response?.status
 
     if (status === 401) {
-      await signOut({ callbackUrl: '/login' })
+      const currentPath = window.location.pathname
+      const redirectUrl = `/login?redirectTo=${encodeURIComponent(currentPath)}`
+      await signOut({ callbackUrl: redirectUrl })
     }
 
-    
-return Promise.reject(error)
+    return Promise.reject(error)
   }
 )

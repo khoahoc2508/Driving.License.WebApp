@@ -185,10 +185,7 @@ const AddPaymentHistoryDialog = ({
       maxWidth="sm"
       fullWidth
       PaperProps={{
-        sx: {
-          borderRadius: 2,
-          overflowY: "initial"
-        }
+        style: { borderRadius: '5px', minWidth: '30%' }
       }}
     >
       <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', pb: 2 }}>

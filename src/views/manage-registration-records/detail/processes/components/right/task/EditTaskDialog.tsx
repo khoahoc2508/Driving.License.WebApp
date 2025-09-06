@@ -28,7 +28,7 @@ import type { GetTaskDto, TaskStatusType, UpdateTaskCommand } from '@/types/step
 import type { AssigneeType } from '@/types/assigneeTypes'
 import CONFIG from '@/configs/config'
 import assigneeAPI from '@/libs/api/assigneeAPI'
-import { formatDateOnlyForAPI, formatDateTimeForAPI, parseVietnameseDate , getInputBehavior } from '@/utils/helpers'
+import { formatDateOnlyForAPI, formatDateTimeForAPI, parseVietnameseDate, getInputBehavior } from '@/utils/helpers'
 import AppReactDatepicker from '@/libs/styles/AppReactDatepicker'
 import stepsAPI from '@/libs/api/stepsAPI'
 import axiosInstance from '@/libs/axios'
@@ -241,7 +241,7 @@ const EditTaskDialog = ({ open, onClose, onSuccess, onCloseWithoutSave, task, is
 
                             return (
                                 <TextField
-                                    label={isRequired ? `${label} (*)` : label}
+                                    label={isRequired ? <span>{label} <span style={{ color: 'red' }}>(*)</span></span> : label}
                                     fullWidth
                                     variant="outlined"
                                     value={value || ''}
@@ -270,7 +270,7 @@ const EditTaskDialog = ({ open, onClose, onSuccess, onCloseWithoutSave, task, is
 
                             return (
                                 <TextField
-                                    label={isRequired ? `${label} (*)` : label}
+                                    label={isRequired ? <span>{label} <span style={{ color: 'red' }}>(*)</span></span> : label}
                                     fullWidth
                                     variant="outlined"
                                     type={behavior.forceTextType ? 'text' : 'number'}
@@ -318,8 +318,8 @@ const EditTaskDialog = ({ open, onClose, onSuccess, onCloseWithoutSave, task, is
                                     // Try to parse as Date object for other formats
                                     const date = new Date(value)
 
-                                    
-return isNaN(date.getTime()) ? null : date
+
+                                    return isNaN(date.getTime()) ? null : date
                                 } catch {
                                     return null
                                 }
@@ -408,7 +408,7 @@ return isNaN(date.getTime()) ? null : date
                         rules={isRequired ? { required: `${label} là bắt buộc` } : {}}
                         render={({ field: { onChange, value } }) => (
                             <TextField
-                                label={isRequired ? `${label} (*)` : label}
+                                label={isRequired ? <span>{label} <span style={{ color: 'red' }}>(*)</span></span> : label}
                                 fullWidth
                                 variant="outlined"
                                 multiline
@@ -433,7 +433,7 @@ return isNaN(date.getTime()) ? null : date
 
                             return (
                                 <TextField
-                                    label={isRequired ? `${label} (*)` : label}
+                                    label={isRequired ? <span>{label} <span style={{ color: 'red' }}>(*)</span></span> : label}
                                     fullWidth
                                     variant="outlined"
                                     value={value || ''}
