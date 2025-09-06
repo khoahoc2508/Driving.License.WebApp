@@ -342,7 +342,6 @@ const TaskTab = ({ selectedStep, onRefreshSteps }: TaskTabProps) => {
                                                 maxWidth: header.column.columnDef.maxSize,
                                                 position: isPinned ? 'sticky' : 'relative',
                                                 right: isPinned === 'right' ? '0px' : undefined,
-                                                backgroundColor: isPinned ? 'var(--mui-palette-background-paper)' : 'transparent',
                                                 zIndex: isPinned ? 1 : 0,
                                                 boxShadow: isPinned === 'right' ? '4px 0 4px -4px gray inset' : undefined
                                             }}

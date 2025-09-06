@@ -187,7 +187,7 @@ const Table = ({
         id: CONFIG.RegistrationRecordsTableColumns.HO_SO,
         header: 'HỒ SƠ',
         cell: ({ row }) => (
-          <div className='flex items-center gap-3 cursor-pointer' onClick={() => router.push(`${CONFIG.Routers.ManageRegistrationRecords}/detail/${row.original.id}`)}>
+          <div className='flex items-center gap-3'>
             <Avatar
               src={`${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}${row.original?.avatarUrl}`}
               sx={{
@@ -430,27 +430,6 @@ const Table = ({
 
   useEffect(() => {
     if (table.getAllColumns().length > 0) {
-      // Pin STT column to left
-      const sttColumn = table.getColumn(CONFIG.RegistrationRecordsTableColumns.STT)
-
-      if (sttColumn) {
-        sttColumn.pin('left')
-      }
-
-      // Pin HẠNG column to left
-      const hangColumn = table.getColumn(CONFIG.RegistrationRecordsTableColumns.HANG)
-
-      if (hangColumn) {
-        hangColumn.pin('left')
-      }
-
-      // Pin HỒ SƠ column to left
-      const hoSoColumn = table.getColumn(CONFIG.RegistrationRecordsTableColumns.HO_SO)
-
-      if (hoSoColumn) {
-        hoSoColumn.pin('left')
-      }
-
       // Pin THAO TÁC column to right
       const thaoTacColumn = table.getColumn(CONFIG.RegistrationRecordsTableColumns.THAO_TAC)
 
@@ -458,7 +437,7 @@ const Table = ({
         thaoTacColumn.pin('right')
       }
     }
-  }, [table, columns])
+  }, [table])
 
   return (
     <>
@@ -485,7 +464,7 @@ const Table = ({
                         colSpan={colSpan}
                         style={{
                           ...getCommonPinningStyles(header.column),
-                          backgroundColor: header.column.getIsPinned() ? 'var(--mui-palette-background-paper)' : 'transparent'
+                          // backgroundColor: header.column.getIsPinned() ? 'var(--mui-palette-background-paper)' : 'transparent'
                         }}
                       >
                         {header.isPlaceholder ? null : (
@@ -554,7 +533,7 @@ const Table = ({
                 </tr>
               ) : (
                 table.getRowModel().rows.map((row, index) => (
-                  <tr key={`${row.id}-${index}`}>
+                  <tr key={`${row.id}-${index}`} className="hover:bg-gray-50">
                     {row.getVisibleCells().map((cell, cellIndex) => {
 
                       return (
@@ -562,8 +541,10 @@ const Table = ({
                           key={`${cell.id}-${cellIndex}`}
                           style={{
                             ...getCommonPinningStyles(cell.column),
-                            backgroundColor: cell.column.getIsPinned() ? 'var(--mui-palette-background-paper)' : 'transparent'
+                            backgroundColor: cell.column.getIsPinned() ? 'var(--mui-palette-background-paper)' : 'transparent',
+                            cursor: 'pointer',
                           }}
+                          onClick={() => router.push(`${CONFIG.Routers.ManageRegistrationRecords}/detail/${row.original.id}`)}
                         >
                           {flexRender(cell.column.columnDef.cell, cell.getContext())}
                         </td>
