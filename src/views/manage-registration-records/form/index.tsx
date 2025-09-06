@@ -154,10 +154,9 @@ const UpsertRegistrationRecord = ({ id }: UpsertRegistrationRecordProps) => {
 
   const fetchStaffAssignees = async () => {
     try {
-      const res = await assigneeAPI.GetAssignees({
+      const res = await assigneeAPI.GetAssigneeAll({
         assigneeType: CONFIG.AssigneeTypes.Employee as AssigneeType,
-        pageNumber: 1,
-        pageSize: 9999
+        active: true
       })
 
       if (res?.data?.data) {
@@ -176,10 +175,9 @@ const UpsertRegistrationRecord = ({ id }: UpsertRegistrationRecordProps) => {
 
   const fetchCollaborators = async () => {
     try {
-      const res = await assigneeAPI.GetAssignees({
+      const res = await assigneeAPI.GetAssigneeAll({
         assigneeType: CONFIG.AssigneeTypes.Collaborator as AssigneeType,
-        pageNumber: 1,
-        pageSize: 9999
+        active: true
       })
 
       if (res?.data?.data) {

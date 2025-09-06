@@ -64,7 +64,7 @@ const AddPaymentDialog = ({ open, onClose, onSuccess, registrationRecordId, mode
 
     const fetchFeeTypes = async () => {
       try {
-        const res = await feeTypeAPI.GetFeeTypes({ pageNumber: 1, pageSize: 9999 } as any)
+        const res = await feeTypeAPI.GetAllFeeTypes({ active: true })
         const options = res?.data?.data?.map((x: any) => ({ value: x.id, label: x.name })) || []
 
         setFeeTypeOptions(options)

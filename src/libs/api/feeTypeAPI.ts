@@ -18,11 +18,11 @@ const GetFeeTypes = async (params: GetFeeTypesQueryParams) => {
   })
 }
 
-const GetAllFeeTypes = async (params?: { Active?: boolean | null; Search?: string | null }) => {
+const GetAllFeeTypes = async (params?: GetFeeTypesQueryParams) => {
   return await axiosInstance.get('/api/feetypes/all', {
     params: {
-      Active: params?.Active,
-      Search: params?.Search
+      Active: params?.active,
+      Search: params?.search
     },
     paramsSerializer: customParamsSerializer
   })

@@ -143,10 +143,9 @@ const ManageRegistrationRecords = () => {
 
   const fetchStaffAssignees = async (page: number, reset: boolean = false) => {
     try {
-      const res = await assigneeAPI.GetAssignees({
+      const res = await assigneeAPI.GetAssigneeAll({
         assigneeType: CONFIG.AssigneeTypes.Employee as AssigneeType,
-        pageNumber: page,
-        pageSize: 9999
+        active: true
       })
 
       if (res?.data?.data) {
@@ -171,10 +170,9 @@ const ManageRegistrationRecords = () => {
 
   const fetchCollaborators = async (page: number, reset: boolean = false) => {
     try {
-      const res = await assigneeAPI.GetAssignees({
+      const res = await assigneeAPI.GetAssigneeAll({
         assigneeType: CONFIG.AssigneeTypes.Collaborator as AssigneeType,
-        pageNumber: page,
-        pageSize: 9999
+        active: true
       })
 
       if (res?.data?.data) {

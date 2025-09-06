@@ -19,6 +19,17 @@ const GetAssignees = async (params: GetAssigneesQueryParams) => {
   })
 }
 
+const GetAssigneeAll = async (params: GetAssigneesQueryParams) => {
+  return await axiosInstance.get('/api/assignees/all', {
+    params: {
+      Search: params.search,
+      AssigneeType: params.assigneeType,
+      Active: params.active
+    },
+    paramsSerializer: customParamsSerializer
+  })
+}
+
 const GetAssigneeById = async (id: string) => {
   return await axiosInstance.get('/api/assignees/' + id)
 }
@@ -30,6 +41,7 @@ const DeleteAssigneeById = async (id: string) => {
 const assigneeAPI = {
   UpsertAssignee,
   GetAssignees,
+  GetAssigneeAll,
   GetAssigneeById,
   DeleteAssigneeById
 }

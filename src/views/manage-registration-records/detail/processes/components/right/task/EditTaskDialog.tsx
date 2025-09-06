@@ -71,10 +71,9 @@ const EditTaskDialog = ({ open, onClose, onSuccess, onCloseWithoutSave, task, is
     // Fetch assignee options (danh sách nhân viên)
     const fetchAssigneeOptions = async () => {
         try {
-            const res = await assigneeAPI.GetAssignees({
+            const res = await assigneeAPI.GetAssigneeAll({
                 assigneeType: CONFIG.AssigneeTypes.Employee as AssigneeType,
-                pageNumber: 1,
-                pageSize: 9999
+                active: true
             })
 
             if (res?.data?.data) {
@@ -357,8 +356,8 @@ const EditTaskDialog = ({ open, onClose, onSuccess, onCloseWithoutSave, task, is
                             const hasDataSource = !!field?.dataSourceConfig?.apiUrl
                             const labelText = isRequired ? <span>{label} <span style={{ color: 'red' }}>(*)</span></span> : label
 
-                            
-return (
+
+                            return (
                                 <Autocomplete
                                     value={options.find(opt => opt.value === value) || null}
                                     options={hasDataSource ? options : []}
