@@ -97,13 +97,12 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
         } else {
           toast.success('Bỏ duyệt hồ sơ thành công')
         }
-      } catch (error) {
+      } catch (error: any) {
         setIsApproved(!checked)
-
         if (checked) {
-          toast.error('Duyệt hồ sơ thất bại')
+          toast.error(error?.response?.data?.message as string || 'Duyệt hồ sơ thất bại')
         } else {
-          toast.error('Bỏ duyệt hồ sơ thất bại')
+          toast.error(error?.response?.data?.message as string || 'Bỏ duyệt hồ sơ thất bại')
         }
 
       }
