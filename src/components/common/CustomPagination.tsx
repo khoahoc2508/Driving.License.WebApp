@@ -53,7 +53,7 @@ const CustomPagination = ({
             sx={{
                 display: 'flex',
                 alignItems: 'center',
-                padding: '5px 20px',
+                padding: '15px 20px',
                 borderTop: '1px solid',
                 borderColor: 'divider',
                 backgroundColor: 'background.paper',
@@ -76,8 +76,11 @@ const CustomPagination = ({
                                     border: 'none'
                                 },
                                 '&.MuiInputBase-root i': {
-                                    right: '28px',
-                                    top: '19%'
+                                    right: '33px !important',
+                                    top: '0'
+                                },
+                                '& .MuiSelect-select': {
+                                    padding: '0 10px !important'
                                 }
                             }}
                             IconComponent={() => (
@@ -101,6 +104,15 @@ const CustomPagination = ({
                     onChange={handlePageChange}
                     color='primary'
                     size='small'
+                    sx={
+                        {
+                            '.MuiPaginationItem-root': {
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }
+                        }
+                    }
                 />
             </Box>
         </Box>

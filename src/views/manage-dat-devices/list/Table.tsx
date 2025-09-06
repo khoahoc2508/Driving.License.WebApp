@@ -43,6 +43,7 @@ import styles from '@core/styles/table.module.css'
 import datDevicesAPI from '@/libs/api/datDevicesAPI'
 import SkeletonTableRowsLoader from '@/components/common/SkeletonTableRowsLoader'
 import type { GetDATDevicesDto, DATDeviceListType } from '@/types/datDeviceTypes'
+import CustomPagination from '@/components/common/CustomPagination'
 
 // Column Definitions
 const columnHelper = createColumnHelper<GetDATDevicesDto>()
@@ -310,18 +311,15 @@ const Table = ({
                         </tbody>
                     </table>
                 </div>
-                <TablePagination
-                    rowsPerPageOptions={[7, 10, 25]}
-                    component='div'
-                    className='border-bs'
-                    count={totalItems}
-                    labelRowsPerPage="Dòng trên trang:"
-                    rowsPerPage={pageSize}
-                    page={pageNumber - 1}
-                    onPageChange={(_, page) => {
-                        onPageChange(page + 1)
-                    }}
-                    onRowsPerPageChange={e => onPageSizeChange(Number(e.target.value))}
+                <CustomPagination
+                    totalItems={totalItems}
+                    pageSize={pageSize}
+                    pageNumber={pageNumber}
+                    onPageChange={onPageChange}
+                    onPageSizeChange={onPageSizeChange}
+                    pageSizeOptions={[7, 10, 25, 50]}
+                    showPageSizeSelector={true}
+                    showTotalItems={true}
                 />
             </div>
             <Dialog

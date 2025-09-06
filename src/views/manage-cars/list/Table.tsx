@@ -43,6 +43,7 @@ import styles from '@core/styles/table.module.css'
 import carsAPI from '@/libs/api/carsAPI'
 import SkeletonTableRowsLoader from '@/components/common/SkeletonTableRowsLoader'
 import type { GetCarsDto, CarListType } from '@/types/carTypes'
+import CustomPagination from '@/components/common/CustomPagination'
 
 // Column Definitions
 const columnHelper = createColumnHelper<GetCarsDto>()
@@ -310,18 +311,15 @@ const Table = ({
                         </tbody>
                     </table>
                 </div>
-                <TablePagination
-                    rowsPerPageOptions={[7, 10, 25]}
-                    component='div'
-                    className='border-bs'
-                    count={totalItems}
-                    labelRowsPerPage="Dòng trên trang:"
-                    rowsPerPage={pageSize}
-                    page={pageNumber - 1}
-                    onPageChange={(_, page) => {
-                        onPageChange(page + 1)
-                    }}
-                    onRowsPerPageChange={e => onPageSizeChange(Number(e.target.value))}
+                <CustomPagination
+                    totalItems={totalItems}
+                    pageSize={pageSize}
+                    pageNumber={pageNumber}
+                    onPageChange={onPageChange}
+                    onPageSizeChange={onPageSizeChange}
+                    pageSizeOptions={[7, 10, 25, 50]}
+                    showPageSizeSelector={true}
+                    showTotalItems={true}
                 />
             </div>
             <Dialog
