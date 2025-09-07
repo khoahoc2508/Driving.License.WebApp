@@ -58,7 +58,8 @@ const CustomPagination = ({
                 borderTop: '1px solid',
                 borderColor: 'divider',
                 backgroundColor: 'background.paper',
-                position: 'relative'
+                position: 'relative',
+                minHeight: '50px'
             }}
         >
             {/* Left side - Page size selector */}

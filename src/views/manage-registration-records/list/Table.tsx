@@ -35,7 +35,7 @@ import {
 import { tableHeaderRowSpan } from 'tanstack-table-header-rowspan'
 
 // Icon Imports
-import { IconButton, Typography, Tooltip } from '@mui/material'
+import { IconButton, Typography, Tooltip, useTheme, useMediaQuery } from '@mui/material'
 
 import { toast } from 'react-toastify'
 
@@ -104,6 +104,10 @@ const Table = ({
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null);
   const [columnPinning, setColumnPinning] = useState({})
+
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
 
   const router = useRouter()
 
@@ -428,14 +432,19 @@ const Table = ({
 
   useEffect(() => {
     if (table.getAllColumns().length > 0) {
-      // Pin THAO TÁC column to right
       const thaoTacColumn = table.getColumn(CONFIG.RegistrationRecordsTableColumns.THAO_TAC)
 
       if (thaoTacColumn) {
-        thaoTacColumn.pin('right')
+        if (isMobile) {
+          // Unpin column on mobile
+          thaoTacColumn.pin(false)
+        } else {
+          // Pin THAO TÁC column to right on desktop
+          thaoTacColumn.pin('right')
+        }
       }
     }
-  }, [table])
+  }, [table, isMobile])
 
   return (
     <>
@@ -537,7 +546,7 @@ const Table = ({
           onPageChange={onPageChange}
           onPageSizeChange={onPageSizeChange}
           pageSizeOptions={[7, 10, 25, 50]}
-          showPageSizeSelector={true}
+          showPageSizeSelector={!isMobile}
         />
       </div>
 
