@@ -1,5 +1,6 @@
+import type { Viewport } from 'next'
+
 import LandingPageWrapper from '@/views/on-thi-bang-lai-xe'
-import { Viewport } from 'next'
 
 
 export const metadata = {

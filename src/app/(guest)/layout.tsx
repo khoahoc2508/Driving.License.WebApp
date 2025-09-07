@@ -5,6 +5,8 @@ import InitColorSchemeScript from '@mui/material/InitColorSchemeScript'
 import 'react-perfect-scrollbar/dist/css/styles.css'
 
 // Type Imports
+import type { Viewport } from 'next'
+
 import type { ChildrenType } from '@core/types'
 
 // Context Imports
@@ -24,7 +26,6 @@ import '@/app/globals.css'
 import '@assets/iconify-icons/generated-icons.css'
 import { IntersectionProvider } from '@/contexts/intersectionContext'
 import ScrollToTopClient from '@/components/ScrollToTopClient'
-import { Viewport } from 'next'
 
 export const metadata = {
   title: 'Giải Pháp Quản Lý Hồ Sơ Thông Minh – Tiết Kiệm Thời Gian & Chi Phí | banglaixanh.vn',

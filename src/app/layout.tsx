@@ -5,8 +5,9 @@ import InitColorSchemeScript from '@mui/material/InitColorSchemeScript'
 import 'react-perfect-scrollbar/dist/css/styles.css'
 
 // Type Imports
-import type { ChildrenType } from '@core/types'
 import type { Viewport } from 'next'
+
+import type { ChildrenType } from '@core/types'
 
 // Util Imports
 import { getSystemMode } from '@core/utils/serverHelpers'
