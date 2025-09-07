@@ -162,3 +162,8 @@ code {
   scrollbar-width: thin;
   scrollbar-color: #c1c1c1 #f1f1f1;
 }
+
+.ts-breakpoint-reached,
+.ts-collapsed {
+  z-index: 1111 !important;
+}
