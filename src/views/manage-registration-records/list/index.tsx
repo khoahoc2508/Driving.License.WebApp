@@ -89,6 +89,7 @@ const ManageRegistrationRecords = () => {
     { column: CONFIG.RegistrationRecordsTableColumns.NGAY_SINH, label: 'Ngày sinh', visible: true },
     { column: CONFIG.RegistrationRecordsTableColumns.NGAY_NHAN_HS, label: 'Ngày nhận HS', visible: true },
     { column: CONFIG.RegistrationRecordsTableColumns.NGAY_KHAM_SK, label: 'Ngày khám SK', visible: true },
+
     // { column: CONFIG.RegistrationRecordsTableColumns.THANH_TOAN, label: 'Thanh toán', visible: true },
     { column: CONFIG.RegistrationRecordsTableColumns.TONG, label: 'Tổng', visible: true },
     { column: CONFIG.RegistrationRecordsTableColumns.DA_NOP, label: 'Đã nộp', visible: true },
@@ -228,7 +229,9 @@ const ManageRegistrationRecords = () => {
 
         mergedConfig = fixedColumnConfig.map(fixedCol => {
           const backendCol = backendConfig.find((bc: any) => bc.column === fixedCol.column)
-          return {
+
+          
+return {
             ...fixedCol,
             visible: backendCol ? backendCol.visible : fixedCol.visible
           }
@@ -245,9 +248,11 @@ const ManageRegistrationRecords = () => {
       setColumnVisibility(visibilityState)
     } catch (error: any) {
       console.error('Error fetching column configuration:', error)
+
       // Fallback về fixedColumnConfig nếu có lỗi
       setColumnConfig(fixedColumnConfig)
       const visibilityState: VisibilityState = {}
+
       fixedColumnConfig.forEach((col: any) => {
         visibilityState[col.column] = col.visible
       })

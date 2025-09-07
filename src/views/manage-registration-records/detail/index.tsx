@@ -88,13 +88,14 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
 
     if (id) {
       try {
-        const res = await registrationRecordsAPI.UpdateRegistrationRecordIsApproved({
+        await registrationRecordsAPI.UpdateRegistrationRecordIsApproved({
           id,
           isApproved: checked
         })
 
         if (checked) {
           toast.success('Duyệt hồ sơ thành công')
+
           if (processingTabRef.current) {
             processingTabRef.current.refreshSteps()
             processingTabRef.current.refreshTasks()
@@ -102,6 +103,7 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
           }
         } else {
           toast.success('Bỏ duyệt hồ sơ thành công')
+
           if (processingTabRef.current) {
             processingTabRef.current.refreshSteps()
             processingTabRef.current.refreshTasks()

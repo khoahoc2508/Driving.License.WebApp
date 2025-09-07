@@ -6,7 +6,7 @@ import { Box, Typography, Chip, Divider, IconButton, TextField, InputAdornment, 
 
 import { toast } from 'react-toastify'
 
-import type { GetStepsDto, StepActionTemplateDto, StepOverviewDto, StepStatusType } from '@/types/stepsTypes'
+import type { GetStepsDto, StepActionTemplateDto, StepOverviewDto } from '@/types/stepsTypes'
 import type { components } from '@/libs/api/client/schema'
 import { getInputBehavior } from '@/utils/helpers'
 import CONFIG from '@/configs/config'
@@ -52,7 +52,9 @@ const OverviewTab = forwardRef<OverviewTabRef, OverviewTabProps>(({ selectedStep
         const response = await stepsAPI.GetStepByStepIdOverview({ id })
 
         const overviewData = response?.data?.data
+
         setStepOverview(overviewData)
+
         return overviewData
     }
 

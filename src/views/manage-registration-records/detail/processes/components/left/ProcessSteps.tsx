@@ -30,6 +30,7 @@ const StepItem = memo(({ step, index, isSelected, onStepClick, getTextColor }: {
     getTextColor: (status: number | undefined) => string
 }) => {
     const isStepClickable = true
+
     const labelProps: {
         error?: boolean
     } = {}
@@ -161,14 +162,12 @@ const CustomStepIcon = ({ step }: { step: GetStepsDto; index: number }) => {
 
 const ProcessSteps = forwardRef<ProcessStepsRef, ProcessStepsProps>(({ registrationRecordId, onStepClick, selectedStepIndex }, ref) => {
     const [steps, setSteps] = useState<GetStepsDto[]>([])
-    const [loading, setLoading] = useState(true)
     const theme = useTheme()
 
     const fetchSteps = async () => {
         if (!registrationRecordId) return
 
         try {
-            setLoading(false)
 
             const response = await stepsAPI.GetStepsByRegistrationRecordId({
                 registrationRecordId
@@ -180,7 +179,6 @@ const ProcessSteps = forwardRef<ProcessStepsRef, ProcessStepsProps>(({ registrat
         } catch (error) {
             console.error('Error fetching steps:', error)
         } finally {
-            setLoading(false)
         }
     }
 
@@ -196,22 +194,30 @@ const ProcessSteps = forwardRef<ProcessStepsRef, ProcessStepsProps>(({ registrat
         updateStepStatus: (stepId: string, status: StepStatusType) => {
             setSteps(prevSteps => {
                 const newSteps = [...prevSteps]
+
                 // Tìm step theo ID và cập nhật status
                 const targetIndex = newSteps.findIndex(step => step.id === stepId)
+
                 if (targetIndex >= 0 && newSteps[targetIndex]) {
                     newSteps[targetIndex] = { ...newSteps[targetIndex], status }
                 }
+
+
                 return newSteps
             })
         },
         updateStepStatusByIndex: (stepIndex: number, status: StepStatusType) => {
             setSteps(prevSteps => {
                 const newSteps = [...prevSteps]
+
                 // Nếu stepIndex = -1, cập nhật step cuối cùng
                 const targetIndex = stepIndex === -1 ? newSteps.length - 1 : stepIndex
+
                 if (newSteps[targetIndex]) {
                     newSteps[targetIndex] = { ...newSteps[targetIndex], status }
                 }
+
+
                 return newSteps
             })
         }

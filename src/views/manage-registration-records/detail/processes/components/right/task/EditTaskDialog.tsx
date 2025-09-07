@@ -100,7 +100,8 @@ const EditTaskDialog = ({ open, onClose, onSuccess, onCloseWithoutSave, task, is
 
                 // Flatten options for Autocomplete
                 const flatOptions: AssigneeOption[] = []
-                Object.entries(groupedOptions).forEach(([typeName, options]) => {
+
+                Object.entries(groupedOptions).forEach(([, options]) => {
                     flatOptions.push(...options)
                 })
                 setAssigneeOptions(flatOptions)
