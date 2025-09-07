@@ -12,7 +12,7 @@ import CONFIG from "@/configs/config";
 
 
 import registrationRecordsAPI from "@/libs/api/registrationRecordsAPI";
-import type { RegistrationRecordBasicInfoDto, RegistrationRecordOverviewDto } from "@/types/registrationRecords";
+import type { RegistrationRecordBasicInfoDto } from "@/types/registrationRecords";
 import OverviewTab from "./overview/OverviewTab";
 import PaymentsTab from "./payments/PaymentsTab";
 import ProcessingTab, { type ProcessingTabRef } from "./processes/ProcessingTab";
@@ -37,20 +37,39 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
   ] as const
 
   const [basicInfo, setBasicInfo] = useState<RegistrationRecordBasicInfoDto | null>(null)
-  const [overview, setOverview] = useState<RegistrationRecordOverviewDto | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const processingTabRef = useRef<ProcessingTabRef>(null)
 
 
-  const refreshData = () => {
+  const fetchBasicInfo = async (id: string) => {
+    try {
+      const basicRes = await registrationRecordsAPI.GetRegistrationRecordBasicInfo(id)
+      setBasicInfo(basicRes?.data?.data || null)
+      setIsApproved(basicRes?.data?.data?.isApproved || false)
+    } catch (error) {
+      setBasicInfo(null)
+    }
+  }
+
+  const fetchAllData = async (id: string) => {
+    try {
+      setIsLoading(true)
+      await fetchBasicInfo(id)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+
+  const refreshBasicInfo = () => {
     if (id) {
-      fetchData(id)
+      fetchBasicInfo(id)
     }
   }
 
   useEffect(() => {
     if (!id) return
-    fetchData(id)
+    fetchAllData(id)
   }, [id])
 
   // Sync active tab from URL query param
@@ -62,25 +81,6 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams])
 
-  const fetchData = async (id: string) => {
-    try {
-      setIsLoading(true)
-
-      const [basicRes, overviewRes] = await Promise.all([
-        registrationRecordsAPI.GetRegistrationRecordBasicInfo(id),
-        registrationRecordsAPI.GetRegistrationRecordOverview(id)
-      ])
-
-      setBasicInfo(basicRes?.data?.data || null)
-      setIsApproved(basicRes?.data?.data?.isApproved || false)
-      setOverview(overviewRes?.data?.data || null)
-    } catch (error) {
-      setBasicInfo(null)
-      setOverview(null)
-    } finally {
-      setIsLoading(false)
-    }
-  }
 
 
   const handleApprovedChange = async (_: any, checked: boolean) => {
@@ -219,29 +219,14 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
               }
             />
           </Tabs>
-          {!isLoading && activeTab === 0 && (
-            <OverviewTab overview={overview} />
+          {activeTab === 0 && (
+            <OverviewTab registrationRecordId={id} />
           )}
           {!isLoading && activeTab === 1 && (
-            <PaymentsTab registrationRecordId={id} onDataChange={refreshData} />
+            <PaymentsTab registrationRecordId={id} onDataChange={refreshBasicInfo} />
           )}
           {!isLoading && activeTab === 2 && (
             <ProcessingTab ref={processingTabRef} registrationRecordId={id} />
-          )}
-          {isLoading && (
-            <Box sx={{ mt: 4, display: 'flex', flexDirection: 'column', gap: 3 }}>
-              <Box>
-                <Box sx={{ width: 150, height: 28, bgcolor: 'action.hover', borderRadius: 1, mb: 2 }} />
-                <Box sx={{ display: 'grid', gridTemplateColumns: '180px 1fr', rowGap: 2, columnGap: 2 }}>
-                  <Box sx={{ width: 120, height: 20, bgcolor: 'action.hover', borderRadius: 1 }} />
-                  <Box sx={{ width: 200, height: 20, bgcolor: 'action.hover', borderRadius: 1 }} />
-                  <Box sx={{ width: 120, height: 20, bgcolor: 'action.hover', borderRadius: 1 }} />
-                  <Box sx={{ width: 300, height: 20, bgcolor: 'action.hover', borderRadius: 1 }} />
-                  <Box sx={{ width: 120, height: 20, bgcolor: 'action.hover', borderRadius: 1 }} />
-                  <Box sx={{ width: 100, height: 20, bgcolor: 'action.hover', borderRadius: 1 }} />
-                </Box>
-              </Box>
-            </Box>
           )}
         </CardContent>
       </Card>

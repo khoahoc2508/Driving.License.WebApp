@@ -1,17 +1,38 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 
 import { Avatar, Box, CardContent, Chip, Divider, Typography } from '@mui/material'
 
 import type { RegistrationRecordOverviewDto } from '@/types/registrationRecords'
 import { formatCurrency, formatDate } from '@/utils/helpers'
+import registrationRecordsAPI from '@/libs/api/registrationRecordsAPI'
 
 type OverviewTabProps = {
-    overview: RegistrationRecordOverviewDto | null
+    registrationRecordId?: string
 }
 
-const OverviewTab = ({ overview }: OverviewTabProps) => {
+const OverviewTab = ({ registrationRecordId }: OverviewTabProps) => {
+    const [overview, setOverview] = useState<RegistrationRecordOverviewDto | null>(null)
+    const [isLoading, setIsLoading] = useState(false)
+
+    const fetchOverview = async (id: string) => {
+        try {
+            setIsLoading(true)
+            const overviewRes = await registrationRecordsAPI.GetRegistrationRecordOverview(id)
+            setOverview(overviewRes?.data?.data || null)
+        } catch (error) {
+            setOverview(null)
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
+    useEffect(() => {
+        if (registrationRecordId) {
+            fetchOverview(registrationRecordId)
+        }
+    }, [registrationRecordId])
 
     const processingStepChips = useMemo(() => {
         const steps = overview?.processing?.steps || []
@@ -28,6 +49,71 @@ const OverviewTab = ({ overview }: OverviewTabProps) => {
             />
         ))
     }, [overview])
+
+    if (isLoading) {
+        return (
+            <CardContent>
+                <Box sx={{ width: 150, height: 28, bgcolor: 'action.hover', borderRadius: 1, mb: 4 }} />
+
+                {/* Xử lý hồ sơ skeleton */}
+                <Box sx={{ display: 'grid', gridTemplateColumns: '180px 1fr', rowGap: 3, alignItems: 'center', mb: 5 }}>
+                    <Box sx={{ width: 120, height: 20, bgcolor: 'action.hover', borderRadius: 1 }} />
+                    <Box sx={{ display: 'flex', gap: 1 }}>
+                        <Box sx={{ width: 80, height: 24, bgcolor: 'action.hover', borderRadius: 1 }} />
+                        <Box sx={{ width: 100, height: 24, bgcolor: 'action.hover', borderRadius: 1 }} />
+                    </Box>
+                    <Box sx={{ width: 120, height: 20, bgcolor: 'action.hover', borderRadius: 1 }} />
+                    <Box sx={{ width: 200, height: 20, bgcolor: 'action.hover', borderRadius: 1 }} />
+                    <Box sx={{ width: 120, height: 20, bgcolor: 'action.hover', borderRadius: 1 }} />
+                    <Box sx={{ width: 60, height: 24, bgcolor: 'action.hover', borderRadius: 1 }} />
+                </Box>
+
+                <Divider sx={{ my: 5 }} />
+
+                {/* Thanh toán skeleton */}
+                <Box sx={{ width: 150, height: 28, bgcolor: 'action.hover', borderRadius: 1, mb: 4 }} />
+                <Box sx={{ display: 'grid', gridTemplateColumns: '180px 1fr', rowGap: 3, alignItems: 'center', mb: 5 }}>
+                    <Box sx={{ width: 120, height: 20, bgcolor: 'action.hover', borderRadius: 1 }} />
+                    <Box sx={{ width: 100, height: 20, bgcolor: 'action.hover', borderRadius: 1 }} />
+                    <Box sx={{ width: 120, height: 20, bgcolor: 'action.hover', borderRadius: 1 }} />
+                    <Box sx={{ width: 100, height: 20, bgcolor: 'action.hover', borderRadius: 1 }} />
+                    <Box sx={{ width: 120, height: 20, bgcolor: 'action.hover', borderRadius: 1 }} />
+                    <Box sx={{ width: 100, height: 20, bgcolor: 'action.hover', borderRadius: 1 }} />
+                </Box>
+
+                <Divider sx={{ my: 5 }} />
+
+                {/* Thông tin chung skeleton */}
+                <Box sx={{ width: 150, height: 28, bgcolor: 'action.hover', borderRadius: 1, mb: 4 }} />
+                <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', columnGap: 6, mb: 5 }}>
+                    <Box sx={{ display: 'grid', gridTemplateColumns: '180px 1fr', rowGap: 3 }}>
+                        <Box sx={{ width: 120, height: 20, bgcolor: 'action.hover', borderRadius: 1 }} />
+                        <Box sx={{ width: 150, height: 20, bgcolor: 'action.hover', borderRadius: 1 }} />
+                        <Box sx={{ width: 120, height: 20, bgcolor: 'action.hover', borderRadius: 1 }} />
+                        <Box sx={{ width: 100, height: 20, bgcolor: 'action.hover', borderRadius: 1 }} />
+                        <Box sx={{ width: 120, height: 20, bgcolor: 'action.hover', borderRadius: 1 }} />
+                        <Box sx={{ width: 100, height: 20, bgcolor: 'action.hover', borderRadius: 1 }} />
+                    </Box>
+                    <Box sx={{ display: 'grid', gridTemplateColumns: '180px 1fr', rowGap: 3 }}>
+                        <Box sx={{ width: 120, height: 20, bgcolor: 'action.hover', borderRadius: 1 }} />
+                        <Box sx={{ width: 200, height: 40, bgcolor: 'action.hover', borderRadius: 1 }} />
+                    </Box>
+                </Box>
+
+                <Divider sx={{ my: 5 }} />
+
+                {/* Cộng tác viên skeleton */}
+                <Box sx={{ width: 150, height: 28, bgcolor: 'action.hover', borderRadius: 1, mb: 4 }} />
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                    <Box sx={{ width: 40, height: 40, bgcolor: 'action.hover', borderRadius: '50%' }} />
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                        <Box sx={{ width: 120, height: 20, bgcolor: 'action.hover', borderRadius: 1 }} />
+                        <Box sx={{ width: 100, height: 16, bgcolor: 'action.hover', borderRadius: 1 }} />
+                    </Box>
+                </Box>
+            </CardContent>
+        )
+    }
 
     return (
         <CardContent>
