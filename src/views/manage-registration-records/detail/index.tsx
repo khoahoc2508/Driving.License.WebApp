@@ -100,12 +100,14 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
           if (processingTabRef.current) {
             processingTabRef.current.updateStepStatus(-1, CONFIG.StepStatus.Completed as StepStatusType)
             processingTabRef.current.refreshTasks()
+            processingTabRef.current.refreshStepOverview()
           }
         } else {
           toast.success('Bỏ duyệt hồ sơ thành công')
           if (processingTabRef.current) {
             processingTabRef.current.updateStepStatus(-1, CONFIG.StepStatus.InProgress as StepStatusType)
             processingTabRef.current.refreshTasks()
+            processingTabRef.current.refreshStepOverview()
           }
         }
       } catch (error: any) {

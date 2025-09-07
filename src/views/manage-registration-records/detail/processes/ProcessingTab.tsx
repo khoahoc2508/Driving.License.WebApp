@@ -16,6 +16,7 @@ export type ProcessingTabRef = {
     refreshSteps: () => void
     updateStepStatus: (stepIndex: number, status: StepStatusType) => void
     refreshTasks: () => void
+    refreshStepOverview: () => void
 }
 
 const ProcessingTab = forwardRef<ProcessingTabRef, ProcessingTabProps>(({ registrationRecordId }, ref) => {
@@ -50,6 +51,11 @@ const ProcessingTab = forwardRef<ProcessingTabRef, ProcessingTabProps>(({ regist
         refreshTasks: () => {
             if (mainContentRef.current) {
                 mainContentRef.current.refreshTasks()
+            }
+        },
+        refreshStepOverview: () => {
+            if (mainContentRef.current) {
+                mainContentRef.current.refreshStepOverview()
             }
         }
     }), [])

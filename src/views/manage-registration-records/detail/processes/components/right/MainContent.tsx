@@ -9,7 +9,7 @@ import { Box, Tabs, Tab } from '@mui/material'
 import type { GetStepsDto } from '@/types/stepsTypes'
 import CONFIG from '@/configs/config'
 
-import OverviewTab from './overview/OverviewTab'
+import OverviewTab, { type OverviewTabRef } from './overview/OverviewTab'
 import TaskTab, { type TaskTabRef } from './task/TaskTab'
 
 type MainContentProps = {
@@ -20,6 +20,7 @@ type MainContentProps = {
 
 export type MainContentRef = {
     refreshTasks: () => void
+    refreshStepOverview: () => void
 }
 
 const MainContent = forwardRef<MainContentRef, MainContentProps>(({ selectedStep, registrationRecordId, onRefreshSteps }, ref) => {
@@ -28,6 +29,7 @@ const MainContent = forwardRef<MainContentRef, MainContentProps>(({ selectedStep
     const pathname = usePathname()
     const searchParams = useSearchParams()
     const taskTabRef = useRef<TaskTabRef>(null)
+    const overviewTabRef = useRef<OverviewTabRef>(null)
 
     const tabKeys = [CONFIG.RegistrationRecordProcessTabs.Overview, CONFIG.RegistrationRecordProcessTabs.Tasks] as const
 
@@ -53,6 +55,11 @@ const MainContent = forwardRef<MainContentRef, MainContentProps>(({ selectedStep
             if (taskTabRef.current) {
                 taskTabRef.current.refreshTasks()
             }
+        },
+        refreshStepOverview: () => {
+            if (overviewTabRef.current) {
+                overviewTabRef.current.refreshStepOverview()
+            }
         }
     }), [])
 
@@ -75,7 +82,7 @@ const MainContent = forwardRef<MainContentRef, MainContentProps>(({ selectedStep
 
             <Box>
                 {tabValue === CONFIG.RegistrationRecordProcessTabs.Overview && (
-                    <OverviewTab selectedStep={selectedStep} registrationRecordId={registrationRecordId} onRefreshSteps={onRefreshSteps} />
+                    <OverviewTab ref={overviewTabRef} selectedStep={selectedStep} registrationRecordId={registrationRecordId} onRefreshSteps={onRefreshSteps} />
                 )}
                 {tabValue === CONFIG.RegistrationRecordProcessTabs.Tasks && (
                     <TaskTab ref={taskTabRef} selectedStep={selectedStep} onRefreshSteps={onRefreshSteps} />

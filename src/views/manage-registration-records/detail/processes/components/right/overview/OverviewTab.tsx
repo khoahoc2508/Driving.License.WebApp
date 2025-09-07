@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, forwardRef, useImperativeHandle } from 'react'
 
 import { Box, Typography, Chip, Divider, IconButton, TextField, InputAdornment, Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material'
 
@@ -18,7 +18,11 @@ type OverviewTabProps = {
     onRefreshSteps: (count: number) => void
 }
 
-const OverviewTab = ({ selectedStep, registrationRecordId, onRefreshSteps }: OverviewTabProps) => {
+export type OverviewTabRef = {
+    refreshStepOverview: () => void
+}
+
+const OverviewTab = forwardRef<OverviewTabRef, OverviewTabProps>(({ selectedStep, registrationRecordId, onRefreshSteps }, ref) => {
 
     const [stepOverview, setStepOverview] = useState<StepOverviewDto | null>(null)
     const [editingFieldId, setEditingFieldId] = useState<string | null>(null)
@@ -34,6 +38,15 @@ const OverviewTab = ({ selectedStep, registrationRecordId, onRefreshSteps }: Ove
             fetchStepActions(selectedStep.id)
         }
     }, [selectedStep])
+
+    // Expose refreshStepOverview method to parent component
+    useImperativeHandle(ref, () => ({
+        refreshStepOverview: () => {
+            if (selectedStep?.id) {
+                fetchStepOverview(selectedStep.id)
+            }
+        }
+    }), [selectedStep])
 
     const fetchStepOverview = async (id: string) => {
         const response = await stepsAPI.GetStepByStepIdOverview({ id })
@@ -342,6 +355,8 @@ const OverviewTab = ({ selectedStep, registrationRecordId, onRefreshSteps }: Ove
             </Dialog>
         </Box>
     )
-}
+})
+
+OverviewTab.displayName = 'OverviewTab'
 
 export default OverviewTab
