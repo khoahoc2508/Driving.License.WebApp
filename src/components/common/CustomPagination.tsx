@@ -11,7 +11,9 @@ import {
     FormControl,
     MenuItem,
     Select,
-    Typography
+    Typography,
+    useMediaQuery,
+    useTheme
 } from '@mui/material'
 
 import Pagination from '@mui/material/Pagination'
@@ -37,6 +39,12 @@ const CustomPagination = ({
     pageSizeOptions = [7, 10, 25, 50],
     showPageSizeSelector = true,
 }: CustomPaginationProps) => {
+
+
+    const theme = useTheme()
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+
+
     const totalPages = Math.ceil(totalItems / pageSize)
 
     const handlePageSizeChange = (event: SelectChangeEvent<number>) => {
@@ -48,6 +56,8 @@ const CustomPagination = ({
     const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
         onPageChange(page)
     }
+
+
 
     return (
         <Box
@@ -63,7 +73,7 @@ const CustomPagination = ({
             }}
         >
             {/* Left side - Page size selector */}
-            {showPageSizeSelector && (
+            {showPageSizeSelector && !isMobile && (
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography variant="body1" color="text.secondary">
                         Hiển thị:

@@ -546,7 +546,7 @@ const Table = ({
           onPageChange={onPageChange}
           onPageSizeChange={onPageSizeChange}
           pageSizeOptions={[7, 10, 25, 50]}
-          showPageSizeSelector={!isMobile}
+          showPageSizeSelector={true}
         />
       </div>
 
