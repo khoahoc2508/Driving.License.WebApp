@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
@@ -15,8 +15,9 @@ import registrationRecordsAPI from "@/libs/api/registrationRecordsAPI";
 import type { RegistrationRecordBasicInfoDto, RegistrationRecordOverviewDto } from "@/types/registrationRecords";
 import OverviewTab from "./overview/OverviewTab";
 import PaymentsTab from "./payments/PaymentsTab";
-import ProcessingTab from "./processes/ProcessingTab";
+import ProcessingTab, { type ProcessingTabRef } from "./processes/ProcessingTab";
 import { formatCurrency } from "@/utils/helpers";
+import { StepStatusType } from "@/types/stepsTypes";
 
 
 type RegistrationRecordDetailProps = {
@@ -40,6 +41,7 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
   const [basicInfo, setBasicInfo] = useState<RegistrationRecordBasicInfoDto | null>(null)
   const [overview, setOverview] = useState<RegistrationRecordOverviewDto | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const processingTabRef = useRef<ProcessingTabRef>(null)
 
 
   const refreshData = () => {
@@ -95,8 +97,16 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
 
         if (checked) {
           toast.success('Duyệt hồ sơ thành công')
+          if (processingTabRef.current) {
+            processingTabRef.current.updateStepStatus(-1, CONFIG.StepStatus.Completed as StepStatusType)
+            processingTabRef.current.refreshTasks()
+          }
         } else {
           toast.success('Bỏ duyệt hồ sơ thành công')
+          if (processingTabRef.current) {
+            processingTabRef.current.updateStepStatus(-1, CONFIG.StepStatus.InProgress as StepStatusType)
+            processingTabRef.current.refreshTasks()
+          }
         }
       } catch (error: any) {
         setIsApproved(!checked)
@@ -214,7 +224,7 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
             <PaymentsTab registrationRecordId={id} onDataChange={refreshData} />
           )}
           {!isLoading && activeTab === 2 && (
-            <ProcessingTab registrationRecordId={id} />
+            <ProcessingTab ref={processingTabRef} registrationRecordId={id} />
           )}
           {isLoading && (
             <Box sx={{ mt: 4, display: 'flex', flexDirection: 'column', gap: 3 }}>

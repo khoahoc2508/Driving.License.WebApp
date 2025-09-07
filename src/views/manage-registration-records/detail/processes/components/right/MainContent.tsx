@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react'
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
@@ -10,7 +10,7 @@ import type { GetStepsDto } from '@/types/stepsTypes'
 import CONFIG from '@/configs/config'
 
 import OverviewTab from './overview/OverviewTab'
-import TaskTab from './task/TaskTab'
+import TaskTab, { type TaskTabRef } from './task/TaskTab'
 
 type MainContentProps = {
     selectedStep: GetStepsDto | null
@@ -18,11 +18,16 @@ type MainContentProps = {
     onRefreshSteps: (newStepsCount?: number) => void
 }
 
-const MainContent = ({ selectedStep, registrationRecordId, onRefreshSteps }: MainContentProps) => {
+export type MainContentRef = {
+    refreshTasks: () => void
+}
+
+const MainContent = forwardRef<MainContentRef, MainContentProps>(({ selectedStep, registrationRecordId, onRefreshSteps }, ref) => {
     const [tabValue, setTabValue] = useState<string>(CONFIG.RegistrationRecordProcessTabs.Overview)
     const router = useRouter()
     const pathname = usePathname()
     const searchParams = useSearchParams()
+    const taskTabRef = useRef<TaskTabRef>(null)
 
     const tabKeys = [CONFIG.RegistrationRecordProcessTabs.Overview, CONFIG.RegistrationRecordProcessTabs.Tasks] as const
 
@@ -41,6 +46,15 @@ const MainContent = ({ selectedStep, registrationRecordId, onRefreshSteps }: Mai
         qs.set('processTab', nextTab)
         router.replace(`${pathname}?${qs.toString()}`)
     }
+
+    // Expose refreshTasks method to parent component
+    useImperativeHandle(ref, () => ({
+        refreshTasks: () => {
+            if (taskTabRef.current) {
+                taskTabRef.current.refreshTasks()
+            }
+        }
+    }), [])
 
     return (
         <Box sx={{
@@ -64,11 +78,13 @@ const MainContent = ({ selectedStep, registrationRecordId, onRefreshSteps }: Mai
                     <OverviewTab selectedStep={selectedStep} registrationRecordId={registrationRecordId} onRefreshSteps={onRefreshSteps} />
                 )}
                 {tabValue === CONFIG.RegistrationRecordProcessTabs.Tasks && (
-                    <TaskTab selectedStep={selectedStep} onRefreshSteps={onRefreshSteps} />
+                    <TaskTab ref={taskTabRef} selectedStep={selectedStep} onRefreshSteps={onRefreshSteps} />
                 )}
             </Box>
         </Box>
     )
-}
+})
+
+MainContent.displayName = 'MainContent'
 
 export default MainContent

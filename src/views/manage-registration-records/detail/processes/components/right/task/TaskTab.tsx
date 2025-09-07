@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo, forwardRef, useImperativeHandle } from 'react'
 
 import { Box, Typography, Chip, IconButton, Avatar, Button } from '@mui/material'
 
@@ -19,6 +19,10 @@ type TaskTabProps = {
     onRefreshSteps: (count: number) => void
 }
 
+export type TaskTabRef = {
+    refreshTasks: () => void
+}
+
 const columnHelper = createColumnHelper<GetTaskDto>()
 
 // Add fuzzy filter function
@@ -33,7 +37,7 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value) => {
     return true
 }
 
-const TaskTab = ({ selectedStep, onRefreshSteps }: TaskTabProps) => {
+const TaskTab = forwardRef<TaskTabRef, TaskTabProps>(({ selectedStep, onRefreshSteps }, ref) => {
     const [tasks, setTasks] = useState<GetTaskDto[]>([])
     const [selectedTask, setSelectedTask] = useState<GetTaskDto | null>(null)
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
@@ -54,6 +58,11 @@ const TaskTab = ({ selectedStep, onRefreshSteps }: TaskTabProps) => {
         fetchTasks()
         fetchTaskActions()
     }, [selectedStep?.id])
+
+    // Expose refreshTasks method to parent component
+    useImperativeHandle(ref, () => ({
+        refreshTasks: fetchTasks
+    }), [selectedStep])
 
     const fetchTaskActions = async () => {
         if (selectedStep?.id) {
@@ -404,6 +413,8 @@ const TaskTab = ({ selectedStep, onRefreshSteps }: TaskTabProps) => {
             />
         </Box>
     )
-}
+})
+
+TaskTab.displayName = 'TaskTab'
 
 export default TaskTab

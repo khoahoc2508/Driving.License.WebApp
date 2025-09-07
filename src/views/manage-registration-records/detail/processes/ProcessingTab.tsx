@@ -1,21 +1,28 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, forwardRef, useImperativeHandle } from 'react'
 
 import { Box, Grid } from '@mui/material'
 
-import type { GetStepsDto } from '@/types/stepsTypes'
+import type { GetStepsDto, StepStatusType } from '@/types/stepsTypes'
 import ProcessSteps, { type ProcessStepsRef } from './components/left/ProcessSteps'
-import MainContent from './components/right/MainContent'
+import MainContent, { type MainContentRef } from './components/right/MainContent'
 
 type ProcessingTabProps = {
     registrationRecordId: string | undefined
 }
 
-const ProcessingTab = ({ registrationRecordId }: ProcessingTabProps) => {
+export type ProcessingTabRef = {
+    refreshSteps: () => void
+    updateStepStatus: (stepIndex: number, status: StepStatusType) => void
+    refreshTasks: () => void
+}
+
+const ProcessingTab = forwardRef<ProcessingTabRef, ProcessingTabProps>(({ registrationRecordId }, ref) => {
     const [selectedStep, setSelectedStep] = useState<GetStepsDto | null>(null)
     const [selectedStepIndex, setSelectedStepIndex] = useState<number>(-1)
     const processStepsRef = useRef<ProcessStepsRef>(null)
+    const mainContentRef = useRef<MainContentRef>(null)
 
     const handleStepClick = (step: GetStepsDto, stepIndex: number) => {
         setSelectedStep(step)
@@ -28,6 +35,24 @@ const ProcessingTab = ({ registrationRecordId }: ProcessingTabProps) => {
             setSelectedStepIndex(prev => prev + newStepsCount)
         }
     }
+
+    useImperativeHandle(ref, () => ({
+        refreshSteps: () => {
+            if (processStepsRef.current) {
+                processStepsRef.current.refreshSteps()
+            }
+        },
+        updateStepStatus: (stepIndex: number, status: StepStatusType) => {
+            if (processStepsRef.current) {
+                processStepsRef.current.updateStepStatus(stepIndex, status)
+            }
+        },
+        refreshTasks: () => {
+            if (mainContentRef.current) {
+                mainContentRef.current.refreshTasks()
+            }
+        }
+    }), [])
 
     return (
         <Box sx={{ p: 2 }}>
@@ -43,6 +68,7 @@ const ProcessingTab = ({ registrationRecordId }: ProcessingTabProps) => {
 
                 <Grid item xs={12} md={8}>
                     <MainContent
+                        ref={mainContentRef}
                         selectedStep={selectedStep}
                         registrationRecordId={registrationRecordId}
                         onRefreshSteps={handleRefreshSteps}
@@ -51,7 +77,9 @@ const ProcessingTab = ({ registrationRecordId }: ProcessingTabProps) => {
             </Grid>
         </Box>
     )
-}
+})
+
+ProcessingTab.displayName = 'ProcessingTab'
 
 export default ProcessingTab
 

@@ -4,7 +4,7 @@ import { useEffect, useState, forwardRef, useImperativeHandle } from 'react'
 
 import { Box, Typography, CircularProgress, Stepper, Step, StepLabel, useTheme } from '@mui/material'
 
-import type { GetStepsDto } from '@/types/stepsTypes'
+import type { GetStepsDto, StepStatusType } from '@/types/stepsTypes'
 import stepsAPI from '@/libs/api/stepsAPI'
 import StepperWrapper from '@/@core/styles/stepper'
 import styles from './ProcessSteps.module.css'
@@ -18,6 +18,7 @@ type ProcessStepsProps = {
 
 export type ProcessStepsRef = {
     refreshSteps: () => void
+    updateStepStatus: (stepIndex: number, status: StepStatusType) => void
 }
 
 const CustomStepIcon = ({ step }: { step: GetStepsDto; index: number }) => {
@@ -134,7 +135,17 @@ const ProcessSteps = forwardRef<ProcessStepsRef, ProcessStepsProps>(({ registrat
 
     // Expose fetchSteps function to parent component
     useImperativeHandle(ref, () => ({
-        refreshSteps: fetchSteps
+        refreshSteps: fetchSteps,
+        updateStepStatus: (stepIndex: number, status: StepStatusType) => {
+            setSteps(prevSteps => {
+                const newSteps = [...prevSteps]
+                const targetIndex = stepIndex === -1 ? newSteps.length - 1 : stepIndex
+                if (newSteps[targetIndex]) {
+                    newSteps[targetIndex] = { ...newSteps[targetIndex], status }
+                }
+                return newSteps
+            })
+        }
     }), [registrationRecordId])
 
     const handleStepClick = (step: GetStepsDto, stepIndex: number) => {
