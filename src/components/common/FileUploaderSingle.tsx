@@ -1,5 +1,5 @@
 // React Imports
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 
 // MUI Imports
 import Avatar from '@mui/material/Avatar'
@@ -15,7 +15,7 @@ interface FileUploaderSingleProps {
   field: ControllerRenderProps<any, any>; // Accept the field object from react-hook-form
   error?: boolean
   helperText?: string
-  description?: string
+  description?: ReactNode
 }
 
 const FileUploaderSingle = ({
@@ -113,7 +113,7 @@ const FileUploaderSingle = ({
             <Avatar variant='rounded' className='bs-12 is-12 mbe-9'>
               <i className='ri-upload-2-line' />
             </Avatar>
-            <Typography variant='h4' className='mbe-2.5'>
+            <Typography variant='h5' className='mbe-2.5'>
               {description}
             </Typography>
             <Typography color='text.secondary'>

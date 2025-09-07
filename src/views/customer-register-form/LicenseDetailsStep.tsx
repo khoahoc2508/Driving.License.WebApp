@@ -17,7 +17,11 @@ import type { Step } from './index'; // Import the Step type
 
 import CONFIG from '@/configs/config'
 import LicenseTypeAPI from '@/libs/api/licenseTypeApi'
-import type { LicenseTypeDto } from '@/types/LicensesRegistrations'
+
+type LicenseTypeDto = {
+  code: string;
+  name: string;
+}
 
 // Define types based on your validation schema (adjust as needed)
 type LicenseDetailsForm = {
@@ -43,7 +47,7 @@ const LicenseDetailsStep = ({ steps, handleBack, handleNext, vehicleTypePage }: 
       if (!vehicleTypePage) return;
 
       try {
-        const response = await LicenseTypeAPI.getAllLicenseTypes({
+        const response = await LicenseTypeAPI.getAllLicenseTypesAvailable({
           VehicleTypeCode: vehicleTypePage
         });
 

@@ -6,10 +6,10 @@ export type GetExamAddressesWithPaginationQueryParams = {
 }
 
 // Basic Exam Address Types
-export type ExamAddressType = components['schemas']['ExamAddressVm']
+export type ExamAddressType = {}
 
 // Paginated List Types
-export type PaginatedListOfExamAddressType = components['schemas']['PaginatedListOfExamAddressVm']
+export type PaginatedListOfExamAddressType = {}
 
 // API Response Types
 export type ExamAddressesWithPaginationResponse = {

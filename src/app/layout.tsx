@@ -5,6 +5,8 @@ import InitColorSchemeScript from '@mui/material/InitColorSchemeScript'
 import 'react-perfect-scrollbar/dist/css/styles.css'
 
 // Type Imports
+import type { Viewport } from 'next'
+
 import type { ChildrenType } from '@core/types'
 
 // Util Imports
@@ -20,6 +22,13 @@ export const metadata = {
   title: 'Materio - Material Design Next.js Admin Template',
   description:
     'Materio - Material Design Next.js Admin Dashboard Template - is the most developer friendly & highly customizable Admin Dashboard Template based on MUI v5.'
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1.0,
+  maximumScale: 1.0,
+  userScalable: false
 }
 
 const RootLayout = async (props: ChildrenType) => {

@@ -44,6 +44,7 @@
     "react-use": "17.6.0",
     "recharts": "^2.15.3",
     "server-only": "0.0.1",
+    "tanstack-table-header-rowspan": "^1.0.4",
     "valibot": "^1.1.0"
   },
   "devDependencies": {

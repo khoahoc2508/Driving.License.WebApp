@@ -3,12 +3,18 @@
   border-collapse: collapse;
   font-size: 0.875rem;
   white-space: nowrap;
+  /* table-layout: fixed; */
+  /* min-height: 250px; */
 
   [align='right'] > * {
     text-align: end;
   }
   [align='center'] > * {
     text-align: center;
+  }
+
+  &.fixed {
+    table-layout: fixed;
   }
 
   thead {
@@ -20,9 +26,12 @@
       font-size: 0.8125rem;
       letter-spacing: 0.2px;
       line-height: 1.8462;
-      text-align: start;
+      /* text-align: start; */
+      text-align: center;
       block-size: 56px;
       background-color: var(--mui-palette-customColors-tableHeaderBg);
+      border: 1px solid var(--border-color);
+
       &:not(:first-of-type):not(:last-of-type) {
         padding-block: 0.5rem;
         padding-inline: 1rem;
@@ -51,6 +60,9 @@
       font-size: 0.9375rem;
       line-height: 1.4667;
       block-size: 50px;
+      text-align: center;
+      border: 1px solid var(--border-color);
+
       &:not(:first-of-type):not(:last-of-type) {
         padding-block: 0.5rem;
         padding-inline: 1rem;
@@ -89,4 +101,27 @@
   &:focus-visible {
     outline: 1px solid var(--mui-palette-primary-main);
   }
+}
+
+.resizer {
+  background: rgba(0, 0, 0, 0.1);
+  cursor: col-resize;
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  touch-action: none;
+  user-select: none;
+  width: 5px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.resizer:hover {
+  opacity: 1;
+}
+
+.resizer.isResizing {
+  background: rgba(0, 0, 0, 0.3);
+  opacity: 1;
 }

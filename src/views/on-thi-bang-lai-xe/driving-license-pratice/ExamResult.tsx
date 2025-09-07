@@ -242,11 +242,6 @@ const ExamResult = ({ examSubmissionId }: ExamResultProps) => {
     } catch (err: any) {
     } finally {
     }
-
-    console.log(exam)
-
-    // call API
-    debugger
   }
 
 

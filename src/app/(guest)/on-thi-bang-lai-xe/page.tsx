@@ -1,3 +1,5 @@
+import type { Viewport } from 'next'
+
 import LandingPageWrapper from '@/views/on-thi-bang-lai-xe'
 
 
@@ -17,6 +19,13 @@ export const metadata = {
     locale: 'en_US',
     type: 'website',
   },
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1.0,
+  maximumScale: 1.0,
+  userScalable: false
 }
 
 const Page = async () => {

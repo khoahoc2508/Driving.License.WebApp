@@ -14,7 +14,6 @@ import Button from '@mui/material/Button'
 import ClickAwayListener from '@mui/material/ClickAwayListener'
 import Divider from '@mui/material/Divider'
 import Fade from '@mui/material/Fade'
-import MenuItem from '@mui/material/MenuItem'
 import MenuList from '@mui/material/MenuList'
 import Paper from '@mui/material/Paper'
 import Popper from '@mui/material/Popper'
@@ -133,7 +132,7 @@ const UserDropdown = () => {
                     </div>
                   </div>
                   <Divider className='mlb-1' />
-                  <MenuItem className='gap-3' onClick={e => handleDropdownClose(e)}>
+                  {/* <MenuItem className='gap-3' onClick={e => handleDropdownClose(e)}>
                     <i className='ri-user-3-line' />
                     <Typography color='text.primary'>My Profile</Typography>
                   </MenuItem>
@@ -148,7 +147,7 @@ const UserDropdown = () => {
                   <MenuItem className='gap-3' onClick={e => handleDropdownClose(e)}>
                     <i className='ri-question-line' />
                     <Typography color='text.primary'>FAQ</Typography>
-                  </MenuItem>
+                  </MenuItem> */}
                   <div className='flex items-center plb-2 pli-4'>
                     <Button
                       fullWidth

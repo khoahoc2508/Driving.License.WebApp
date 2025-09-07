@@ -69,21 +69,51 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
         renderExpandedMenuItemIcon={{ icon: <i className='ri-circle-line' /> }}
         menuSectionStyles={menuSectionStyles(verticalNavOptions, theme)}
       >
-        <MenuItem href='/admin' icon={<i className='ri-home-smile-line' />}>
+        {/* <MenuItem href='/admin' icon={<i className='ri-home-smile-line' />}>
           Home
-        </MenuItem>
-        <MenuItem href='/admin/about' icon={<i className='ri-information-line' />}>
+        </MenuItem> */}
+        {/* <MenuItem href='/admin/about' icon={<i className='ri-information-line' />}>
           About
         </MenuItem>
         <MenuItem href='/admin/dashboard' icon={<i className="ri-bar-chart-line"></i>}>
           Dashboard
-        </MenuItem>
-        <MenuItem href={CONFIG.Routers.ManageLicensesRegistration} icon={<i className='ri-user-3-line' />}>
-          Học viên
-        </MenuItem>
-        <MenuItem href={`${CONFIG.Routers.ExamSchedule}/list`} icon={<i className="ri-calendar-line"></i>}>
-          Lịch thi
-        </MenuItem>
+        </MenuItem> */}
+        {/* Quản lý hồ sơ */}
+        <SubMenu label={"Quản lý hồ sơ"} icon={<i className='ri-file-list-line' />}>
+          <MenuItem href={`${CONFIG.Routers.ManageRegistrationRecords}/list`} exactMatch={false} activeUrl={`${CONFIG.Routers.ManageRegistrationRecords}`}>{"Danh sách hồ sơ"}</MenuItem>
+        </SubMenu>
+
+        <SubMenu label={"Quản lý địa điểm"} icon={<i className='ri-map-2-line' />}>
+          <MenuItem href={`${CONFIG.Routers.ManageExamCenters}/list`}>{"Trường thi"}</MenuItem>
+          <MenuItem href={`${CONFIG.Routers.ManageExamYards}/list`}>{"Sân thi"}</MenuItem>
+        </SubMenu>
+
+
+        {/* Quản lý giáo viên */}
+        <SubMenu label={"Quản lý giáo viên"} icon={<i className='ri-presentation-line' />}>
+          <MenuItem href={`${CONFIG.Routers.ManageTeacher}/list`}>{"Danh sách giáo viên"}</MenuItem>
+          <MenuItem href={`${CONFIG.Routers.ManageTeacher}/schedule`}>{"Lịch làm việc"}</MenuItem>
+        </SubMenu>
+        {/* Quản lý CTV */}
+        <SubMenu label={"Quản lý CTV"} icon={<i className='ri-user-community-fill' />}>
+          <MenuItem href={`${CONFIG.Routers.ManageCTV}/list`}>{"Danh sách CTV"}</MenuItem>
+        </SubMenu>
+        {/* Quản lý nhân viên */}
+        <SubMenu label={"Quản lý nhân viên"} icon={<i className='ri-team-line' />}>
+          <MenuItem href={`${CONFIG.Routers.ManageEmployee}/list`}>{"Danh sách nhân viên"}</MenuItem>
+        </SubMenu>
+
+        {/* Quản lý thiết bị */}
+        <SubMenu label={"Quản lý thiết bị"} icon={<i className='ri-keyboard-line' />}>
+          <MenuItem href={`${CONFIG.Routers.ManageCars}/list`}>{"Ô tô"}</MenuItem>
+          <MenuItem href={`${CONFIG.Routers.ManageDATDevices}/list`}>{"Máy DAT"}</MenuItem>
+        </SubMenu>
+
+        {/* Quản lý loại phí */}
+        <SubMenu label={"Quản lý thanh toán"} icon={<i className="ri-bank-card-line"></i>}>
+          <MenuItem href={`${CONFIG.Routers.ManageFeeType}/list`}>{"Danh sách lệ phí"}</MenuItem>
+        </SubMenu>
+
         <SubMenu label={"Cấu hình cá nhân"} icon={<i className='ri-settings-3-line' />}>
           <MenuItem href={`${CONFIG.Routers.BrandSetting}/brand-setting`}>{"Thương hiệu"}</MenuItem>
         </SubMenu>
