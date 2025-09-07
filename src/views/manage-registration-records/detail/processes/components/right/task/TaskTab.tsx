@@ -286,6 +286,7 @@ const TaskTab = forwardRef<TaskTabRef, TaskTabProps>(({ selectedStep, onRefreshS
     useEffect(() => {
         if (table.getAllColumns().length > 0) {
             const thaoTacColumn = table.getColumn('actions')
+
             if (thaoTacColumn) {
                 if (isMobile) {
                     // Unpin column on mobile
