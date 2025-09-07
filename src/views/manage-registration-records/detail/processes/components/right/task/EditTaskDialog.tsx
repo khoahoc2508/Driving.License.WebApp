@@ -25,7 +25,6 @@ import {
 import { toast } from 'react-toastify'
 
 import type { GetTaskDto, TaskStatusType, UpdateTaskCommand } from '@/types/stepsTypes'
-import type { AssigneeType } from '@/types/assigneeTypes'
 import CONFIG from '@/configs/config'
 import assigneeAPI from '@/libs/api/assigneeAPI'
 import { formatDateOnlyForAPI, formatDateTimeForAPI, parseVietnameseDate, getInputBehavior } from '@/utils/helpers'
@@ -53,6 +52,11 @@ type FormData = {
 type AssigneeOption = {
     value: string
     label: string
+    assigneeType: number
+}
+
+type GroupedAssigneeOptions = {
+    [key: string]: AssigneeOption[]
 }
 
 const EditTaskDialog = ({ open, onClose, onSuccess, onCloseWithoutSave, task, isCreate }: EditTaskDialogProps) => {
@@ -69,25 +73,55 @@ const EditTaskDialog = ({ open, onClose, onSuccess, onCloseWithoutSave, task, is
         mode: 'onChange'
     })
 
-    // Fetch assignee options (danh sách nhân viên)
+    // Fetch assignee options (danh sách Người phục trách) - lấy tất cả active và group theo type
     const fetchAssigneeOptions = async () => {
         try {
             const res = await assigneeAPI.GetAssigneeAll({
-                assigneeType: CONFIG.AssigneeTypes.Employee as AssigneeType,
                 active: true
             })
 
             if (res?.data?.data) {
-                const options = res.data.data.map((assignee: any) => ({
-                    label: assignee.fullName || 'Unknown',
-                    value: assignee.id || ''
-                }))
+                const groupedOptions: GroupedAssigneeOptions = {}
 
-                setAssigneeOptions(options)
+                res.data.data.forEach((assignee: any) => {
+                    const assigneeType = assignee.assigneeType
+                    const typeName = getAssigneeTypeName(assigneeType)
+
+                    if (!groupedOptions[typeName]) {
+                        groupedOptions[typeName] = []
+                    }
+
+                    groupedOptions[typeName].push({
+                        label: assignee.fullName || 'Unknown',
+                        value: assignee.id || '',
+                        assigneeType: assigneeType
+                    })
+                })
+
+                // Flatten options for Autocomplete
+                const flatOptions: AssigneeOption[] = []
+                Object.entries(groupedOptions).forEach(([typeName, options]) => {
+                    flatOptions.push(...options)
+                })
+                setAssigneeOptions(flatOptions)
             }
         } catch (error: any) {
             console.error('Error fetching assignee options:', error)
             setAssigneeOptions([])
+        }
+    }
+
+    // Helper function to get assignee type name
+    const getAssigneeTypeName = (assigneeType: number) => {
+        switch (assigneeType) {
+            case CONFIG.AssigneeTypes.Teacher:
+                return 'Giáo viên'
+            case CONFIG.AssigneeTypes.Employee:
+                return 'Nhân viên'
+            case CONFIG.AssigneeTypes.Collaborator:
+                return 'Cộng tác viên'
+            default:
+                return 'Khác'
         }
     }
 
@@ -145,7 +179,11 @@ const EditTaskDialog = ({ open, onClose, onSuccess, onCloseWithoutSave, task, is
                         const items = res?.data?.data ?? res?.data ?? []
 
                         const options: AssigneeOption[] = Array.isArray(items)
-                            ? items.map((it: any) => ({ value: String(it?.[valueField] ?? ''), label: String(it?.[labelField] ?? '') }))
+                            ? items.map((it: any) => ({
+                                value: String(it?.[valueField] ?? ''),
+                                label: String(it?.[labelField] ?? ''),
+                                assigneeType: 0 // Default value for field options
+                            }))
                             : []
 
                         return { fieldId: String(field.id), options }
@@ -461,10 +499,7 @@ const EditTaskDialog = ({ open, onClose, onSuccess, onCloseWithoutSave, task, is
             onClose={handleClose}
             fullWidth
             PaperProps={{
-                sx: {
-                    borderRadius: 2,
-                    overflowY: "initial"
-                }
+                style: { borderRadius: '5px', minWidth: '30%' }
             }}
             className='custom-scrollbar'
         >
@@ -515,24 +550,47 @@ const EditTaskDialog = ({ open, onClose, onSuccess, onCloseWithoutSave, task, is
                     <Divider sx={{ my: 2 }} />
 
                     {/* Assignee field */}
-                    <FormControl fullWidth error={!!errors.assigneeId}>
-                        <InputLabel>Nhân viên <span style={{ color: 'red' }}>(*)</span></InputLabel>
-                        <Controller
-                            name="assigneeId"
-                            control={control}
-                            rules={{ required: 'Vui lòng chọn Nhân viên' }}
-                            render={({ field }) => (
-                                <Select {...field} label="Nhân viên (*)">
-                                    {assigneeOptions.map(opt => (
-                                        <MenuItem key={opt.value} value={opt.value}>{opt.label}</MenuItem>
-                                    ))}
-                                </Select>
-                            )}
-                        />
-                        {errors.assigneeId && (
-                            <FormHelperText>{String(errors.assigneeId.message || 'Có lỗi xảy ra')}</FormHelperText>
+                    <Controller
+                        name="assigneeId"
+                        control={control}
+                        rules={{ required: 'Vui lòng chọn người phụ trách' }}
+                        render={({ field: { onChange, value } }) => (
+                            <Autocomplete
+                                value={assigneeOptions.find(opt => opt.value === value) || null}
+                                options={assigneeOptions}
+                                groupBy={(option) => getAssigneeTypeName(option.assigneeType)}
+                                getOptionLabel={(option) => option.label}
+                                isOptionEqualToValue={(option, value) => option.value === value.value}
+                                onChange={(_event, newValue) => {
+                                    onChange(newValue ? newValue.value : '')
+                                }}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label={<span>Người phụ trách <span style={{ color: 'red' }}>(*)</span></span>}
+                                        error={!!errors.assigneeId}
+                                        helperText={errors.assigneeId?.message || ''}
+                                    />
+                                )}
+                                renderGroup={(params) => (
+                                    <li key={params.key}>
+                                        <div style={{
+                                            fontWeight: 'bold',
+                                            padding: '8px 12px',
+                                        }}>
+                                            {params.group}
+                                        </div>
+                                        <ul style={{ padding: 0, margin: 0 }}>
+                                            {params.children}
+                                        </ul>
+                                    </li>
+                                )}
+                                noOptionsText='Không có dữ liệu'
+                                clearOnEscape
+                                disableClearable={false}
+                            />
                         )}
-                    </FormControl>
+                    />
 
                     {/* Status field */}
                     <FormControl fullWidth error={!!errors.status}>

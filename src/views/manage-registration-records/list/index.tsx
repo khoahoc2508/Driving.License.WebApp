@@ -81,6 +81,25 @@ const ManageRegistrationRecords = () => {
   const [columnVisibilitySearch, setColumnVisibilitySearch] = useState('');
   const [columnConfig, setColumnConfig] = useState<any[]>([]);
 
+  // Fixed column configuration - không thay đổi
+  const fixedColumnConfig = [
+    { column: CONFIG.RegistrationRecordsTableColumns.STT, label: 'STT', visible: true },
+    { column: CONFIG.RegistrationRecordsTableColumns.HANG, label: 'Hạng', visible: true },
+    { column: CONFIG.RegistrationRecordsTableColumns.HO_SO, label: 'Hồ sơ', visible: true },
+    { column: CONFIG.RegistrationRecordsTableColumns.NGAY_SINH, label: 'Ngày sinh', visible: true },
+    { column: CONFIG.RegistrationRecordsTableColumns.NGAY_NHAN_HS, label: 'Ngày nhận HS', visible: true },
+    { column: CONFIG.RegistrationRecordsTableColumns.NGAY_KHAM_SK, label: 'Ngày khám SK', visible: true },
+    // { column: CONFIG.RegistrationRecordsTableColumns.THANH_TOAN, label: 'Thanh toán', visible: true },
+    { column: CONFIG.RegistrationRecordsTableColumns.TONG, label: 'Tổng', visible: true },
+    { column: CONFIG.RegistrationRecordsTableColumns.DA_NOP, label: 'Đã nộp', visible: true },
+    { column: CONFIG.RegistrationRecordsTableColumns.CON_THIEU, label: 'Còn thiếu', visible: true },
+    { column: CONFIG.RegistrationRecordsTableColumns.TRANG_THAI, label: 'Trạng thái', visible: true },
+    { column: CONFIG.RegistrationRecordsTableColumns.NGUOI_PHU_TRACH, label: 'NV phụ trách', visible: true },
+    { column: CONFIG.RegistrationRecordsTableColumns.CTV, label: 'CTV', visible: true },
+    { column: CONFIG.RegistrationRecordsTableColumns.GHI_CHU, label: 'Ghi chú', visible: true },
+    { column: CONFIG.RegistrationRecordsTableColumns.THAO_TAC, label: 'Thao tác', visible: true }
+  ];
+
   useEffect(() => {
     setParams({
       pageNumber: 1,
@@ -199,22 +218,40 @@ const ManageRegistrationRecords = () => {
     try {
       const res = await userPageConfigAPI.GetUserPageConfig({ pageKey: CONFIG.UserPageConfigKey.RegistrationRecords })
 
-      if (res?.data?.data) {
-        const config = res.data.data
+      // Luôn sử dụng fixedColumnConfig làm base
+      let mergedConfig = [...fixedColumnConfig]
+      const visibilityState: VisibilityState = {}
 
-        setColumnConfig(config)
+      if (res?.data?.data && res.data.data.length > 0) {
+        // Nếu có dữ liệu từ BE, mapping với fixedColumnConfig
+        const backendConfig = res.data.data
 
-        const visibilityState: VisibilityState = {}
-
-        config.forEach((col: any) => {
-          visibilityState[col.column] = col.visible
+        mergedConfig = fixedColumnConfig.map(fixedCol => {
+          const backendCol = backendConfig.find((bc: any) => bc.column === fixedCol.column)
+          return {
+            ...fixedCol,
+            visible: backendCol ? backendCol.visible : fixedCol.visible
+          }
         })
-
-        setColumnVisibility(visibilityState)
       }
+
+      setColumnConfig(mergedConfig)
+
+      // Tạo visibility state từ merged config
+      mergedConfig.forEach((col: any) => {
+        visibilityState[col.column] = col.visible
+      })
+
+      setColumnVisibility(visibilityState)
     } catch (error: any) {
       console.error('Error fetching column configuration:', error)
-      setColumnVisibility({})
+      // Fallback về fixedColumnConfig nếu có lỗi
+      setColumnConfig(fixedColumnConfig)
+      const visibilityState: VisibilityState = {}
+      fixedColumnConfig.forEach((col: any) => {
+        visibilityState[col.column] = col.visible
+      })
+      setColumnVisibility(visibilityState)
     }
   }
 
@@ -312,8 +349,8 @@ const ManageRegistrationRecords = () => {
 
   const handleSaveColumnVisibility = async () => {
     try {
-      // Convert VisibilityState back to API format
-      const columnConfigToSave = columnConfig.map(col => {
+      // Sử dụng fixedColumnConfig làm base và map với columnVisibility hiện tại
+      const columnConfigToSave = fixedColumnConfig.map(col => {
         const isVisible = columnVisibility[col.column] !== false
 
         return {
@@ -462,7 +499,7 @@ const ManageRegistrationRecords = () => {
                 id='staff-assignee-autocomplete'
                 getOptionLabel={option => option?.label || ''}
                 isOptionEqualToValue={(opt, val) => opt.value === val.value}
-                renderInput={params => <TextField {...params} label='Người phụ trách' />}
+                renderInput={params => <TextField {...params} label='Nhân viên phụ trách' />}
                 renderTags={(tagValue, getTagProps) =>
                   tagValue.map((option, index) => {
                     const { key, ...chipProps } = getTagProps({ index }) as any;
@@ -664,7 +701,7 @@ const ManageRegistrationRecords = () => {
                               }}
                             />
                           }
-                          label="THANH TOÁN"
+                          label="Thanh toán"
                           sx={{ display: 'block', mb: 1, fontWeight: 'bold' }}
                         />
                       </Box>
