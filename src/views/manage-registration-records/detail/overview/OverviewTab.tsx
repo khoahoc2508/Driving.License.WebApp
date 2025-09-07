@@ -20,6 +20,7 @@ const OverviewTab = ({ registrationRecordId }: OverviewTabProps) => {
         try {
             setIsLoading(true)
             const overviewRes = await registrationRecordsAPI.GetRegistrationRecordOverview(id)
+
             setOverview(overviewRes?.data?.data || null)
         } catch (error) {
             setOverview(null)

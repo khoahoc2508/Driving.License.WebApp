@@ -44,6 +44,7 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
   const fetchBasicInfo = async (id: string) => {
     try {
       const basicRes = await registrationRecordsAPI.GetRegistrationRecordBasicInfo(id)
+
       setBasicInfo(basicRes?.data?.data || null)
       setIsApproved(basicRes?.data?.data?.isApproved || false)
     } catch (error) {
