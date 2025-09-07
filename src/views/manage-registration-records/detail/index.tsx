@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from "react";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-import { Avatar, Box, Button, Card, CardContent, Switch, Tab, Tabs, Typography, useTheme } from "@mui/material";
+import { Avatar, Box, Button, Card, CardContent, Switch, Tab, Tabs, Typography, useMediaQuery, useTheme } from "@mui/material";
 
 import { toast } from "react-toastify";
 
@@ -39,6 +39,9 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
   const [basicInfo, setBasicInfo] = useState<RegistrationRecordBasicInfoDto | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const processingTabRef = useRef<ProcessingTabRef>(null)
+
+
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
 
   const fetchBasicInfo = async (id: string) => {
@@ -149,9 +152,11 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
             onChange={handleApprovedChange}
             color="primary"
           />
-          <Typography variant="body1" sx={{ opacity: 0.5 }}>
-            Duyệt hồ sơ
-          </Typography>
+          {!isMobile && (
+            <Typography variant="body1" sx={{ opacity: 0.5 }}>
+              Duyệt hồ sơ
+            </Typography>
+          )}
         </div>
       </div>
 
@@ -168,7 +173,7 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
               </Box>
             </Box>
           ) : (
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4" style={{ flexDirection: isMobile ? 'column' : 'row' }}>
               <Avatar
                 src={basicInfo?.avatarUrl ? `${process.env.NEXT_PUBLIC_STORAGE_BASE_URL}${basicInfo.avatarUrl}` : undefined}
                 sx={{ width: 56, height: 56 }}
@@ -187,14 +192,29 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
             </div>
           )}
 
-          <Tabs value={activeTab} onChange={(_, v) => {
-            setActiveTab(v)
-            const nextTab = tabKeys[v] || CONFIG.RegistrationRecordDetailTabs.Overview
-            const qs = new URLSearchParams(Array.from(searchParams.entries()))
+          <Tabs
+            value={activeTab}
+            className="w-full"
+            onChange={(_, v) => {
+              setActiveTab(v)
+              const nextTab = tabKeys[v] || CONFIG.RegistrationRecordDetailTabs.Overview
+              const qs = new URLSearchParams(Array.from(searchParams.entries()))
 
-            qs.set('tab', nextTab)
-            router.replace(`${pathname}?${qs.toString()}`)
-          }} sx={{ mt: 4 }}>
+              qs.set('tab', nextTab)
+              router.replace(`${pathname}?${qs.toString()}`)
+            }}
+            variant={isMobile ? "scrollable" : "standard"}
+            scrollButtons={isMobile ? "auto" : false}
+            allowScrollButtonsMobile={isMobile}
+            sx={{
+              mt: 4,
+              '& .MuiTabs-scrollButtons': {
+                '&.Mui-disabled': {
+                  opacity: 0.3,
+                },
+              },
+            }}
+          >
             <Tab
               label={
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -202,6 +222,7 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
                   TỔNG QUAN
                 </Box>
               }
+              sx={{ minWidth: isMobile ? 'auto' : 'auto' }}
             />
             <Tab
               label={
@@ -210,6 +231,7 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
                   THANH TOÁN
                 </Box>
               }
+              sx={{ minWidth: isMobile ? 'auto' : 'auto' }}
             />
             <Tab
               label={
@@ -218,6 +240,7 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
                   XỬ LÝ HỒ SƠ
                 </Box>
               }
+              sx={{ minWidth: isMobile ? 'auto' : 'auto' }}
             />
           </Tabs>
           {activeTab === 0 && (
