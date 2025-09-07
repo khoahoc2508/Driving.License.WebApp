@@ -24,6 +24,7 @@ import '@/app/globals.css'
 import '@assets/iconify-icons/generated-icons.css'
 import { IntersectionProvider } from '@/contexts/intersectionContext'
 import ScrollToTopClient from '@/components/ScrollToTopClient'
+import { Viewport } from 'next'
 
 export const metadata = {
   title: 'Giải Pháp Quản Lý Hồ Sơ Thông Minh – Tiết Kiệm Thời Gian & Chi Phí | banglaixanh.vn',
@@ -41,6 +42,13 @@ export const metadata = {
     locale: 'en_US',
     type: 'website',
   },
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1.0,
+  maximumScale: 1.0,
+  userScalable: false
 }
 
 const Layout = async ({ children }: ChildrenType) => {
