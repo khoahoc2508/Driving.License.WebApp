@@ -4,7 +4,7 @@ import { useState, useRef, forwardRef, useImperativeHandle } from 'react'
 
 import { Box, Grid } from '@mui/material'
 
-import type { GetStepsDto, StepStatusType } from '@/types/stepsTypes'
+import type { GetStepsDto } from '@/types/stepsTypes'
 import ProcessSteps, { type ProcessStepsRef } from './components/left/ProcessSteps'
 import MainContent, { type MainContentRef } from './components/right/MainContent'
 
@@ -14,7 +14,6 @@ type ProcessingTabProps = {
 
 export type ProcessingTabRef = {
     refreshSteps: () => void
-    updateStepStatus: (stepIndex: number, status: StepStatusType) => void
     refreshTasks: () => void
     refreshStepOverview: () => void
 }
@@ -41,11 +40,6 @@ const ProcessingTab = forwardRef<ProcessingTabRef, ProcessingTabProps>(({ regist
         refreshSteps: () => {
             if (processStepsRef.current) {
                 processStepsRef.current.refreshSteps()
-            }
-        },
-        updateStepStatus: (stepIndex: number, status: StepStatusType) => {
-            if (processStepsRef.current) {
-                processStepsRef.current.updateStepStatus(stepIndex, status)
             }
         },
         refreshTasks: () => {

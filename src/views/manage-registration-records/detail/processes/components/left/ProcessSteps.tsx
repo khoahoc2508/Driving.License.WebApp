@@ -1,8 +1,8 @@
 'use client'
 
-import { useEffect, useState, forwardRef, useImperativeHandle } from 'react'
+import { useEffect, useState, forwardRef, useImperativeHandle, memo } from 'react'
 
-import { Box, Typography, CircularProgress, Stepper, Step, StepLabel, useTheme } from '@mui/material'
+import { Box, Typography, Stepper, Step, StepLabel, useTheme } from '@mui/material'
 
 import type { GetStepsDto, StepStatusType } from '@/types/stepsTypes'
 import stepsAPI from '@/libs/api/stepsAPI'
@@ -18,8 +18,65 @@ type ProcessStepsProps = {
 
 export type ProcessStepsRef = {
     refreshSteps: () => void
-    updateStepStatus: (stepIndex: number, status: StepStatusType) => void
+    updateStepStatus: (stepId: string, status: StepStatusType) => void
+    updateStepStatusByIndex: (stepIndex: number, status: StepStatusType) => void
 }
+
+const StepItem = memo(({ step, index, isSelected, onStepClick, getTextColor }: {
+    step: GetStepsDto
+    index: number
+    isSelected: boolean
+    onStepClick: (step: GetStepsDto, stepIndex: number) => void
+    getTextColor: (status: number | undefined) => string
+}) => {
+    const isStepClickable = true
+    const labelProps: {
+        error?: boolean
+    } = {}
+
+    return (
+        <Step
+            key={index}
+            completed={step.status === CONFIG.StepStatus.Completed}
+            active={step.status === CONFIG.StepStatus.InProgress}
+            data-active={isSelected}
+            data-status={step.status}
+        >
+            <StepLabel
+                {...labelProps}
+                slots={{
+                    stepIcon: () => <CustomStepIcon step={step} index={index} />
+                }}
+                sx={{
+                    '& .MuiStepLabel-labelContainer': {
+                        '& .step-label': {
+                            color: getTextColor(step.status),
+                            fontSize: '14px'
+                        }
+                    }
+                }}
+            >
+                <div
+                    className='step-label'
+                    style={{
+                        color: getTextColor(step.status),
+                        cursor: isStepClickable ? 'pointer' : 'not-allowed',
+                        opacity: isStepClickable ? 1 : 0.6
+                    }}
+                    onClick={() => {
+                        if (isStepClickable) {
+                            onStepClick(step, index)
+                        }
+                    }}
+                >
+                    {step.name}
+                </div>
+            </StepLabel>
+        </Step>
+    )
+})
+
+StepItem.displayName = 'StepItem'
 
 const CustomStepIcon = ({ step }: { step: GetStepsDto; index: number }) => {
     const theme = useTheme()
@@ -111,7 +168,7 @@ const ProcessSteps = forwardRef<ProcessStepsRef, ProcessStepsProps>(({ registrat
         if (!registrationRecordId) return
 
         try {
-            setLoading(true)
+            setLoading(false)
 
             const response = await stepsAPI.GetStepsByRegistrationRecordId({
                 registrationRecordId
@@ -136,9 +193,21 @@ const ProcessSteps = forwardRef<ProcessStepsRef, ProcessStepsProps>(({ registrat
     // Expose fetchSteps function to parent component
     useImperativeHandle(ref, () => ({
         refreshSteps: fetchSteps,
-        updateStepStatus: (stepIndex: number, status: StepStatusType) => {
+        updateStepStatus: (stepId: string, status: StepStatusType) => {
             setSteps(prevSteps => {
                 const newSteps = [...prevSteps]
+                // Tìm step theo ID và cập nhật status
+                const targetIndex = newSteps.findIndex(step => step.id === stepId)
+                if (targetIndex >= 0 && newSteps[targetIndex]) {
+                    newSteps[targetIndex] = { ...newSteps[targetIndex], status }
+                }
+                return newSteps
+            })
+        },
+        updateStepStatusByIndex: (stepIndex: number, status: StepStatusType) => {
+            setSteps(prevSteps => {
+                const newSteps = [...prevSteps]
+                // Nếu stepIndex = -1, cập nhật step cuối cùng
                 const targetIndex = stepIndex === -1 ? newSteps.length - 1 : stepIndex
                 if (newSteps[targetIndex]) {
                     newSteps[targetIndex] = { ...newSteps[targetIndex], status }
@@ -167,28 +236,19 @@ const ProcessSteps = forwardRef<ProcessStepsRef, ProcessStepsProps>(({ registrat
         }
     }, [steps, selectedStepIndex, onStepClick])
 
-    if (loading) {
-        return (
-            <Box sx={{ display: 'flex', justifyContent: 'center', py: 2, alignItems: 'center' }}>
-                <CircularProgress size={24} />
-            </Box>
-        )
-    }
 
     return (
         steps.length === 0 ? (
-            <Typography variant='body2' color="text.secondary">
-                Chưa có dữ liệu
-            </Typography>
+            <Box>
+                <Typography variant='body2' color="text.secondary" className='text-center'>
+                    Chưa có dữ liệu
+                </Typography>
+            </Box>
         ) : (
             <Box className={styles.processStepsContainer}>
                 <StepperWrapper>
                     <Stepper activeStep={selectedStepIndex} orientation="vertical" className='p-4'>
                         {steps.map((step, index) => {
-                            const labelProps: {
-                                error?: boolean
-                            } = {}
-
                             const getTextColor = (status: number | undefined) => {
                                 switch (status) {
                                     case CONFIG.StepStatus.Completed: // Completed
@@ -204,47 +264,15 @@ const ProcessSteps = forwardRef<ProcessStepsRef, ProcessStepsProps>(({ registrat
 
                             const isSelected = index === selectedStepIndex
 
-                            const isStepClickable = true
-
                             return (
-                                <Step
-                                    key={index}
-                                    completed={step.status === CONFIG.StepStatus.Completed}
-                                    active={step.status === CONFIG.StepStatus.InProgress}
-                                    data-active={isSelected}
-                                    data-status={step.status}
-                                >
-                                    <StepLabel
-                                        {...labelProps}
-                                        slots={{
-                                            stepIcon: () => <CustomStepIcon step={step} index={index} />
-                                        }}
-                                        sx={{
-                                            '& .MuiStepLabel-labelContainer': {
-                                                '& .step-label': {
-                                                    color: getTextColor(step.status),
-                                                    fontSize: '14px'
-                                                }
-                                            }
-                                        }}
-                                    >
-                                        <div
-                                            className='step-label'
-                                            style={{
-                                                color: getTextColor(step.status),
-                                                cursor: isStepClickable ? 'pointer' : 'not-allowed',
-                                                opacity: isStepClickable ? 1 : 0.6
-                                            }}
-                                            onClick={() => {
-                                                if (isStepClickable) {
-                                                    handleStepClick(step, index)
-                                                }
-                                            }}
-                                        >
-                                            {step.name}
-                                        </div>
-                                    </StepLabel>
-                                </Step>
+                                <StepItem
+                                    key={`${step.id}-${index}`}
+                                    step={step}
+                                    index={index}
+                                    isSelected={isSelected}
+                                    onStepClick={handleStepClick}
+                                    getTextColor={getTextColor}
+                                />
                             )
                         })}
                     </Stepper>

@@ -17,8 +17,6 @@ import OverviewTab from "./overview/OverviewTab";
 import PaymentsTab from "./payments/PaymentsTab";
 import ProcessingTab, { type ProcessingTabRef } from "./processes/ProcessingTab";
 import { formatCurrency } from "@/utils/helpers";
-import { StepStatusType } from "@/types/stepsTypes";
-
 
 type RegistrationRecordDetailProps = {
   id?: string
@@ -90,7 +88,7 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
 
     if (id) {
       try {
-        await registrationRecordsAPI.UpdateRegistrationRecordIsApproved({
+        const res = await registrationRecordsAPI.UpdateRegistrationRecordIsApproved({
           id,
           isApproved: checked
         })
@@ -98,14 +96,14 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
         if (checked) {
           toast.success('Duyệt hồ sơ thành công')
           if (processingTabRef.current) {
-            processingTabRef.current.updateStepStatus(-1, CONFIG.StepStatus.Completed as StepStatusType)
+            processingTabRef.current.refreshSteps()
             processingTabRef.current.refreshTasks()
             processingTabRef.current.refreshStepOverview()
           }
         } else {
           toast.success('Bỏ duyệt hồ sơ thành công')
           if (processingTabRef.current) {
-            processingTabRef.current.updateStepStatus(-1, CONFIG.StepStatus.InProgress as StepStatusType)
+            processingTabRef.current.refreshSteps()
             processingTabRef.current.refreshTasks()
             processingTabRef.current.refreshStepOverview()
           }

@@ -91,3 +91,29 @@
   margin-top: -10px !important;
   margin-bottom: -10px !important;
 }
+
+/* Hide connector line for the first step - more specific selector */
+.processStepsContainer
+  :global(.MuiStepper-root .MuiStep-root:first-child + .MuiStepConnector-root .MuiStepConnector-line) {
+  display: none !important;
+}
+
+/* Hide the entire first connector */
+.processStepsContainer :global(.MuiStepper-root .MuiStep-root:first-child + .MuiStepConnector-root) {
+  display: none !important;
+}
+
+/* Alternative approach: Hide connector before first step */
+.processStepsContainer :global(.MuiStepper-root .MuiStepConnector-root:first-child) {
+  display: none !important;
+}
+
+/* Direct approach: Target the stepper and hide first connector */
+.processStepsContainer :global(.MuiStepper-vertical .MuiStepConnector-root:first-child) {
+  display: none !important;
+}
+
+/* Hide the line inside the first connector */
+.processStepsContainer :global(.MuiStepper-vertical .MuiStepConnector-root:first-child .MuiStepConnector-line) {
+  display: none !important;
+}
