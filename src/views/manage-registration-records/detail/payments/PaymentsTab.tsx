@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
-import { CardContent, Tab, Tabs } from '@mui/material'
+import { CardContent, Tab, Tabs, useMediaQuery, useTheme } from '@mui/material'
 
 
 import CONFIG from '@/configs/config'
@@ -24,6 +24,9 @@ const PaymentsTab = ({ registrationRecordId, onDataChange }: PaymentsTabProps) =
     const router = useRouter()
     const pathname = usePathname()
     const searchParams = useSearchParams()
+
+    const theme = useTheme()
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
     const [activeSubTab, setActiveSubTab] = useState<string>(CONFIG.RegistrationRecordPaymentsTabs.Fees)
     const [payments, setPayments] = useState<GetPaymentDto[]>([])
@@ -123,11 +126,36 @@ const PaymentsTab = ({ registrationRecordId, onDataChange }: PaymentsTabProps) =
     }
 
     return (
-        <CardContent className='px-0 flex-1 h-full flex flex-col justify-between pb-0'>
+        <CardContent
+            className='px-0 flex-1 h-full flex flex-col justify-between pb-0'
+            sx={{ p: isMobile ? 2 : 4, py: 4 }}
+        >
             {/* Sub-tabs */}
-            <Tabs value={activeSubTab} onChange={handleTabChange} sx={{ mb: 3 }}>
-                <Tab value={CONFIG.RegistrationRecordPaymentsTabs.Fees} label="Bảng khoản phí" />
-                <Tab value={CONFIG.RegistrationRecordPaymentsTabs.History} label="Lịch sử thanh toán" />
+            <Tabs
+                value={activeSubTab}
+                onChange={handleTabChange}
+                variant={isMobile ? "scrollable" : "standard"}
+                scrollButtons={isMobile ? "auto" : false}
+                allowScrollButtonsMobile={isMobile}
+                sx={{
+                    mb: 3,
+                    '& .MuiTabs-scrollButtons': {
+                        '&.Mui-disabled': {
+                            opacity: 0.3,
+                        },
+                    },
+                }}
+            >
+                <Tab
+                    value={CONFIG.RegistrationRecordPaymentsTabs.Fees}
+                    label="Bảng khoản phí"
+                    sx={{ minWidth: isMobile ? 'auto' : 'auto' }}
+                />
+                <Tab
+                    value={CONFIG.RegistrationRecordPaymentsTabs.History}
+                    label="Lịch sử thanh toán"
+                    sx={{ minWidth: isMobile ? 'auto' : 'auto' }}
+                />
             </Tabs>
 
             {/* Fee Table Tab */}
