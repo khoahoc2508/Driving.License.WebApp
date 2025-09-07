@@ -2,7 +2,7 @@
 
 import { useEffect, useState, forwardRef, useImperativeHandle } from 'react'
 
-import { Box, Typography, Chip, Divider, IconButton, TextField, InputAdornment, Button, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material'
+import { Box, Typography, Chip, Divider, IconButton, TextField, InputAdornment, Button, Dialog, DialogTitle, DialogContent, DialogActions, useMediaQuery, useTheme } from '@mui/material'
 
 import { toast } from 'react-toastify'
 
@@ -23,6 +23,8 @@ export type OverviewTabRef = {
 }
 
 const OverviewTab = forwardRef<OverviewTabRef, OverviewTabProps>(({ selectedStep, registrationRecordId, onRefreshSteps }, ref) => {
+    const theme = useTheme()
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
     const [stepOverview, setStepOverview] = useState<StepOverviewDto | null>(null)
     const [editingFieldId, setEditingFieldId] = useState<string | null>(null)
@@ -199,7 +201,7 @@ const OverviewTab = forwardRef<OverviewTabRef, OverviewTabProps>(({ selectedStep
 
     return (
         <Box>
-            <Box sx={{ p: 4, display: 'grid', gridTemplateColumns: '180px 1fr', rowGap: 3 }}>
+            <Box sx={{ p: isMobile ? 2 : 4, display: 'grid', gridTemplateColumns: isMobile ? '140px 1fr' : '180px 1fr', rowGap: 3 }}>
                 <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
                     Trạng thái:
                 </Typography>
@@ -217,7 +219,7 @@ const OverviewTab = forwardRef<OverviewTabRef, OverviewTabProps>(({ selectedStep
                         ) => (
                             <Box
                                 key={`step-field-${item.stepFieldTemplateConfig?.id || 'unknown'}-${index}`}
-                                sx={{ display: 'grid', gridTemplateColumns: '180px 1fr', rowGap: 3, alignItems: 'center' }}
+                                sx={{ display: 'grid', gridTemplateColumns: isMobile ? '140px 1fr' : '180px 1fr', rowGap: 3, alignItems: 'center' }}
                             >
                                 <Typography variant="subtitle2" color="text.secondary">
                                     {item.stepFieldTemplateConfig?.label}:
@@ -272,7 +274,7 @@ const OverviewTab = forwardRef<OverviewTabRef, OverviewTabProps>(({ selectedStep
                 </Box>
             </Box>
             {(stepOverview?.taskInfos ?? []).length > 0 && <Divider sx={{ my: 2 }} />}
-            <Box sx={{ p: 4 }}>
+            <Box sx={{ p: isMobile ? 2 : 4 }}>
                 {stepOverview?.taskInfos
                     ?.flatMap(
                         (task, taskIndex) =>
@@ -293,7 +295,7 @@ const OverviewTab = forwardRef<OverviewTabRef, OverviewTabProps>(({ selectedStep
                     .map((field) => (
                         <Box
                             key={field.key}
-                            sx={{ display: 'grid', gridTemplateColumns: '180px 1fr', rowGap: 3, mb: 2 }}
+                            sx={{ display: 'grid', gridTemplateColumns: isMobile ? '140px 1fr' : '180px 1fr', rowGap: 3, mb: 2 }}
                         >
                             <Typography variant="subtitle2" color="text.secondary">
                                 {field.label}:

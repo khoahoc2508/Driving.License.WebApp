@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useMemo, forwardRef, useImperativeHandle } from 'react'
 
-import { Box, Typography, Chip, IconButton, Avatar, Button } from '@mui/material'
+import { Box, Typography, Chip, IconButton, Avatar, Button, useTheme, useMediaQuery } from '@mui/material'
 
 import { createColumnHelper, flexRender, getCoreRowModel, useReactTable, type FilterFn } from '@tanstack/react-table'
 
@@ -45,6 +45,9 @@ const TaskTab = forwardRef<TaskTabRef, TaskTabProps>(({ selectedStep, onRefreshS
     const [taskActions, setTaskActions] = useState<TaskActionTemplateDto[]>([])
     const [isCreateDialog, setIsCreateDialog] = useState(false)
     const [createdTaskId, setCreatedTaskId] = useState<string | null>(null)
+
+    const theme = useTheme()
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
     const fetchTasks = async () => {
         if (selectedStep?.id) {
@@ -279,16 +282,21 @@ const TaskTab = forwardRef<TaskTabRef, TaskTabProps>(({ selectedStep, onRefreshS
         enableColumnPinning: true
     })
 
-    // Pin cột THAO TÁC sang phải khi component mount
+
     useEffect(() => {
         if (table.getAllColumns().length > 0) {
             const thaoTacColumn = table.getColumn('actions')
-
             if (thaoTacColumn) {
-                thaoTacColumn.pin('right')
+                if (isMobile) {
+                    // Unpin column on mobile
+                    thaoTacColumn.pin(false)
+                } else {
+                    // Pin THAO TÁC column to right on desktop
+                    thaoTacColumn.pin('right')
+                }
             }
         }
-    }, [table])
+    }, [table, isMobile])
 
     if (!selectedStep) {
         return (

@@ -4,7 +4,7 @@ import { useEffect, useState, useRef, forwardRef, useImperativeHandle } from 're
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
-import { Box, Tabs, Tab } from '@mui/material'
+import { Box, Tabs, Tab, useMediaQuery, useTheme } from '@mui/material'
 
 import type { GetStepsDto } from '@/types/stepsTypes'
 import CONFIG from '@/configs/config'
@@ -30,6 +30,9 @@ const MainContent = forwardRef<MainContentRef, MainContentProps>(({ selectedStep
     const searchParams = useSearchParams()
     const taskTabRef = useRef<TaskTabRef>(null)
     const overviewTabRef = useRef<OverviewTabRef>(null)
+
+    const theme = useTheme()
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
     const tabKeys = [CONFIG.RegistrationRecordProcessTabs.Overview, CONFIG.RegistrationRecordProcessTabs.Tasks] as const
 
@@ -65,7 +68,7 @@ const MainContent = forwardRef<MainContentRef, MainContentProps>(({ selectedStep
 
     return (
         <Box sx={{
-            p: 3,
+            p: isMobile ? 2 : 3,
             height: '100%',
             borderLeft: { xs: 'none', md: '1px solid' },
             borderColor: { md: 'divider' }
@@ -74,9 +77,27 @@ const MainContent = forwardRef<MainContentRef, MainContentProps>(({ selectedStep
                 <Tabs
                     value={tabValue}
                     onChange={handleTabChange}
+                    variant={isMobile ? "scrollable" : "standard"}
+                    scrollButtons={isMobile ? "auto" : false}
+                    allowScrollButtonsMobile={isMobile}
+                    sx={{
+                        '& .MuiTabs-scrollButtons': {
+                            '&.Mui-disabled': {
+                                opacity: 0.3,
+                            },
+                        },
+                    }}
                 >
-                    <Tab value={CONFIG.RegistrationRecordProcessTabs.Overview} label="Tổng quan" />
-                    <Tab value={CONFIG.RegistrationRecordProcessTabs.Tasks} label="Công việc" />
+                    <Tab
+                        value={CONFIG.RegistrationRecordProcessTabs.Overview}
+                        label="Tổng quan"
+                        sx={{ minWidth: isMobile ? 'auto' : 'auto' }}
+                    />
+                    <Tab
+                        value={CONFIG.RegistrationRecordProcessTabs.Tasks}
+                        label="Công việc"
+                        sx={{ minWidth: isMobile ? 'auto' : 'auto' }}
+                    />
                 </Tabs>
             </Box>
 
