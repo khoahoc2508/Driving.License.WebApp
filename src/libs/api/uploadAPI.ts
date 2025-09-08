@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axiosInstance from '../axios'
 
 const uploadFiles = async (files: File[]) => {
   const formData = new FormData()
@@ -8,7 +8,7 @@ const uploadFiles = async (files: File[]) => {
   })
 
   try {
-    const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/uploads/files`, formData, {
+    const response = await axiosInstance.post(`/api/uploads/files`, formData, {
       headers: {
         accept: 'application/json',
         'Content-Type': 'multipart/form-data'

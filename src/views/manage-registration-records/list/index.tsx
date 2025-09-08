@@ -230,8 +230,8 @@ const ManageRegistrationRecords = () => {
         mergedConfig = fixedColumnConfig.map(fixedCol => {
           const backendCol = backendConfig.find((bc: any) => bc.column === fixedCol.column)
 
-          
-return {
+
+          return {
             ...fixedCol,
             visible: backendCol ? backendCol.visible : fixedCol.visible
           }
@@ -388,7 +388,7 @@ return {
 
   return (
     <>
-      <Card className='h-full flex flex-col'>
+      <Card className='flex flex-col h-[calc(100vh-116px)]'>
         <CardHeader title='Lọc hồ sơ' />
         <CardContent>
           <Grid container spacing={5} alignItems={'flex-end'}>
@@ -568,21 +568,23 @@ return {
                 noOptionsText='Không có dữ liệu'
               />
             </Grid>
-          </Grid>
-        </CardContent>
-        <CardContent>
-          {(() => {
-            const hasAnySelected =
-              (licenseTypeValue?.length || 0) > 0 ||
-              (paymentStatusValue?.length || 0) > 0 ||
-              (registrationRecordStatusValue?.length || 0) > 0 ||
-              (staffAssigneeValue?.length || 0) > 0 ||
-              (collaboratorValue?.length || 0) > 0
+            <Grid size={{ xs: 12, sm: 8, md: 9 }}>
+              {(() => {
+                const hasAnySelected =
+                  (licenseTypeValue?.length || 0) > 0 ||
+                  (paymentStatusValue?.length || 0) > 0 ||
+                  (registrationRecordStatusValue?.length || 0) > 0 ||
+                  (staffAssigneeValue?.length || 0) > 0 ||
+                  (collaboratorValue?.length || 0) > 0
 
-            return (<Grid size={{ xs: 12, sm: 8, md: 9 }} className='flex items-center gap-3'>
-              <Button disabled={!hasAnySelected} variant='outlined' color='error' className='min-w-[170px]' onClick={clearAllFilters}>XÓA TẤT CẢ</Button>
-            </Grid>)
-          })()}
+                return (<Grid size={{ xs: 12, sm: 8, md: 9 }} className='flex items-center gap-3'>
+                  <Button disabled={!hasAnySelected} variant='outlined' color='error' className='min-w-[170px]' onClick={clearAllFilters}>XÓA TẤT CẢ</Button>
+                </Grid>)
+              })()}
+            </Grid>
+          </Grid>
+
+
         </CardContent>
         <Divider />
 
@@ -602,18 +604,20 @@ return {
             </Button>
           </Link>
         </div>
-        <Table
-          data={dataTable}
-          pageNumber={pageNumber}
-          pageSize={pageSize}
-          totalItems={totalItems}
-          onPageChange={(page: number) => setPageNumber(page)}
-          onPageSizeChange={(size: number) => setPageSize(size)}
-          setReloadDataTable={setReloadDataTable}
-          isLoading={isLoading}
-          columnVisibility={columnVisibility}
-          onColumnVisibilityChange={handleColumnVisibilityChange}
-        />
+        <div className='flex-1 overflow-hidden'>
+          <Table
+            data={dataTable}
+            pageNumber={pageNumber}
+            pageSize={pageSize}
+            totalItems={totalItems}
+            onPageChange={(page: number) => setPageNumber(page)}
+            onPageSizeChange={(size: number) => setPageSize(size)}
+            setReloadDataTable={setReloadDataTable}
+            isLoading={isLoading}
+            columnVisibility={columnVisibility}
+            onColumnVisibilityChange={handleColumnVisibilityChange}
+          />
+        </div>
       </Card>
 
       {/* Column Visibility Popover */}

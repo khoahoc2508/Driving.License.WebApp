@@ -448,10 +448,10 @@ const Table = ({
 
   return (
     <>
-      <div className='flex flex-col justify-between flex-1'>
-        <div className='overflow-x-auto custom-scrollbar'>
+      <div className='flex flex-col justify-between flex-1 h-full'>
+        <div className='overflow-x-auto custom-scrollbar' style={{ maxHeight: '100%', overflowY: 'auto', width: '100%' }}>
           <table
-            className={`${styles.table} ${styles.fixed}`}
+            className={`${styles.table} ${styles.fixed} ${styles.borderX}`}
             style={{
               borderCollapse: 'separate',
               borderSpacing: 0,
@@ -474,7 +474,7 @@ const Table = ({
                         colSpan={header.colSpan}
                         rowSpan={rowSpan}
                         style={{
-                          ...getCommonPinningStyles(header.column),
+                          ...getCommonPinningStyles(header.column)
                         }}
                       >
                         {flexRender(header.column.columnDef.header, header.getContext())}
