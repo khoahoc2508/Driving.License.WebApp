@@ -474,7 +474,11 @@ const Table = ({
                         colSpan={header.colSpan}
                         rowSpan={rowSpan}
                         style={{
-                          ...getCommonPinningStyles(header.column)
+                          ...getCommonPinningStyles(header.column),
+                          position: 'sticky',
+                          top: (header.depth - 1 || 0) * 56,
+                          zIndex: 3,
+                          backgroundColor: 'var(--mui-palette-customColors-tableHeaderBg)'
                         }}
                       >
                         {flexRender(header.column.columnDef.header, header.getContext())}
