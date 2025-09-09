@@ -477,7 +477,7 @@ const Table = ({
                           ...getCommonPinningStyles(header.column),
                           position: 'sticky',
                           top: (header.depth - 1 || 0) * 56,
-                          zIndex: 3,
+                          zIndex: header.column.getIsPinned() ? 4 : 3,
                           backgroundColor: 'var(--mui-palette-customColors-tableHeaderBg)'
                         }}
                       >
