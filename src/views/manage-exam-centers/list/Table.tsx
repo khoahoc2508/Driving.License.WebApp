@@ -231,7 +231,7 @@ const Table = ({
         <>
             <div className='flex flex-col justify-between flex-1'>
                 <div className='overflow-x-auto'>
-                    <table className={`${styles.table} ${styles.fixed}`}>
+                    <table className={`${styles.table} ${styles.fixed} ${styles.borderX}`}>
                         <thead>
                             {table.getHeaderGroups().map(headerGroup => (
                                 <tr key={headerGroup.id} className="h-9">

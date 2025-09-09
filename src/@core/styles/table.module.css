@@ -93,6 +93,9 @@
         & th:first-of-type {
           border-left: 0;
         }
+        /* & th:last-of-type {
+          border-right: 0;
+        } */
       }
     }
 
@@ -100,6 +103,9 @@
       td:first-of-type {
         border-left: 0;
       }
+      /* td:last-of-type {
+        border-right: 0;
+      } */
     }
   }
 }
