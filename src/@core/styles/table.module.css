@@ -86,6 +86,22 @@
       border-block-end: 1px solid var(--border-color);
     }
   }
+
+  &.borderX {
+    thead {
+      tr:first-of-type {
+        & th:first-of-type {
+          border-left: 0;
+        }
+      }
+    }
+
+    tbody {
+      td:first-of-type {
+        border-left: 0;
+      }
+    }
+  }
 }
 
 .cellWithInput input {
