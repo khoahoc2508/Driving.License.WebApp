@@ -89,7 +89,7 @@ const CustomPagination = ({
                                 },
                                 '&.MuiInputBase-root i': {
                                     right: '33px !important',
-                                    top: '0'
+                                    top: '-1px'
                                 },
                                 '& .MuiSelect-select': {
                                     padding: '0 10px !important'

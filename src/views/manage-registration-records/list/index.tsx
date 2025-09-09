@@ -16,7 +16,9 @@ import {
   Box,
   Typography,
   Chip,
-  Tooltip
+  Tooltip,
+  useTheme,
+  useMediaQuery
 } from '@mui/material'
 import Autocomplete from '@mui/material/Autocomplete'
 
@@ -80,6 +82,9 @@ const ManageRegistrationRecords = () => {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [columnVisibilitySearch, setColumnVisibilitySearch] = useState('');
   const [columnConfig, setColumnConfig] = useState<any[]>([]);
+
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   // Fixed column configuration - không thay đổi
   const fixedColumnConfig = [
@@ -388,7 +393,7 @@ const ManageRegistrationRecords = () => {
 
   return (
     <>
-      <Card className='flex flex-col h-[calc(100vh-116px)]'>
+      <Card className={`flex flex-col ${!isMobile ? 'h-[calc(100vh-116px)]' : 'h-full'}`}>
         <CardHeader title='Lọc hồ sơ' />
         <CardContent>
           <Grid container spacing={5} alignItems={'flex-end'}>
