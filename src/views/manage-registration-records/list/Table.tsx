@@ -307,6 +307,8 @@ const Table = ({
           </div>
         ),
         size: 120,
+        minSize: 120,
+        maxSize: 120,
       }),
       columnHelper.accessor('staffAssigneeName', {
         id: CONFIG.RegistrationRecordsTableColumns.NGUOI_PHU_TRACH,
