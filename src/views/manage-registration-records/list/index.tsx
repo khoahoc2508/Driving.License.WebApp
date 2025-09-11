@@ -588,8 +588,6 @@ const ManageRegistrationRecords = () => {
               })()}
             </Grid>
           </Grid>
-
-
         </CardContent>
         <Divider />
 
