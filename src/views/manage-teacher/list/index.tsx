@@ -9,7 +9,9 @@ import {
     CardContent,
     CardHeader,
     Divider,
-    TextField
+    TextField,
+    useMediaQuery,
+    useTheme
 } from '@mui/material'
 import Autocomplete from '@mui/material/Autocomplete'
 
@@ -23,6 +25,8 @@ import AddTeacherDialog, { DialogMode } from './AddTeacherDialog'
 import CONFIG from '@/configs/config'
 
 const ManageTeacher = () => {
+    const theme = useTheme()
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
     const [dataTable, setDataTable] = useState<AssigneeListType>([])
     const [search, setSearch] = useState('')
@@ -127,58 +131,57 @@ const ManageTeacher = () => {
     }
 
     return (
-        <Card className='h-full flex flex-col'>
-            <CardHeader title='Lọc giáo viên' />
-            <CardContent>
-                <Grid container spacing={5} alignItems={'flex-end'}>
-                    <Grid size={{ xs: 12, sm: 4, md: 3 }}>
-                        <Autocomplete
-                            value={statusValue}
-                            options={CONFIG.statusOptions}
-                            onChange={handleStatusSelect}
-                            id='teacher-status-autocomplete'
-                            getOptionLabel={option => option?.label || ''}
-                            isOptionEqualToValue={(opt, val) => opt.value === val.value}
-                            renderInput={params => <TextField {...params} label='Trạng thái' />}
-                            noOptionsText='Không có dữ liệu'
+        <>
+            <Card className={`flex flex-col ${!isMobile ? 'h-[calc(100vh-116px)]' : 'h-full'}`}>
+                <CardHeader title='Lọc giáo viên' />
+                <CardContent>
+                    <Grid container spacing={5} alignItems={'flex-end'}>
+                        <Grid size={{ xs: 12, sm: 4, md: 3 }}>
+                            <Autocomplete
+                                value={statusValue}
+                                options={CONFIG.statusOptions}
+                                onChange={handleStatusSelect}
+                                id='teacher-status-autocomplete'
+                                getOptionLabel={option => option?.label || ''}
+                                isOptionEqualToValue={(opt, val) => opt.value === val.value}
+                                renderInput={params => <TextField {...params} label='Trạng thái' />}
+                                noOptionsText='Không có dữ liệu'
+                            />
+                        </Grid>
+                        <Grid size={{ xs: 12, sm: 8, md: 9 }}>
+                            <Button variant='outlined' disabled={!statusValue} color='error' className='min-w-[170px]' onClick={clearAllFilters}>XÓA TẤT CẢ</Button>
+                        </Grid>
+                    </Grid>
+                </CardContent>
+                <Divider />
+                <div className='flex justify-between p-5 gap-4 flex-col sm:flex-row sm:items-center'>
+                    <div className='flex items-center gap-3 w-full sm:w-auto'>
+                        <DebouncedInput
+                            value={search}
+                            className='w-full'
+                            onDebounceChange={onChangeSearch}
+                            placeholder='Họ tên, số điện thoại'
                         />
-                    </Grid>
-                    <Grid size={{ xs: 12, sm: 8, md: 9 }}>
-                    </Grid>
-                </Grid>
-            </CardContent>
-            <CardContent>
-                <Grid size={{ xs: 12, sm: 8, md: 9 }} className='flex items-center gap-3'>
-                    <Button variant='outlined' disabled={!statusValue} color='error' className='min-w-[170px]' onClick={clearAllFilters}>XÓA TẤT CẢ</Button>
-                </Grid>
-            </CardContent>
-            <Divider />
-
-            <div className='flex justify-between p-5 gap-4 flex-col sm:flex-row sm:items-center'>
-                <div className='flex items-center gap-3 w-full sm:w-auto'>
-                    <DebouncedInput
-                        value={search}
-                        className='w-full'
-                        onDebounceChange={onChangeSearch}
-                        placeholder='Họ tên, số điện thoại'
+                    </div>
+                    <Button variant='contained' color='primary' className='w-full sm:w-auto' onClick={handleOpenAddDialog}>
+                        THÊM MỚI
+                    </Button>
+                </div>
+                <div className='flex-1 overflow-hidden'>
+                    <Table
+                        data={dataTable}
+                        setData={setDataTable}
+                        pageNumber={pageNumber}
+                        pageSize={pageSize}
+                        totalItems={totalItems}
+                        onPageChange={(page) => setPageNumber(page)}
+                        onPageSizeChange={(size) => setPageSize(size)}
+                        setReloadDataTable={setReloadDataTable}
+                        isLoading={isLoading}
+                        onEditTeacher={handleEditTeacher}
                     />
                 </div>
-                <Button variant='contained' color='primary' className='w-full sm:w-auto' onClick={handleOpenAddDialog}>
-                    THÊM MỚI
-                </Button>
-            </div>
-            <Table
-                data={dataTable}
-                setData={setDataTable}
-                pageNumber={pageNumber}
-                pageSize={pageSize}
-                totalItems={totalItems}
-                onPageChange={(page) => setPageNumber(page)}
-                onPageSizeChange={(size) => setPageSize(size)}
-                setReloadDataTable={setReloadDataTable}
-                isLoading={isLoading}
-                onEditTeacher={handleEditTeacher}
-            />
+            </Card>
 
             <AddTeacherDialog
                 open={openAddDialog}
@@ -187,7 +190,7 @@ const ManageTeacher = () => {
                 editData={editData}
                 mode={dialogMode}
             />
-        </Card>
+        </>
     )
 }
 

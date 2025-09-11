@@ -92,7 +92,7 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
         {/* Quản lý giáo viên */}
         <SubMenu label={"Quản lý giáo viên"} icon={<i className='ri-presentation-line' />}>
           <MenuItem href={`${CONFIG.Routers.ManageTeacher}/list`}>{"Danh sách giáo viên"}</MenuItem>
-          <MenuItem href={`${CONFIG.Routers.ManageTeacher}/schedule`}>{"Lịch làm việc"}</MenuItem>
+          {/* <MenuItem href={`${CONFIG.Routers.ManageTeacher}/schedule`}>{"Lịch làm việc"}</MenuItem> */}
         </SubMenu>
         {/* Quản lý CTV */}
         <SubMenu label={"Quản lý CTV"} icon={<i className='ri-user-community-fill' />}>

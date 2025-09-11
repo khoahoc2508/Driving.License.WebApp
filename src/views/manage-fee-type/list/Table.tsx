@@ -43,6 +43,7 @@ import feeTypeAPI from '@/libs/api/feeTypeAPI'
 import SkeletonTableRowsLoader from '@/components/common/SkeletonTableRowsLoader'
 import type { FeeTypeDto, FeeTypeListType } from '@/types/feeTypes'
 import CustomPagination from '@/components/common/CustomPagination'
+import { useScrollbarHover } from '@/hooks/useCustomScrollbar'
 
 // Column Definitions
 const columnHelper = createColumnHelper<FeeTypeDto>()
@@ -95,6 +96,9 @@ const Table = ({
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null);
 
+    // Custom scrollbar hook
+    const scrollbarRef = useScrollbarHover()
+
     const getStatusChip = (status: boolean | undefined) => {
         const label = status === true ? 'Đang hoạt động' : 'Dừng hoạt động'
         const color = status === true ? 'success' : 'error'
@@ -144,7 +148,7 @@ const Table = ({
                         </div>
                     )
                 },
-                size: 150,
+                size: 120,
                 minSize: 120
             }),
             columnHelper.accessor('description', {
@@ -266,9 +270,12 @@ const Table = ({
 
     return (
         <>
-            <div className='flex flex-col justify-between flex-1'>
-                <div className='overflow-x-auto'>
-                    <table className={styles.table}>
+            <div className='flex flex-col flex-1 h-full'>
+                <div ref={scrollbarRef} className='flex-1 overflow-x-auto custom-scrollbar' style={{ overflowY: 'auto', width: '100%' }}>
+                    <table className={`${styles.table} ${styles.fixed} ${styles.borderX}`} style={{
+                        borderCollapse: 'separate',
+                        borderSpacing: 0,
+                    }}>
                         <thead>
                             {table.getHeaderGroups().map(headerGroup => (
                                 <tr key={headerGroup.id} className="h-9">
@@ -277,7 +284,11 @@ const Table = ({
                                             <th key={header.id} style={{
                                                 width: header.getSize(),
                                                 minWidth: header.column.columnDef.minSize,
-                                                maxWidth: header.column.columnDef.maxSize
+                                                maxWidth: header.column.columnDef.maxSize,
+                                                position: 'sticky',
+                                                top: 0,
+                                                zIndex: 3,
+                                                backgroundColor: 'var(--mui-palette-customColors-tableHeaderBg)'
                                             }}>
                                                 {header.isPlaceholder ? null : (
                                                     <>
@@ -307,15 +318,17 @@ const Table = ({
                         </tbody>
                     </table>
                 </div>
-                <CustomPagination
-                    totalItems={totalItems}
-                    pageSize={pageSize}
-                    pageNumber={pageNumber}
-                    onPageChange={onPageChange}
-                    onPageSizeChange={onPageSizeChange}
-                    pageSizeOptions={[7, 10, 25, 50]}
-                    showPageSizeSelector={true}
-                />
+                <div className='flex-shrink-0'>
+                    <CustomPagination
+                        totalItems={totalItems}
+                        pageSize={pageSize}
+                        pageNumber={pageNumber}
+                        onPageChange={onPageChange}
+                        onPageSizeChange={onPageSizeChange}
+                        pageSizeOptions={[7, 10, 25, 50]}
+                        showPageSizeSelector={true}
+                    />
+                </div>
             </div>
             <Dialog
                 open={openDeleteDialog}
