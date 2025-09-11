@@ -235,12 +235,15 @@ const Table = ({
         <>
             <div className='flex flex-col flex-1 h-full'>
                 <div ref={scrollbarRef} className='flex-1 overflow-x-auto custom-scrollbar' style={{ overflowY: 'auto', width: '100%' }}>
-                    <table className={`${styles.table} ${styles.fixed} ${styles.borderX}`}>
+                    <table className={`${styles.table} ${styles.fixed} ${styles.borderX}`} style={{
+                        borderCollapse: 'separate',
+                        borderSpacing: 0,
+                    }}>
                         <thead>
                             {table.getHeaderGroups().map(headerGroup => (
                                 <tr key={headerGroup.id} className="h-9" style={{
                                     position: 'sticky',
-                                    top: -1,
+                                    top: 0,
                                     zIndex: 3,
                                     backgroundColor: 'var(--mui-palette-customColors-tableHeaderBg)'
                                 }}>
@@ -252,7 +255,6 @@ const Table = ({
                                                     width: header.getSize(),
                                                     minWidth: header.column.columnDef.minSize,
                                                     maxWidth: header.column.columnDef.maxSize,
-
                                                 }}
                                             >
                                                 {header.isPlaceholder ? null : (

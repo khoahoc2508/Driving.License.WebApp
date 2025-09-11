@@ -224,7 +224,7 @@ const Table = ({
             </Typography>
           </div>
         ),
-        size: 150,
+        size: 120,
       }),
       columnHelper.accessor('receivedDate', {
         id: CONFIG.RegistrationRecordsTableColumns.NGAY_NHAN_HS,
@@ -306,7 +306,7 @@ const Table = ({
             {getStatusChip(row.original?.status as RegistrationRecordStatus)}
           </div>
         ),
-        size: 150,
+        size: 120,
       }),
       columnHelper.accessor('staffAssigneeName', {
         id: CONFIG.RegistrationRecordsTableColumns.NGUOI_PHU_TRACH,
@@ -316,7 +316,7 @@ const Table = ({
             <Typography sx={{ maxWidth: 230, overflow: 'hidden', textOverflow: 'ellipsis' }}>{row.original?.staffAssigneeName || ''}</Typography>
           </div>
         ),
-        size: 230,
+        size: 220,
       }),
       columnHelper.accessor('collaboratorName', {
         id: CONFIG.RegistrationRecordsTableColumns.CTV,
@@ -455,7 +455,7 @@ const Table = ({
       <div className='flex flex-col flex-1 h-full'>
         <div ref={scrollbarRef} className='flex-1 overflow-x-auto custom-scrollbar' style={{ overflowY: 'auto', width: '100%' }}>
           <table
-            className={`${styles.table} ${styles.fixed} ${styles.borderX}`}
+            className={`${styles.table} ${styles.fixed} ${styles.borderX} ${styles.borderTop}`}
             style={{
               borderCollapse: 'separate',
               borderSpacing: 0,

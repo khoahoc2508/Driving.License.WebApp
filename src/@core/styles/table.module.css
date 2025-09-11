@@ -13,10 +13,6 @@
     text-align: center;
   }
 
-  &.fixed {
-    table-layout: fixed;
-  }
-
   thead {
     text-transform: uppercase;
     color: var(--mui-palette-text-primary);
@@ -31,6 +27,8 @@
       block-size: 56px;
       background-color: var(--mui-palette-customColors-tableHeaderBg);
       border: 1px solid var(--border-color);
+      /* border-top: 0px; */
+      /* border-bottom: 0; */
 
       &:not(:first-of-type):not(:last-of-type) {
         padding-block: 0.5rem;
@@ -85,6 +83,10 @@
     tr:not(:last-child) {
       border-block-end: 1px solid var(--border-color);
     }
+  }
+
+  &.fixed {
+    table-layout: fixed;
   }
 
   &.borderX {
