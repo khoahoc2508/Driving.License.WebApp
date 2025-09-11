@@ -452,8 +452,8 @@ const Table = ({
 
   return (
     <>
-      <div className='flex flex-col justify-between flex-1 h-full'>
-        <div ref={scrollbarRef} className='overflow-x-auto custom-scrollbar' style={{ maxHeight: '100%', overflowY: 'auto', width: '100%' }}>
+      <div className='flex flex-col flex-1 h-full'>
+        <div ref={scrollbarRef} className='flex-1 overflow-x-auto custom-scrollbar' style={{ overflowY: 'auto', width: '100%' }}>
           <table
             className={`${styles.table} ${styles.fixed} ${styles.borderX}`}
             style={{
@@ -547,15 +547,17 @@ const Table = ({
             </tbody>
           </table>
         </div>
-        <CustomPagination
-          totalItems={totalItems}
-          pageSize={pageSize}
-          pageNumber={pageNumber}
-          onPageChange={onPageChange}
-          onPageSizeChange={onPageSizeChange}
-          pageSizeOptions={[7, 10, 25, 50]}
-          showPageSizeSelector={true}
-        />
+        <div className='flex-shrink-0'>
+          <CustomPagination
+            totalItems={totalItems}
+            pageSize={pageSize}
+            pageNumber={pageNumber}
+            onPageChange={onPageChange}
+            onPageSizeChange={onPageSizeChange}
+            pageSizeOptions={[7, 10, 25, 50]}
+            showPageSizeSelector={true}
+          />
+        </div>
       </div>
 
       {/* Delete Confirmation Dialog */}
