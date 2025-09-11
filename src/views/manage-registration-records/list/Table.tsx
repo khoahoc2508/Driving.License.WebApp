@@ -48,6 +48,7 @@ import registrationRecordsAPI from '@/libs/api/registrationRecordsAPI'
 import SkeletonTableRowsLoader from '@/components/common/SkeletonTableRowsLoader'
 import type { GetRegistrationRecordsDto, GetRegistrationRecordsListType, RegistrationRecordStatus } from '@/types/registrationRecords'
 import CONFIG from '@/configs/config'
+import { useScrollbarHover } from '@/hooks/useCustomScrollbar'
 import { formatCurrency, formatDate } from '@/utils/helpers'
 
 // Column Definitions
@@ -104,6 +105,9 @@ const Table = ({
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null);
   const [columnPinning, setColumnPinning] = useState({})
+
+  // Custom scrollbar hook
+  const scrollbarRef = useScrollbarHover()
 
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -302,7 +306,7 @@ const Table = ({
             {getStatusChip(row.original?.status as RegistrationRecordStatus)}
           </div>
         ),
-        size: 120,
+        size: 150,
       }),
       columnHelper.accessor('staffAssigneeName', {
         id: CONFIG.RegistrationRecordsTableColumns.NGUOI_PHU_TRACH,
@@ -449,7 +453,7 @@ const Table = ({
   return (
     <>
       <div className='flex flex-col justify-between flex-1 h-full'>
-        <div className='overflow-x-auto custom-scrollbar' style={{ maxHeight: '100%', overflowY: 'auto', width: '100%' }}>
+        <div ref={scrollbarRef} className='overflow-x-auto custom-scrollbar' style={{ maxHeight: '100%', overflowY: 'auto', width: '100%' }}>
           <table
             className={`${styles.table} ${styles.fixed} ${styles.borderX}`}
             style={{
