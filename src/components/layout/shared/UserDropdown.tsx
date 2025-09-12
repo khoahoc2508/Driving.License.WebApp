@@ -50,7 +50,6 @@ const UserDropdown = () => {
 
   const { data } = useSession()
 
-  console.log('data', data)
   const { settings } = useSettings()
 
   const handleDropdownOpen = () => {

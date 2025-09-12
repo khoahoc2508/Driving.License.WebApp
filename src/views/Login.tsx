@@ -7,7 +7,6 @@ import { useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 // MUI Imports
-import Alert from '@mui/material/Alert'
 import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import InputAdornment from '@mui/material/InputAdornment'
@@ -80,8 +79,8 @@ const Login = ({ mode }: { mode: Mode }) => {
   } = useForm<FormData>({
     resolver: valibotResolver(schema),
     defaultValues: {
-      username: 'Ngotrungkien2k2',
-      password: 'Kiennt@123'
+      username: '',
+      password: ''
     }
   })
 
@@ -158,15 +157,15 @@ const Login = ({ mode }: { mode: Mode }) => {
         </div>
         <div className='flex flex-col gap-5 is-full sm:is-auto md:is-full sm:max-is-[400px] md:max-is-[unset]'>
           <div>
-            <Typography variant='h4'>{`Đăng nhập !👋🏻`}</Typography>
-            <Typography>Please sign-in to your account and start the adventure</Typography>
+            <Typography variant='h4' color='primary.main'>{`Đăng nhập !👋🏻`}</Typography>
+            <Typography >Chào mừng bạn đến với banglaixanh.vn</Typography>
           </div>
-          <Alert icon={false} className='bg-primaryLight'>
+          {/* <Alert icon={false} className='bg-primaryLight'>
             <Typography variant='body2' color='primary.main'>
               Username: <span className='font-medium'>Ngotrungkien2k2</span> / Pass:{' '}
               <span className='font-medium'>Kiennt@123</span>
             </Typography>
-          </Alert>
+          </Alert> */}
 
           <form
             noValidate
@@ -205,7 +204,7 @@ const Login = ({ mode }: { mode: Mode }) => {
                 <TextField
                   {...field}
                   fullWidth
-                  label='Password'
+                  label='Mật khẩu'
                   id='login-password'
                   type={isPasswordShown ? 'text' : 'password'}
                   onChange={e => {
