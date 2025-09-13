@@ -1,7 +1,9 @@
 // lib/axios.ts
-import CONFIG from '@/configs/config'
 import axios from 'axios'
+
 import { getSession, signOut } from 'next-auth/react'
+
+import CONFIG from '../configs/config'
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,

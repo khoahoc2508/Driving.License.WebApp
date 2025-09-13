@@ -5,9 +5,9 @@ import { useState } from 'react'
 
 // Next Imports
 import Link from 'next/link'
+import { useRouter, usePathname } from 'next/navigation'
 
 // MUI Imports
-import { redirect, usePathname } from 'next/navigation'
 
 import IconButton from '@mui/material/IconButton'
 import Button from '@mui/material/Button'
@@ -46,6 +46,7 @@ const Header = ({ mode }: { mode: Mode }) => {
   const [openDialog, setOpenDialog] = useState(false)
 
   // Hooks
+  const router = useRouter()
   const isBelowLgScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down('lg'))
   const pathName = usePathname()
   const { data: session, status } = useSession()
@@ -89,7 +90,7 @@ const Header = ({ mode }: { mode: Mode }) => {
             ) : (
               <Button
                 onClick={() => {
-                  redirect(`${CONFIG.Routers.Login}?redirectTo=${encodeURIComponent(pathName)}`)
+                  router.push(`${CONFIG.Routers.Login}?redirectTo=${encodeURIComponent(pathName)}`)
                 }}
                 variant='outlined'
                 className='whitespace-nowrap'

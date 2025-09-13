@@ -1,5 +1,4 @@
 // Third-party Imports
-import CONFIG from '@/configs/config'
 import type { NextAuthOptions } from 'next-auth'
 import CredentialProvider from 'next-auth/providers/credentials'
 
@@ -107,7 +106,7 @@ export const authOptions: NextAuthOptions = {
 
   // ** Please refer to https://next-auth.js.org/configuration/options#pages for more `pages` options
   pages: {
-    signIn: CONFIG.Routers.Login
+    signIn: '/login'
   },
 
   // ** Please refer to https://next-auth.js.org/configuration/options#callbacks for more `callbacks` options

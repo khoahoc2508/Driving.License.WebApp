@@ -19,7 +19,7 @@ const NavbarContent = () => {
         <ModeDropdown />
       </div>
       <div className='flex items-center'>
-        <UserDropdown />
+        <UserDropdown isHomePage={false} />
       </div>
     </div>
   )
