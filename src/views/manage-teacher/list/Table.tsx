@@ -174,7 +174,7 @@ const Table = ({
                             <i className="ri-edit-box-line text-textSecondary" />
                         </IconButton>
 
-                        <IconButton onClick={() => handleOpenDeleteDialog(row.original.id)}>
+                        <IconButton disabled={!row.original.createdBy} onClick={() => handleOpenDeleteDialog(row.original.id)}>
                             <i className='ri-delete-bin-7-line text-textSecondary' />
                         </IconButton>
                     </div>
