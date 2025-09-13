@@ -1146,10 +1146,13 @@ export interface components {
     schemas: {
         PaginatedListOfAssigneeDto: {
             data?: components["schemas"]["AssigneeDto"][];
+
             /** Format: int32 */
             pageNumber?: number;
+
             /** Format: int32 */
             totalPages?: number;
+
             /** Format: int32 */
             totalCount?: number;
             hasPreviousPage?: boolean;
@@ -1164,6 +1167,7 @@ export interface components {
             createdBy?: string | null;
             assigneeType?: components["schemas"]["AssigneeType"];
         };
+
         /** @enum {integer} */
         AssigneeType: 1 | 2 | 3;
         BaseResponseOfListOfAssigneeDto: components["schemas"]["BaseResponse"] & {
@@ -1174,6 +1178,7 @@ export interface components {
             message?: string | null;
             statusCode?: components["schemas"]["HttpStatusCode"];
         };
+
         /** @enum {integer} */
         HttpStatusCode: 100 | 101 | 102 | 103 | 200 | 201 | 202 | 203 | 204 | 205 | 206 | 207 | 208 | 226 | 300 | 300 | 301 | 301 | 302 | 302 | 303 | 303 | 304 | 305 | 306 | 307 | 307 | 308 | 400 | 401 | 402 | 403 | 404 | 405 | 406 | 407 | 408 | 409 | 410 | 411 | 412 | 413 | 414 | 415 | 416 | 417 | 421 | 422 | 422 | 423 | 424 | 426 | 428 | 429 | 431 | 451 | 500 | 501 | 502 | 503 | 504 | 505 | 506 | 507 | 508 | 510 | 511;
         BaseResponseOfAssigneeDto: components["schemas"]["BaseResponse"] & {
@@ -1215,10 +1220,13 @@ export interface components {
         };
         PaginatedListOfGetCarsDto: {
             data?: components["schemas"]["GetCarsDto"][];
+
             /** Format: int32 */
             pageNumber?: number;
+
             /** Format: int32 */
             totalPages?: number;
+
             /** Format: int32 */
             totalCount?: number;
             hasPreviousPage?: boolean;
@@ -1269,10 +1277,13 @@ export interface components {
         };
         PaginatedListOfGetDATDevicesDto: {
             data?: components["schemas"]["GetDATDevicesDto"][];
+
             /** Format: int32 */
             pageNumber?: number;
+
             /** Format: int32 */
             totalPages?: number;
+
             /** Format: int32 */
             totalCount?: number;
             hasPreviousPage?: boolean;
@@ -1316,10 +1327,13 @@ export interface components {
         };
         PaginatedListOfGetExamCentersDto: {
             data?: components["schemas"]["GetExamCentersDto"][];
+
             /** Format: int32 */
             pageNumber?: number;
+
             /** Format: int32 */
             totalPages?: number;
+
             /** Format: int32 */
             totalCount?: number;
             hasPreviousPage?: boolean;
@@ -1363,10 +1377,13 @@ export interface components {
         };
         PaginatedListOfGetExamYardsDto: {
             data?: components["schemas"]["GetExamYardsDto"][];
+
             /** Format: int32 */
             pageNumber?: number;
+
             /** Format: int32 */
             totalPages?: number;
+
             /** Format: int32 */
             totalCount?: number;
             hasPreviousPage?: boolean;
@@ -1410,10 +1427,13 @@ export interface components {
         };
         PaginatedListOfFeeTypeDto: {
             data?: components["schemas"]["FeeTypeDto"][];
+
             /** Format: int32 */
             pageNumber?: number;
+
             /** Format: int32 */
             totalPages?: number;
+
             /** Format: int32 */
             totalCount?: number;
             hasPreviousPage?: boolean;
@@ -1451,8 +1471,10 @@ export interface components {
         };
         CreatePaymentHistoryCommand: {
             paymentId?: string;
+
             /** Format: decimal */
             amount?: number;
+
             /** Format: date-time */
             paymentDate?: string;
             note?: string;
@@ -1461,8 +1483,10 @@ export interface components {
             id?: string;
             paymentId?: string;
             description?: string;
+
             /** Format: decimal */
             amount?: number;
+
             /** Format: date-time */
             paymentDate?: string;
             note?: string;
@@ -1472,8 +1496,10 @@ export interface components {
         };
         GetPaymentHistoryDto: {
             id?: string;
+
             /** Format: decimal */
             amount?: number;
+
             /** Format: date-time */
             paymentDate?: string;
             note?: string;
@@ -1485,8 +1511,10 @@ export interface components {
         GetPaymentHistoryDetailDto: {
             id?: string;
             paymentId?: string;
+
             /** Format: decimal */
             amount?: number;
+
             /** Format: date-time */
             paymentDate?: string;
             note?: string;
@@ -1497,11 +1525,13 @@ export interface components {
         GetPaymentDto: {
             id?: string;
             feeTypeName?: string;
+
             /** Format: decimal */
             amount?: number;
             note?: string;
             status?: components["schemas"]["PaymentStatus"];
         };
+
         /** @enum {integer} */
         PaymentStatus: 0 | 1 | 2 | 3;
         BaseResponseOfGetPaymentDetailDto: components["schemas"]["BaseResponse"] & {
@@ -1510,6 +1540,7 @@ export interface components {
         GetPaymentDetailDto: {
             feeTypeId?: string;
             registrationRecordId?: string;
+
             /** Format: decimal */
             amount?: number | null;
             note?: string;
@@ -1517,6 +1548,7 @@ export interface components {
         CreatePaymentCommand: {
             feeTypeId?: string;
             registrationRecordId?: string;
+
             /** Format: decimal */
             amount?: number;
             note?: string;
@@ -1525,6 +1557,7 @@ export interface components {
             id?: string;
             feeTypeId?: string;
             registrationRecordId?: string;
+
             /** Format: decimal */
             amount?: number;
             note?: string;
@@ -1541,6 +1574,7 @@ export interface components {
         };
         FrontCitizenCardDto: {
             fullName?: string;
+
             /** Format: date */
             birthday?: string;
             gender?: components["schemas"]["GenderType"];
@@ -1549,6 +1583,7 @@ export interface components {
             nationality?: string;
             imageUrl?: string | null;
         };
+
         /** @enum {integer} */
         GenderType: 0 | 1 | 2;
         Address: {
@@ -1557,6 +1592,7 @@ export interface components {
             wardCode?: string;
         };
         BackCitizenCardDto: {
+
             /** Format: date */
             issuedDate?: string;
             issuedBy?: string;
@@ -1571,11 +1607,13 @@ export interface components {
         CitizenCardPdfRequest: {
             id?: string;
             fullName?: string;
+
             /** Format: date */
             birthday?: string;
             placeOfOrigin?: string;
             placeOfResidence?: string;
             nationality?: string;
+
             /** Format: date */
             issuedDate?: string;
             issuedBy?: string;
@@ -1587,6 +1625,7 @@ export interface components {
         };
         QuestionDetailDto: {
             id?: string;
+
             /** Format: int32 */
             order?: number;
             content?: string;
@@ -1597,6 +1636,7 @@ export interface components {
         };
         AnswerDto: {
             id?: string;
+
             /** Format: int32 */
             order?: number;
             isCorrect?: boolean;
@@ -1606,6 +1646,7 @@ export interface components {
             licenseTypeCode?: string;
             avatarUrl?: string;
             fullname?: string;
+
             /** Format: date */
             birthday?: string;
             gender?: components["schemas"]["GenderType"];
@@ -1615,8 +1656,10 @@ export interface components {
             citizenIdNumber?: string;
             citizenIdFrontImageUrl?: string;
             citizenIdBackImageUrl?: string;
+
             /** Format: date-time */
             receivedDate?: string;
+
             /** Format: date-time */
             healthCheckDate?: string | null;
             staffAssigneeId?: string | null;
@@ -1628,6 +1671,7 @@ export interface components {
             licenseTypeCode?: string;
             avatarUrl?: string;
             fullname?: string;
+
             /** Format: date */
             birthday?: string;
             gender?: components["schemas"]["GenderType"];
@@ -1637,8 +1681,10 @@ export interface components {
             citizenIdNumber?: string;
             citizenIdFrontImageUrl?: string;
             citizenIdBackImageUrl?: string;
+
             /** Format: date-time */
             receivedDate?: string;
+
             /** Format: date-time */
             healthCheckDate?: string | null;
             staffAssigneeId?: string | null;
@@ -1647,10 +1693,13 @@ export interface components {
         };
         PaginatedListOfGetRegistrationRecordsDto: {
             data?: components["schemas"]["GetRegistrationRecordsDto"][];
+
             /** Format: int32 */
             pageNumber?: number;
+
             /** Format: int32 */
             totalPages?: number;
+
             /** Format: int32 */
             totalCount?: number;
             hasPreviousPage?: boolean;
@@ -1662,11 +1711,14 @@ export interface components {
             avatarUrl?: string;
             fullname?: string;
             phone?: string;
+
             /** Format: date */
             birthday?: string;
             citizenIdNumber?: string;
+
             /** Format: date-time */
             receivedDate?: string;
+
             /** Format: date-time */
             healthCheckDate?: string | null;
             payment?: components["schemas"]["GetRegistrationRecordsPaymentDto"];
@@ -1680,13 +1732,17 @@ export interface components {
             name?: string;
         };
         GetRegistrationRecordsPaymentDto: {
+
             /** Format: decimal */
             totalAmount?: number | null;
+
             /** Format: decimal */
             paidAmount?: number | null;
+
             /** Format: decimal */
             remainingAmount?: number | null;
         };
+
         /** @enum {integer} */
         RegistrationRecordStatus: 0 | 1 | 2;
         BaseResponseOfGetRegistrationRecordDetailDto: components["schemas"]["BaseResponse"] & {
@@ -1698,6 +1754,7 @@ export interface components {
             licenseTypeName?: string;
             avatarUrl?: string;
             fullname?: string;
+
             /** Format: date */
             birthday?: string;
             gender?: components["schemas"]["GenderType"];
@@ -1707,8 +1764,10 @@ export interface components {
             citizenIdNumber?: string;
             citizenIdFrontImageUrl?: string;
             citizenIdBackImageUrl?: string;
+
             /** Format: date-time */
             receivedDate?: string;
+
             /** Format: date-time */
             healthCheckDate?: string | null;
             staffAssigneeId?: string | null;
@@ -1725,10 +1784,13 @@ export interface components {
             fullName?: string;
             licenseTypeName?: string;
             phone?: string;
+
             /** Format: decimal */
             totalAmount?: number | null;
+
             /** Format: decimal */
             paidAmount?: number | null;
+
             /** Format: decimal */
             remainingAmount?: number | null;
             isApproved?: boolean;
@@ -1751,26 +1813,33 @@ export interface components {
             status?: components["schemas"]["StepStatusType"];
             assignee?: components["schemas"]["ProcessingStepAssigneeDto"] | null;
         };
+
         /** @enum {integer} */
         StepStatusType: 0 | 1 | 2;
         ProcessingStepAssigneeDto: {
             name?: string;
             phone?: string;
         };
+
         /** @enum {integer} */
         ExamResultStatusType: 1 | 2 | 3;
         PaymentSummaryDto: {
+
             /** Format: decimal */
             totalAmount?: number | null;
+
             /** Format: decimal */
             paidAmount?: number | null;
+
             /** Format: decimal */
             remainingAmount?: number | null;
         };
         GeneralInfoDto: {
             phone?: string;
+
             /** Format: date-time */
             healthCheckDate?: string | null;
+
             /** Format: date-time */
             receivedDate?: string | null;
             note?: string | null;
@@ -1810,6 +1879,7 @@ export interface components {
         GetStepsDto: {
             id?: string;
             name?: string;
+
             /** Format: int32 */
             order?: number;
             status?: components["schemas"]["StepStatusType"];
@@ -1841,6 +1911,7 @@ export interface components {
             active?: boolean;
             readOnly?: boolean;
             key?: string;
+
             /** Format: int32 */
             order?: number;
             prefix?: string | null;
@@ -1848,6 +1919,7 @@ export interface components {
             isShowOverview?: boolean;
             isCurrency?: boolean;
         };
+
         /** @enum {integer} */
         InputType: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
         DataSourceConfigDto: {
@@ -1882,6 +1954,7 @@ export interface components {
         StepActionTemplateDto: {
             id?: string;
             name?: string;
+
             /** Format: int32 */
             order?: number;
             key?: string;
@@ -1892,6 +1965,7 @@ export interface components {
             id?: string;
             key?: string;
             name?: string;
+
             /** Format: int32 */
             order?: number;
             note?: string;
@@ -1904,6 +1978,7 @@ export interface components {
         GetStepDto: {
             id?: string;
             name?: string;
+
             /** Format: int32 */
             order?: number;
             status?: components["schemas"]["StepStatusType"];
@@ -1933,6 +2008,7 @@ export interface components {
             fullName?: string;
             avatarUrl?: string;
         };
+
         /** @enum {integer} */
         TaskStatusType: 0 | 1 | 2;
         TaskFieldInstanceSubmissionDto2: {
@@ -1945,6 +2021,7 @@ export interface components {
         TaskActionTemplateDto: {
             id?: string;
             name?: string;
+
             /** Format: int32 */
             order?: number;
             enable?: boolean;
@@ -1954,6 +2031,7 @@ export interface components {
             id?: string;
             key?: string;
             name?: string;
+
             /** Format: int32 */
             order?: number;
             note?: string;
@@ -2011,12 +2089,16 @@ export interface components {
             id?: string;
             name?: string;
             description?: string;
+
             /** Format: int32 */
             totalQuestions?: number;
+
             /** Format: int32 */
             passingScore?: number;
+
             /** Format: int32 */
             durationMinutes?: number;
+
             /** Format: int32 */
             order?: number;
             examType?: components["schemas"]["ExamType"];
@@ -2024,8 +2106,10 @@ export interface components {
             licenseTypeCode?: string;
             groupExamId?: string;
         };
+
         /** @enum {integer} */
         ExamType: 1 | 2;
+
         /** @enum {integer} */
         GroupExamType: 0 | 1 | 2;
         GenerateExamsCommand: {
@@ -2033,14 +2117,19 @@ export interface components {
             licenseTypeCode?: string;
             questionNumbers?: number[];
             criticalQuestionNumbers?: number[];
+
             /** Format: int32 */
             numberOfExams?: number;
+
             /** Format: int32 */
             questionsPerExam?: number;
+
             /** Format: int32 */
             criticalQuestionsPerExam?: number;
+
             /** Format: int32 */
             durationMinutes?: number;
+
             /** Format: int32 */
             passingScore?: number;
         };
@@ -2068,10 +2157,13 @@ export interface components {
         ExamSubmissionResultDto: {
             id?: string;
             licenseTypeDto?: components["schemas"]["LicenseTypeDto"];
+
             /** Format: duration */
             duration?: string;
+
             /** Format: int32 */
             totalQuestions?: number;
+
             /** Format: int32 */
             correctAnswerCount?: number;
             hasCriticalMistake?: boolean;
@@ -2087,6 +2179,7 @@ export interface components {
         SubmitQuestionDto: {
             id?: string;
             explanation?: string | null;
+
             /** Format: int32 */
             order?: number;
             content?: string;
@@ -2096,6 +2189,7 @@ export interface components {
         };
         SubmitAnswerDto: {
             id?: string;
+
             /** Format: int32 */
             order?: number;
             isCorrect?: boolean;
@@ -2126,6 +2220,7 @@ export interface components {
             name?: string;
             description?: string;
             iconUrl?: string | null;
+
             /** Format: int32 */
             order?: number;
             licenseTypeCode?: string | null;
@@ -2145,6 +2240,7 @@ export interface components {
         };
         QuestionDto: {
             id?: string;
+
             /** Format: int32 */
             order?: number;
             content?: string;
@@ -2154,6 +2250,7 @@ export interface components {
         };
         AnswerDto2: {
             id?: string;
+
             /** Format: int32 */
             order?: number;
             content?: string;
@@ -3353,6 +3450,7 @@ export interface operations {
         requestBody?: {
             content: {
                 "multipart/form-data": {
+
                     /** Format: binary */
                     FormFile?: string | null;
                 };
@@ -3630,6 +3728,7 @@ export interface operations {
         requestBody?: {
             content: {
                 "multipart/form-data": {
+
                     /** Format: binary */
                     File?: string | null;
                 };

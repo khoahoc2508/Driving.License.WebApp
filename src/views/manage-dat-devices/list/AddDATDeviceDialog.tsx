@@ -124,11 +124,13 @@ const AddDATDeviceDialog = ({
             // const errorMessage = mode === DialogMode.EDIT ? 'Có lỗi xảy ra khi chỉnh sửa thiết bị DAT' : 'Có lỗi xảy ra khi thêm thiết bị DAT'
             Object.keys(error.response.data.errors).forEach(fieldName => {
                 const formFieldName = fieldName.toLowerCase()
+
                 setError(formFieldName as keyof FormData, {
                     type: 'manual',
                     message: error.response.data.errors[fieldName]
                 })
             })
+
             // toast.error(error?.message || errorMessage)
         } finally {
             setIsSubmitting(false)

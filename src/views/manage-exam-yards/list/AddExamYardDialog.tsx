@@ -126,6 +126,7 @@ const AddExamYardDialog = ({
 
             Object.keys(error.response.data.errors).forEach(fieldName => {
                 const formFieldName = fieldName.toLowerCase()
+
                 setError(formFieldName as keyof FormData, {
                     type: 'manual',
                     message: error.response.data.errors[fieldName]

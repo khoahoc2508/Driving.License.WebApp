@@ -104,11 +104,13 @@ const AddFeeTypeDialog = ({
             // const errorMessage = mode === DialogMode.EDIT ? 'Có lỗi xảy ra khi chỉnh sửa lệ phí' : 'Có lỗi xảy ra khi thêm lệ phí'
             Object.keys(error.response.data.errors).forEach(fieldName => {
                 const formFieldName = fieldName.toLowerCase()
+
                 setError(formFieldName as keyof UpsertFeeTypeCommand, {
                     type: 'manual',
                     message: error.response.data.errors[fieldName]
                 })
             })
+
             // toast.error(error?.message || errorMessage)
         } finally {
             setIsSubmitting(false)
