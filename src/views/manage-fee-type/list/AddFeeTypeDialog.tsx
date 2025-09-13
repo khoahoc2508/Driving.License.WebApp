@@ -53,6 +53,7 @@ const AddFeeTypeDialog = ({
         control,
         handleSubmit,
         reset,
+        setError,
         setValue,
         formState: { errors }
     } = useForm<UpsertFeeTypeCommand>({
@@ -100,9 +101,15 @@ const AddFeeTypeDialog = ({
                 toast.error(response.data.message || errorMessage)
             }
         } catch (error: any) {
-            const errorMessage = mode === DialogMode.EDIT ? 'Có lỗi xảy ra khi chỉnh sửa lệ phí' : 'Có lỗi xảy ra khi thêm lệ phí'
-
-            toast.error(error?.message || errorMessage)
+            // const errorMessage = mode === DialogMode.EDIT ? 'Có lỗi xảy ra khi chỉnh sửa lệ phí' : 'Có lỗi xảy ra khi thêm lệ phí'
+            Object.keys(error.response.data.errors).forEach(fieldName => {
+                const formFieldName = fieldName.toLowerCase()
+                setError(formFieldName as keyof UpsertFeeTypeCommand, {
+                    type: 'manual',
+                    message: error.response.data.errors[fieldName]
+                })
+            })
+            // toast.error(error?.message || errorMessage)
         } finally {
             setIsSubmitting(false)
         }

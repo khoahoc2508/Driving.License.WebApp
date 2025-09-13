@@ -58,6 +58,7 @@ const AddExamYardDialog = ({
         handleSubmit,
         reset,
         setValue,
+        setError,
         formState: { errors }
     } = useForm<FormData>({
         defaultValues: {
@@ -120,9 +121,16 @@ const AddExamYardDialog = ({
                 }
             }
         } catch (error: any) {
-            const errorMessage = mode === DialogMode.EDIT ? 'Có lỗi xảy ra khi chỉnh sửa sân thi' : 'Có lỗi xảy ra khi thêm sân thi'
+            // const errorMessage = mode === DialogMode.EDIT ? 'Có lỗi xảy ra khi chỉnh sửa sân thi' : 'Có lỗi xảy ra khi thêm sân thi'
+            // toast.error(error?.message || errorMessage)
 
-            toast.error(error?.message || errorMessage)
+            Object.keys(error.response.data.errors).forEach(fieldName => {
+                const formFieldName = fieldName.toLowerCase()
+                setError(formFieldName as keyof FormData, {
+                    type: 'manual',
+                    message: error.response.data.errors[fieldName]
+                })
+            })
         } finally {
             setIsSubmitting(false)
         }

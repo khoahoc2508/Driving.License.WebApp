@@ -58,6 +58,7 @@ const AddExamCenterDialog = ({
         handleSubmit,
         reset,
         setValue,
+        setError,
         formState: { errors }
     } = useForm<FormData>({
         defaultValues: {
@@ -120,9 +121,15 @@ const AddExamCenterDialog = ({
                 }
             }
         } catch (error: any) {
-            const errorMessage = mode === DialogMode.EDIT ? 'Có lỗi xảy ra khi chỉnh sửa trường thi' : 'Có lỗi xảy ra khi thêm trường thi'
-
-            toast.error(error?.message || errorMessage)
+            // const errorMessage = mode === DialogMode.EDIT ? 'Có lỗi xảy ra khi chỉnh sửa trường thi' : 'Có lỗi xảy ra khi thêm trường thi'
+            Object.keys(error.response.data.errors).forEach(fieldName => {
+                const formFieldName = fieldName.toLowerCase()
+                setError(formFieldName as keyof FormData, {
+                    type: 'manual',
+                    message: error.response.data.errors[fieldName]
+                })
+            })
+            // toast.error(error?.message || errorMessage)
         } finally {
             setIsSubmitting(false)
         }
