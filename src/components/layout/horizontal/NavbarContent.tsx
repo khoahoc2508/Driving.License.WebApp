@@ -30,7 +30,7 @@ const NavbarContent = () => {
       </div>
       <div className='flex items-center'>
         <ModeDropdown />
-        <UserDropdown />
+        <UserDropdown isHomePage={false} />
       </div>
     </div>
   )

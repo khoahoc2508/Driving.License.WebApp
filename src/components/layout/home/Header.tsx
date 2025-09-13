@@ -7,12 +7,16 @@ import { useState } from 'react'
 import Link from 'next/link'
 
 // MUI Imports
-import { usePathname } from 'next/navigation'
+import { redirect, usePathname, useRouter } from 'next/navigation'
 
 import IconButton from '@mui/material/IconButton'
+import Button from '@mui/material/Button'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import useScrollTrigger from '@mui/material/useScrollTrigger'
 import type { Theme } from '@mui/material/styles'
+
+// Next Auth Imports
+import { useSession } from 'next-auth/react'
 
 // Third-party Imports
 import classnames from 'classnames'
@@ -34,15 +38,19 @@ import { frontLayoutClasses } from '@layouts/utils/layoutClasses'
 // Styles Imports
 import styles from './styles.module.css'
 import CONFIG from '@/configs/config'
+import UserDropdown from '../shared/UserDropdown'
 
 const Header = ({ mode }: { mode: Mode }) => {
   // States
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [openDialog, setOpenDialog] = useState(false)
 
+  const router = useRouter()
+
   // Hooks
   const isBelowLgScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down('lg'))
   const pathName = usePathname()
+  const { data: session, status } = useSession()
 
   // Detect window scroll
   const trigger = useScrollTrigger({
@@ -74,6 +82,24 @@ const Header = ({ mode }: { mode: Mode }) => {
           )}
           <div className='flex items-center gap-2 sm:gap-4'>
             <ModeDropdown />
+            {status === 'loading' ? (
+              <div className='flex items-center justify-center w-10 h-10'>
+                <div className='animate-spin rounded-full h-6 w-6 border-b-2 border-primary'></div>
+              </div>
+            ) : session?.user ? (
+              <UserDropdown isHomePage={true} />
+            ) : (
+              <Button
+                onClick={() => {
+                  redirect(`${CONFIG.Routers.Login}?redirectTo=${encodeURIComponent(pathName)}`)
+                }}
+                variant='outlined'
+                className='whitespace-nowrap'
+                size='small'
+              >
+                Đăng nhập
+              </Button>
+            )}
             {/* {isBelowLgScreen ? (
               <CustomIconButton
                 component={Link}

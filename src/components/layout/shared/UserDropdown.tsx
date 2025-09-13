@@ -26,6 +26,8 @@ import { signOut, useSession } from 'next-auth/react'
 
 import AppLoading from '@/@core/components/AppLoading'
 import { useSettings } from '@core/hooks/useSettings'
+import { MenuItem } from '@mui/material'
+import CONFIG from '@/configs/config'
 
 // Styled component for badge content
 const BadgeContentSpan = styled('span')({
@@ -37,7 +39,15 @@ const BadgeContentSpan = styled('span')({
   boxShadow: '0 0 0 2px var(--mui-palette-background-paper)'
 })
 
-const UserDropdown = () => {
+// props, set default value
+type UserDropdownProps = {
+  isHomePage: boolean
+}
+
+const UserDropdown = (props: UserDropdownProps) => {
+  // Props
+  const { isHomePage } = props
+
   // States
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -137,22 +147,21 @@ const UserDropdown = () => {
                     </div>
                   </div>
                   <Divider className='mlb-1' />
-                  {/* <MenuItem className='gap-3' onClick={e => handleDropdownClose(e)}>
-                    <i className='ri-user-3-line' />
-                    <Typography color='text.primary'>My Profile</Typography>
-                  </MenuItem>
-                  <MenuItem className='gap-3' onClick={e => handleDropdownClose(e)}>
-                    <i className='ri-settings-4-line' />
-                    <Typography color='text.primary'>Settings</Typography>
-                  </MenuItem>
-                  <MenuItem className='gap-3' onClick={e => handleDropdownClose(e)}>
-                    <i className='ri-money-dollar-circle-line' />
-                    <Typography color='text.primary'>Pricing</Typography>
-                  </MenuItem>
-                  <MenuItem className='gap-3' onClick={e => handleDropdownClose(e)}>
-                    <i className='ri-question-line' />
-                    <Typography color='text.primary'>FAQ</Typography>
-                  </MenuItem> */}
+                  {
+                    isHomePage && (
+                      <>
+                        <MenuItem className='gap-3' onClick={e => {
+                          handleDropdownClose(e)
+                          window.open(`${CONFIG.Routers.ManageRegistrationRecords}/list`, '_blank')
+                        }}>
+                          <i className="ri-corner-up-right-double-line"></i>
+                          <Typography color='text.primary'>Đi đến trang quản lý</Typography>
+                        </MenuItem>
+
+                        <Divider className='mlb-1' />
+                      </>
+                    )
+                  }
                   <div className='flex items-center plb-2 pli-4'>
                     <Button
                       fullWidth
