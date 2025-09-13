@@ -7,14 +7,15 @@ import { redirect, usePathname } from 'next/navigation'
 
 // Config Imports
 import themeConfig from '@configs/themeConfig'
+import CONFIG from '@/configs/config'
 
 // Util Imports
 
 const AuthRedirect = () => {
   const pathname = usePathname()
 
-  const redirectUrl = `/login?redirectTo=${encodeURIComponent(pathname)}`
-  const login = `/login`
+  const redirectUrl = `${CONFIG.Routers.Login}?redirectTo=${encodeURIComponent(pathname)}`
+  const login = CONFIG.Routers.Login
   const homePage = themeConfig.homePageUrl
 
   return redirect(pathname === login ? login : pathname === homePage ? login : redirectUrl)

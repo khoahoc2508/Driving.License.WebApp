@@ -24,9 +24,10 @@ import { signOut, useSession } from 'next-auth/react'
 
 // Hook Imports
 
+import { MenuItem } from '@mui/material'
+
 import AppLoading from '@/@core/components/AppLoading'
 import { useSettings } from '@core/hooks/useSettings'
-import { MenuItem } from '@mui/material'
 import CONFIG from '@/configs/config'
 
 // Styled component for badge content
@@ -59,6 +60,7 @@ const UserDropdown = (props: UserDropdownProps) => {
   const router = useRouter()
 
   const { data } = useSession()
+
   console.log(data)
 
   const { settings } = useSettings()

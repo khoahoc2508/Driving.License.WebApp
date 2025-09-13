@@ -281,15 +281,15 @@ const DropdownMenu = (props: Props) => {
         })}
         {...(isBelowLgScreen
           ? {
-              onClick: (e: MouseEvent) => {
-                e.preventDefault()
-                setIsOpen(!isOpen)
-              }
+            onClick: (e: MouseEvent) => {
+              e.preventDefault()
+              setIsOpen(!isOpen)
             }
+          }
           : {
-              ref: refs.setReference,
-              ...getReferenceProps()
-            })}
+            ref: refs.setReference,
+            ...getReferenceProps()
+          })}
       >
         <span>Pages</span>
         <i

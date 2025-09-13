@@ -1,4 +1,5 @@
 // lib/axios.ts
+import CONFIG from '@/configs/config'
 import axios from 'axios'
 import { getSession, signOut } from 'next-auth/react'
 
@@ -28,7 +29,7 @@ axiosInstance.interceptors.response.use(
 
     if (status === 401) {
       const currentPath = window.location.pathname
-      const redirectUrl = `/login?redirectTo=${encodeURIComponent(currentPath)}`
+      const redirectUrl = `${CONFIG.Routers.Login}?redirectTo=${encodeURIComponent(currentPath)}`
 
       await signOut({ callbackUrl: redirectUrl })
     }

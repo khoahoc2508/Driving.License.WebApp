@@ -7,7 +7,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 
 // MUI Imports
-import { redirect, usePathname, useRouter } from 'next/navigation'
+import { redirect, usePathname } from 'next/navigation'
 
 import IconButton from '@mui/material/IconButton'
 import Button from '@mui/material/Button'
@@ -44,8 +44,6 @@ const Header = ({ mode }: { mode: Mode }) => {
   // States
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [openDialog, setOpenDialog] = useState(false)
-
-  const router = useRouter()
 
   // Hooks
   const isBelowLgScreen = useMediaQuery((theme: Theme) => theme.breakpoints.down('lg'))
