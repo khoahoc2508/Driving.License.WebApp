@@ -70,9 +70,11 @@ export const authOptions: NextAuthOptions = {
               access_token: data?.access_token,
               refresh_token: data?.refresh_token,
               expires_in: data?.expires_in,
-              name: userInfo?.role,
+              name: userInfo?.name,
               email: userInfo?.email,
-              id: userInfo?.sub
+              id: userInfo?.sub,
+              role: userInfo?.role,
+              username: userInfo?.username
             } as any
           }
 
@@ -121,8 +123,10 @@ export const authOptions: NextAuthOptions = {
         token.accessToken = user.access_token
         token.refreshToken = user.refresh_token
         token.accessTokenExpires = Date.now() + (user.expires_in ? Number(user.expires_in) * 1000 : 60 * 60 * 1000)
-        
-return token
+        token.role = user.role
+        token.username = user.username
+
+        return token
       }
 
       // If the access token has not expired yet, return it
@@ -155,12 +159,12 @@ return token
         token.refreshToken = refreshed.refresh_token ?? token.refreshToken
         token.accessTokenExpires = Date.now() + Number(refreshed.expires_in ?? 3600) * 1000
         delete token.error
-        
-return token
+
+        return token
       } catch (error) {
         token.error = 'Mời bạn đăng nhập lại'
-        
-return token
+
+        return token
       }
     },
     async session({ session, token }) {
@@ -173,6 +177,8 @@ return token
         // ** Add custom params to user in session which are added in `jwt()` callback via `token` parameter
         session.user.name = token.name
         session.user.id = token.sub
+        session.user.role = token.role
+        session.user.username = token.username
       }
 
       return session

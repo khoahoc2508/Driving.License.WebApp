@@ -49,6 +49,7 @@ const UserDropdown = () => {
   const router = useRouter()
 
   const { data } = useSession()
+  console.log(data)
 
   const { settings } = useSettings()
 
@@ -128,7 +129,11 @@ const UserDropdown = () => {
                       <Typography className='font-medium' color='text.primary'>
                         {data?.user.name}
                       </Typography>
-                      <Typography variant='caption'>{data?.user.email}</Typography>
+                      {data?.user.role && (
+                        <Typography variant='caption' color='primary'>
+                          {data?.user.role} ({data?.user.username})
+                        </Typography>
+                      )}
                     </div>
                   </div>
                   <Divider className='mlb-1' />

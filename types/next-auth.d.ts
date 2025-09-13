@@ -6,6 +6,8 @@ declare module 'next-auth' {
     user: {
       id: string
       access_token: string
+      role?: string
+      username?: string
     } & DefaultUser['user']
   }
 }
