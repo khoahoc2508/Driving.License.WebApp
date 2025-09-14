@@ -13,10 +13,13 @@ import type { GetStepsDto, GetTaskDto, TaskActionTemplateDto } from '@/types/ste
 import styles from '@core/styles/table.module.css'
 import CONFIG from '@/configs/config'
 import EditTaskDialog from './EditTaskDialog'
+import AddPaymentDialog, { DialogMode } from '../../../../payments/AddPaymentDialog'
 
 type TaskTabProps = {
     selectedStep: GetStepsDto | null,
-    onRefreshSteps: (count: number) => void
+    onRefreshSteps: (count: number) => void,
+    registrationRecordId?: string,
+    refreshBasicInfo: () => void
 }
 
 export type TaskTabRef = {
@@ -37,7 +40,7 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value) => {
     return true
 }
 
-const TaskTab = forwardRef<TaskTabRef, TaskTabProps>(({ selectedStep, onRefreshSteps }, ref) => {
+const TaskTab = forwardRef<TaskTabRef, TaskTabProps>(({ selectedStep, onRefreshSteps, registrationRecordId, refreshBasicInfo }, ref) => {
     const [tasks, setTasks] = useState<GetTaskDto[]>([])
     const [selectedTask, setSelectedTask] = useState<GetTaskDto | null>(null)
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
@@ -45,6 +48,7 @@ const TaskTab = forwardRef<TaskTabRef, TaskTabProps>(({ selectedStep, onRefreshS
     const [taskActions, setTaskActions] = useState<TaskActionTemplateDto[]>([])
     const [isCreateDialog, setIsCreateDialog] = useState(false)
     const [createdTaskId, setCreatedTaskId] = useState<string | null>(null)
+    const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false)
 
     const theme = useTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -111,6 +115,15 @@ const TaskTab = forwardRef<TaskTabRef, TaskTabProps>(({ selectedStep, onRefreshS
         setCreatedTaskId(null) // Reset createdTaskId khi lưu thành công
     }
 
+    const handlePaymentDialogClose = () => {
+        setIsPaymentDialogOpen(false)
+    }
+
+    const handlePaymentDialogSuccess = () => {
+        setIsPaymentDialogOpen(false)
+        refreshBasicInfo()
+    }
+
     const handleCreateTaskFromAction = async (action: TaskActionTemplateDto) => {
         try {
             if (selectedStep?.id && action.taskTemplate?.id) {
@@ -128,6 +141,9 @@ const TaskTab = forwardRef<TaskTabRef, TaskTabProps>(({ selectedStep, onRefreshS
                     setIsCreateDialog(true)
                     setIsEditDialogOpen(true)
                 }
+            }
+            if (action.actionType === CONFIG.StepActionType.AddNewFeePayment) {
+                setIsPaymentDialogOpen(true)
             }
         } catch (error) {
             console.error('Error creating task from action:', error)
@@ -418,6 +434,17 @@ const TaskTab = forwardRef<TaskTabRef, TaskTabProps>(({ selectedStep, onRefreshS
                 task={selectedTask}
                 isCreate={isCreateDialog}
             />
+
+            {/* Add Payment Dialog */}
+            {registrationRecordId && (
+                <AddPaymentDialog
+                    open={isPaymentDialogOpen}
+                    onClose={handlePaymentDialogClose}
+                    onSuccess={handlePaymentDialogSuccess}
+                    registrationRecordId={registrationRecordId}
+                    mode={DialogMode.ADD}
+                />
+            )}
         </Box>
     )
 })

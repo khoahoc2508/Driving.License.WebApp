@@ -10,7 +10,8 @@ import MainContent, { type MainContentRef } from './components/right/MainContent
 
 type ProcessingTabProps = {
     registrationRecordId: string | undefined,
-    setIsApproved: (isApproved: boolean) => void
+    setIsApproved: (isApproved: boolean) => void,
+    refreshBasicInfo: () => void
 }
 
 export type ProcessingTabRef = {
@@ -19,7 +20,7 @@ export type ProcessingTabRef = {
     refreshStepOverview: () => void,
 }
 
-const ProcessingTab = forwardRef<ProcessingTabRef, ProcessingTabProps>(({ registrationRecordId, setIsApproved }, ref) => {
+const ProcessingTab = forwardRef<ProcessingTabRef, ProcessingTabProps>(({ registrationRecordId, setIsApproved, refreshBasicInfo }, ref) => {
     const [selectedStep, setSelectedStep] = useState<GetStepsDto | null>(null)
     const [selectedStepIndex, setSelectedStepIndex] = useState<number>(-1)
     const processStepsRef = useRef<ProcessStepsRef>(null)
@@ -74,6 +75,7 @@ const ProcessingTab = forwardRef<ProcessingTabRef, ProcessingTabProps>(({ regist
                         selectedStep={selectedStep}
                         registrationRecordId={registrationRecordId}
                         onRefreshSteps={handleRefreshSteps}
+                        refreshBasicInfo={refreshBasicInfo}
                     />
                 </Grid>
             </Grid>

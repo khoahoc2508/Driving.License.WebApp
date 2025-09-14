@@ -314,6 +314,12 @@ const RegistrationRecordPaymentsTabs = {
   History: 'history'
 } as const
 
+const StepActionType = {
+  AddNewStep: 1,
+  AddNewTask: 2,
+  AddNewFeePayment: 3
+}
+
 const CONFIG = {
   LicenseRegistrationStatus,
   LicenseRegistrationStatusMappingText,
@@ -359,7 +365,8 @@ const CONFIG = {
   TaskStatusOptions,
   RegistrationRecordDetailTabs,
   RegistrationRecordProcessTabs,
-  RegistrationRecordPaymentsTabs
+  RegistrationRecordPaymentsTabs,
+  StepActionType
 }
 
 export default CONFIG

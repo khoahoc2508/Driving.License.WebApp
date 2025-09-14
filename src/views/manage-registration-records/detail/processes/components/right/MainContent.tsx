@@ -15,7 +15,8 @@ import TaskTab, { type TaskTabRef } from './task/TaskTab'
 type MainContentProps = {
     selectedStep: GetStepsDto | null
     registrationRecordId: string | undefined
-    onRefreshSteps: (newStepsCount?: number) => void
+    onRefreshSteps: (newStepsCount?: number) => void,
+    refreshBasicInfo: () => void
 }
 
 export type MainContentRef = {
@@ -23,7 +24,7 @@ export type MainContentRef = {
     refreshStepOverview: () => void
 }
 
-const MainContent = forwardRef<MainContentRef, MainContentProps>(({ selectedStep, registrationRecordId, onRefreshSteps }, ref) => {
+const MainContent = forwardRef<MainContentRef, MainContentProps>(({ selectedStep, registrationRecordId, onRefreshSteps, refreshBasicInfo }, ref) => {
     const [tabValue, setTabValue] = useState<string>(CONFIG.RegistrationRecordProcessTabs.Overview)
     const router = useRouter()
     const pathname = usePathname()
@@ -106,7 +107,12 @@ const MainContent = forwardRef<MainContentRef, MainContentProps>(({ selectedStep
                     <OverviewTab ref={overviewTabRef} selectedStep={selectedStep} registrationRecordId={registrationRecordId} onRefreshSteps={onRefreshSteps} />
                 )}
                 {tabValue === CONFIG.RegistrationRecordProcessTabs.Tasks && (
-                    <TaskTab ref={taskTabRef} selectedStep={selectedStep} onRefreshSteps={onRefreshSteps} />
+                    <TaskTab ref={taskTabRef}
+                        selectedStep={selectedStep}
+                        onRefreshSteps={onRefreshSteps}
+                        registrationRecordId={registrationRecordId}
+                        refreshBasicInfo={refreshBasicInfo}
+                    />
                 )}
             </Box>
         </Box>
