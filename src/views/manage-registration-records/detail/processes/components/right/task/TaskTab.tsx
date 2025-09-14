@@ -326,6 +326,7 @@ const TaskTab = forwardRef<TaskTabRef, TaskTabProps>(({ selectedStep, onRefreshS
                                 variant='outlined'
                                 color='primary'
                                 onClick={() => handleCreateTaskFromAction(action)}
+                                disabled={!action.enable}
                             >
                                 {action.name}
                             </Button>

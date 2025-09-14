@@ -333,7 +333,7 @@ const OverviewTab = forwardRef<OverviewTabRef, OverviewTabProps>(({ selectedStep
                                 variant='contained'
                                 color='primary'
                                 onClick={() => handleCreateStepFromAction(action)}
-                                disabled={isCreatingStep}
+                                disabled={isCreatingStep || !action.enable}
                             >
                                 {isCreatingStep ? 'Đang tạo...' : action.name}
                             </Button>
