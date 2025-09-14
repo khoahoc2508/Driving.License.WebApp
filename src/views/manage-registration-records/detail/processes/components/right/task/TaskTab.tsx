@@ -215,16 +215,6 @@ const TaskTab = forwardRef<TaskTabRef, TaskTabProps>(({ selectedStep, onRefreshS
             size: 300,
             minSize: 300
         }),
-        columnHelper.accessor('note', {
-            header: 'GHI CHÚ',
-            cell: ({ row }) => (
-                <Typography color="text.secondary" sx={{ textAlign: "right" }}>
-                    {row.original.note || '-'}
-                </Typography>
-            ),
-            size: 250,
-            minSize: 250
-        }),
         columnHelper.accessor('summaryItems', {
             header: 'NỘI DUNG',
             cell: ({ row }) => (
@@ -236,17 +226,24 @@ const TaskTab = forwardRef<TaskTabRef, TaskTabProps>(({ selectedStep, onRefreshS
                             color="text.primary"
                             sx={{ fontSize: '0.875rem' }}
                         >
-                            {item.label}: <span className='font-semibold'>{item.value}</span>
+                            {item.label}: {item.value ? <span className='font-semibold'>{item.value}</span> : <span>-</span>}
                         </Typography>
                     )) || (
                             <Typography variant="body2" color="text.secondary">
                                 Không có dữ liệu
                             </Typography>
                         )}
+                    <Typography
+                        variant="body2"
+                        color="text.primary"
+                        sx={{ fontSize: '0.875rem' }}
+                    >
+                        Ghi chú: {row.original.note ? <span className='font-semibold'>{row.original.note}</span> : <span>-</span>}
+                    </Typography>
                 </Box>
             ),
-            size: 250,
-            minSize: 200
+            size: 300,
+            minSize: 300
         }),
         columnHelper.accessor('id', {
             id: 'actions',
