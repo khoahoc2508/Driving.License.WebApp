@@ -8,7 +8,7 @@ const config: Config = {
   corePlugins: {
     preflight: false
   },
-  important: '#__next',
+  important: true,
   plugins: [tailwindcssLogical, tailwindPlugin],
   theme: {
     extend: {}

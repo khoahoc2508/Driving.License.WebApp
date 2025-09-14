@@ -193,7 +193,7 @@ const GroupExamType = {
 
 const Routers = {
   Login: '/login',
-  Home: '/admin',
+  Home: '/',
   ExamSchedule: '/admin/exam-schedules',
   BrandSetting: '/admin/account-settings',
   ManageTeacher: '/admin/manage-teacher',

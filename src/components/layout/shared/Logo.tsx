@@ -19,6 +19,8 @@ import themeConfig from '@configs/themeConfig'
 // Hook Imports
 import useVerticalNav from '@menu/hooks/useVerticalNav'
 import { useSettings } from '@core/hooks/useSettings'
+import CONFIG from '@/configs/config'
+import { useRouter } from 'next/navigation'
 
 type LogoTextProps = {
   isHovered?: VerticalNavContextProps['isHovered']
@@ -52,6 +54,8 @@ const Logo = ({ color }: { color?: CSSProperties['color'] }) => {
   const { isHovered, transitionDuration, isBreakpointReached } = useVerticalNav()
   const { settings } = useSettings()
 
+  const router = useRouter()
+
   // Vars
   const { layout } = settings
 
@@ -71,7 +75,7 @@ const Logo = ({ color }: { color?: CSSProperties['color'] }) => {
   }, [isHovered, layout, isBreakpointReached])
 
   return (
-    <div className='flex items-center min-bs-[24px]'>
+    <div className='flex items-center min-bs-[24px] cursor-pointer' onClick={() => router.push(CONFIG.Routers.Home)}>
       <MaterioLogo className='text-[22px] text-primary' />
       <LogoText
         color={color}

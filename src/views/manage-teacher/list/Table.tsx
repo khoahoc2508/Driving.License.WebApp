@@ -170,7 +170,7 @@ const Table = ({
                 header: 'THAO TÁC',
                 cell: ({ row }) => (
                     <div className="flex items-center justify-center">
-                        <IconButton onClick={() => onEditTeacher?.(row.original)}>
+                        <IconButton disabled={!row.original.createdBy} onClick={() => onEditTeacher?.(row.original)}>
                             <i className="ri-edit-box-line text-textSecondary" />
                         </IconButton>
 

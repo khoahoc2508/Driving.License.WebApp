@@ -154,7 +154,7 @@ const UserDropdown = (props: UserDropdownProps) => {
                       <>
                         <MenuItem className='gap-3' onClick={e => {
                           handleDropdownClose(e)
-                          window.open(`${CONFIG.Routers.ManageRegistrationRecords}/list`, '_blank')
+                          router.push(`${CONFIG.Routers.ManageRegistrationRecords}/list`)
                         }}>
                           <i className="ri-corner-up-right-double-line"></i>
                           <Typography color='text.primary'>Đi đến trang quản lý</Typography>

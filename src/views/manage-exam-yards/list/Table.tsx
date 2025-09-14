@@ -159,7 +159,7 @@ const Table = ({
                 header: 'THAO TÁC',
                 cell: ({ row }) => (
                     <div className="flex items-center justify-center">
-                        <IconButton onClick={() => onEditExamYard?.(row.original)}>
+                        <IconButton disabled={!row.original.createdBy} onClick={() => onEditExamYard?.(row.original)}>
                             <i className="ri-edit-box-line text-textSecondary" />
                         </IconButton>
 
