@@ -104,6 +104,7 @@ const Table = ({
   const [globalFilter, setGlobalFilter] = useState('')
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null);
+  const [itemToDelete, setItemToDelete] = useState<GetRegistrationRecordsDto | null>(null);
   const [columnPinning, setColumnPinning] = useState({})
 
   // Custom scrollbar hook
@@ -377,7 +378,9 @@ const Table = ({
 
   const handleOpenDeleteDialog = (id: string | undefined) => {
     if (id) {
+      const item = data.find(item => item.id === id);
       setItemIdToDelete(id);
+      setItemToDelete(item || null);
       setOpenDeleteDialog(true);
     }
   };
@@ -385,6 +388,7 @@ const Table = ({
   const handleCloseDeleteDialog = () => {
     setOpenDeleteDialog(false);
     setItemIdToDelete(null);
+    setItemToDelete(null);
   };
 
   const handleDeleteConfirmed = async () => {
@@ -535,9 +539,16 @@ const Table = ({
                           style={{
                             ...getCommonPinningStyles(cell.column),
                             backgroundColor: cell.column.getIsPinned() ? 'var(--mui-palette-background-paper)' : 'transparent',
-                            cursor: 'pointer',
+                            cursor: cell.column.id === CONFIG.RegistrationRecordsTableColumns.THAO_TAC ? 'default' : 'pointer',
                           }}
-                          onClick={() => router.push(`${CONFIG.Routers.ManageRegistrationRecords}/detail/${row.original.id}`)}
+                          onClick={(e) => {
+                            // Prevent row click when clicking on actions column
+                            if (cell.column.id === CONFIG.RegistrationRecordsTableColumns.THAO_TAC) {
+                              e.stopPropagation();
+                              return;
+                            }
+                            router.push(`${CONFIG.Routers.ManageRegistrationRecords}/detail/${row.original.id}`);
+                          }}
                         >
                           {flexRender(cell.column.columnDef.cell, cell.getContext())}
                         </td>
@@ -572,7 +583,7 @@ const Table = ({
         <DialogTitle id="alert-dialog-title">{"Xác nhận xóa"}</DialogTitle>
         <DialogContent>
           <Typography id="alert-dialog-description">
-            Bạn có chắc chắn muốn xóa hồ sơ này không?
+            Bạn đang xóa hồ sơ <strong>{itemToDelete?.fullname || 'này'}</strong>. Dữ liệu liên quan đến hồ sơ này sẽ bị mất!
           </Typography>
         </DialogContent>
         <DialogActions>
