@@ -5,6 +5,8 @@ import { useEffect, useRef } from 'react'
 import type { CSSProperties } from 'react'
 
 // Third-party Imports
+import { useRouter } from 'next/navigation'
+
 import styled from '@emotion/styled'
 
 // Type Imports
@@ -20,7 +22,6 @@ import themeConfig from '@configs/themeConfig'
 import useVerticalNav from '@menu/hooks/useVerticalNav'
 import { useSettings } from '@core/hooks/useSettings'
 import CONFIG from '@/configs/config'
-import { useRouter } from 'next/navigation'
 
 type LogoTextProps = {
   isHovered?: VerticalNavContextProps['isHovered']
