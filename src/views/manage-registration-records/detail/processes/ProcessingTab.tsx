@@ -9,16 +9,17 @@ import ProcessSteps, { type ProcessStepsRef } from './components/left/ProcessSte
 import MainContent, { type MainContentRef } from './components/right/MainContent'
 
 type ProcessingTabProps = {
-    registrationRecordId: string | undefined
+    registrationRecordId: string | undefined,
+    setIsApproved: (isApproved: boolean) => void
 }
 
 export type ProcessingTabRef = {
     refreshSteps: () => void
     refreshTasks: () => void
-    refreshStepOverview: () => void
+    refreshStepOverview: () => void,
 }
 
-const ProcessingTab = forwardRef<ProcessingTabRef, ProcessingTabProps>(({ registrationRecordId }, ref) => {
+const ProcessingTab = forwardRef<ProcessingTabRef, ProcessingTabProps>(({ registrationRecordId, setIsApproved }, ref) => {
     const [selectedStep, setSelectedStep] = useState<GetStepsDto | null>(null)
     const [selectedStepIndex, setSelectedStepIndex] = useState<number>(-1)
     const processStepsRef = useRef<ProcessStepsRef>(null)
@@ -63,6 +64,7 @@ const ProcessingTab = forwardRef<ProcessingTabRef, ProcessingTabProps>(({ regist
                         registrationRecordId={registrationRecordId}
                         onStepClick={handleStepClick}
                         selectedStepIndex={selectedStepIndex}
+                        setIsApproved={setIsApproved}
                     />
                 </Grid>
 

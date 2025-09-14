@@ -13,7 +13,8 @@ import CONFIG from '@/configs/config'
 type ProcessStepsProps = {
     registrationRecordId: string | undefined
     onStepClick?: (step: GetStepsDto, stepIndex: number) => void
-    selectedStepIndex?: number
+    selectedStepIndex?: number,
+    setIsApproved: (isApproved: boolean) => void
 }
 
 export type ProcessStepsRef = {
@@ -160,7 +161,7 @@ const CustomStepIcon = ({ step }: { step: GetStepsDto; index: number }) => {
     )
 }
 
-const ProcessSteps = forwardRef<ProcessStepsRef, ProcessStepsProps>(({ registrationRecordId, onStepClick, selectedStepIndex }, ref) => {
+const ProcessSteps = forwardRef<ProcessStepsRef, ProcessStepsProps>(({ registrationRecordId, onStepClick, selectedStepIndex, setIsApproved }, ref) => {
     const [steps, setSteps] = useState<GetStepsDto[]>([])
     const theme = useTheme()
 
@@ -187,6 +188,12 @@ const ProcessSteps = forwardRef<ProcessStepsRef, ProcessStepsProps>(({ registrat
             fetchSteps()
         }
     }, [registrationRecordId])
+
+    useEffect(() => {
+        if (setIsApproved) {
+            setIsApproved(steps.length > 0 && steps[steps.length - 1].status === CONFIG.StepStatus.Completed)
+        }
+    }, [steps])
 
     // Expose fetchSteps function to parent component
     useImperativeHandle(ref, () => ({

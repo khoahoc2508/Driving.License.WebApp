@@ -250,7 +250,7 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
             <PaymentsTab registrationRecordId={id} onDataChange={refreshBasicInfo} />
           )}
           {!isLoading && activeTab === 2 && (
-            <ProcessingTab ref={processingTabRef} registrationRecordId={id} />
+            <ProcessingTab ref={processingTabRef} registrationRecordId={id} setIsApproved={setIsApproved} />
           )}
         </CardContent>
       </Card>
