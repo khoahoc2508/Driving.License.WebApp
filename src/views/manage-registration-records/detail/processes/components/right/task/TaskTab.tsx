@@ -142,6 +142,7 @@ const TaskTab = forwardRef<TaskTabRef, TaskTabProps>(({ selectedStep, onRefreshS
                     setIsEditDialogOpen(true)
                 }
             }
+
             if (action.actionType === CONFIG.StepActionType.AddNewFeePayment) {
                 setIsPaymentDialogOpen(true)
             }

@@ -379,6 +379,7 @@ const Table = ({
   const handleOpenDeleteDialog = (id: string | undefined) => {
     if (id) {
       const item = data.find(item => item.id === id);
+
       setItemIdToDelete(id);
       setItemToDelete(item || null);
       setOpenDeleteDialog(true);
@@ -545,8 +546,10 @@ const Table = ({
                             // Prevent row click when clicking on actions column
                             if (cell.column.id === CONFIG.RegistrationRecordsTableColumns.THAO_TAC) {
                               e.stopPropagation();
-                              return;
+                              
+return;
                             }
+
                             router.push(`${CONFIG.Routers.ManageRegistrationRecords}/detail/${row.original.id}`);
                           }}
                         >
