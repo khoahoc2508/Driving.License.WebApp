@@ -186,7 +186,7 @@ export const getStatusColor = (status: number | undefined) => {
 
   switch (status) {
     case CONFIG.StepStatus.Pending:
-      return 'info'
+      return 'default'
     case CONFIG.StepStatus.InProgress:
       return 'warning'
     case CONFIG.StepStatus.Completed:

@@ -14,6 +14,7 @@ import styles from '@core/styles/table.module.css'
 import CONFIG from '@/configs/config'
 import EditTaskDialog from './EditTaskDialog'
 import AddPaymentDialog, { DialogMode } from '../../../../payments/AddPaymentDialog'
+import { getStatusColor } from '@/utils/helpers'
 
 type TaskTabProps = {
     selectedStep: GetStepsDto | null,
@@ -165,21 +166,6 @@ const TaskTab = forwardRef<TaskTabRef, TaskTabProps>(({ selectedStep, onRefreshS
                 return 'Hoàn thành'
             default:
                 return 'Không xác định'
-        }
-    }
-
-    const getStatusColor = (status: number | undefined) => {
-        if (status === undefined) return 'default'
-
-        switch (status) {
-            case CONFIG.StepStatus.Pending:
-                return 'default'
-            case CONFIG.StepStatus.InProgress:
-                return 'warning'
-            case CONFIG.StepStatus.Completed:
-                return 'success'
-            default:
-                return 'default'
         }
     }
 

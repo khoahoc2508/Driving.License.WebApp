@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react'
 
-import { Box, Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material'
+import { Box, Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Menu, MenuItem, Typography } from '@mui/material'
 import type { RankingInfo } from '@tanstack/match-sorter-utils'
 import { rankItem } from '@tanstack/match-sorter-utils'
 import type { ColumnDef, ColumnFiltersState, FilterFn } from '@tanstack/react-table'
@@ -57,9 +57,11 @@ type FeeTabProps = {
     onEditPayment: (payment: GetPaymentDto) => void
     onRefresh: () => void
     onAdd?: () => void
+    onAddPaymentHistory?: (payment: GetPaymentDto) => void
+    onViewHistory?: (payment: GetPaymentDto) => void
 }
 
-const FeeTab = ({ data, isLoading, onEditPayment, onRefresh, onAdd }: FeeTabProps) => {
+const FeeTab = ({ data, isLoading, onEditPayment, onRefresh, onAdd, onAddPaymentHistory, onViewHistory }: FeeTabProps) => {
     // States
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [globalFilter, setGlobalFilter] = useState('')
@@ -95,10 +97,50 @@ const FeeTab = ({ data, isLoading, onEditPayment, onRefresh, onAdd }: FeeTabProp
                 color = 'default'
         }
 
-        return <Chip label={statusOption.label} color={color} size='small' variant='filled' />
+        return <Chip label={statusOption.label} color={color} size='small' variant='tonal' />
     }
 
     // Hooks
+    const RowActions = ({ payment }: { payment: GetPaymentDto }) => {
+        const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+        const open = Boolean(anchorEl)
+
+        const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
+            setAnchorEl(event.currentTarget)
+        }
+
+        const handleCloseMenu = () => setAnchorEl(null)
+
+        const canPay = (payment?.remainingAmount ?? 0) > 0
+
+        return (
+            <div className="flex items-center justify-center gap-1">
+                <button
+                    disabled={!canPay}
+                    onClick={() => canPay && onAddPaymentHistory && onAddPaymentHistory(payment)}
+                    className={` ${!canPay ? 'cursor-not-allowed' : 'text-primary'} bg-transparent cursor-pointer`}
+                    style={{ fontWeight: 600, fontSize: '14px' }}
+                >
+                    Nộp tiền
+                </button>
+                <IconButton onClick={handleOpenMenu}>
+                    <i className="ri-more-2-fill text-textSecondary" />
+                </IconButton>
+                <Menu anchorEl={anchorEl} open={open} onClose={handleCloseMenu} keepMounted>
+                    <MenuItem onClick={() => { handleCloseMenu(); onViewHistory && onViewHistory(payment) }}>
+                        <i className="ri-history-line mr-2" /> Xem lịch sử
+                    </MenuItem>
+                    <MenuItem onClick={() => { handleCloseMenu(); onEditPayment(payment) }}>
+                        <i className="ri-edit-box-line text-textSecondary mr-2" /> Sửa
+                    </MenuItem>
+                    <MenuItem onClick={() => { handleCloseMenu(); handleOpenDeleteDialog(payment.id) }}>
+                        <i className='ri-delete-bin-7-line mr-2' /> Xóa
+                    </MenuItem>
+                </Menu>
+            </div>
+        )
+    }
+
     const columns = useMemo<ColumnDef<GetPaymentDto, any>[]>(
         () => [
             columnHelper.accessor('id', {
@@ -128,9 +170,33 @@ const FeeTab = ({ data, isLoading, onEditPayment, onRefresh, onAdd }: FeeTabProp
                             {formatCurrency(row.original?.amount)}
                         </Typography>
                     </div>
+                )
+            }),
+            columnHelper.accessor('paidAmount', {
+                header: 'ĐÃ THANH TOÁN',
+                cell: ({ row }) => (
+                    <div style={{ textAlign: 'right' }}>
+                        <Typography className='w-full'>
+                            {formatCurrency(row.original?.paidAmount)}
+                        </Typography>
+                    </div>
                 ),
-                size: 70,
-                minSize: 60
+            }),
+            columnHelper.accessor('remainingAmount', {
+                header: 'CÒN LẠI',
+                cell: ({ row }) => (
+                    <div style={{ textAlign: 'right' }}>
+                        <Typography className='w-full'>
+                            {formatCurrency(row.original?.remainingAmount)}
+                        </Typography>
+                    </div>
+                ),
+            }),
+            columnHelper.accessor('status', {
+                header: 'TRẠNG THÁI',
+                cell: ({ row }) => getStatusChip(row.original?.status),
+                size: 150,
+                minSize: 150
             }),
             columnHelper.accessor('note', {
                 header: 'GHI CHÚ',
@@ -139,31 +205,16 @@ const FeeTab = ({ data, isLoading, onEditPayment, onRefresh, onAdd }: FeeTabProp
                         {row.original?.note || '-'}
                     </Typography>
                 ),
-                size: 250,
-                minSize: 200
-            }),
-            columnHelper.accessor('status', {
-                header: 'TRẠNG THÁI',
-                cell: ({ row }) => getStatusChip(row.original?.status),
-                size: 150,
-                minSize: 120
             }),
             columnHelper.accessor('id', {
                 id: 'actions',
                 header: 'THAO TÁC',
                 cell: ({ row }) => (
-                    <div className="flex items-center justify-center">
-                        <IconButton onClick={() => onEditPayment(row.original)}>
-                            <i className="ri-edit-box-line text-textSecondary" />
-                        </IconButton>
-                        <IconButton onClick={() => handleOpenDeleteDialog(row.original.id)}>
-                            <i className='ri-delete-bin-7-line text-textSecondary' />
-                        </IconButton>
-                    </div>
+                    <RowActions payment={row.original} />
                 ),
                 enableSorting: false,
-                size: 80,
-                minSize: 60
+                size: 180,
+                minSize: 150
             })
         ],
         [onEditPayment]
@@ -226,7 +277,7 @@ const FeeTab = ({ data, isLoading, onEditPayment, onRefresh, onAdd }: FeeTabProp
 
     const renderTableRows = () => {
         if (isLoading) {
-            return <SkeletonTableRowsLoader rowsNum={10} columnsNum={6} />
+            return <SkeletonTableRowsLoader rowsNum={10} columnsNum={8} />
         }
 
         if (table.getFilteredRowModel().rows.length === 0) {
