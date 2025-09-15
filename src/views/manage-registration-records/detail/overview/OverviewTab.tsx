@@ -5,7 +5,7 @@ import { useEffect, useState, useMemo } from 'react'
 import { Avatar, Box, CardContent, Chip, Divider, Typography, useMediaQuery, useTheme } from '@mui/material'
 
 import type { RegistrationRecordOverviewDto } from '@/types/registrationRecords'
-import { formatCurrency, formatDate } from '@/utils/helpers'
+import { formatCurrency, formatDate, getStatusColor } from '@/utils/helpers'
 import registrationRecordsAPI from '@/libs/api/registrationRecordsAPI'
 
 type OverviewTabProps = {
@@ -38,6 +38,7 @@ const OverviewTab = ({ registrationRecordId }: OverviewTabProps) => {
         }
     }, [registrationRecordId])
 
+
     const processingStepChips = useMemo(() => {
         const steps = overview?.processing?.steps || []
 
@@ -45,8 +46,8 @@ const OverviewTab = ({ registrationRecordId }: OverviewTabProps) => {
         return steps.map((step, index) => (
             <Chip
                 key={`${step?.name}-${index}`}
-                label={step?.name || 'Không xác định'}
-                color='warning'
+                label={step?.name || '-'}
+                color={getStatusColor(step?.status)}
                 variant='tonal'
                 size='small'
                 sx={{ mr: 1, mb: 1 }}
@@ -160,7 +161,7 @@ const OverviewTab = ({ registrationRecordId }: OverviewTabProps) => {
                                     label = 'Không xác định'
                             }
 
-                            return <Chip label={label} color={color} size='small' variant='filled' />
+                            return <Chip label={label} color={color} size='small' variant='tonal' />
                         })()}
                     </Box>
                 </Box>
@@ -172,11 +173,11 @@ const OverviewTab = ({ registrationRecordId }: OverviewTabProps) => {
             <Typography variant="h5" sx={{ mb: 4, fontWeight: 600 }}>Thanh toán</Typography>
             <Box sx={{ display: 'grid', gridTemplateColumns: isMobile ? '140px 1fr' : '180px 1fr', rowGap: 3, alignItems: 'center' }}>
                 <Typography variant="body2" color="text.secondary">Còn thiếu:</Typography>
-                <Typography variant="body2" sx={{ color: 'error.main', fontWeight: 600 }}>{formatCurrency(overview?.paymentSummary?.remainingAmount)}</Typography>
+                <Typography variant="body2" sx={{ color: 'error.main', fontWeight: 600 }}>{overview?.paymentSummary?.remainingAmount ? formatCurrency(overview?.paymentSummary?.remainingAmount) : 'Chưa có dữ liệu'}</Typography>
                 <Typography variant="body2" color="text.secondary">Đã thanh toán:</Typography>
-                <Typography variant="body2" sx={{ fontWeight: 600 }}>{formatCurrency(overview?.paymentSummary?.paidAmount)}</Typography>
+                <Typography variant="body2" sx={{ fontWeight: 600 }}>{overview?.paymentSummary?.paidAmount ? formatCurrency(overview?.paymentSummary?.paidAmount) : 'Chưa có dữ liệu'}</Typography>
                 <Typography variant="body2" color="text.secondary">Tổng cần thanh toán:</Typography>
-                <Typography variant="body2" sx={{ fontWeight: 600 }}>{formatCurrency(overview?.paymentSummary?.totalAmount)}</Typography>
+                <Typography variant="body2" sx={{ fontWeight: 600 }}>{overview?.paymentSummary?.totalAmount ? formatCurrency(overview?.paymentSummary?.totalAmount) : 'Chưa có dữ liệu'}</Typography>
             </Box>
 
             <Divider sx={{ my: 5 }} />
@@ -186,15 +187,15 @@ const OverviewTab = ({ registrationRecordId }: OverviewTabProps) => {
             <Box sx={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', columnGap: 6 }}>
                 <Box sx={{ display: 'grid', gridTemplateColumns: isMobile ? '140px 1fr' : '180px 1fr', rowGap: 3 }}>
                     <Typography variant="body2" color="text.secondary">Số điện thoại:</Typography>
-                    <Typography variant="body2" sx={{ fontWeight: 600 }}>{overview?.generalInfo?.phone || 'Chưa có dữ liệu'}</Typography>
+                    <Typography variant="body2" sx={{ fontWeight: 600 }}>{overview?.generalInfo?.phone || '-'}</Typography>
                     <Typography variant="body2" color="text.secondary">Ngày khám sức khỏe:</Typography>
-                    <Typography variant="body2" sx={{ fontWeight: 600 }}>{formatDate(overview?.generalInfo?.healthCheckDate)}</Typography>
+                    <Typography variant="body2" sx={{ fontWeight: 600 }}>{overview?.generalInfo?.healthCheckDate ? formatDate(overview?.generalInfo?.healthCheckDate) : '-'}</Typography>
                     <Typography variant="body2" color="text.secondary">Ngày nhận hồ sơ:</Typography>
-                    <Typography variant="body2" sx={{ fontWeight: 600 }}>{formatDate(overview?.generalInfo?.receivedDate)}</Typography>
+                    <Typography variant="body2" sx={{ fontWeight: 600 }}>{overview?.generalInfo?.receivedDate ? formatDate(overview?.generalInfo?.receivedDate) : '-'}</Typography>
                 </Box>
                 <Box sx={{ display: 'grid', gridTemplateColumns: isMobile ? '140px 1fr' : '180px 1fr', rowGap: 3, mt: isMobile ? 3 : 0 }}>
                     <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>Ghi chú:</Typography>
-                    <Typography variant="body2" sx={{ fontWeight: 600 }}>{overview?.generalInfo?.note || 'Chưa có dữ liệu'}</Typography>
+                    <Typography variant="body2" sx={{ fontWeight: 600 }}>{overview?.generalInfo?.note || '-'}</Typography>
                 </Box>
             </Box>
 

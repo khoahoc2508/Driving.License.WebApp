@@ -307,9 +307,9 @@ const Table = ({
             {getStatusChip(row.original?.status as RegistrationRecordStatus)}
           </div>
         ),
-        size: 120,
-        minSize: 120,
-        maxSize: 120,
+        size: 150,
+        minSize: 150,
+        maxSize: 150,
       }),
       columnHelper.accessor('staffAssigneeName', {
         id: CONFIG.RegistrationRecordsTableColumns.NGUOI_PHU_TRACH,
@@ -329,7 +329,7 @@ const Table = ({
             <Typography sx={{ maxWidth: 230, overflow: 'hidden', textOverflow: 'ellipsis' }}>{row.original?.collaboratorName || ''}</Typography>
           </div>
         ),
-        size: 230,
+        size: 240,
       }),
       columnHelper.accessor('note', {
         id: CONFIG.RegistrationRecordsTableColumns.GHI_CHU,
@@ -348,7 +348,7 @@ const Table = ({
             </Tooltip>
           </div>
         ),
-        size: 200,
+        size: 250,
       }),
       columnHelper.accessor('id', {
         id: CONFIG.RegistrationRecordsTableColumns.THAO_TAC,
@@ -546,8 +546,8 @@ const Table = ({
                             // Prevent row click when clicking on actions column
                             if (cell.column.id === CONFIG.RegistrationRecordsTableColumns.THAO_TAC) {
                               e.stopPropagation();
-                              
-return;
+
+                              return;
                             }
 
                             router.push(`${CONFIG.Routers.ManageRegistrationRecords}/detail/${row.original.id}`);

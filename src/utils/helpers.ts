@@ -1,3 +1,5 @@
+import CONFIG from '@/configs/config'
+
 export const formatCurrencyVNDInput = (value: string): string => {
   const digitsOnly = (value || '').replace(/[^\d]/g, '')
 
@@ -59,8 +61,8 @@ export const formatDate = (date: Date | string | null | undefined): string => {
     })
   } catch (error) {
     console.error('Error formatting date:', error)
-    
-return ''
+
+    return ''
   }
 }
 
@@ -82,8 +84,8 @@ export const formatDateTime = (date: Date | string | null | undefined): string =
     })
   } catch (error) {
     console.error('Error formatting date time:', error)
-    
-return ''
+
+    return ''
   }
 }
 
@@ -113,12 +115,11 @@ export const formatDateOnlyForAPI = (date: Date | string | null | undefined): st
     // Set time to 00:00:00 UTC
     const utcDate = new Date(Date.UTC(dateObj.getFullYear(), dateObj.getMonth(), dateObj.getDate(), 0, 0, 0, 0))
 
-    
-return utcDate.toISOString()
+    return utcDate.toISOString()
   } catch (error) {
     console.error('Error formatting date only for API:', error)
-    
-return null
+
+    return null
   }
 }
 
@@ -146,8 +147,8 @@ export const formatDateTimeForAPI = (date: Date | string | null | undefined): st
     return dateObj.toISOString()
   } catch (error) {
     console.error('Error formatting date time for API:', error)
-    
-return null
+
+    return null
   }
 }
 
@@ -173,7 +174,24 @@ export const parseVietnameseDate = (dateString: string): Date | null => {
     return date
   } catch (error) {
     console.error('Error parsing Vietnamese date:', error)
-    
-return null
+
+    return null
+  }
+}
+
+export const getStatusColor = (status: number | undefined) => {
+  if (status === undefined) {
+    return 'default'
+  }
+
+  switch (status) {
+    case CONFIG.StepStatus.Pending:
+      return 'info'
+    case CONFIG.StepStatus.InProgress:
+      return 'warning'
+    case CONFIG.StepStatus.Completed:
+      return 'success'
+    default:
+      return 'default'
   }
 }

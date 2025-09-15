@@ -8,7 +8,7 @@ import { toast } from 'react-toastify'
 
 import type { GetStepsDto, StepActionTemplateDto, StepOverviewDto } from '@/types/stepsTypes'
 import type { components } from '@/libs/api/client/schema'
-import { getInputBehavior } from '@/utils/helpers'
+import { getInputBehavior, getStatusColor } from '@/utils/helpers'
 import CONFIG from '@/configs/config'
 import stepsAPI from '@/libs/api/stepsAPI'
 
@@ -130,23 +130,6 @@ const OverviewTab = forwardRef<OverviewTabRef, OverviewTabProps>(({ selectedStep
         }
     }
 
-    const getStatusColor = (status: number | undefined) => {
-        if (status === undefined) {
-            return 'default'
-        }
-
-        switch (status) {
-            case CONFIG.StepStatus.Pending:
-                return 'default'
-            case CONFIG.StepStatus.InProgress:
-                return 'warning'
-            case CONFIG.StepStatus.Completed:
-                return 'success'
-            default:
-                return 'default'
-        }
-    }
-
     const handleCreateStepFromAction = async (action: StepActionTemplateDto) => {
         try {
             if (registrationRecordId && action.stepTemplates && action.stepTemplates.length > 0) {
@@ -201,17 +184,20 @@ const OverviewTab = forwardRef<OverviewTabRef, OverviewTabProps>(({ selectedStep
 
     return (
         <Box>
-            <Box sx={{ p: isMobile ? 2 : 4, display: 'grid', gridTemplateColumns: isMobile ? '140px 1fr' : '180px 1fr' }}>
-                <Typography variant="subtitle2" color="text.secondary" className='flex items-center'>
-                    Trạng thái:
-                </Typography>
-                <Chip
-                    label={getStatusText(stepOverview?.status)}
-                    color={getStatusColor(stepOverview?.status)}
-                    size="small"
-                    sx={{ width: 'fit-content' }}
-                />
-                <Box className='flex flex-col gap-3'>
+            <Box sx={{ p: isMobile ? 2 : 4 }}>
+                <Box sx={{ display: 'grid', gridTemplateColumns: isMobile ? '140px 1fr' : '180px 1fr' }}>
+                    <Typography variant="subtitle2" color="text.secondary" className='flex items-center'>
+                        Trạng thái:
+                    </Typography>
+                    <Chip
+                        label={getStatusText(stepOverview?.status)}
+                        color={getStatusColor(stepOverview?.status)}
+                        size="small"
+                        sx={{ width: 'fit-content' }}
+                        variant='tonal'
+                    />
+                </Box>
+                {stepOverview?.stepFieldInstanceSubmissions && stepOverview?.stepFieldInstanceSubmissions?.length > 0 && <Box className='flex flex-col gap-3 mt-4'>
                     {stepOverview?.stepFieldInstanceSubmissions?.map(
                         (
                             item: components['schemas']['StepFieldInstanceSubmissionDto'],
@@ -271,10 +257,10 @@ const OverviewTab = forwardRef<OverviewTabRef, OverviewTabProps>(({ selectedStep
                             </Box>
                         )
                     )}
-                </Box>
+                </Box>}
             </Box>
             {(stepOverview?.taskInfos ?? []).length > 0 && <Divider sx={{ my: 2 }} />}
-            <Box sx={{ p: isMobile ? 2 : 4 }}>
+            <Box sx={{ p: isMobile ? 2 : 4, display: 'flex', flexDirection: 'column', gap: 3 }}>
                 {stepOverview?.taskInfos
                     ?.flatMap(
                         (task, taskIndex) =>
@@ -295,7 +281,7 @@ const OverviewTab = forwardRef<OverviewTabRef, OverviewTabProps>(({ selectedStep
                     .map((field) => (
                         <Box
                             key={field.key}
-                            sx={{ display: 'grid', gridTemplateColumns: isMobile ? '140px 1fr' : '180px 1fr', rowGap: 3, mb: 2 }}
+                            sx={{ display: 'grid', gridTemplateColumns: isMobile ? '140px 1fr' : '180px 1fr', rowGap: 3, paddingBottom: '7px' }}
                         >
                             <Typography variant="subtitle2" color="text.secondary">
                                 {field.label}:
