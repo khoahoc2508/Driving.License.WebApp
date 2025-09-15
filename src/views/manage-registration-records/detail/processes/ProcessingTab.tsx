@@ -57,8 +57,8 @@ const ProcessingTab = forwardRef<ProcessingTabRef, ProcessingTabProps>(({ regist
     }), [])
 
     return (
-        <Box sx={{ p: 2 }}>
-            <Grid container spacing={3}>
+        <Box sx={{ p: 2, py: 3, height: '100%' }}>
+            <Grid container className='h-full'>
                 <Grid item xs={12} md={4}>
                     <ProcessSteps
                         ref={processStepsRef}

@@ -201,8 +201,8 @@ const OverviewTab = forwardRef<OverviewTabRef, OverviewTabProps>(({ selectedStep
 
     return (
         <Box>
-            <Box sx={{ p: isMobile ? 2 : 4, display: 'grid', gridTemplateColumns: isMobile ? '140px 1fr' : '180px 1fr', rowGap: 3 }}>
-                <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1 }}>
+            <Box sx={{ p: isMobile ? 2 : 4, display: 'grid', gridTemplateColumns: isMobile ? '140px 1fr' : '180px 1fr' }}>
+                <Typography variant="subtitle2" color="text.secondary" className='flex items-center'>
                     Trạng thái:
                 </Typography>
                 <Chip

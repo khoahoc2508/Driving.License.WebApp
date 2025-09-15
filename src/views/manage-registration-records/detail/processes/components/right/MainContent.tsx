@@ -69,7 +69,7 @@ const MainContent = forwardRef<MainContentRef, MainContentProps>(({ selectedStep
 
     return (
         <Box sx={{
-            p: isMobile ? 2 : 3,
+            p: isMobile ? 2 : 4,
             height: '100%',
             borderLeft: { xs: 'none', md: '1px solid' },
             borderColor: { md: 'divider' }
