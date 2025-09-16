@@ -190,7 +190,7 @@ const ProcessSteps = forwardRef<ProcessStepsRef, ProcessStepsProps>(({ registrat
     }, [registrationRecordId])
 
     useEffect(() => {
-        if (setIsApproved) {
+        if (setIsApproved && steps.length > 0) {
             setIsApproved(steps.length > 0 && steps[steps.length - 1].status === CONFIG.StepStatus.Completed)
         }
     }, [steps])

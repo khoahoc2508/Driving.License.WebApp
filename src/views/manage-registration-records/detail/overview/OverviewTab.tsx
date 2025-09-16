@@ -130,7 +130,7 @@ const OverviewTab = ({ registrationRecordId }: OverviewTabProps) => {
 
                     <Typography variant="body2" color="text.secondary">Nhân viên:</Typography>
                     <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                        {overview?.processing?.steps?.filter(s => s?.assignee?.name).map((s) => `${s?.assignee?.name} (${s?.assignee?.phone})`).join(', ') || 'Chưa có dữ liệu'}
+                        {overview?.processing?.steps?.filter(s => s?.assignee?.name).map((s) => `${s?.assignee?.name} ${s?.assignee?.phone ? `(${s?.assignee?.phone})` : ''}`).join(', ') || '-'}
                     </Typography>
 
                     <Typography variant="body2" color="text.secondary">Kết quả thi:</Typography>

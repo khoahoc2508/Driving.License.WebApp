@@ -203,6 +203,7 @@ const TaskTab = forwardRef<TaskTabRef, TaskTabProps>(({ selectedStep, onRefreshS
                                 label={getStatusText(row.original.status)}
                                 color={getStatusColor(row.original.status)}
                                 size="small"
+                                variant='tonal'
                                 sx={{ height: 20, fontSize: '0.75rem' }}
                             />
                             <Typography variant="caption" color="text.secondary">
