@@ -99,7 +99,7 @@ const ManageCollaborator = () => {
     const handleCloseAddDialog = () => {
         setOpenAddDialog(false)
         setEditData(null)
-        setDialogMode(DialogMode.ADD)
+        // setDialogMode(DialogMode.ADD)
     }
 
     const handleEditCollaborator = (collaborator: AssigneeDto) => {

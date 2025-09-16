@@ -41,7 +41,7 @@ const ManageExamCentersList = () => {
     // Modal states
     const [openAddDialog, setOpenAddDialog] = useState(false)
     const [editData, setEditData] = useState<GetExamCentersDto | null>(null)
-    const [dialogMode, setDialogMode] = useState<DialogMode>(DialogMode.ADD)
+    const [dialogMode, setDialogMode] = useState<DialogMode>()
 
     useEffect(() => {
         setParams({
@@ -97,7 +97,7 @@ const ManageExamCentersList = () => {
     const handleCloseAddDialog = () => {
         setOpenAddDialog(false)
         setEditData(null)
-        setDialogMode(DialogMode.ADD)
+        // setDialogMode(DialogMode.ADD)
     }
 
     const handleEditExamCenter = (examCenter: GetExamCentersDto) => {

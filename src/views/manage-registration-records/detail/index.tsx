@@ -186,7 +186,7 @@ const RegistrationRecordDetail = ({ id }: RegistrationRecordDetailProps) => {
                   Số điện thoại: <span className="text-primary">{phoneNumber || 'Chưa có dữ liệu'}</span>
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Tổng phí: {basicInfo?.totalAmount ? formatCurrency(basicInfo?.totalAmount) : 'Chưa có dữ liệu'} | Đã thu: {basicInfo?.paidAmount ? formatCurrency(basicInfo?.paidAmount) : 'Chưa có dữ liệu'} | Còn lại: <span className="text-red-500">{basicInfo?.remainingAmount ? formatCurrency(basicInfo?.remainingAmount) : 'Chưa có dữ liệu'}</span>
+                  Tổng phí: {basicInfo?.totalAmount || basicInfo?.totalAmount === 0 ? formatCurrency(basicInfo?.totalAmount) : 'Chưa có dữ liệu'} | Đã thu: {basicInfo?.paidAmount || basicInfo?.paidAmount === 0 ? formatCurrency(basicInfo?.paidAmount) : 'Chưa có dữ liệu'} | Còn lại: <span className="text-red-500">{basicInfo?.remainingAmount || basicInfo?.remainingAmount === 0 ? formatCurrency(basicInfo?.remainingAmount) : 'Chưa có dữ liệu'}</span>
                 </Typography>
               </div>
             </div>

@@ -97,7 +97,7 @@ const ManageDATDevicesList = () => {
     const handleCloseAddDialog = () => {
         setOpenAddDialog(false)
         setEditData(null)
-        setDialogMode(DialogMode.ADD)
+        // setDialogMode(DialogMode.ADD)
     }
 
     const handleEditDATDevice = (datDevice: GetDATDevicesDto) => {

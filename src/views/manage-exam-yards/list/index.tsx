@@ -96,7 +96,7 @@ const ManageExamYardsList = () => {
     const handleCloseAddDialog = () => {
         setOpenAddDialog(false)
         setEditData(null)
-        setDialogMode(DialogMode.ADD)
+        // setDialogMode(DialogMode.ADD)
     }
 
     const handleEditExamYard = (examYard: GetExamYardsDto) => {
