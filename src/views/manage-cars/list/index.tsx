@@ -96,6 +96,7 @@ const ManageCarsList = () => {
     const handleCloseAddDialog = () => {
         setOpenAddDialog(false)
         setEditData(null)
+
         // setDialogMode(DialogMode.ADD)
     }
 

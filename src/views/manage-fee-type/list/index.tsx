@@ -97,6 +97,7 @@ const ManageFeeType = () => {
     const handleCloseAddDialog = () => {
         setOpenAddDialog(false)
         setEditData(null)
+
         // setDialogMode(DialogMode.ADD)
     }
 

@@ -85,6 +85,7 @@ const PaymentsTab = ({ registrationRecordId, onDataChange }: PaymentsTabProps) =
 
     const fetchPaymentHistories = async (search?: string) => {
         if (!registrationRecordId) return
+
         try {
             setIsHistoryLoading(true)
             const response = await registrationRecordsAPI.GetAllPaymentHistoriesByRegistrationRecordId(registrationRecordId, search)
@@ -114,10 +115,12 @@ const PaymentsTab = ({ registrationRecordId, onDataChange }: PaymentsTabProps) =
 
     const handleViewHistory = (payment: GetPaymentDto) => {
         const nextTab = CONFIG.RegistrationRecordPaymentsTabs.History
+
         setActiveSubTab(nextTab)
         setHistorySearch(payment.feeTypeName?.toLowerCase() || '')
 
         const qs = new URLSearchParams(Array.from(searchParams.entries()))
+
         qs.set('paymentsTab', nextTab)
         router.replace(`${pathname}?${qs.toString()}`)
     }
@@ -128,11 +131,13 @@ const PaymentsTab = ({ registrationRecordId, onDataChange }: PaymentsTabProps) =
         } else {
             fetchPaymentHistories(historySearch)
         }
+
         onDataChange()
     }
 
     const handleSearchHistories = (value: string | number) => {
         const v = String(value)
+
         setHistorySearch(v)
     }
 

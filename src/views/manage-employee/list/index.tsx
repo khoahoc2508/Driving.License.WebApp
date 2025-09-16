@@ -99,6 +99,7 @@ const ManageEmployee = () => {
     const handleCloseAddDialog = () => {
         setOpenAddDialog(false)
         setEditData(null)
+
         // setDialogMode(DialogMode.ADD)
     }
 
