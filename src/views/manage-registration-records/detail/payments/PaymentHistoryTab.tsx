@@ -28,6 +28,7 @@ import registrationRecordsAPI from '@/libs/api/registrationRecordsAPI'
 import SkeletonTableRowsLoader from '@/components/common/SkeletonTableRowsLoader'
 import AddPaymentHistoryDialog, { DialogMode } from './AddPaymentHistoryDialog'
 import { formatCurrency, formatDate } from '@/utils/helpers'
+import DebouncedInput from '@/components/common/DebouncedInput'
 
 // Column Definitions
 const columnHelper = createColumnHelper<GetPaymentHistoryDto>()
@@ -58,12 +59,13 @@ type PaymentHistoryTabProps = {
     registrationRecordId?: string
     onAdd?: () => void
     onEdit?: (paymentHistory: GetPaymentHistoryDto) => void
+    search: string,
+    onSearch: (value: string | number) => void
 }
 
-const PaymentHistoryTab = ({ data, isLoading, onRefresh, registrationRecordId, onAdd, onEdit }: PaymentHistoryTabProps) => {
+const PaymentHistoryTab = ({ data, isLoading, onRefresh, registrationRecordId, onAdd, onEdit, search, onSearch }: PaymentHistoryTabProps) => {
     // States
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-    const [globalFilter, setGlobalFilter] = useState('')
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false)
     const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null)
     const [isAddOpen, setIsAddOpen] = useState(false)
@@ -204,6 +206,10 @@ const PaymentHistoryTab = ({ data, isLoading, onRefresh, registrationRecordId, o
         }
     }
 
+    const onChangeSearch = (value: string | number) => {
+        onSearch(value)
+    }
+
     const table = useReactTable({
         data: data,
         columns,
@@ -211,11 +217,9 @@ const PaymentHistoryTab = ({ data, isLoading, onRefresh, registrationRecordId, o
             fuzzy: fuzzyFilter
         },
         state: {
-            columnFilters,
-            globalFilter
+            columnFilters
         },
         onColumnFiltersChange: setColumnFilters,
-        onGlobalFilterChange: setGlobalFilter,
         globalFilterFn: fuzzyFilter,
         getCoreRowModel: getCoreRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
@@ -259,13 +263,24 @@ const PaymentHistoryTab = ({ data, isLoading, onRefresh, registrationRecordId, o
 
     return (
         <Box className='flex-1 h-full flex flex-col justify-between'>
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', mb: 3 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3, gap: 2 }}>
+                <DebouncedInput
+                    value={search}
+                    onDebounceChange={onChangeSearch}
+                    className='w-full'
+                    placeholder='Loại lệ phí, ghi chú...'
+                    size='small'
+                    sx={{
+                        maxWidth: '260px'
+                    }}
+                />
                 <Button
                     variant="outlined"
                     color="primary"
                     sx={{
                         borderColor: 'primary.main',
                         color: 'primary.main',
+                        whiteSpace: 'nowrap'
                     }}
                     onClick={handleAddNew}
                 >

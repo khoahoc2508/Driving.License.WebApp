@@ -61,9 +61,9 @@ const DeletePayment = async (id: string) => {
 }
 
 // Payment Histories
-const GetAllPaymentHistoriesByRegistrationRecordId = async (registrationRecordId: string) => {
+const GetAllPaymentHistoriesByRegistrationRecordId = async (registrationRecordId: string, search?: string | null) => {
   return await axiosInstance.get('/api/payment-histories/all', {
-    params: { RegistrationRecordId: registrationRecordId }
+    params: { RegistrationRecordId: registrationRecordId, Search: search }
   })
 }
 

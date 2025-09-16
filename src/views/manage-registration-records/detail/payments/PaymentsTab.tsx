@@ -33,6 +33,7 @@ const PaymentsTab = ({ registrationRecordId, onDataChange }: PaymentsTabProps) =
     const [paymentHistories, setPaymentHistories] = useState<GetPaymentHistoryDto[]>([])
     const [isLoading, setIsLoading] = useState(false)
     const [isHistoryLoading, setIsHistoryLoading] = useState(false)
+    const [historySearch, setHistorySearch] = useState('')
     const [isAddOpen, setIsAddOpen] = useState(false)
     const [editPaymentId, setEditPaymentId] = useState<string | null>(null)
     const [isHistoryAddOpen, setIsHistoryAddOpen] = useState(false)
@@ -52,14 +53,15 @@ const PaymentsTab = ({ registrationRecordId, onDataChange }: PaymentsTabProps) =
     }, [searchParams])
 
     useEffect(() => {
-        if (registrationRecordId) {
-            if (activeSubTab === CONFIG.RegistrationRecordPaymentsTabs.Fees) {
-                fetchPayments()
-            } else if (activeSubTab === CONFIG.RegistrationRecordPaymentsTabs.History) {
-                fetchPaymentHistories()
-            }
+        if (!registrationRecordId) return
+
+        if (activeSubTab === CONFIG.RegistrationRecordPaymentsTabs.Fees) {
+            fetchPayments()
+        } else if (activeSubTab === CONFIG.RegistrationRecordPaymentsTabs.History) {
+            fetchPaymentHistories(historySearch)
         }
-    }, [registrationRecordId, activeSubTab])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [registrationRecordId, activeSubTab, historySearch])
 
     const fetchPayments = async () => {
         if (!registrationRecordId) return
@@ -79,12 +81,11 @@ const PaymentsTab = ({ registrationRecordId, onDataChange }: PaymentsTabProps) =
         }
     }
 
-    const fetchPaymentHistories = async () => {
+    const fetchPaymentHistories = async (search?: string) => {
         if (!registrationRecordId) return
-
         try {
             setIsHistoryLoading(true)
-            const response = await registrationRecordsAPI.GetAllPaymentHistoriesByRegistrationRecordId(registrationRecordId)
+            const response = await registrationRecordsAPI.GetAllPaymentHistoriesByRegistrationRecordId(registrationRecordId, search)
 
             if (response?.data?.data) {
                 setPaymentHistories(response.data.data)
@@ -102,14 +103,28 @@ const PaymentsTab = ({ registrationRecordId, onDataChange }: PaymentsTabProps) =
         setIsAddOpen(true)
     }
 
+    const handleViewHistory = (payment: GetPaymentDto) => {
+        const nextTab = CONFIG.RegistrationRecordPaymentsTabs.History
+        setActiveSubTab(nextTab)
+        setHistorySearch(payment.feeTypeName?.toLowerCase() || '')
+
+        const qs = new URLSearchParams(Array.from(searchParams.entries()))
+        qs.set('paymentsTab', nextTab)
+        router.replace(`${pathname}?${qs.toString()}`)
+    }
+
     const handleRefresh = () => {
         if (activeSubTab === CONFIG.RegistrationRecordPaymentsTabs.Fees) {
             fetchPayments()
         } else {
-            fetchPaymentHistories()
+            fetchPaymentHistories(historySearch)
         }
-
         onDataChange()
+    }
+
+    const handleSearchHistories = (value: string | number) => {
+        const v = String(value)
+        setHistorySearch(v)
     }
 
     const handleTabChange = (_: React.SyntheticEvent, newValue: string) => {
@@ -166,6 +181,7 @@ const PaymentsTab = ({ registrationRecordId, onDataChange }: PaymentsTabProps) =
                     onEditPayment={handleEditPayment}
                     onRefresh={handleRefresh}
                     onAdd={() => { setEditPaymentId(null); setIsAddOpen(true) }}
+                    onViewHistory={handleViewHistory}
                 />
             )}
 
@@ -176,6 +192,8 @@ const PaymentsTab = ({ registrationRecordId, onDataChange }: PaymentsTabProps) =
                     isLoading={isHistoryLoading}
                     onRefresh={handleRefresh}
                     registrationRecordId={registrationRecordId}
+                    search={historySearch}
+                    onSearch={handleSearchHistories}
                     onAdd={() => { setEditPaymentHistoryId(null); setIsHistoryAddOpen(true) }}
                     onEdit={(paymentHistory: GetPaymentHistoryDto) => { setEditPaymentHistoryId(paymentHistory.id || null); setIsHistoryAddOpen(true) }}
                 />

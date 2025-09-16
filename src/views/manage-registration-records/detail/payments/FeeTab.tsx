@@ -115,14 +115,19 @@ const FeeTab = ({ data, isLoading, onEditPayment, onRefresh, onAdd, onAddPayment
 
         return (
             <div className="flex items-center justify-center gap-1">
-                <button
-                    disabled={!canPay}
+                <Button
+                    variant="text"
+                    color="primary"
+                    sx={{
+                        borderColor: 'primary.main',
+                        color: 'primary.main',
+                    }}
+                    className='cursor-pointer'
                     onClick={() => canPay && onAddPaymentHistory && onAddPaymentHistory(payment)}
-                    className={` ${!canPay ? 'cursor-not-allowed' : 'text-primary'} bg-transparent cursor-pointer`}
-                    style={{ fontWeight: 600, fontSize: '14px' }}
+                    disabled={!canPay}
                 >
                     Nộp tiền
-                </button>
+                </Button>
                 <IconButton onClick={handleOpenMenu}>
                     <i className="ri-more-2-fill text-textSecondary" />
                 </IconButton>
