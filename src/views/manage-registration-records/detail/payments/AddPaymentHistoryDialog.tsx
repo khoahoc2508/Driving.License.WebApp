@@ -38,6 +38,8 @@ type AddPaymentHistoryDialogProps = {
   registrationRecordId: string
   mode: DialogMode
   editPaymentHistoryId?: string | null
+  defaultPaymentId?: string
+  defaultAmount?: number
 }
 
 type FormData = {
@@ -53,7 +55,9 @@ const AddPaymentHistoryDialog = ({
   onSuccess,
   registrationRecordId,
   mode,
-  editPaymentHistoryId
+  editPaymentHistoryId,
+  defaultPaymentId,
+  defaultAmount
 }: AddPaymentHistoryDialogProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const [paymentOptions, setPaymentOptions] = useState<PaymentOption[]>([])
@@ -94,12 +98,12 @@ const AddPaymentHistoryDialog = ({
     } else if (open) {
       reset({
         paymentDate: new Date().toISOString().split('T')[0],
-        paymentId: '',
-        amountInput: '',
+        paymentId: defaultPaymentId || '',
+        amountInput: defaultAmount != null ? (formatCurrency(defaultAmount || 0) || '') : '',
         note: ''
       })
     }
-  }, [open, mode, editPaymentHistoryId, reset])
+  }, [open, mode, editPaymentHistoryId, reset, defaultPaymentId, defaultAmount])
 
   const fetchPaymentHistory = async () => {
     if (!editPaymentHistoryId) return

@@ -38,6 +38,8 @@ const PaymentsTab = ({ registrationRecordId, onDataChange }: PaymentsTabProps) =
     const [editPaymentId, setEditPaymentId] = useState<string | null>(null)
     const [isHistoryAddOpen, setIsHistoryAddOpen] = useState(false)
     const [editPaymentHistoryId, setEditPaymentHistoryId] = useState<string | null>(null)
+    const [defaultHistoryPaymentId, setDefaultHistoryPaymentId] = useState<string | undefined>(undefined)
+    const [defaultHistoryAmount, setDefaultHistoryAmount] = useState<number | undefined>(undefined)
 
     const tabKeys = [
         CONFIG.RegistrationRecordPaymentsTabs.Fees,
@@ -101,6 +103,13 @@ const PaymentsTab = ({ registrationRecordId, onDataChange }: PaymentsTabProps) =
     const handleEditPayment = (payment: GetPaymentDto) => {
         setEditPaymentId(payment.id || null)
         setIsAddOpen(true)
+    }
+
+    const handleAddPaymentHistoryFromFee = (payment: GetPaymentDto) => {
+        setDefaultHistoryPaymentId(payment.id)
+        setDefaultHistoryAmount(payment.remainingAmount)
+        setEditPaymentHistoryId(null)
+        setIsHistoryAddOpen(true)
     }
 
     const handleViewHistory = (payment: GetPaymentDto) => {
@@ -181,6 +190,7 @@ const PaymentsTab = ({ registrationRecordId, onDataChange }: PaymentsTabProps) =
                     onEditPayment={handleEditPayment}
                     onRefresh={handleRefresh}
                     onAdd={() => { setEditPaymentId(null); setIsAddOpen(true) }}
+                    onAddPaymentHistory={handleAddPaymentHistoryFromFee}
                     onViewHistory={handleViewHistory}
                 />
             )}
@@ -217,6 +227,8 @@ const PaymentsTab = ({ registrationRecordId, onDataChange }: PaymentsTabProps) =
                 registrationRecordId={registrationRecordId as string}
                 mode={editPaymentHistoryId ? PaymentHistoryDialogMode.EDIT : PaymentHistoryDialogMode.ADD}
                 editPaymentHistoryId={editPaymentHistoryId}
+                defaultPaymentId={defaultHistoryPaymentId}
+                defaultAmount={defaultHistoryAmount}
             />
         </CardContent>
     )
