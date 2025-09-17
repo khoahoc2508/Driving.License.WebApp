@@ -23,14 +23,14 @@ export type ProcessStepsRef = {
     updateStepStatusByIndex: (stepIndex: number, status: StepStatusType) => void
 }
 
-const StepItem = memo(({ step, index, isSelected, onStepClick, getTextColor }: {
+const StepItem = memo(({ step, index, isSelected, onStepClick, getTextColor, isStepClickable }: {
     step: GetStepsDto
     index: number
     isSelected: boolean
     onStepClick: (step: GetStepsDto, stepIndex: number) => void
-    getTextColor: (status: number | undefined) => string
+    getTextColor: (status: number | undefined) => string,
+    isStepClickable: boolean
 }) => {
-    const isStepClickable = true
 
     const labelProps: {
         error?: boolean
@@ -49,6 +49,7 @@ const StepItem = memo(({ step, index, isSelected, onStepClick, getTextColor }: {
                 slots={{
                     stepIcon: () => <CustomStepIcon step={step} index={index} />
                 }}
+
                 sx={{
                     '& .MuiStepLabel-labelContainer': {
                         '& .step-label': {
@@ -276,6 +277,7 @@ const ProcessSteps = forwardRef<ProcessStepsRef, ProcessStepsProps>(({ registrat
                             }
 
                             const isSelected = index === selectedStepIndex
+                            const isStepClickable = step.status !== CONFIG.StepStatus.Pending
 
                             return (
                                 <StepItem
@@ -285,6 +287,7 @@ const ProcessSteps = forwardRef<ProcessStepsRef, ProcessStepsProps>(({ registrat
                                     isSelected={isSelected}
                                     onStepClick={handleStepClick}
                                     getTextColor={getTextColor}
+                                    isStepClickable={isStepClickable}
                                 />
                             )
                         })}
