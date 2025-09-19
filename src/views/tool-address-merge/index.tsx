@@ -314,7 +314,7 @@ const ToolAddressMerge = () => {
                         {inputMode === InputMode.EXCEL ? (
                             <>
                                 {/* Upload Area */}
-                                <DropzoneCard {...getDropzoneRootProps()}>
+                                <DropzoneCard {...getDropzoneRootProps()} className='py-7'>
                                     <input {...getDropzoneInputProps()} />
                                     <CustomAvatar
                                         variant="rounded"
@@ -328,7 +328,7 @@ const ToolAddressMerge = () => {
                                         <i className="ri-upload-2-line" style={{ fontSize: 24 }} />
                                     </CustomAvatar>
                                     <Typography variant="h5" sx={{ fontWeight: 500, mb: 1 }}>
-                                        Tải file excel địa chỉ cũ <span style={{ color: 'red' }}>(*)</span>
+                                        Tải file excel <span className='font-bold'>địa chỉ cũ</span> <span style={{ color: 'red' }}>(*)</span>
                                     </Typography>
                                     <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
                                         Nội dung file excel phải có cột Địa Chỉ để chuyển đổi chính xác
