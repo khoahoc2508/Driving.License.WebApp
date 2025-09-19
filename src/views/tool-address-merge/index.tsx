@@ -11,7 +11,8 @@ import {
     CardContent,
     CardHeader,
     Typography,
-    IconButton
+    IconButton,
+    TextField
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
@@ -20,6 +21,12 @@ import { useDropzone } from 'react-dropzone'
 
 // Component Imports
 import CustomAvatar from '@core/components/mui/Avatar'
+
+// Enums
+enum InputMode {
+    EXCEL = 'excel',
+    MANUAL = 'manual'
+}
 
 // Styled Components
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -86,11 +93,6 @@ const iconButtonStyles = (color: string, hoverBg: string, hoverColor: string) =>
     }
 })
 
-// Common Download Button Styles
-const downloadButtonStyles = {
-
-}
-
 interface FileItem {
     id: string
     name: string
@@ -100,10 +102,14 @@ interface FileItem {
 
 const ToolAddressMerge = () => {
     // States
-    const [inputMode, setInputMode] = useState<'excel' | 'manual'>('excel')
+    const [inputMode, setInputMode] = useState<InputMode>(InputMode.EXCEL)
     const [uploadedFiles, setUploadedFiles] = useState<FileItem[]>([])
     const [outputFiles, setOutputFiles] = useState<FileItem[]>([])
     const [isConverting, setIsConverting] = useState(false)
+
+    // Manual input states
+    const [oldAddressInput, setOldAddressInput] = useState<string>('')
+    const [newAddressOutput, setNewAddressOutput] = useState<string>('')
 
     // Mock data for demonstration
     const mockUploadedFiles: FileItem[] = [
@@ -145,7 +151,7 @@ const ToolAddressMerge = () => {
     })
 
     // Handlers
-    const handleInputModeChange = (newMode: 'excel' | 'manual') => {
+    const handleInputModeChange = (newMode: InputMode) => {
         setInputMode(newMode)
     }
 
@@ -163,13 +169,35 @@ const ToolAddressMerge = () => {
         console.log('Downloading all files')
     }
 
+    const handleCopy = () => {
+        if (newAddressOutput) {
+            navigator.clipboard.writeText(newAddressOutput)
+            console.log('Copied to clipboard:', newAddressOutput)
+        }
+    }
+
     const handleConvert = async () => {
         setIsConverting(true)
-        // Mock conversion process
-        setTimeout(() => {
-            setOutputFiles(mockOutputFiles)
-            setIsConverting(false)
-        }, 2000)
+
+        if (inputMode === InputMode.EXCEL) {
+            // Mock conversion process for Excel files
+            setTimeout(() => {
+                setOutputFiles(mockOutputFiles)
+                setIsConverting(false)
+            }, 2000)
+        } else {
+            // Mock conversion process for manual input
+            setTimeout(() => {
+                // Simple placeholder conversion logic
+                const inputAddresses = oldAddressInput.split('\n').filter(line => line.trim() !== '')
+                const convertedAddresses = inputAddresses.map(address => {
+                    // Mock conversion: just add "New " prefix
+                    return `New ${address.trim()}`
+                }).join('\n')
+                setNewAddressOutput(convertedAddresses)
+                setIsConverting(false)
+            }, 2000)
+        }
     }
 
     const formatFileSize = (bytes: number) => {
@@ -253,14 +281,14 @@ const ToolAddressMerge = () => {
                     width: '100%',
                 }}>
                     <Button
-                        onClick={() => handleInputModeChange('excel')}
-                        sx={tabButtonStyles(inputMode === 'excel')}
+                        onClick={() => handleInputModeChange(InputMode.EXCEL)}
+                        sx={tabButtonStyles(inputMode === InputMode.EXCEL)}
                     >
                         TẢI EXCEL
                     </Button>
                     <Button
-                        onClick={() => handleInputModeChange('manual')}
-                        sx={tabButtonStyles(inputMode === 'manual')}
+                        onClick={() => handleInputModeChange(InputMode.MANUAL)}
+                        sx={tabButtonStyles(inputMode === InputMode.MANUAL)}
                     >
                         TỰ NHẬP
                     </Button>
@@ -283,46 +311,71 @@ const ToolAddressMerge = () => {
                         }}
                     />
                     <CardContent sx={{ p: 4, pt: 0 }}>
-                        {/* Upload Area */}
-                        <DropzoneCard {...getDropzoneRootProps()}>
-                            <input {...getDropzoneInputProps()} />
-                            <CustomAvatar
-                                variant="rounded"
-                                sx={{
-                                    margin: '0 auto',
-                                    mb: 4,
-                                    width: 30,
-                                    height: 30,
-                                }}
-                            >
-                                <i className="ri-upload-2-line" style={{ fontSize: 24 }} />
-                            </CustomAvatar>
-                            <Typography variant="h5" sx={{ fontWeight: 500, mb: 1 }}>
-                                Tải file excel địa chỉ cũ <span style={{ color: 'red' }}>(*)</span>
-                            </Typography>
-                            <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
-                                Nội dung file excel phải có cột Địa Chỉ để chuyển đổi chính xác
-                            </Typography>
-                            <Typography variant="caption" sx={{ color: 'error.main' }}>
-                                Tối đa 5 file
-                            </Typography>
-                        </DropzoneCard>
+                        {inputMode === InputMode.EXCEL ? (
+                            <>
+                                {/* Upload Area */}
+                                <DropzoneCard {...getDropzoneRootProps()}>
+                                    <input {...getDropzoneInputProps()} />
+                                    <CustomAvatar
+                                        variant="rounded"
+                                        sx={{
+                                            margin: '0 auto',
+                                            mb: 4,
+                                            width: 30,
+                                            height: 30,
+                                        }}
+                                    >
+                                        <i className="ri-upload-2-line" style={{ fontSize: 24 }} />
+                                    </CustomAvatar>
+                                    <Typography variant="h5" sx={{ fontWeight: 500, mb: 1 }}>
+                                        Tải file excel địa chỉ cũ <span style={{ color: 'red' }}>(*)</span>
+                                    </Typography>
+                                    <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
+                                        Nội dung file excel phải có cột Địa Chỉ để chuyển đổi chính xác
+                                    </Typography>
+                                    <Typography variant="caption" sx={{ color: 'error.main' }}>
+                                        Tối đa 5 file
+                                    </Typography>
+                                </DropzoneCard>
 
-                        {/* Uploaded Files List */}
-                        {uploadedFiles.length > 0 && (
-                            <Box sx={{ mt: 3 }}>
-                                {uploadedFiles.map((file) => (
-                                    <FileItem
-                                        key={file.id}
-                                        file={file}
-                                        onAction={handleRemoveFile}
-                                        actionIcon="ri-close-line"
-                                        actionColor="error.main"
-                                        actionHoverBg="error.light"
-                                        actionHoverColor="error.dark"
-                                    />
-                                ))}
-                            </Box>
+                                {/* Uploaded Files List */}
+                                {uploadedFiles.length > 0 && (
+                                    <Box sx={{ mt: 3 }}>
+                                        {uploadedFiles.map((file) => (
+                                            <FileItem
+                                                key={file.id}
+                                                file={file}
+                                                onAction={handleRemoveFile}
+                                                actionIcon="ri-close-line"
+                                                actionColor="error.main"
+                                                actionHoverBg="error.light"
+                                                actionHoverColor="error.dark"
+                                            />
+                                        ))}
+                                    </Box>
+                                )}
+                            </>
+                        ) : (
+                            <>
+                                {/* Manual Input Area */}
+                                <TextField
+                                    fullWidth
+                                    multiline
+                                    rows={10}
+                                    value={oldAddressInput}
+                                    onChange={(e) => setOldAddressInput(e.target.value)}
+                                    placeholder="Hải Tân, Hải Hậu, Nam Định"
+                                    sx={{ mb: 2 }}
+                                />
+                                <div className='flex flex-col items-start'>
+                                    <Typography variant="body2" sx={{ color: 'primary.main', mb: 1 }}>
+                                        1. Định dạng: Địa chỉ chi tiết, Phường/Xã, Quận/Huyện, Tỉnh/Thành phố
+                                    </Typography>
+                                    <Typography variant="body2" sx={{ color: 'primary.main' }}>
+                                        2. Mỗi dòng một địa chỉ
+                                    </Typography>
+                                </div>
+                            </>
                         )}
                     </CardContent>
                 </Card>
@@ -341,40 +394,69 @@ const ToolAddressMerge = () => {
                         }}
                     />
                     <CardContent sx={{ p: 4, pt: 0, flex: 1 }}>
-                        {/* Output Files List */}
-                        {outputFiles.length > 0 ? (
-                            <Box className='w-full h-full flex flex-col items-stretch justify-between'>
-                                <div>
-                                    {outputFiles.map((file) => (
-                                        <Box key={file.id} sx={{ mb: 2 }}>
-                                            <FileItem
-                                                file={file}
-                                                onAction={handleDownloadFile}
-                                                actionIcon="ri-download-line"
-                                                actionColor="#7c4dff"
-                                                actionHoverBg="#f3f0ff"
-                                                actionHoverColor="#6a3de8"
-                                            />
-                                        </Box>
-                                    ))}
-                                </div>
+                        {inputMode === InputMode.EXCEL ? (
+                            <>
+                                {/* Output Files List */}
+                                {outputFiles.length > 0 ? (
+                                    <Box className='w-full h-full flex flex-col items-stretch justify-between'>
+                                        <div>
+                                            {outputFiles.map((file) => (
+                                                <Box key={file.id} sx={{ mb: 2 }}>
+                                                    <FileItem
+                                                        file={file}
+                                                        onAction={handleDownloadFile}
+                                                        actionIcon="ri-download-line"
+                                                        actionColor="#7c4dff"
+                                                        actionHoverBg="#f3f0ff"
+                                                        actionHoverColor="#6a3de8"
+                                                    />
+                                                </Box>
+                                            ))}
+                                        </div>
 
-                                {/* Download All Button */}
+                                        {/* Download All Button */}
+                                        <Button
+                                            variant="outlined"
+                                            startIcon={<i className="ri-download-line" />}
+                                            onClick={handleDownloadAll}
+                                        >
+                                            TẢI XUỐNG TẤT CẢ
+                                        </Button>
+                                    </Box>
+                                ) : (
+                                    <Card sx={{ textAlign: 'center', py: 4, backgroundColor: 'transparent', boxShadow: 'none', border: '1px dashed', borderColor: 'divider' }}>
+                                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                                            Chưa có file kết quả
+                                        </Typography>
+                                    </Card>
+                                )}
+                            </>
+                        ) : (
+                            <>
+                                {/* Manual Output Area */}
+                                <TextField
+                                    fullWidth
+                                    multiline
+                                    rows={10}
+                                    value={newAddressOutput}
+                                    onChange={(e) => setNewAddressOutput(e.target.value)}
+                                    placeholder="Xã Hải Tiến, Ninh Bình"
+                                    InputProps={{
+                                        readOnly: true
+                                    }}
+                                    sx={{ mb: 2 }}
+                                />
                                 <Button
                                     variant="outlined"
-                                    startIcon={<i className="ri-download-line" />}
-                                    onClick={handleDownloadAll}
-                                    sx={downloadButtonStyles}
+                                    startIcon={<i className="ri-file-copy-line" />}
+                                    onClick={handleCopy}
+                                    sx={{
+                                        width: '100%',
+                                    }}
                                 >
-                                    TẢI XUỐNG TẤT CẢ
+                                    COPY
                                 </Button>
-                            </Box>
-                        ) : (
-                            <Card sx={{ textAlign: 'center', py: 4, backgroundColor: 'transparent', boxShadow: 'none', border: '1px dashed', borderColor: 'divider' }}>
-                                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                    Chưa có file kết quả
-                                </Typography>
-                            </Card>
+                            </>
                         )}
                     </CardContent>
                 </Card>
@@ -384,7 +466,11 @@ const ToolAddressMerge = () => {
                 variant="contained"
                 size="medium"
                 onClick={handleConvert}
-                disabled={uploadedFiles.length === 0 || isConverting}
+                disabled={
+                    (inputMode === InputMode.EXCEL && uploadedFiles.length === 0) ||
+                    (inputMode === InputMode.MANUAL && !oldAddressInput.trim()) ||
+                    isConverting
+                }
                 className='my-4 min-w-[400px] rounded'
             >
                 {isConverting ? (
