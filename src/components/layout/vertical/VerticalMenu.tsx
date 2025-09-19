@@ -114,6 +114,10 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
           <MenuItem href={`${CONFIG.Routers.ManageFeeType}/list`}>{"Danh sách lệ phí"}</MenuItem>
         </SubMenu>
 
+        <SubMenu label={"Công cụ tiện ích"} icon={<i className="ri-tools-line"></i>}>
+          <MenuItem href={`${CONFIG.Routers.ToolAddressMerge}`}>{"Sáp nhập địa chỉ"}</MenuItem>
+        </SubMenu>
+
         {/* <SubMenu label={"Cấu hình cá nhân"} icon={<i className='ri-settings-3-line' />}>
           <MenuItem href={`${CONFIG.Routers.BrandSetting}/brand-setting`}>{"Thương hiệu"}</MenuItem>
         </SubMenu> */}
