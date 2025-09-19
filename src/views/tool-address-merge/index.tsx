@@ -11,8 +11,6 @@ import {
     CardContent,
     CardHeader,
     Typography,
-    ToggleButton,
-    ToggleButtonGroup,
     IconButton
 } from '@mui/material'
 import { styled } from '@mui/material/styles'
@@ -60,6 +58,38 @@ const FileItemCard = styled(Card)(({ theme }) => ({
         boxShadow: theme.shadows[1]
     }
 }))
+
+// Common Button Styles
+const tabButtonStyles = (isActive: boolean) => ({
+    flex: 1,
+    py: 2,
+    px: 4,
+    textTransform: 'uppercase',
+    letterSpacing: '0.3px',
+    transition: 'all 0.3s ease',
+    backgroundColor: isActive ? 'primary.main' : 'transparent',
+    color: isActive ? 'white' : 'text.primary !important',
+    boxShadow: isActive ? '0 2px 8px rgba(124, 77, 255, 0.3)' : 'none',
+    position: 'relative',
+    '&:hover': {
+        backgroundColor: isActive ? '#6a3de8 !important' : '#e9ecef',
+        boxShadow: isActive ? '0 4px 12px rgba(124, 77, 255, 0.4)' : '0 1px 3px rgba(0, 0, 0, 0.1)'
+    }
+})
+
+// Common Icon Button Styles
+const iconButtonStyles = (color: string, hoverBg: string, hoverColor: string) => ({
+    color,
+    '&:hover': {
+        backgroundColor: hoverBg,
+        color: hoverColor
+    }
+})
+
+// Common Download Button Styles
+const downloadButtonStyles = {
+
+}
 
 interface FileItem {
     id: string
@@ -158,6 +188,46 @@ const ToolAddressMerge = () => {
         return 'ri-file-line'
     }
 
+    // Reusable File Item Component
+    const FileItem = ({
+        file,
+        onAction,
+        actionIcon,
+        actionColor = '#7c4dff',
+        actionHoverBg = '#f3f0ff',
+        actionHoverColor = '#6a3de8'
+    }: {
+        file: FileItem
+        onAction: (fileId: string) => void
+        actionIcon: string
+        actionColor?: string
+        actionHoverBg?: string
+        actionHoverColor?: string
+    }) => (
+        <FileItemCard sx={{ p: 2, px: 4, display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', flex: 1 }}>
+                <Box sx={{ mr: 4, display: 'flex', alignItems: 'center' }}>
+                    <i className={getFileIcon(file.type)} style={{ fontSize: 20 }} />
+                </Box>
+                <Box className='flex flex-col items-start'>
+                    <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                        {file.name}
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                        {formatFileSizeDisplay(file.size)}
+                    </Typography>
+                </Box>
+            </Box>
+            <IconButton
+                onClick={() => onAction(file.id)}
+                size="small"
+                sx={iconButtonStyles(actionColor, actionHoverBg, actionHoverColor)}
+            >
+                <i className={actionIcon} />
+            </IconButton>
+        </FileItemCard>
+    )
+
     return (
         < Card sx={{ mb: 4, textAlign: 'center' }}>
             <CardHeader
@@ -184,43 +254,13 @@ const ToolAddressMerge = () => {
                 }}>
                     <Button
                         onClick={() => handleInputModeChange('excel')}
-                        sx={{
-                            flex: 1,
-                            py: 2,
-                            px: 4,
-                            textTransform: 'uppercase',
-                            letterSpacing: '0.3px',
-                            transition: 'all 0.3s ease',
-                            backgroundColor: inputMode === 'excel' ? 'primary.main' : 'transparent',
-                            color: inputMode === 'excel' ? 'white' : 'text.primary !important',
-                            boxShadow: inputMode === 'excel' ? '0 2px 8px rgba(124, 77, 255, 0.3)' : 'none',
-                            position: 'relative',
-                            '&:hover': {
-                                backgroundColor: inputMode === 'excel' ? '#6a3de8 !important' : '#e9ecef',
-                                boxShadow: inputMode === 'excel' ? '0 4px 12px rgba(124, 77, 255, 0.4)' : '0 1px 3px rgba(0, 0, 0, 0.1)'
-                            }
-                        }}
+                        sx={tabButtonStyles(inputMode === 'excel')}
                     >
                         TẢI EXCEL
                     </Button>
                     <Button
                         onClick={() => handleInputModeChange('manual')}
-                        sx={{
-                            flex: 1,
-                            py: 2,
-                            px: 4,
-                            textTransform: 'uppercase',
-                            letterSpacing: '0.3px',
-                            transition: 'all 0.3s ease',
-                            backgroundColor: inputMode === 'manual' ? 'primary.main' : 'transparent',
-                            color: inputMode === 'manual' ? 'white' : 'text.primary !important',
-                            boxShadow: inputMode === 'manual' ? '0 2px 8px rgba(124, 77, 255, 0.3)' : 'none',
-                            position: 'relative',
-                            '&:hover': {
-                                backgroundColor: inputMode === 'manual' ? '#6a3de8 !important' : '#e9ecef',
-                                boxShadow: inputMode === 'manual' ? '0 4px 12px rgba(124, 77, 255, 0.4)' : '0 1px 3px rgba(0, 0, 0, 0.1)'
-                            }
-                        }}
+                        sx={tabButtonStyles(inputMode === 'manual')}
                     >
                         TỰ NHẬP
                     </Button>
@@ -272,34 +312,15 @@ const ToolAddressMerge = () => {
                         {uploadedFiles.length > 0 && (
                             <Box sx={{ mt: 3 }}>
                                 {uploadedFiles.map((file) => (
-                                    <FileItemCard key={file.id} sx={{ p: 2, px: 4, display: 'flex', alignItems: 'center' }}>
-                                        <Box sx={{ display: 'flex', alignItems: 'center', flex: 1 }}>
-                                            <Box sx={{ mr: 4, display: 'flex', alignItems: 'center' }}>
-                                                <i className={getFileIcon(file.type)} style={{ fontSize: 20 }} />
-                                            </Box>
-                                            <Box className='flex flex-col items-start'>
-                                                <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                                                    {file.name}
-                                                </Typography>
-                                                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                                    {formatFileSizeDisplay(file.size)}
-                                                </Typography>
-                                            </Box>
-                                        </Box>
-                                        <IconButton
-                                            onClick={() => handleRemoveFile(file.id)}
-                                            size="small"
-                                            sx={{
-                                                color: 'error.main',
-                                                '&:hover': {
-                                                    backgroundColor: 'error.light',
-                                                    color: 'error.dark'
-                                                }
-                                            }}
-                                        >
-                                            <i className="ri-close-line" />
-                                        </IconButton>
-                                    </FileItemCard>
+                                    <FileItem
+                                        key={file.id}
+                                        file={file}
+                                        onAction={handleRemoveFile}
+                                        actionIcon="ri-close-line"
+                                        actionColor="error.main"
+                                        actionHoverBg="error.light"
+                                        actionHoverColor="error.dark"
+                                    />
                                 ))}
                             </Box>
                         )}
@@ -325,34 +346,16 @@ const ToolAddressMerge = () => {
                             <Box className='w-full h-full flex flex-col items-stretch justify-between'>
                                 <div>
                                     {outputFiles.map((file) => (
-                                        <FileItemCard key={file.id} sx={{ p: 2, px: 4, display: 'flex', alignItems: 'center', mb: 2 }}>
-                                            <Box sx={{ display: 'flex', alignItems: 'center', flex: 1 }}>
-                                                <Box sx={{ mr: 4, display: 'flex', alignItems: 'center' }}>
-                                                    <i className={getFileIcon(file.type)} style={{ fontSize: 20 }} />
-                                                </Box>
-                                                <Box className='flex flex-col items-start'>
-                                                    <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                                                        {file.name}
-                                                    </Typography>
-                                                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                                        {formatFileSizeDisplay(file.size)}
-                                                    </Typography>
-                                                </Box>
-                                            </Box>
-                                            <IconButton
-                                                onClick={() => handleDownloadFile(file.id)}
-                                                size="small"
-                                                sx={{
-                                                    color: '#7c4dff',
-                                                    '&:hover': {
-                                                        backgroundColor: '#f3f0ff',
-                                                        color: '#6a3de8'
-                                                    }
-                                                }}
-                                            >
-                                                <i className="ri-download-line" />
-                                            </IconButton>
-                                        </FileItemCard>
+                                        <Box key={file.id} sx={{ mb: 2 }}>
+                                            <FileItem
+                                                file={file}
+                                                onAction={handleDownloadFile}
+                                                actionIcon="ri-download-line"
+                                                actionColor="#7c4dff"
+                                                actionHoverBg="#f3f0ff"
+                                                actionHoverColor="#6a3de8"
+                                            />
+                                        </Box>
                                     ))}
                                 </div>
 
@@ -361,7 +364,7 @@ const ToolAddressMerge = () => {
                                     variant="outlined"
                                     startIcon={<i className="ri-download-line" />}
                                     onClick={handleDownloadAll}
-                                    className='w-full'
+                                    sx={downloadButtonStyles}
                                 >
                                     TẢI XUỐNG TẤT CẢ
                                 </Button>
@@ -379,7 +382,7 @@ const ToolAddressMerge = () => {
 
             <Button
                 variant="contained"
-                size="large"
+                size="medium"
                 onClick={handleConvert}
                 disabled={uploadedFiles.length === 0 || isConverting}
                 className='my-4 min-w-[400px] rounded'
