@@ -295,7 +295,12 @@ const ToolAddressMerge = () => {
           InputProps={{
             readOnly: true
           }}
-          sx={{ mb: 2 }}
+          sx={{
+            '& .MuiOutlinedInput-notchedOutline': {
+              borderColor: 'var(--border-color) !important',
+              borderWidth: '1px !important'
+            }
+          }}
         />
       )
     }
@@ -305,7 +310,6 @@ const ToolAddressMerge = () => {
         sx={{
           width: '100%',
           height: '100%',
-          mb: 2,
           border: '1px solid',
           borderRadius: 1,
           p: 4,
@@ -316,7 +320,7 @@ const ToolAddressMerge = () => {
         }}
       >
         {results.map((result, index) => (
-          <Box key={index} sx={{ mb: 2 }}>
+          <Box key={index} sx={{ mb: 1 }}>
             <Box
               sx={{
                 backgroundColor: result.isError
@@ -335,10 +339,11 @@ const ToolAddressMerge = () => {
                     ? 'warning.main'
                     : 'primary.main'
                   }`,
-                textAlign: 'left'
+                textAlign: 'left',
+                whiteSpace: 'pre-line'
               }}
             >
-              {result.newAddresses.join('\n')}
+              {result.newAddresses?.length > 0 ? result.newAddresses.join('\n') : result.oldAddress}
             </Box>
           </Box>
         ))}
@@ -509,7 +514,13 @@ const ToolAddressMerge = () => {
                   value={oldAddressInput}
                   onChange={(e) => setOldAddressInput(e.target.value)}
                   placeholder="Hải Tân, Hải Hậu, Nam Định"
-                  sx={{ mb: 2 }}
+                  sx={{
+                    mb: 2,
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderColor: 'var(--border-color) !important',
+                      borderWidth: '1px !important'
+                    }
+                  }}
                 />
                 <div className='flex flex-col items-start'>
                   <Typography variant="body2" sx={{ color: 'primary.main', mb: 1 }}>
@@ -586,7 +597,7 @@ const ToolAddressMerge = () => {
                 )}
               </>
             ) : (
-              <>
+              <div className='w-full h-full flex flex-col items-stretch justify-between gap-[14px]'>
                 {/* Manual Output Area */}
                 <CustomResultTextField results={textConversionResults} />
 
@@ -600,7 +611,7 @@ const ToolAddressMerge = () => {
                 >
                   COPY
                 </Button>
-              </>
+              </div>
             )}
           </CardContent>
         </Card>
