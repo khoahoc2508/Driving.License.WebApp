@@ -95,7 +95,6 @@ const ToolAddressMerge = () => {
   const [uploadedFiles, setUploadedFiles] = useState<FileItem[]>([])
   const [outputFiles, setOutputFiles] = useState<FileItem[]>([])
   const [isConverting, setIsConverting] = useState(false)
-  const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
 
   console.log(success)
@@ -146,14 +145,10 @@ const ToolAddressMerge = () => {
         await AddressConversionAPI.downloadConvertedFile(file.downloadUrl, file.name)
         setSuccess(`Đã tải xuống file: ${file.name}`)
         toast.success(`Đã tải xuống file: ${file.name}`)
-        setError(null)
-      } else {
-        setError('File chưa được chuyển đổi hoặc không có URL download.')
       }
     } catch (error: any) {
       console.error('Error downloading file:', error)
       toast.error(error?.message || 'Có lỗi xảy ra khi tải xuống file. Vui lòng thử lại.')
-      setError(error?.message || 'Có lỗi xảy ra khi tải xuống file. Vui lòng thử lại.')
       setSuccess(null)
     }
   }, [outputFiles])
@@ -178,14 +173,10 @@ const ToolAddressMerge = () => {
         }
 
         toast.success(`Đã tải xuống tất cả ${convertedFiles.length} file`)
-        setError(null)
-      } else {
-        setError('Chưa có file nào được chuyển đổi. Vui lòng chuyển đổi trước.')
       }
     } catch (error: any) {
       console.error('Error downloading all files:', error)
       toast.error(error?.message || 'Có lỗi xảy ra khi tải xuống tất cả file. Vui lòng thử lại.')
-      setError(error?.message || 'Có lỗi xảy ra khi tải xuống tất cả file. Vui lòng thử lại.')
       setSuccess(null)
     }
   }
@@ -199,7 +190,6 @@ const ToolAddressMerge = () => {
 
   const handleConvert = async () => {
     setIsConverting(true)
-    setError(null)
     setSuccess(null)
 
     try {
@@ -243,7 +233,7 @@ const ToolAddressMerge = () => {
       }
     } catch (error: any) {
       console.error('Error during conversion:', error)
-      setError(error?.message || 'Có lỗi xảy ra trong quá trình chuyển đổi. Vui lòng thử lại.')
+      toast.error(error?.message || 'Có lỗi xảy ra trong quá trình chuyển đổi. Vui lòng thử lại.')
     } finally {
       setIsConverting(false)
     }
