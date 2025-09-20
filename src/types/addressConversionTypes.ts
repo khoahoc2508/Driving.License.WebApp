@@ -13,6 +13,17 @@ export interface ExcelConversionResponse {
   [key: string]: ConvertedFileResult
 }
 
+// Text conversion response types
+export interface TextConversionResult {
+  oldAddress: string
+  newAddresses: string[]
+  isWarning: boolean
+  isError: boolean
+  message: string
+}
+
+export type TextConversionResponse = TextConversionResult[]
+
 // File handling types
 export interface FileUploadItem {
   id: string

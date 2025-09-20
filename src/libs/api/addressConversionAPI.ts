@@ -1,5 +1,9 @@
 import axiosInstance from '../axios'
-import type { ConvertToNewAddressFromTextCommand, ExcelConversionResponse } from '@/types/addressConversionTypes'
+import type {
+  ConvertToNewAddressFromTextCommand,
+  ExcelConversionResponse,
+  TextConversionResponse
+} from '@/types/addressConversionTypes'
 
 /**
  * Convert addresses from Excel files to new administrative units
@@ -33,7 +37,7 @@ const convertAddressesFromExcel = async (files: File[]): Promise<ExcelConversion
  * @param oldAddresses - Array of old addresses to convert
  * @returns Promise with binary data (Excel file)
  */
-const convertAddressesFromText = async (oldAddresses: string[]): Promise<Blob> => {
+const convertAddressesFromText = async (oldAddresses: string[]): Promise<TextConversionResponse> => {
   const requestBody: ConvertToNewAddressFromTextCommand = {
     oldAddresses
   }
@@ -43,10 +47,10 @@ const convertAddressesFromText = async (oldAddresses: string[]): Promise<Blob> =
       headers: {
         'Content-Type': 'application/json'
       },
-      responseType: 'blob' // Important for binary data
+      responseType: 'json' // Changed to JSON to receive text results
     })
 
-    return response.data
+    return response.data.data
   } catch (error) {
     console.error('Error converting addresses from text:', error)
     throw error
@@ -149,25 +153,6 @@ const downloadConvertedFile = async (fileUrl: string, originalFileName: string):
   }
 }
 
-/**
- * Process text addresses and download result
- * @param addresses - Array of addresses
- * @param outputFilename - Name for output file (optional)
- */
-const processTextAddresses = async (addresses: string[], outputFilename?: string): Promise<void> => {
-  try {
-    const blob = await convertAddressesFromText(addresses)
-
-    const filename = outputFilename || `converted_addresses_${new Date().getTime()}.xlsx`
-
-    downloadBlobAsFile(blob, filename)
-  } catch (error) {
-    console.error('Error processing text addresses:', error)
-
-    throw error
-  }
-}
-
 const AddressConversionAPI = {
   convertAddressesFromExcel,
   convertAddressesFromText,
@@ -175,8 +160,7 @@ const AddressConversionAPI = {
   downloadFileFromUrl,
   processExcelFiles,
   downloadAllConvertedFiles,
-  downloadConvertedFile,
-  processTextAddresses
+  downloadConvertedFile
 }
 
 export default AddressConversionAPI

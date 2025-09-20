@@ -103,6 +103,7 @@ const ToolAddressMerge = () => {
   // Manual input states
   const [oldAddressInput, setOldAddressInput] = useState<string>('')
   const [newAddressOutput, setNewAddressOutput] = useState<string>('')
+  const [textConversionResults, setTextConversionResults] = useState<any[]>([])
 
   // Initialize with empty arrays - no mock data needed
 
@@ -225,16 +226,16 @@ const ToolAddressMerge = () => {
         const inputAddresses = oldAddressInput.split('\n').filter(line => line.trim() !== '')
 
         if (inputAddresses.length > 0) {
-          // For text mode, we'll get the result as Excel file but also show in text area
-          // First, let's get the converted addresses as text for display
-          await AddressConversionAPI.processTextAddresses(inputAddresses)
+          // Get text conversion results
+          const results = await AddressConversionAPI.convertAddressesFromText(inputAddresses)
 
-          // For now, we'll keep the mock conversion for display in text area
-          // In a real implementation, you might want to parse the Excel result
-          const convertedAddresses = inputAddresses.map(address => {
-            // This is a placeholder - in real implementation, you'd get this from API
-            return `New ${address.trim()}`
-          }).join('\n')
+          // Set results for display
+          setTextConversionResults(results)
+
+          // Create text output for copy functionality
+          const convertedAddresses = results.map(result =>
+            result.newAddresses?.length > 0 ? result.newAddresses.join('\n') : result.oldAddress
+          ).join('\n')
 
           setNewAddressOutput(convertedAddresses)
           setSuccess(`Đã chuyển đổi thành công ${inputAddresses.length} địa chỉ`)
@@ -277,6 +278,71 @@ const ToolAddressMerge = () => {
         </Box>
         <Skeleton variant="circular" width={32} height={32} />
       </FileItemCard>
+    )
+  }
+
+  // Custom TextField with colored output
+  const CustomResultTextField = ({ results }: { results: any[] }) => {
+    if (results.length === 0) {
+      return (
+        <TextField
+          fullWidth
+          multiline
+          rows={10}
+          value={newAddressOutput}
+          onChange={(e) => setNewAddressOutput(e.target.value)}
+          placeholder="Xã Hải Tiến, Ninh Bình"
+          InputProps={{
+            readOnly: true
+          }}
+          sx={{ mb: 2 }}
+        />
+      )
+    }
+
+    return (
+      <Box
+        sx={{
+          width: '100%',
+          height: '100%',
+          mb: 2,
+          border: '1px solid',
+          borderRadius: 1,
+          p: 4,
+          backgroundColor: 'background.paper'
+        }}
+        style={{
+          borderColor: 'var(--border-color)'
+        }}
+      >
+        {results.map((result, index) => (
+          <Box key={index} sx={{ mb: 2 }}>
+            <Box
+              sx={{
+                backgroundColor: result.isError
+                  ? 'error.light'
+                  : result.isWarning
+                    ? 'warning.light'
+                    : 'transparent',
+                color: result.isError
+                  ? 'white'
+                  : result.isWarning
+                    ? 'white'
+                    : 'text.primary',
+                border: `1px solid ${result.isError
+                  ? 'error.main'
+                  : result.isWarning
+                    ? 'warning.main'
+                    : 'primary.main'
+                  }`,
+                textAlign: 'left'
+              }}
+            >
+              {result.newAddresses.join('\n')}
+            </Box>
+          </Box>
+        ))}
+      </Box>
     )
   }
 
@@ -371,22 +437,6 @@ const ToolAddressMerge = () => {
             TỰ NHẬP
           </Button>
         </Card>
-
-        {/* Error/Success Messages */}
-        {error && (
-          <Card sx={{
-            mt: 2,
-            p: 2,
-            backgroundColor: 'error.light',
-            border: '1px solid',
-            borderColor: 'error.main'
-          }}>
-            <Typography variant="body2" sx={{ color: 'error.dark' }}>
-              <i className="ri-error-warning-line" style={{ marginRight: 8 }} />
-              {error}
-            </Typography>
-          </Card>
-        )}
       </CardContent>
 
       {/* Main Content */}
@@ -487,7 +537,7 @@ const ToolAddressMerge = () => {
               borderBottom: '1px solid #e0e0e0',
             }}
           />
-          <CardContent sx={{ p: 4, pt: 0, flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+          <CardContent sx={{ p: 4, pt: 0, flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'space-between' }}>
             {inputMode === InputMode.EXCEL ? (
               <>
                 {/* Output Files List */}
@@ -538,18 +588,8 @@ const ToolAddressMerge = () => {
             ) : (
               <>
                 {/* Manual Output Area */}
-                <TextField
-                  fullWidth
-                  multiline
-                  rows={10}
-                  value={newAddressOutput}
-                  onChange={(e) => setNewAddressOutput(e.target.value)}
-                  placeholder="Xã Hải Tiến, Ninh Bình"
-                  InputProps={{
-                    readOnly: true
-                  }}
-                  sx={{ mb: 2 }}
-                />
+                <CustomResultTextField results={textConversionResults} />
+
                 <Button
                   variant="outlined"
                   startIcon={<i className="ri-file-copy-line" />}
