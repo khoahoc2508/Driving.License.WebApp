@@ -203,7 +203,7 @@ const ToolAddressMerge = () => {
           const processedFiles = Object.entries(conversionResults).map(([key, result]) => ({
             id: key,
             name: result.originalFileName,
-            size: 0,
+            size: result.fileSize,
             type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             downloadUrl: process.env.NEXT_PUBLIC_API_URL + result.convertedFileUrl
           }))
@@ -241,7 +241,7 @@ const ToolAddressMerge = () => {
 
   // Convert file size to display format like in the image
   const formatFileSizeDisplay = (bytes: number) => {
-    return `${(bytes / 1000).toFixed(1)} kb`
+    return `${(bytes / 1024).toFixed(1)} kb`
   }
 
   const getFileIcon = (type: string) => {
@@ -581,7 +581,7 @@ const ToolAddressMerge = () => {
                     </Button>
                   </Box>
                 ) : (
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                  <Typography variant="body2" sx={{ color: 'text.secondary', margin: 'auto 0' }}>
                     Chưa có file kết quả
                   </Typography>
                 )}
