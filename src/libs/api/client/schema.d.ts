@@ -436,6 +436,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/files/download-zip": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Files_DownloadZipFromLinks"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/license-types": {
         parameters: {
             query?: never;
@@ -1540,6 +1556,20 @@ export interface components {
             name?: string;
             description?: string;
             active?: boolean;
+        };
+        BaseResponseOfDownloadAndZipFileResult: components["schemas"]["BaseResponse"] & {
+            data?: components["schemas"]["DownloadAndZipFileResult"] | null;
+        };
+        DownloadAndZipFileResult: {
+            originalFileName?: string;
+            fileName?: string;
+            fileUrl?: string;
+
+            /** Format: int64 */
+            fileSize?: number;
+        };
+        DownloadZipFromLinksCommand: {
+            fileUrls?: string[];
         };
         BaseResponseOfListOfLicenseTypeDto: components["schemas"]["BaseResponse"] & {
             data?: components["schemas"]["LicenseTypeDto"][] | null;
@@ -3322,6 +3352,29 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BaseResponseOfBoolean"];
+                };
+            };
+        };
+    };
+    Files_DownloadZipFromLinks: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DownloadZipFromLinksCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfDownloadAndZipFileResult"];
                 };
             };
         };

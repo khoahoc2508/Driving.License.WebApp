@@ -7,6 +7,7 @@ export type ConvertToNewAddressFromTextCommand = components['schemas']['ConvertT
 export interface ConvertedFileResult {
   originalFileName: string
   convertedFileUrl: string
+  convertedFileName: string
   fileSize: number
 }
 

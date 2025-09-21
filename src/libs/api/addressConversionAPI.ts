@@ -153,6 +153,30 @@ const downloadConvertedFile = async (fileUrl: string, originalFileName: string):
   }
 }
 
+/**
+ * Download all converted files as a zip file
+ * @param fileUrls - Array of file URLs to zip and download
+ */
+const downloadAllAsZip = async (fileUrls: string[]): Promise<void> => {
+  try {
+    const response = await axiosInstance.post('/api/files/download-zip', {
+      fileUrls: fileUrls
+    })
+
+    // Extract file info from response
+    const { fileUrl, fileName } = response.data.data
+
+    // Construct full URL for download
+    const fullUrl = fileUrl.startsWith('http') ? fileUrl : `${process.env.NEXT_PUBLIC_API_URL}${fileUrl}`
+
+    // Download the zip file using the full URL
+    await downloadFileFromUrl(fullUrl, fileName)
+  } catch (error) {
+    console.error('Error downloading zip file:', error)
+    throw error
+  }
+}
+
 const AddressConversionAPI = {
   convertAddressesFromExcel,
   convertAddressesFromText,
@@ -160,7 +184,8 @@ const AddressConversionAPI = {
   downloadFileFromUrl,
   processExcelFiles,
   downloadAllConvertedFiles,
-  downloadConvertedFile
+  downloadConvertedFile,
+  downloadAllAsZip
 }
 
 export default AddressConversionAPI
