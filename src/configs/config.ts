@@ -205,7 +205,8 @@ const Routers = {
   ManageExamYards: '/admin/manage-exam-yards',
   ManageCars: '/admin/manage-cars',
   ManageDATDevices: '/admin/manage-dat-devices',
-  ToolAddressMerge: '/admin/tool-address-merge'
+  ToolAddressMerge: '/admin/tool-address-merge',
+  ToolAddressSync: '/admin/tool-address-sync'
 }
 
 const RoutersCustomer = {
