@@ -44,17 +44,14 @@ const getFileIcon = (type: string) => {
         return 'ri-file-excel-2-line'
     }
 
-    
-return 'ri-file-line'
+
+    return 'ri-file-line'
 }
 
 const FileItemComponent = ({
     file,
     onAction,
     actionIcon,
-    actionColor,
-    actionHoverBg,
-    actionHoverColor
 }: FileItemProps) => {
     return (
         <FileItemCard>

@@ -1,6 +1,6 @@
 'use client'
 
-import { Box, Typography, TextField, Button, Skeleton, Tooltip, IconButton, Card, CardContent } from '@mui/material'
+import { Box, Typography, TextField, Button, Skeleton, Tooltip, IconButton, CardContent } from '@mui/material'
 
 import FileItemComponent from './FileItem'
 import type { FileItem } from './FileItem'

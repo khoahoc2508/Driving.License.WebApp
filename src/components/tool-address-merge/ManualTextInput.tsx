@@ -1,6 +1,6 @@
 'use client'
 
-import { Typography, TextField } from '@mui/material'
+import { TextField } from '@mui/material'
 
 interface ManualTextInputProps {
     value: string
