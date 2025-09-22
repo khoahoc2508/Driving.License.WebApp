@@ -16,7 +16,8 @@ import {
     DialogTitle,
     DialogContent,
     DialogActions,
-    IconButton
+    IconButton,
+    Divider
 } from '@mui/material'
 
 // Component Imports
@@ -186,6 +187,24 @@ const ToolAddressSync = () => {
         setShowConfirmDialog(false)
     }
 
+    // Reset form function
+    const resetForm = () => {
+        // Reset form values
+        setValue('oldProvince', '')
+        setValue('oldDistrict', '')
+        setValue('oldWard', '')
+        setValue('newProvince', '')
+        setValue('newWard', '')
+
+        // Clear dropdown data
+        setOldDistricts([])
+        setOldWards([])
+        setNewWards([])
+
+        // Clear sync result
+        setSyncResult(null)
+    }
+
     // Form submit handler
     const onSubmit = async (data: FormData) => {
         try {
@@ -220,6 +239,9 @@ const ToolAddressSync = () => {
 
             setSyncResult(result)
             toast.success('Đồng bộ dữ liệu thành công')
+
+            // Reset form after successful update
+            resetForm()
         } catch (error: any) {
             console.error('Error syncing address mapping:', error)
             toast.error(error?.response?.data?.message || 'Có lỗi xảy ra trong quá trình đồng bộ')
@@ -244,15 +266,7 @@ const ToolAddressSync = () => {
     }
 
     const handleClearAll = () => {
-        setValue('oldProvince', '')
-        setValue('oldDistrict', '')
-        setValue('oldWard', '')
-        setValue('newProvince', '')
-        setValue('newWard', '')
-        setOldDistricts([])
-        setOldWards([])
-        setNewWards([])
-        setSyncResult(null)
+        resetForm()
         toast.success('Đã xóa toàn bộ dữ liệu')
     }
 
@@ -303,7 +317,7 @@ const ToolAddressSync = () => {
                 }
                 subheader={
                     <Typography variant="body1" sx={{ color: 'text.secondary', mt: 2 }}>
-                        Hãy chắc chắn việc cập nhật là chính xác
+                        Hãy chắc chắn việc cập nhật của bạn là chính xác
                     </Typography>
                 }
                 sx={{
@@ -412,21 +426,15 @@ const ToolAddressSync = () => {
                 onClose={handleCancelUpdate}
                 maxWidth="sm"
                 fullWidth
-                sx={{
-                    '& .MuiDialog-paper': {
-                        borderRadius: 2,
-                        p: 1
-                    }
-                }}
             >
                 <DialogTitle
                     sx={{
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        pb: 2,
                         fontSize: '1.25rem',
-                        fontWeight: 600
+                        fontWeight: 600,
+                        borderBottom: '1px solid #e0e0e0'
                     }}
                 >
                     Bạn chắc chắn cập nhật?
@@ -440,19 +448,20 @@ const ToolAddressSync = () => {
                             }
                         }}
                     >
-                        <i className="ri-close-line" />
+                        <i className="ri-close-line" style={{ fontSize: '24px' }} />
                     </IconButton>
                 </DialogTitle>
 
-                <DialogContent sx={{ pb: 2 }}>
-                    <Typography variant="body1" sx={{ mb: 2, color: 'text.primary' }}>
+                <DialogContent sx={{ p: 5 }}>
+                    <Typography variant="body1" sx={{ my: 4, color: 'text.primary' }}>
                         Bạn đang cập nhật dữ liệu sau sáp nhập:
                     </Typography>
+
 
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                         <Typography variant="body2">
                             <strong>Xã cũ:</strong>{' '}
-                            <span style={{ color: '#1976d2', fontWeight: 500 }}>
+                            <span className='text-primary font-semibold'>
                                 {(() => {
                                     const oldProvince = oldProvinces.find(p => p.value === watchedValues.oldProvince)
                                     const oldDistrict = oldDistricts.find(d => d.value === watchedValues.oldDistrict)
@@ -464,7 +473,7 @@ const ToolAddressSync = () => {
 
                         <Typography variant="body2">
                             <strong>Xã mới:</strong>{' '}
-                            <span style={{ color: '#1976d2', fontWeight: 500 }}>
+                            <span className='text-primary font-semibold'>
                                 {(() => {
                                     const newProvince = newProvinces.find(p => p.value === watchedValues.newProvince)
                                     const newWard = newWards.find(w => w.value === watchedValues.newWard)
@@ -475,19 +484,15 @@ const ToolAddressSync = () => {
                     </Box>
                 </DialogContent>
 
-                <DialogActions sx={{ px: 3, pb: 2, gap: 1 }}>
+                <DialogActions sx={{
+                    p: 4,
+                    pt: 4,
+                    borderTop: '1px solid #e0e0e0'
+                }}>
                     <Button
                         onClick={handleCancelUpdate}
                         variant="outlined"
-                        sx={{
-                            minWidth: 100,
-                            borderColor: '#e0e0e0',
-                            color: 'text.secondary',
-                            '&:hover': {
-                                borderColor: '#bdbdbd',
-                                backgroundColor: 'action.hover'
-                            }
-                        }}
+                        color='secondary'
                     >
                         HỦY
                     </Button>
@@ -495,13 +500,6 @@ const ToolAddressSync = () => {
                         onClick={handleConfirmUpdate}
                         variant="contained"
                         disabled={isSubmitting}
-                        sx={{
-                            minWidth: 100,
-                            backgroundColor: '#1976d2',
-                            '&:hover': {
-                                backgroundColor: '#1565c0'
-                            }
-                        }}
                     >
                         {isSubmitting ? (
                             <>
