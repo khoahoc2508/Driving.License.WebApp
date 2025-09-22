@@ -6,7 +6,6 @@ import type {
 } from '@/types/addressConversionTypes'
 import type {
   ProvinceDto,
-  DistrictDto,
   WardDto,
   OldProvinceDto,
   OldDistrictDto,
@@ -194,6 +193,7 @@ const downloadAllAsZip = async (fileUrls: string[]): Promise<void> => {
 const getProvinces = async (): Promise<ProvinceDto[]> => {
   try {
     const response = await axiosInstance.get('/api/addresses/provinces/all')
+
     return response.data?.data || []
   } catch (error) {
     console.error('Error fetching provinces:', error)
@@ -208,6 +208,7 @@ const getWards = async (provinceId?: string): Promise<WardDto[]> => {
   try {
     const params = provinceId ? { ProvinceId: provinceId } : {}
     const response = await axiosInstance.get('/api/addresses/wards/all', { params })
+
     return response.data?.data || []
   } catch (error) {
     console.error('Error fetching wards:', error)
@@ -221,6 +222,7 @@ const getWards = async (provinceId?: string): Promise<WardDto[]> => {
 const getOldProvinces = async (): Promise<OldProvinceDto[]> => {
   try {
     const response = await axiosInstance.get('/api/addresses/old-provinces/all')
+
     return response.data?.data || []
   } catch (error) {
     console.error('Error fetching old provinces:', error)
@@ -238,6 +240,7 @@ const getOldDistricts = async (oldProvinceId: string): Promise<OldDistrictDto[]>
         OldProvinceId: oldProvinceId
       }
     })
+
     return response.data?.data || []
   } catch (error) {
     console.error('Error fetching old districts:', error)
@@ -255,6 +258,7 @@ const getOldWards = async (oldDistrictId: string): Promise<OldWardDto[]> => {
         OldDistrictId: oldDistrictId
       }
     })
+
     return response.data?.data || []
   } catch (error) {
     console.error('Error fetching old wards:', error)
@@ -268,6 +272,7 @@ const getOldWards = async (oldDistrictId: string): Promise<OldWardDto[]> => {
 const upsertUserWardMapping = async (mapping: UpsertUserWardMappingCommand): Promise<any> => {
   try {
     const response = await axiosInstance.post('/api/addresses/user-ward-mapping/upsert', mapping)
+
     return response.data
   } catch (error) {
     console.error('Error upserting user ward mapping:', error)

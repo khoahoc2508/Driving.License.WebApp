@@ -16,8 +16,7 @@ import {
     DialogTitle,
     DialogContent,
     DialogActions,
-    IconButton,
-    Divider
+    IconButton
 } from '@mui/material'
 
 // Component Imports
@@ -35,7 +34,6 @@ import type { DropdownOption } from '@/types/addressesTypes'
 // Local Component Imports
 import {
     AddressInputPanel,
-    type AddressData
 } from '@/components/tool-address-sync'
 
 type FormData = {
@@ -53,7 +51,7 @@ const ToolAddressSync = () => {
         handleSubmit,
         watch,
         setValue,
-        formState: { errors, isSubmitting }
+        formState: { isSubmitting }
     } = useForm<FormData>({
         defaultValues: {
             oldProvince: '',
@@ -69,7 +67,6 @@ const ToolAddressSync = () => {
     const watchedValues = watch()
 
     // States
-    const [syncResult, setSyncResult] = useState<any>(null)
     const [isLoading, setIsLoading] = useState(true)
     const [showConfirmDialog, setShowConfirmDialog] = useState(false)
 
@@ -133,7 +130,9 @@ const ToolAddressSync = () => {
     const loadOldDistricts = async (oldProvinceId: string) => {
         try {
             const oldDistrictsData = await AddressConversionAPI.getOldDistricts(oldProvinceId)
+
             setOldDistricts(oldDistrictsData.map(item => ({ label: item.name || '', value: item.id?.toString() || '' })))
+
             // Clear old wards when districts change
             setOldWards([])
             setValue('oldDistrict', '')
@@ -148,7 +147,9 @@ const ToolAddressSync = () => {
     const loadOldWards = async (oldDistrictId: string) => {
         try {
             const oldWardsData = await AddressConversionAPI.getOldWards(oldDistrictId)
+
             setOldWards(oldWardsData.map(item => ({ label: item.name || '', value: item.id?.toString() || '' })))
+
             // Clear ward when district changes
             setValue('oldWard', '')
         } catch (error) {
@@ -161,7 +162,9 @@ const ToolAddressSync = () => {
     const loadNewWards = async (newProvinceId: string) => {
         try {
             const newWardsData = await AddressConversionAPI.getWards(newProvinceId)
+
             setNewWards(newWardsData.map(item => ({ label: item.name || '', value: item.id?.toString() || '' })))
+
             // Clear ward when province changes
             setValue('newWard', '')
         } catch (error) {
@@ -171,7 +174,7 @@ const ToolAddressSync = () => {
     }
 
     // Show confirmation dialog
-    const handleShowConfirmDialog = (data: FormData) => {
+    const handleShowConfirmDialog = () => {
         setShowConfirmDialog(true)
     }
 
@@ -179,6 +182,7 @@ const ToolAddressSync = () => {
     const handleConfirmUpdate = async () => {
         setShowConfirmDialog(false)
         const formData = watchedValues
+
         await onSubmit(formData)
     }
 
@@ -201,8 +205,6 @@ const ToolAddressSync = () => {
         setOldWards([])
         setNewWards([])
 
-        // Clear sync result
-        setSyncResult(null)
     }
 
     // Form submit handler
@@ -218,26 +220,8 @@ const ToolAddressSync = () => {
             }
 
             // Call API to upsert mapping
-            const response = await AddressConversionAPI.upsertUserWardMapping(mappingData)
+            await AddressConversionAPI.upsertUserWardMapping(mappingData)
 
-            const result = {
-                oldAddress: {
-                    province: data.oldProvince,
-                    district: data.oldDistrict,
-                    ward: data.oldWard
-                },
-                newAddress: {
-                    province: data.newProvince,
-                    district: '',
-                    ward: data.newWard
-                },
-                syncStatus: 'success',
-                message: 'Đồng bộ dữ liệu thành công',
-                timestamp: new Date().toISOString(),
-                response: response
-            }
-
-            setSyncResult(result)
             toast.success('Đồng bộ dữ liệu thành công')
 
             // Reset form after successful update
@@ -245,29 +229,7 @@ const ToolAddressSync = () => {
         } catch (error: any) {
             console.error('Error syncing address mapping:', error)
             toast.error(error?.response?.data?.message || 'Có lỗi xảy ra trong quá trình đồng bộ')
-
-            const result = {
-                oldAddress: {
-                    province: data.oldProvince,
-                    district: data.oldDistrict,
-                    ward: data.oldWard
-                },
-                newAddress: {
-                    province: data.newProvince,
-                    district: '',
-                    ward: data.newWard
-                },
-                syncStatus: 'error',
-                message: error?.response?.data?.message || 'Có lỗi xảy ra trong quá trình đồng bộ',
-                timestamp: new Date().toISOString()
-            }
-            setSyncResult(result)
         }
-    }
-
-    const handleClearAll = () => {
-        resetForm()
-        toast.success('Đã xóa toàn bộ dữ liệu')
     }
 
     if (isLoading) {
@@ -466,6 +428,8 @@ const ToolAddressSync = () => {
                                     const oldProvince = oldProvinces.find(p => p.value === watchedValues.oldProvince)
                                     const oldDistrict = oldDistricts.find(d => d.value === watchedValues.oldDistrict)
                                     const oldWard = oldWards.find(w => w.value === watchedValues.oldWard)
+
+
                                     return `${oldWard?.label || ''} - ${oldDistrict?.label || ''} - ${oldProvince?.label || ''}`
                                 })()}
                             </span>
@@ -477,6 +441,8 @@ const ToolAddressSync = () => {
                                 {(() => {
                                     const newProvince = newProvinces.find(p => p.value === watchedValues.newProvince)
                                     const newWard = newWards.find(w => w.value === watchedValues.newWard)
+
+
                                     return `${newWard?.label || ''} - ${newProvince?.label || ''}`
                                 })()}
                             </span>

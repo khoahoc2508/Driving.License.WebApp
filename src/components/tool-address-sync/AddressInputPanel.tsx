@@ -1,7 +1,6 @@
 'use client'
 
 // React Imports
-import { useEffect } from 'react'
 
 // MUI Imports
 import {
@@ -43,7 +42,6 @@ const AddressInputPanel = ({
 }: AddressInputPanelProps) => {
     // Watch form values for disabled state
     const provinceValue = watch(`${fieldPrefix}Province`)
-    const districtValue = watch(`${fieldPrefix}District`)
 
     return (
         <Card sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -77,10 +75,13 @@ const AddressInputPanel = ({
                             value={provinces.find(p => p.value === field.value) || null}
                             onChange={(_, newValue) => {
                                 field.onChange(newValue?.value || '')
+
+
                                 // Clear district and ward when province changes
                                 if (showDistrict) {
                                     setValue(`${fieldPrefix}District`, '')
                                 }
+
                                 setValue(`${fieldPrefix}Ward`, '')
                             }}
                             options={provinces}
@@ -111,6 +112,7 @@ const AddressInputPanel = ({
                                 value={districts.find(d => d.value === field.value) || null}
                                 onChange={(_, newValue) => {
                                     field.onChange(newValue?.value || '')
+
                                     // Clear ward when district changes
                                     setValue(`${fieldPrefix}Ward`, '')
                                 }}
