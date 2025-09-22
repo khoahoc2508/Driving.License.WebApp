@@ -278,7 +278,7 @@ const ToolAddressMerge = () => {
               ) : (
                 <>
                   <Typography variant="body2" sx={{ color: 'primary.main', mb: 1 }} className='text-left'>
-                    1. Định dạng: Địa chỉ chi tiết, Phường/Xã, Quận/Huyện, Tỉnh/Thành phố
+                    1. Định dạng: Phường/Xã, Quận/Huyện, Tỉnh/Thành phố
                   </Typography>
                   <Typography variant="body2" sx={{ color: 'primary.main' }} className='text-left'>
                     2. Mỗi dòng một địa chỉ
