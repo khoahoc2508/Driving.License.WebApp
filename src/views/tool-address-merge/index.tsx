@@ -12,11 +12,7 @@ import {
   CardHeader,
   Typography,
   useMediaQuery,
-  useTheme,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions
+  useTheme
 } from '@mui/material'
 
 // Component Imports
@@ -60,8 +56,17 @@ const ToolAddressMerge = () => {
   const [textConversionResults, setTextConversionResults] = useState<any[]>([])
   const [isCopied, setIsCopied] = useState<boolean>(false)
 
-  // Restore confirmation dialog state
-  const [showRestoreDialog, setShowRestoreDialog] = useState<boolean>(false)
+  // Check if there's any data to restore
+  const hasDataToRestore = () => {
+    return (
+      uploadedFiles.length > 0 ||
+      outputFiles.length > 0 ||
+      oldAddressInput.trim() !== '' ||
+      newAddressOutput.trim() !== '' ||
+      textConversionResults.length > 0 ||
+      success !== null
+    )
+  }
 
   // Initialize with empty arrays - no mock data needed
 
@@ -142,10 +147,8 @@ const ToolAddressMerge = () => {
     setNewAddressOutput('')
     setTextConversionResults([])
     setIsCopied(false)
-    setShowRestoreDialog(false)
 
     // Show success message
-    toast.success('Đã khôi phục dữ liệu về trạng thái ban đầu')
   }
 
   const handleConvert = async () => {
@@ -363,50 +366,13 @@ const ToolAddressMerge = () => {
           size="medium"
           color="error"
           className='rounded'
-          onClick={() => setShowRestoreDialog(true)}
+          disabled={!hasDataToRestore()}
+          onClick={handleRestore}
         >
           KHÔI PHỤC
         </Button>
       </Box>
 
-      {/* Restore Confirmation Dialog */}
-      <Dialog
-        open={showRestoreDialog}
-        onClose={() => setShowRestoreDialog(false)}
-        maxWidth="sm"
-        fullWidth
-      >
-        <DialogTitle sx={{ textAlign: 'center', pb: 2 }}>
-          <Typography variant="h5" sx={{ fontWeight: 600 }}>
-            Xác nhận khôi phục
-          </Typography>
-        </DialogTitle>
-        <DialogContent sx={{ textAlign: 'center', py: 3 }}>
-          <Typography variant="body1" sx={{ mb: 2 }}>
-            Bạn có chắc chắn muốn khôi phục toàn bộ dữ liệu về trạng thái ban đầu?
-          </Typography>
-          <Typography variant="body2" sx={{ color: 'error.main', fontWeight: 500 }}>
-            Tất cả dữ liệu hiện tại sẽ bị xóa và không thể khôi phục.
-          </Typography>
-        </DialogContent>
-        <DialogActions sx={{ justifyContent: 'center', gap: 2, pb: 3 }}>
-          <Button
-            variant="outlined"
-            onClick={() => setShowRestoreDialog(false)}
-            sx={{ minWidth: 100 }}
-          >
-            Hủy
-          </Button>
-          <Button
-            variant="contained"
-            color="error"
-            onClick={handleRestore}
-            sx={{ minWidth: 100 }}
-          >
-            Khôi phục
-          </Button>
-        </DialogActions>
-      </Dialog>
     </Card >
   )
 }
