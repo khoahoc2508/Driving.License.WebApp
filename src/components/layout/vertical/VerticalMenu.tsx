@@ -116,6 +116,7 @@ const VerticalMenu = ({ scrollMenu }: Props) => {
 
         <SubMenu label={"Công cụ tiện ích"} icon={<i className="ri-tools-line"></i>}>
           <MenuItem href={`${CONFIG.Routers.ToolAddressMerge}`}>{"Sáp nhập địa chỉ"}</MenuItem>
+          <MenuItem href={`${CONFIG.Routers.ToolAddressSync}`}>{"Đồng bộ dữ liệu sáp nhập"}</MenuItem>
         </SubMenu>
 
         {/* <SubMenu label={"Cấu hình cá nhân"} icon={<i className='ri-settings-3-line' />}>

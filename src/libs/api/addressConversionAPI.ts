@@ -4,6 +4,14 @@ import type {
   ExcelConversionResponse,
   TextConversionResponse
 } from '@/types/addressConversionTypes'
+import type {
+  ProvinceDto,
+  WardDto,
+  OldProvinceDto,
+  OldDistrictDto,
+  OldWardDto,
+  UpsertUserWardMappingCommand
+} from '@/types/addressesTypes'
 
 /**
  * Convert addresses from Excel files to new administrative units
@@ -177,7 +185,103 @@ const downloadAllAsZip = async (fileUrls: string[]): Promise<void> => {
   }
 }
 
+// ===== ADDRESS MANAGEMENT APIs =====
+
+/**
+ * Get all provinces (new administrative units)
+ */
+const getProvinces = async (): Promise<ProvinceDto[]> => {
+  try {
+    const response = await axiosInstance.get('/api/addresses/provinces/all')
+
+    return response.data?.data || []
+  } catch (error) {
+    console.error('Error fetching provinces:', error)
+    throw error
+  }
+}
+
+/**
+ * Get wards by province ID (new administrative units)
+ */
+const getWards = async (provinceId?: string): Promise<WardDto[]> => {
+  try {
+    const params = provinceId ? { ProvinceId: provinceId } : {}
+    const response = await axiosInstance.get('/api/addresses/wards/all', { params })
+
+    return response.data?.data || []
+  } catch (error) {
+    console.error('Error fetching wards:', error)
+    throw error
+  }
+}
+
+/**
+ * Get all old provinces
+ */
+const getOldProvinces = async (): Promise<OldProvinceDto[]> => {
+  try {
+    const response = await axiosInstance.get('/api/addresses/old-provinces/all')
+
+    return response.data?.data || []
+  } catch (error) {
+    console.error('Error fetching old provinces:', error)
+    throw error
+  }
+}
+
+/**
+ * Get old districts by province ID
+ */
+const getOldDistricts = async (oldProvinceId: string): Promise<OldDistrictDto[]> => {
+  try {
+    const response = await axiosInstance.get('/api/addresses/old-districts/all', {
+      params: {
+        OldProvinceId: oldProvinceId
+      }
+    })
+
+    return response.data?.data || []
+  } catch (error) {
+    console.error('Error fetching old districts:', error)
+    throw error
+  }
+}
+
+/**
+ * Get old wards by district ID
+ */
+const getOldWards = async (oldDistrictId: string): Promise<OldWardDto[]> => {
+  try {
+    const response = await axiosInstance.get('/api/addresses/old-wards/all', {
+      params: {
+        OldDistrictId: oldDistrictId
+      }
+    })
+
+    return response.data?.data || []
+  } catch (error) {
+    console.error('Error fetching old wards:', error)
+    throw error
+  }
+}
+
+/**
+ * Upsert user ward mapping
+ */
+const upsertUserWardMapping = async (mapping: UpsertUserWardMappingCommand): Promise<any> => {
+  try {
+    const response = await axiosInstance.post('/api/addresses/user-ward-mapping/upsert', mapping)
+
+    return response.data
+  } catch (error) {
+    console.error('Error upserting user ward mapping:', error)
+    throw error
+  }
+}
+
 const AddressConversionAPI = {
+  // Address conversion functions
   convertAddressesFromExcel,
   convertAddressesFromText,
   downloadBlobAsFile,
@@ -185,7 +289,15 @@ const AddressConversionAPI = {
   processExcelFiles,
   downloadAllConvertedFiles,
   downloadConvertedFile,
-  downloadAllAsZip
+  downloadAllAsZip,
+
+  // Address management functions
+  getProvinces,
+  getWards,
+  getOldProvinces,
+  getOldDistricts,
+  getOldWards,
+  upsertUserWardMapping
 }
 
 export default AddressConversionAPI
