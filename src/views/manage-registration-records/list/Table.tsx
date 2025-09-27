@@ -7,12 +7,7 @@ import { useMemo, useState, useEffect } from 'react'
 // MUI Imports
 import { useRouter } from 'next/navigation'
 
-import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
-import DialogTitle from '@mui/material/DialogTitle'
 import Avatar from '@mui/material/Avatar'
 
 
@@ -40,6 +35,7 @@ import { IconButton, Typography, Tooltip, useTheme, useMediaQuery } from '@mui/m
 import { toast } from 'react-toastify'
 
 import CustomPagination from '@/components/common/CustomPagination'
+import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog'
 
 // Style Imports
 import styles from '@core/styles/table.module.css'
@@ -105,6 +101,7 @@ const Table = ({
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null);
   const [itemToDelete, setItemToDelete] = useState<GetRegistrationRecordsDto | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [columnPinning, setColumnPinning] = useState({})
 
   // Custom scrollbar hook
@@ -395,12 +392,14 @@ const Table = ({
   const handleDeleteConfirmed = async () => {
     if (!itemIdToDelete) return;
 
+    setIsDeleting(true);
     try {
       const response = await registrationRecordsAPI.DeleteRegistrationRecord(itemIdToDelete);
 
       if (response.data.success) {
         toast.success('Xóa thành công');
         setReloadDataTable(prev => !prev);
+        handleCloseDeleteDialog();
       } else {
         toast.error(response.data.message || 'Có lỗi xảy ra khi xóa');
       }
@@ -408,7 +407,7 @@ const Table = ({
       console.error('Error deleting item:', error);
       toast.error('Có lỗi xảy ra khi xóa');
     } finally {
-      handleCloseDeleteDialog();
+      setIsDeleting(false);
     }
   };
 
@@ -577,25 +576,14 @@ const Table = ({
       </div>
 
       {/* Delete Confirmation Dialog */}
-      <Dialog
+      <DeleteConfirmationDialog
         open={openDeleteDialog}
         onClose={handleCloseDeleteDialog}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">{"Xác nhận xóa"}</DialogTitle>
-        <DialogContent>
-          <Typography id="alert-dialog-description">
-            Bạn đang xóa hồ sơ <strong>{itemToDelete?.fullname || 'này'}</strong>. Dữ liệu liên quan đến hồ sơ này sẽ bị mất!
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDeleteDialog}>Hủy</Button>
-          <Button onClick={handleDeleteConfirmed} autoFocus color="error">
-            Xóa
-          </Button>
-        </DialogActions>
-      </Dialog>
+        onConfirm={handleDeleteConfirmed}
+        itemName={itemToDelete?.fullname}
+        itemType="hồ sơ"
+        isLoading={isDeleting}
+      />
     </>
   )
 }
