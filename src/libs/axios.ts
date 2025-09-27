@@ -33,6 +33,7 @@ axiosInstance.interceptors.response.use(
       const currentPath = window.location.pathname
       const redirectUrl = `${CONFIG.Routers.Login}?redirectTo=${encodeURIComponent(currentPath)}`
 
+      // Force sign out to clear session completely
       await signOut({ callbackUrl: redirectUrl })
     }
 

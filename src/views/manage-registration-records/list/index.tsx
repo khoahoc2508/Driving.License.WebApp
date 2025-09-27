@@ -639,6 +639,8 @@ const ManageRegistrationRecords = () => {
         PaperProps={{
           sx: {
             width: 320,
+            minHeight: 400,
+            maxHeight: '80vh',
           }
         }}
       >
@@ -654,7 +656,7 @@ const ManageRegistrationRecords = () => {
             onChange={(e) => setColumnVisibilitySearch(e.target.value)}
           />
         </Box>
-        <Box sx={{ maxHeight: 130, overflow: 'auto', p: 3 }} className='custom-scrollbar'>
+        <Box sx={{ minHeight: '25vh', maxHeight: '35vh', overflow: 'auto', p: 3 }} className='scrollbar-override'>
           <FormControlLabel
             control={
               <Checkbox

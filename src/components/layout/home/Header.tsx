@@ -85,7 +85,7 @@ const Header = ({ mode }: { mode: Mode }) => {
               <div className='flex items-center justify-center w-10 h-10'>
                 <div className='animate-spin rounded-full h-6 w-6 border-b-2 border-primary'></div>
               </div>
-            ) : session?.user ? (
+            ) : session?.user?.name && !session?.error ? (
               <UserDropdown isHomePage={true} />
             ) : (
               <Button

@@ -10,5 +10,10 @@ import AuthRedirect from '@/components/AuthRedirect'
 export default async function AuthGuard({ children }: ChildrenType) {
   const session = await getServerSession()
 
-  return <>{session ? children : <AuthRedirect />}</>
+  // If no session or session is invalid, redirect to login
+  if (!session) {
+    return <AuthRedirect />
+  }
+
+  return <>{children}</>
 }

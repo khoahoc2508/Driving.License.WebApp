@@ -19,6 +19,7 @@ import HorizontalFooter from '@components/layout/horizontal/Footer'
 import { ProgressProvider } from "@/@core/components/ProgressProvider"
 
 import AuthGuard from '@/hocs/AuthGuard'
+import SessionChecker from '@/components/SessionChecker'
 
 // Util Imports
 import { getMode, getSystemMode } from '@core/utils/serverHelpers'
@@ -35,6 +36,7 @@ const Layout = async (props: ChildrenType) => {
   return (
     <Providers direction={direction}>
       <AuthGuard>
+        <SessionChecker />
         <LayoutWrapper
           systemMode={systemMode}
           verticalLayout={

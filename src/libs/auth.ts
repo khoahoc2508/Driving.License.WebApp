@@ -162,12 +162,26 @@ export const authOptions: NextAuthOptions = {
 
         return token
       } catch (error) {
-        token.error = 'Mời bạn đăng nhập lại'
-
-        return token
+        // Clear all token data when refresh fails
+        return null
       }
     },
     async session({ session, token }) {
+      // If token is null (refresh failed), return empty session
+      if (!token) {
+        return {
+          ...session,
+          user: {
+            ...session.user,
+            name: null,
+            email: null,
+            image: null
+          },
+          accessToken: '',
+          error: 'Mời bạn đăng nhập lại'
+        }
+      }
+
       session.accessToken = (token.accessToken as string) + ''
 
       // @ts-ignore

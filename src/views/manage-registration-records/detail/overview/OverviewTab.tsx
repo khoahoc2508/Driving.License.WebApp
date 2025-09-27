@@ -175,7 +175,7 @@ const OverviewTab = ({ registrationRecordId }: OverviewTabProps) => {
                 <Typography variant="body2" color="text.secondary">Còn thiếu:</Typography>
                 <Typography variant="body2" sx={{ color: 'error.main', fontWeight: 600 }}>{overview?.paymentSummary?.remainingAmount ? formatCurrency(overview?.paymentSummary?.remainingAmount) : 'Chưa có dữ liệu'}</Typography>
                 <Typography variant="body2" color="text.secondary">Đã thanh toán:</Typography>
-                <Typography variant="body2" sx={{ fontWeight: 600 }}>{overview?.paymentSummary?.paidAmount ? formatCurrency(overview?.paymentSummary?.paidAmount) : 'Chưa có dữ liệu'}</Typography>
+                <Typography variant="body2" sx={{ fontWeight: 600 }}>{overview?.paymentSummary?.paidAmount || overview?.paymentSummary?.paidAmount === 0 ? formatCurrency(overview?.paymentSummary?.paidAmount) : 'Chưa có dữ liệu'}</Typography>
                 <Typography variant="body2" color="text.secondary">Tổng cần thanh toán:</Typography>
                 <Typography variant="body2" sx={{ fontWeight: 600 }}>{overview?.paymentSummary?.totalAmount ? formatCurrency(overview?.paymentSummary?.totalAmount) : 'Chưa có dữ liệu'}</Typography>
             </Box>
