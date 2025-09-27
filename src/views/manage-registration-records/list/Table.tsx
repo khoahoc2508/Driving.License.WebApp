@@ -119,11 +119,8 @@ const Table = ({
     const isFirstRightPinnedColumn = isPinned === 'right' && column.getIsFirstColumn('right')
 
     return {
-      boxShadow: isLastLeftPinnedColumn
-        ? '-4px 0 4px -4px gray inset'
-        : isFirstRightPinnedColumn
-          ? '4px 0 4px -4px gray inset'
-          : undefined,
+      borderRight: isLastLeftPinnedColumn ? '1px solid var(--border-color)' : undefined,
+      borderLeft: isFirstRightPinnedColumn ? '1px solid var(--border-color)' : undefined,
       left: isPinned === 'left' ? `${column.getStart('left')}px` : undefined,
       right: isPinned === 'right' ? `${column.getAfter('right')}px` : undefined,
       position: isPinned ? 'sticky' : 'relative',
@@ -462,11 +459,9 @@ const Table = ({
       <div className='flex flex-col flex-1 h-full'>
         <div ref={scrollbarRef} className='flex-1 overflow-x-auto custom-scrollbar' style={{ overflowY: 'auto', width: '100%' }}>
           <table
-            className={`${styles.table} ${styles.fixed} ${styles.borderX} ${styles.borderTop}`}
-            style={{
+            className={`${styles.table} ${styles.fixed} ${styles.borderX}`} style={{
               borderCollapse: 'separate',
               borderSpacing: 0,
-              width: table.getTotalSize()
             }}
           >
             <thead>
