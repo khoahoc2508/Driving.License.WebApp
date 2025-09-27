@@ -38,10 +38,15 @@
   padding: 2px 0;
 }
 
-/* .processStepsContainer :global(.step-label:hover) {
-  border-radius: 4px;
-  padding-left: 8px;
-} */
+/* Hover effect for unselected steps */
+.processStepsContainer :global(.MuiStep-root:not([data-active='true']):hover) {
+  background-color: #00000005 !important;
+  border-radius: 4px !important;
+  padding: 4px !important;
+  margin: -4px !important;
+  padding-left: 19px !important;
+  margin-left: -19px !important;
+}
 
 /* Highlight bar for active step using data attribute with dynamic colors */
 .processStepsContainer :global(.MuiStep-root[data-active='true']) {

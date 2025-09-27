@@ -317,10 +317,23 @@ const EditTaskDialog = ({ open, onClose, onSuccess, onCloseWithoutSave, task, is
                                     onChange={e => onChange(behavior.format(e.target.value))}
                                     error={!!errors[fieldKey]}
                                     helperText={errors[fieldKey]?.message || hint || description}
+                                    onFocus={(e) => {
+                                        // Ngăn chặn sự kiện wheel khi focus vào input number
+                                        const input = e.target as HTMLInputElement
+                                        input.addEventListener('wheel', (event) => {
+                                            event.preventDefault()
+                                            event.stopPropagation()
+                                        }, { passive: false })
+                                    }}
                                     InputProps={{
                                         startAdornment: field?.prefix ? (
                                             <InputAdornment position="start">{String(field.prefix)}</InputAdornment>
-                                        ) : undefined
+                                        ) : undefined,
+                                        onWheel: (e) => {
+                                            // Ngăn chặn hoàn toàn việc thay đổi giá trị khi cuộn chuột
+                                            e.preventDefault()
+                                            e.stopPropagation()
+                                        }
                                     }}
                                 />
                             )
