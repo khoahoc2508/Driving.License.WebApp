@@ -580,6 +580,7 @@ const Table = ({
         open={openDeleteDialog}
         onClose={handleCloseDeleteDialog}
         onConfirm={handleDeleteConfirmed}
+        title="Bạn chắc chắn xóa hồ sơ này?"
         itemName={itemToDelete?.fullname}
         itemType="hồ sơ"
         isLoading={isDeleting}
