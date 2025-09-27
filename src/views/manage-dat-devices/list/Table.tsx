@@ -4,7 +4,6 @@
 import { useMemo, useState } from 'react'
 
 // MUI Imports
-import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
 
 // Third-party Imports
@@ -190,6 +189,7 @@ const Table = ({
         if (!itemIdToDelete) return;
 
         setIsDeleting(true);
+
         try {
             const response = await datDevicesAPI.DeleteDATDevice(itemIdToDelete);
 

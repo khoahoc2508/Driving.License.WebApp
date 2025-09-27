@@ -393,6 +393,7 @@ const Table = ({
     if (!itemIdToDelete) return;
 
     setIsDeleting(true);
+
     try {
       const response = await registrationRecordsAPI.DeleteRegistrationRecord(itemIdToDelete);
 

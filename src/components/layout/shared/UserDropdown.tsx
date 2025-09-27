@@ -59,7 +59,7 @@ const UserDropdown = (props: UserDropdownProps) => {
   // Hooks
   const router = useRouter()
 
-  const { data, status } = useSession()
+  const { data } = useSession()
 
   const { settings } = useSettings()
 

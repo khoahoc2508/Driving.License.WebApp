@@ -320,6 +320,7 @@ const EditTaskDialog = ({ open, onClose, onSuccess, onCloseWithoutSave, task, is
                                     onFocus={(e) => {
                                         // Ngăn chặn sự kiện wheel khi focus vào input number
                                         const input = e.target as HTMLInputElement
+
                                         input.addEventListener('wheel', (event) => {
                                             event.preventDefault()
                                             event.stopPropagation()

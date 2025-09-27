@@ -20,16 +20,19 @@ const SessionChecker = () => {
         // Check if session has error (token expired)
         if (session?.error) {
             console.log('Session error detected:', session.error)
+
             // Sign out and redirect to login
             signOut({ callbackUrl: CONFIG.Routers.Login })
-            return
+            
+return
         }
 
         // If unauthenticated, redirect to login
         if (status === 'unauthenticated') {
             console.log('User is unauthenticated, redirecting to login')
             router.push(CONFIG.Routers.Login)
-            return
+            
+return
         }
     }, [session, status, router])
 

@@ -192,6 +192,7 @@ const PaymentHistoryTab = ({ data, isLoading, onRefresh, registrationRecordId, o
         if (!itemIdToDelete) return
 
         setIsDeleting(true);
+
         try {
             const response = await registrationRecordsAPI.DeletePaymentHistory(itemIdToDelete)
 

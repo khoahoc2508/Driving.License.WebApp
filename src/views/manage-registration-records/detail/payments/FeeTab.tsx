@@ -243,6 +243,7 @@ const FeeTab = ({ data, isLoading, onEditPayment, onRefresh, onAdd, onAddPayment
         if (!itemIdToDelete) return
 
         setIsDeleting(true);
+
         try {
             const response = await registrationRecordsAPI.DeletePayment(itemIdToDelete)
 
