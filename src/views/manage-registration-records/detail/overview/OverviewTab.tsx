@@ -128,7 +128,7 @@ const OverviewTab = ({ registrationRecordId }: OverviewTabProps) => {
                     <Typography variant="body2" color="text.secondary">Tình trạng xử lý:</Typography>
                     <Box>{processingStepChips}</Box>
 
-                    <Typography variant="body2" color="text.secondary">Nhân viên:</Typography>
+                    <Typography variant="body2" color="text.secondary">Người phụ trách:</Typography>
                     <Typography variant="body2" sx={{ fontWeight: 600 }}>
                         {overview?.processing?.steps?.filter(s => s?.assignee?.name).map((s) => `${s?.assignee?.name} ${s?.assignee?.phone ? `(${s?.assignee?.phone})` : ''}`).join(', ') || '-'}
                     </Typography>

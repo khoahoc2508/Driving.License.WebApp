@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react'
 
-import { Box, Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Menu, MenuItem, Typography } from '@mui/material'
+import { Box, Button, Chip, IconButton, Menu, MenuItem, Typography } from '@mui/material'
 import type { RankingInfo } from '@tanstack/match-sorter-utils'
 import { rankItem } from '@tanstack/match-sorter-utils'
 import type { ColumnDef, ColumnFiltersState, FilterFn } from '@tanstack/react-table'
@@ -28,6 +28,7 @@ import registrationRecordsAPI from '@/libs/api/registrationRecordsAPI'
 import SkeletonTableRowsLoader from '@/components/common/SkeletonTableRowsLoader'
 import CONFIG from '@/configs/config'
 import { formatCurrency } from '@/utils/helpers'
+import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog'
 
 // Column Definitions
 const columnHelper = createColumnHelper<GetPaymentDto>()
@@ -67,6 +68,7 @@ const FeeTab = ({ data, isLoading, onEditPayment, onRefresh, onAdd, onAddPayment
     const [globalFilter, setGlobalFilter] = useState('')
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false)
     const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null)
+    const [isDeleting, setIsDeleting] = useState(false);
 
     // Add handled by parent dialog
 
@@ -240,12 +242,14 @@ const FeeTab = ({ data, isLoading, onEditPayment, onRefresh, onAdd, onAddPayment
     const handleDeleteConfirmed = async () => {
         if (!itemIdToDelete) return
 
+        setIsDeleting(true);
         try {
             const response = await registrationRecordsAPI.DeletePayment(itemIdToDelete)
 
             if (response.data.success) {
                 toast.success('Xóa khoản phí thành công')
                 onRefresh()
+                handleCloseDeleteDialog()
             } else {
                 toast.error(response.data.message || 'Có lỗi xảy ra khi xóa')
             }
@@ -253,7 +257,7 @@ const FeeTab = ({ data, isLoading, onEditPayment, onRefresh, onAdd, onAddPayment
             console.error('Error deleting payment:', error)
             toast.error('Có lỗi xảy ra khi xóa')
         } finally {
-            handleCloseDeleteDialog()
+            setIsDeleting(false);
         }
     }
 
@@ -368,25 +372,15 @@ const FeeTab = ({ data, isLoading, onEditPayment, onRefresh, onAdd, onAddPayment
                 </div>
 
             </div>
-            <Dialog
+            <DeleteConfirmationDialog
                 open={openDeleteDialog}
                 onClose={handleCloseDeleteDialog}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
-                <DialogTitle id="alert-dialog-title">{"Xác nhận xóa"}</DialogTitle>
-                <DialogContent>
-                    <Typography id="alert-dialog-description">
-                        Bạn có chắc chắn muốn xóa khoản phí này không?
-                    </Typography>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCloseDeleteDialog}>Hủy</Button>
-                    <Button onClick={handleDeleteConfirmed} autoFocus color="error">
-                        Xóa
-                    </Button>
-                </DialogActions>
-            </Dialog>
+                onConfirm={handleDeleteConfirmed}
+                title="Bạn chắc chắn xóa khoản phí này?"
+                itemName={data.find(item => item.id === itemIdToDelete)?.feeTypeName}
+                itemType="khoản phí"
+                isLoading={isDeleting}
+            />
 
             {/* Add dialog moved to parent */}
         </Box>

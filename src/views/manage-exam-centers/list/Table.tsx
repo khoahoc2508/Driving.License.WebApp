@@ -6,10 +6,6 @@ import { useMemo, useState } from 'react'
 // MUI Imports
 import Button from '@mui/material/Button'
 import Chip from '@mui/material/Chip'
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
-import DialogTitle from '@mui/material/DialogTitle'
 
 // Third-party Imports
 import type { RankingInfo } from '@tanstack/match-sorter-utils'
@@ -44,6 +40,7 @@ import SkeletonTableRowsLoader from '@/components/common/SkeletonTableRowsLoader
 import type { GetExamCentersDto, ExamCenterListType } from '@/types/examCenterTypes'
 import CustomPagination from '@/components/common/CustomPagination'
 import { useScrollbarHover } from '@/hooks/useCustomScrollbar'
+import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog'
 
 // Column Definitions
 const columnHelper = createColumnHelper<GetExamCentersDto>()
@@ -95,6 +92,7 @@ const Table = ({
     const [globalFilter, setGlobalFilter] = useState('')
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
     const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     // Custom scrollbar hook
     const scrollbarRef = useScrollbarHover()
@@ -191,12 +189,14 @@ const Table = ({
     const handleDeleteConfirmed = async () => {
         if (!itemIdToDelete) return;
 
+        setIsDeleting(true);
         try {
             const response = await examCentersAPI.DeleteExamCenter(itemIdToDelete);
 
             if (response.data.success) {
                 toast.success('Xóa thành công');
                 setReloadDataTable(prev => !prev); // Trigger data refresh in parent
+                handleCloseDeleteDialog();
             } else {
                 toast.error(response.data.message || 'Có lỗi xảy ra khi xóa');
             }
@@ -204,7 +204,7 @@ const Table = ({
             console.error('Error deleting item:', error);
             toast.error('Có lỗi xảy ra khi xóa');
         } finally {
-            handleCloseDeleteDialog();
+            setIsDeleting(false);
         }
     };
 
@@ -334,25 +334,15 @@ const Table = ({
                     />
                 </div>
             </div>
-            <Dialog
+            <DeleteConfirmationDialog
                 open={openDeleteDialog}
                 onClose={handleCloseDeleteDialog}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
-                <DialogTitle id="alert-dialog-title">{"Xác nhận xóa"}</DialogTitle>
-                <DialogContent>
-                    <Typography id="alert-dialog-description">
-                        Bạn có chắc chắn muốn xóa trường thi này không?
-                    </Typography>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCloseDeleteDialog}>Hủy</Button>
-                    <Button onClick={handleDeleteConfirmed} autoFocus color="error">
-                        Xóa
-                    </Button>
-                </DialogActions>
-            </Dialog>
+                onConfirm={handleDeleteConfirmed}
+                title="Bạn chắc chắn xóa trường thi này?"
+                itemName={data.find(item => item.id === itemIdToDelete)?.name}
+                itemType="trường thi"
+                isLoading={isDeleting}
+            />
         </>
     )
 }

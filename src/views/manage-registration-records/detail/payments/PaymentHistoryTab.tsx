@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react'
 
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material'
+import { Box, Button, IconButton, Typography } from '@mui/material'
 import type { RankingInfo } from '@tanstack/match-sorter-utils'
 import { rankItem } from '@tanstack/match-sorter-utils'
 import type { ColumnDef, ColumnFiltersState, FilterFn } from '@tanstack/react-table'
@@ -28,6 +28,7 @@ import registrationRecordsAPI from '@/libs/api/registrationRecordsAPI'
 import SkeletonTableRowsLoader from '@/components/common/SkeletonTableRowsLoader'
 import AddPaymentHistoryDialog, { DialogMode } from './AddPaymentHistoryDialog'
 import { formatCurrency, formatDate } from '@/utils/helpers'
+import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog'
 import DebouncedInput from '@/components/common/DebouncedInput'
 
 // Column Definitions
@@ -68,6 +69,7 @@ const PaymentHistoryTab = ({ data, isLoading, onRefresh, registrationRecordId, o
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [openDeleteDialog, setOpenDeleteDialog] = useState(false)
     const [itemIdToDelete, setItemIdToDelete] = useState<string | null>(null)
+    const [isDeleting, setIsDeleting] = useState(false);
     const [isAddOpen, setIsAddOpen] = useState(false)
     const [editPaymentHistoryId, setEditPaymentHistoryId] = useState<string | null>(null)
 
@@ -189,12 +191,14 @@ const PaymentHistoryTab = ({ data, isLoading, onRefresh, registrationRecordId, o
     const handleDeleteConfirmed = async () => {
         if (!itemIdToDelete) return
 
+        setIsDeleting(true);
         try {
             const response = await registrationRecordsAPI.DeletePaymentHistory(itemIdToDelete)
 
             if (response.data.success) {
                 toast.success('Xóa lịch sử thanh toán thành công')
                 onRefresh()
+                handleCloseDeleteDialog()
             } else {
                 toast.error(response.data.message || 'Có lỗi xảy ra khi xóa')
             }
@@ -202,7 +206,7 @@ const PaymentHistoryTab = ({ data, isLoading, onRefresh, registrationRecordId, o
             console.error('Error deleting payment history:', error)
             toast.error('Có lỗi xảy ra khi xóa')
         } finally {
-            handleCloseDeleteDialog()
+            setIsDeleting(false);
         }
     }
 
@@ -330,25 +334,15 @@ const PaymentHistoryTab = ({ data, isLoading, onRefresh, registrationRecordId, o
                 </div>
 
             </div>
-            <Dialog
+            <DeleteConfirmationDialog
                 open={openDeleteDialog}
                 onClose={handleCloseDeleteDialog}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
-                <DialogTitle id="alert-dialog-title">{"Xác nhận xóa"}</DialogTitle>
-                <DialogContent>
-                    <Typography id="alert-dialog-description">
-                        Bạn có chắc chắn muốn xóa lịch sử thanh toán này không?
-                    </Typography>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCloseDeleteDialog}>Hủy</Button>
-                    <Button onClick={handleDeleteConfirmed} autoFocus color="error">
-                        Xóa
-                    </Button>
-                </DialogActions>
-            </Dialog>
+                onConfirm={handleDeleteConfirmed}
+                title="Bạn chắc chắn xóa lịch sử thanh toán này?"
+                itemName={data.find(item => item.id === itemIdToDelete)?.feeTypeName}
+                itemType="lịch sử thanh toán"
+                isLoading={isDeleting}
+            />
 
             {/* Add/Edit Payment History Dialog */}
             {!onAdd && !onEdit && (

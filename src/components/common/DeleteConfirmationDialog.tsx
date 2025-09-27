@@ -44,8 +44,9 @@ const DeleteConfirmationDialog = ({
             sx={
                 {
                     '.MuiDialog-paper': {
-                        maxWidth: '23vw',
-                        minWidth: '23vw'
+                        // maxWidth: '23vw',
+                        // minWidth: '23vw'
+                        width: '490px'
                     }
                 }
             }
@@ -55,8 +56,8 @@ const DeleteConfirmationDialog = ({
                 sx={{
                     display: 'flex',
                     alignItems: 'center',
+                    borderBottom: '1px solid #e0e0e0',
                     gap: 1,
-                    borderBottom: '1px solid #e0e0e0'
                 }}
                 className='p-4'
             >
@@ -72,12 +73,7 @@ const DeleteConfirmationDialog = ({
                 <IconButton
                     aria-label="close"
                     onClick={onClose}
-                    sx={{
-                        position: 'absolute',
-                        right: 8,
-                        top: 8,
-                        color: 'text.secondary'
-                    }}
+                    className='ml-auto'
                 >
                     <i className='ri-close-line' style={{ fontSize: '24px' }} />
                 </IconButton>
