@@ -40,6 +40,7 @@ type FormData = {
     oldProvince: string
     oldDistrict: string
     oldWard: string
+    oldAddressDetail: string
     newProvince: string
     newWard: string
 }
@@ -57,6 +58,7 @@ const ToolAddressSync = () => {
             oldProvince: '',
             oldDistrict: '',
             oldWard: '',
+            oldAddressDetail: '',
             newProvince: '',
             newWard: ''
         },
@@ -197,6 +199,7 @@ const ToolAddressSync = () => {
         setValue('oldProvince', '')
         setValue('oldDistrict', '')
         setValue('oldWard', '')
+        setValue('oldAddressDetail', '')
         setValue('newProvince', '')
         setValue('newWard', '')
 
@@ -215,6 +218,7 @@ const ToolAddressSync = () => {
                 oldProvinceId: data.oldProvince,
                 oldDistrictId: data.oldDistrict,
                 oldWardId: data.oldWard,
+                oldAddressDetail: data.oldAddressDetail,
                 newProvinceId: data.newProvince,
                 newWardId: data.newWard
             }
@@ -310,6 +314,7 @@ const ToolAddressSync = () => {
                         wards={oldWards}
                         showDistrict={true}
                         fieldPrefix="old"
+                        showAddressDetail={true}
                     />
 
                     {/* Center - Correspondence Indicator */}
@@ -398,6 +403,7 @@ const ToolAddressSync = () => {
                         fontWeight: 600,
                         borderBottom: '1px solid #e0e0e0'
                     }}
+                    className='p-4'
                 >
                     Bạn chắc chắn cập nhật?
                     <IconButton
@@ -414,34 +420,40 @@ const ToolAddressSync = () => {
                     </IconButton>
                 </DialogTitle>
 
-                <DialogContent sx={{ p: 5 }}>
-                    <Typography variant="body1" sx={{ my: 4, color: 'text.primary' }}>
+                <DialogContent className='p-4'>
+                    <Typography variant="body1" sx={{ mb: 4, color: 'text.primary' }}>
                         Bạn đang cập nhật dữ liệu sau sáp nhập:
                     </Typography>
 
 
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                         <Typography variant="body2">
-                            <strong>Xã cũ:</strong>{' '}
+                            <strong>Địa chỉ cũ:</strong>{' '}
                             <span className='text-primary font-semibold'>
                                 {(() => {
                                     const oldProvince = oldProvinces.find(p => p.value === watchedValues.oldProvince)
                                     const oldDistrict = oldDistricts.find(d => d.value === watchedValues.oldDistrict)
                                     const oldWard = oldWards.find(w => w.value === watchedValues.oldWard)
+                                    const addressDetail = watchedValues.oldAddressDetail
 
+                                    const addressParts = [
+                                        addressDetail,
+                                        oldWard?.label,
+                                        oldDistrict?.label,
+                                        oldProvince?.label
+                                    ].filter(Boolean)
 
-                                    return `${oldWard?.label || ''} - ${oldDistrict?.label || ''} - ${oldProvince?.label || ''}`
+                                    return addressParts.join(' - ')
                                 })()}
                             </span>
                         </Typography>
 
                         <Typography variant="body2">
-                            <strong>Xã mới:</strong>{' '}
+                            <strong>Địa chỉ mới:</strong>{' '}
                             <span className='text-primary font-semibold'>
                                 {(() => {
                                     const newProvince = newProvinces.find(p => p.value === watchedValues.newProvince)
                                     const newWard = newWards.find(w => w.value === watchedValues.newWard)
-
 
                                     return `${newWard?.label || ''} - ${newProvince?.label || ''}`
                                 })()}
@@ -452,9 +464,8 @@ const ToolAddressSync = () => {
 
                 <DialogActions sx={{
                     p: 4,
-                    pt: 4,
                     borderTop: '1px solid #e0e0e0'
-                }}>
+                }} className='pt-4'>
                     <Button
                         onClick={handleCancelUpdate}
                         variant="outlined"

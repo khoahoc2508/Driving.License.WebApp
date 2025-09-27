@@ -27,6 +27,7 @@ interface AddressInputPanelProps {
     wards: DropdownOption[]
     showDistrict: boolean
     fieldPrefix: 'old' | 'new'
+    showAddressDetail?: boolean
 }
 
 const AddressInputPanel = ({
@@ -38,10 +39,13 @@ const AddressInputPanel = ({
     districts,
     wards,
     showDistrict,
-    fieldPrefix
+    fieldPrefix,
+    showAddressDetail = false
 }: AddressInputPanelProps) => {
     // Watch form values for disabled state
     const provinceValue = watch(`${fieldPrefix}Province`)
+    const districtValue = watch(`${fieldPrefix}District`)
+    const wardValue = watch(`${fieldPrefix}Ward`)
 
     return (
         <Card sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -147,7 +151,7 @@ const AddressInputPanel = ({
                             options={wards}
                             getOptionLabel={(option) => option.label}
                             isOptionEqualToValue={(option, value) => option.value === value.value}
-                            disabled={!provinceValue}
+                            disabled={showDistrict ? !districtValue : !provinceValue}
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
@@ -161,6 +165,26 @@ const AddressInputPanel = ({
                         />
                     )}
                 />
+
+                {/* Address Detail Field - Only show if showAddressDetail is true */}
+                {showAddressDetail && (
+                    <Controller
+                        name={`${fieldPrefix}AddressDetail` as any}
+                        control={control}
+                        rules={{ required: 'Vui lòng nhập địa chỉ chi tiết' }}
+                        render={({ field, fieldState }) => (
+                            <TextField
+                                {...field}
+                                label={<span>Địa chỉ chi tiết <span style={{ color: 'red' }}>(*)</span></span>}
+                                placeholder="Nhập địa chỉ chi tiết"
+                                fullWidth
+                                disabled={!wardValue}
+                                error={!!fieldState.error}
+                                helperText={fieldState.error?.message}
+                            />
+                        )}
+                    />
+                )}
             </CardContent>
         </Card>
     )

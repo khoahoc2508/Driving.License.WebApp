@@ -1375,6 +1375,7 @@ export interface components {
             oldProvinceId?: string;
             oldDistrictId?: string;
             oldWardId?: string;
+            oldAddressDetail?: string;
             newProvinceId?: string;
             newWardId?: string;
         };
