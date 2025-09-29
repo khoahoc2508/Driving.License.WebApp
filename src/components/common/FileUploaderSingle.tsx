@@ -8,6 +8,8 @@ import FormHelperText from '@mui/material/FormHelperText'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import Modal from '@mui/material/Modal'
+import IconButton from '@mui/material/IconButton'
+import Tooltip from '@mui/material/Tooltip'
 import Slider from '@mui/material/Slider'
 
 // Third-party Imports
@@ -239,24 +241,67 @@ const FileUploaderSingle = ({
             borderRadius: 1,
             p: 3,
             cursor: 'pointer',
-            '&:hover': {
-              borderColor: 'primary.main'
-            }
+            position: 'relative',
+            '&:hover .delete-overlay': { opacity: 1 }
           }
         })}
       >
         <input {...getInputProps()} />
         {displayImage ? (
-          <img
-            src={`${displayImage}`}
-            alt="Uploaded file"
-            style={{
+          <Box
+            sx={{
               width: '100%',
               height: '100%',
-              objectFit: 'contain'
             }}
-            className='single-file-image'
-          />
+          >
+            <img
+              src={`${displayImage}`}
+              alt="Uploaded file"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'contain'
+              }}
+              className='single-file-image'
+            />
+            <Box
+              className='delete-overlay'
+              sx={{
+                position: 'absolute',
+                inset: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                bgcolor: 'rgba(0,0,0,0.25)',
+                opacity: 0,
+                transition: 'opacity 160ms ease-in-out'
+              }}
+              onClick={(e) => {
+                e.stopPropagation()
+
+                // Clear form value and preview
+                field.onChange([])
+                setPreviewUrl(null)
+              }}
+            >
+              <Tooltip title="Xóa ảnh">
+                <IconButton
+                  size='large'
+                  aria-label='delete-image'
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    field.onChange([])
+                    setPreviewUrl(null)
+                  }}
+                  sx={{
+                    color: 'white'
+                  }}
+                >
+                  <i className="ri-delete-bin-7-line"></i>
+                </IconButton>
+              </Tooltip>
+            </Box>
+          </Box>
         ) : (
           <div className='flex items-center flex-col h-full justify-center'>
             <Avatar variant='rounded' className='bs-12 is-12 mbe-9'>
