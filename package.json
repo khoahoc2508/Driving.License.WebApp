@@ -26,6 +26,7 @@
     "@mui/material-nextjs": "6.2.1",
     "@tanstack/match-sorter-utils": "^8.19.4",
     "@tanstack/react-table": "^8.21.3",
+    "antd": "^5.27.4",
     "apexcharts": "3.49.0",
     "classnames": "2.5.1",
     "keen-slider": "^6.8.6",

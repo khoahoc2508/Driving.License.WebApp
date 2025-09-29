@@ -10,7 +10,6 @@ import {
   CardHeader,
   Divider,
   TextField,
-  Popover,
   Checkbox,
   FormControlLabel,
   Box,
@@ -20,6 +19,7 @@ import {
   useTheme,
   useMediaQuery
 } from '@mui/material'
+import { Popover } from 'antd'
 import Autocomplete from '@mui/material/Autocomplete'
 
 import { toast } from 'react-toastify'
@@ -593,7 +593,130 @@ const ManageRegistrationRecords = () => {
 
         <div className='flex justify-between p-5 gap-4 flex-col sm:flex-row sm:items-center'>
           <div className='flex items-center gap-3 w-full sm:w-auto'>
-            <i className="ri-filter-3-line" onClick={handleOpenColumnVisibilityPopover} style={{ cursor: 'pointer', fontSize: '20px', color: '#1976d2' }} />
+            <Popover
+              content={
+                <div style={{ width: 300, maxHeight: '40vh', overflow: 'hidden' }}>
+                  <Box sx={{ p: 3, pb: 1 }}>
+                    <Typography variant='h5'>Cột hiển thị</Typography>
+                  </Box>
+                  <Box sx={{ p: 3, pb: 3 }}>
+                    <TextField
+                      fullWidth
+                      size="small"
+                      placeholder="Tìm kiếm"
+                      value={columnVisibilitySearch}
+                      onChange={(e) => setColumnVisibilitySearch(e.target.value)}
+                    />
+                  </Box>
+                  <Box sx={{ minHeight: '25vh', maxHeight: '35vh', overflow: 'auto', p: 3 }} className='scrollbar-override'>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={Object.keys(columnVisibility).length === 0 || Object.values(columnVisibility).every(v => v)}
+                          onChange={(e) => {
+                            const checked = e.target.checked;
+                            const newVisibility: VisibilityState = {};
+
+                            const filteredColumns = columnConfig.filter(col =>
+                              columnVisibilitySearch === '' ||
+                              col.column.toLowerCase().includes(columnVisibilitySearch.toLowerCase()) ||
+                              removeAccents(col.column.toLowerCase()).includes(removeAccents(columnVisibilitySearch.toLowerCase()))
+                            );
+
+                            filteredColumns.forEach(col => {
+                              newVisibility[col.column] = checked;
+                            });
+                            setColumnVisibility(newVisibility);
+                          }}
+                        />
+                      }
+                      label="Tất cả"
+                    />
+                    <Box sx={{ mt: 2 }}>
+                      {columnConfig
+                        .filter(column =>
+                          columnVisibilitySearch === '' ||
+                          column.column.toLowerCase().includes(columnVisibilitySearch.toLowerCase()) ||
+                          removeAccents(column.column.toLowerCase()).includes(removeAccents(columnVisibilitySearch.toLowerCase()))
+                        )
+                        .map((column, index) => {
+                          if (column.column === CONFIG.RegistrationRecordsTableColumns.TONG || column.column === CONFIG.RegistrationRecordsTableColumns.DA_NOP || column.column === CONFIG.RegistrationRecordsTableColumns.CON_THIEU) {
+                            if (column.column === CONFIG.RegistrationRecordsTableColumns.TONG) {
+                              const tongVisible = columnVisibility[CONFIG.RegistrationRecordsTableColumns.TONG] !== false;
+                              const daNopVisible = columnVisibility[CONFIG.RegistrationRecordsTableColumns.DA_NOP] !== false;
+                              const conThieuVisible = columnVisibility[CONFIG.RegistrationRecordsTableColumns.CON_THIEU] !== false;
+                              const allVisible = tongVisible && daNopVisible && conThieuVisible;
+                              const someVisible = tongVisible || daNopVisible || conThieuVisible;
+
+                              return (
+                                <Box key={`payment-group-${index}`} sx={{ mb: 2 }}>
+                                  <FormControlLabel
+                                    control={
+                                      <Checkbox
+                                        checked={allVisible}
+                                        indeterminate={someVisible && !allVisible}
+                                        onChange={(e) => {
+                                          const checked = e.target.checked;
+
+                                          setColumnVisibility(prev => ({
+                                            ...prev,
+                                            [CONFIG.RegistrationRecordsTableColumns.TONG]: checked,
+                                            [CONFIG.RegistrationRecordsTableColumns.DA_NOP]: checked,
+                                            [CONFIG.RegistrationRecordsTableColumns.CON_THIEU]: checked
+                                          }));
+                                        }}
+                                      />
+                                    }
+                                    label="Thanh toán"
+                                    sx={{ display: 'block', mb: 1, fontWeight: 'bold' }}
+                                  />
+                                </Box>
+                              );
+                            }
+
+
+                            return null;
+                          }
+
+                          return (
+                            <FormControlLabel
+                              key={`${column.column}-${index}`}
+                              control={
+                                <Checkbox
+                                  checked={columnVisibility[column.column] !== false}
+                                  onChange={(e) => {
+                                    setColumnVisibility(prev => ({
+                                      ...prev,
+                                      [column.column]: e.target.checked
+                                    }));
+                                  }}
+                                />
+                              }
+                              label={column.label}
+                              sx={{ display: 'block', mb: 1 }}
+                            />
+                          );
+                        })}
+                    </Box>
+                  </Box>
+                  <Box sx={{ display: 'flex', gap: 3, mt: 2, justifyContent: 'center', alignItems: 'center', p: 3, borderTop: '1px solid #e0e0e0' }}>
+                    <Button onClick={handleCloseColumnVisibilityPopover} size="small" variant='outlined'>HỦY</Button>
+                    <Button onClick={handleSaveColumnVisibility} variant="contained" size="small">LƯU</Button>
+                  </Box>
+                </div>
+              }
+              trigger="click"
+              placement="bottomLeft"
+              open={Boolean(columnVisibilityAnchorEl)}
+              onOpenChange={(open: boolean) => {
+                if (!open) {
+                  handleCloseColumnVisibilityPopover();
+                }
+              }}
+              arrow={false}
+            >
+              <i className="ri-filter-3-line" onClick={handleOpenColumnVisibilityPopover} style={{ cursor: 'pointer', fontSize: '20px', color: '#1976d2' }} />
+            </Popover>
             <DebouncedInput
               value={search}
               className='w-full'
@@ -623,135 +746,7 @@ const ManageRegistrationRecords = () => {
         </div>
       </Card>
 
-      {/* Column Visibility Popover */}
-      <Popover
-        open={Boolean(columnVisibilityAnchorEl)}
-        anchorEl={columnVisibilityAnchorEl}
-        onClose={handleCloseColumnVisibilityPopover}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-        PaperProps={{
-          sx: {
-            width: 320,
-            minHeight: 400,
-            maxHeight: '80vh',
-          }
-        }}
-      >
-        <Box sx={{ p: 3, pb: 1 }}>
-          <Typography variant='h5'>Cột hiển thị</Typography>
-        </Box>
-        <Box sx={{ p: 3, pb: 3 }}>
-          <TextField
-            fullWidth
-            size="small"
-            placeholder="Tìm kiếm"
-            value={columnVisibilitySearch}
-            onChange={(e) => setColumnVisibilitySearch(e.target.value)}
-          />
-        </Box>
-        <Box sx={{ minHeight: '25vh', maxHeight: '35vh', overflow: 'auto', p: 3 }} className='scrollbar-override'>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={Object.keys(columnVisibility).length === 0 || Object.values(columnVisibility).every(v => v)}
-                onChange={(e) => {
-                  const checked = e.target.checked;
-                  const newVisibility: VisibilityState = {};
 
-                  const filteredColumns = columnConfig.filter(col =>
-                    columnVisibilitySearch === '' ||
-                    col.column.toLowerCase().includes(columnVisibilitySearch.toLowerCase()) ||
-                    removeAccents(col.column.toLowerCase()).includes(removeAccents(columnVisibilitySearch.toLowerCase()))
-                  );
-
-                  filteredColumns.forEach(col => {
-                    newVisibility[col.column] = checked;
-                  });
-                  setColumnVisibility(newVisibility);
-                }}
-              />
-            }
-            label="Tất cả"
-          />
-          <Box sx={{ mt: 2 }}>
-            {columnConfig
-              .filter(column =>
-                columnVisibilitySearch === '' ||
-                column.column.toLowerCase().includes(columnVisibilitySearch.toLowerCase()) ||
-                removeAccents(column.column.toLowerCase()).includes(removeAccents(columnVisibilitySearch.toLowerCase()))
-              )
-              .map((column, index) => {
-                if (column.column === CONFIG.RegistrationRecordsTableColumns.TONG || column.column === CONFIG.RegistrationRecordsTableColumns.DA_NOP || column.column === CONFIG.RegistrationRecordsTableColumns.CON_THIEU) {
-                  if (column.column === CONFIG.RegistrationRecordsTableColumns.TONG) {
-                    const tongVisible = columnVisibility[CONFIG.RegistrationRecordsTableColumns.TONG] !== false;
-                    const daNopVisible = columnVisibility[CONFIG.RegistrationRecordsTableColumns.DA_NOP] !== false;
-                    const conThieuVisible = columnVisibility[CONFIG.RegistrationRecordsTableColumns.CON_THIEU] !== false;
-                    const allVisible = tongVisible && daNopVisible && conThieuVisible;
-                    const someVisible = tongVisible || daNopVisible || conThieuVisible;
-
-                    return (
-                      <Box key={`payment-group-${index}`} sx={{ mb: 2 }}>
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={allVisible}
-                              indeterminate={someVisible && !allVisible}
-                              onChange={(e) => {
-                                const checked = e.target.checked;
-
-                                setColumnVisibility(prev => ({
-                                  ...prev,
-                                  [CONFIG.RegistrationRecordsTableColumns.TONG]: checked,
-                                  [CONFIG.RegistrationRecordsTableColumns.DA_NOP]: checked,
-                                  [CONFIG.RegistrationRecordsTableColumns.CON_THIEU]: checked
-                                }));
-                              }}
-                            />
-                          }
-                          label="Thanh toán"
-                          sx={{ display: 'block', mb: 1, fontWeight: 'bold' }}
-                        />
-                      </Box>
-                    );
-                  }
-
-
-                  return null;
-                }
-
-                return (
-                  <FormControlLabel
-                    key={`${column.column}-${index}`}
-                    control={
-                      <Checkbox
-                        checked={columnVisibility[column.column] !== false}
-                        onChange={(e) => {
-                          setColumnVisibility(prev => ({
-                            ...prev,
-                            [column.column]: e.target.checked
-                          }));
-                        }}
-                      />
-                    }
-                    label={column.label}
-                    sx={{ display: 'block', mb: 1 }}
-                  />
-                );
-              })}
-          </Box>
-        </Box>
-        <Box sx={{ display: 'flex', gap: 3, mt: 2, justifyContent: 'center', alignItems: 'center', p: 3, borderTop: '1px solid #e0e0e0' }}>
-          <Button onClick={handleCloseColumnVisibilityPopover} size="small" variant='outlined'>HỦY</Button>
-          <Button onClick={handleSaveColumnVisibility} variant="contained" size="small">LƯU</Button>
-        </Box>
-      </Popover>
     </>
   )
 }
