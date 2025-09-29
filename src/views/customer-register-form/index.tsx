@@ -124,7 +124,7 @@ const accountValidationSchema = object({
 const accountSchema = accountValidationSchema
 
 const personalSchema = object({
-  avatarUrl: pipe(array(union([string(), instance(File)])), nonEmpty('Vui lòng tải lên ảnh 3x4')),
+  // avatarUrl: pipe(array(union([string(), instance(File)])), nonEmpty('Vui lòng tải lên ảnh 3x4')),
   fullName: pipe(string(), nonEmpty('Vui lòng nhập họ tên')),
   birthday: pipe(
     union([string(), instance(Date), null_()]),
@@ -273,7 +273,7 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
   const personalFormMethods = useForm({
     resolver: valibotResolver(personalSchema),
     defaultValues: {
-      avatarUrl: [],
+      // avatarUrl: [],
       fullName: '',
       birthday: null,
       gender: '',
@@ -444,7 +444,7 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
       citizenCardBackImgUrl: [],
     })
     personalFormMethods.reset({
-      avatarUrl: [],
+      // avatarUrl: [],
       fullName: '',
       birthday: null,
       gender: '',
@@ -587,7 +587,8 @@ const Page = ({ titlePage, vehicleTypePage }: Props) => {
                       ) {
                         labelProps.error = true
                       } else if (
-                        (personalFormMethods.formState.errors.avatarUrl ||
+                        // personalFormMethods.formState.errors.avatarUrl ||
+                        (
                           personalFormMethods.formState.errors.fullName ||
                           personalFormMethods.formState.errors.birthday ||
                           personalFormMethods.formState.errors.gender ||
