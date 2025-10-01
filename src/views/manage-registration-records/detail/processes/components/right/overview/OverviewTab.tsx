@@ -65,6 +65,7 @@ const OverviewTab = forwardRef<OverviewTabRef, OverviewTabProps>(({ selectedStep
 
     const fetchStepActions = async (id: string) => {
         const response = await stepsAPI.GetStepActionsByStepId(id)
+
         setStepActions(response?.data?.data || [])
     }
 
@@ -190,6 +191,7 @@ const OverviewTab = forwardRef<OverviewTabRef, OverviewTabProps>(({ selectedStep
         try {
             setIsForcingComplete(true)
             const isCompleted = stepOverview?.status === CONFIG.StepStatus.Completed
+
             await stepsAPI.ForceCompleteStep(selectedStep.id, !isCompleted)
 
             await fetchStepOverview(selectedStep.id)
