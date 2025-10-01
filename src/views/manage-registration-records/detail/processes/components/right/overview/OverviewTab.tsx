@@ -11,6 +11,7 @@ import type { components } from '@/libs/api/client/schema'
 import { getInputBehavior, getStatusColor } from '@/utils/helpers'
 import CONFIG from '@/configs/config'
 import stepsAPI from '@/libs/api/stepsAPI'
+import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog'
 
 type OverviewTabProps = {
     selectedStep: GetStepsDto | null
@@ -31,8 +32,10 @@ const OverviewTab = forwardRef<OverviewTabRef, OverviewTabProps>(({ selectedStep
     const [editingValue, setEditingValue] = useState<string>('')
     const [stepActions, setStepActions] = useState<StepActionTemplateDto[]>([])
     const [isCreatingStep, setIsCreatingStep] = useState(false)
+    const [isForcingComplete, setIsForcingComplete] = useState(false)
     const [showConfirmDialog, setShowConfirmDialog] = useState(false)
     const [selectedAction, setSelectedAction] = useState<StepActionTemplateDto | null>(null)
+    const [showForceConfirm, setShowForceConfirm] = useState(false)
 
     useEffect(() => {
         if (selectedStep?.id) {
@@ -62,7 +65,6 @@ const OverviewTab = forwardRef<OverviewTabRef, OverviewTabProps>(({ selectedStep
 
     const fetchStepActions = async (id: string) => {
         const response = await stepsAPI.GetStepActionsByStepId(id)
-
         setStepActions(response?.data?.data || [])
     }
 
@@ -180,6 +182,26 @@ const OverviewTab = forwardRef<OverviewTabRef, OverviewTabProps>(({ selectedStep
     const handleCancelCreate = () => {
         setShowConfirmDialog(false)
         setSelectedAction(null)
+    }
+
+    const handleToggleForceComplete = async () => {
+        if (!selectedStep?.id) return
+
+        try {
+            setIsForcingComplete(true)
+            const isCompleted = stepOverview?.status === CONFIG.StepStatus.Completed
+            await stepsAPI.ForceCompleteStep(selectedStep.id, !isCompleted)
+
+            await fetchStepOverview(selectedStep.id)
+            onRefreshSteps(0)
+
+            toast.success(!isCompleted ? 'Đã buộc hoàn thành bước' : 'Đã hủy buộc hoàn thành bước')
+        } catch (error) {
+            toast.error('Thao tác thất bại')
+        } finally {
+            setIsForcingComplete(false)
+            setShowForceConfirm(false)
+        }
     }
 
     return (
@@ -302,30 +324,41 @@ const OverviewTab = forwardRef<OverviewTabRef, OverviewTabProps>(({ selectedStep
                     ))}
             </Box>
             {stepActions.length > 0 && <Divider sx={{ my: 2 }} />}
-            {stepActions.length > 0 && (
-                <Box
-                    sx={{
-                        display: 'flex',
-                        justifyContent: 'flex-end',
-                        gap: 2,
-                        my: 4
-                    }}
+            <Box
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    gap: 2,
+                    my: 4
+                }}
+            >
+                {stepActions.length > 0 && stepActions
+                    .sort((a, b) => (b.order || 0) - (a.order || 0))
+                    .map((action) => (
+                        <Button
+                            key={action.id}
+                            variant='contained'
+                            color='primary'
+                            onClick={() => handleCreateStepFromAction(action)}
+                            disabled={isCreatingStep || !action.enable}
+                        >
+                            {isCreatingStep ? 'Đang tạo...' : action.name}
+                        </Button>
+                    ))}
+                <Button
+                    variant='outlined'
+                    color={stepOverview?.status === CONFIG.StepStatus.Completed ? 'secondary' : 'error'}
+                    onClick={() => setShowForceConfirm(true)}
+                    disabled={isCreatingStep || isForcingComplete}
+                    className='cursor-pointer'
                 >
-                    {stepActions
-                        .sort((a, b) => (b.order || 0) - (a.order || 0))
-                        .map((action) => (
-                            <Button
-                                key={action.id}
-                                variant='contained'
-                                color='primary'
-                                onClick={() => handleCreateStepFromAction(action)}
-                                disabled={isCreatingStep || !action.enable}
-                            >
-                                {isCreatingStep ? 'Đang tạo...' : action.name}
-                            </Button>
-                        ))}
-                </Box>
-            )}
+                    {isForcingComplete
+                        ? 'Đang xử lý...'
+                        : stepOverview?.status === CONFIG.StepStatus.Completed
+                            ? 'HỦY BUỘC HOÀN THÀNH'
+                            : 'BUỘC HOÀN THÀNH'}
+                </Button>
+            </Box>
             {/* Confirmation Dialog */}
             <Dialog open={showConfirmDialog} onClose={handleCancelCreate}>
                 <DialogTitle>Xác nhận?</DialogTitle>
@@ -348,6 +381,42 @@ const OverviewTab = forwardRef<OverviewTabRef, OverviewTabProps>(({ selectedStep
                     </Button>
                 </DialogActions>
             </Dialog>
+            {/* Force Complete Confirm */}
+            <DeleteConfirmationDialog
+                open={showForceConfirm}
+                onClose={() => setShowForceConfirm(false)}
+                onConfirm={handleToggleForceComplete}
+                title={stepOverview?.status === CONFIG.StepStatus.Completed ? 'Hủy buộc hoàn thành?' : 'Buộc hoàn thành?'}
+                itemName={undefined}
+                itemType="bước"
+                isLoading={isForcingComplete}
+                loadingText={'Đang xử lý...'}
+                confirmText={'XÁC NHẬN'}
+                confirmColor={'primary'}
+                confirmVariant={'contained'}
+                description={
+                    stepOverview?.status === CONFIG.StepStatus.Completed
+                        ? (
+                            <>
+                                <Typography variant="body1" color="text.primary">
+                                    Bạn có chắc muốn <strong>hủy buộc hoàn thành</strong>?
+                                </Typography>
+                                <Typography variant="body1" color="text.primary">
+                                    Bước xử lý sẽ trở về trạng thái trước khi buộc hoàn thành.
+                                </Typography>
+                            </>
+                        ) : (
+                            <>
+                                <Typography variant="body1" color="text.primary">
+                                    Bạn có chắc muốn <strong>buộc hoàn thành</strong>?
+                                </Typography>
+                                <Typography variant="body1" color="text.primary">
+                                    Bước xử lý này sẽ được đánh dấu hoàn thành mà không cần hoàn thành tất cả công việc.
+                                </Typography>
+                            </>
+                        )
+                }
+            />
         </Box>
     )
 })

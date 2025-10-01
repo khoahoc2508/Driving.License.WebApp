@@ -49,6 +49,12 @@ const UpdateStepFieldInline = async (data: {
   })
 }
 
+const ForceCompleteStep = async (stepId: string, isForceCompleted: boolean) => {
+  return await axiosInstance.put(`/api/steps/${stepId}/force-complete`, {
+    isForceCompleted
+  })
+}
+
 const GetTaskActionsByStepId = async (stepId: string) => {
   return await axiosInstance.get<BaseResponseOfListOfTaskActionTemplateDto>('/api/tasks/actions', {
     params: {
@@ -79,7 +85,8 @@ const stepsAPI = {
   CreateTaskFromTemplate,
   UpdateTask,
   DeleteTask,
-  UpdateStepFieldInline
+  UpdateStepFieldInline,
+  ForceCompleteStep
 }
 
 export default stepsAPI

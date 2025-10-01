@@ -1,9 +1,11 @@
 'use client'
 
 // React Imports
+import type { ReactNode } from 'react'
 
 // MUI Imports
 import Button from '@mui/material/Button'
+import type { ButtonProps } from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
@@ -21,6 +23,11 @@ interface DeleteConfirmationDialogProps {
     itemName?: string
     itemType?: string
     isLoading?: boolean
+    description?: ReactNode
+    loadingText?: string
+    confirmVariant?: ButtonProps['variant']
+    confirmColor?: ButtonProps['color']
+    confirmText?: string
 }
 
 const DeleteConfirmationDialog = ({
@@ -30,7 +37,12 @@ const DeleteConfirmationDialog = ({
     title = 'Bạn chắc chắn xóa?',
     itemName,
     itemType = 'hồ sơ',
-    isLoading = false
+    isLoading = false,
+    description,
+    loadingText = 'Đang xóa...',
+    confirmVariant = 'outlined',
+    confirmColor = 'error',
+    confirmText = 'XÁC NHẬN'
 }: DeleteConfirmationDialogProps) => {
     return (
         <Dialog
@@ -79,13 +91,23 @@ const DeleteConfirmationDialog = ({
             </DialogTitle>
 
             <DialogContent className='p-4'>
-                <Typography
-                    id="delete-dialog-description"
-                    variant="body1"
-                    color="text.primary"
-                >
-                    Bạn đang xóa {itemType} <strong>{itemName}</strong>. Dữ liệu liên quan đến {itemType} này sẽ bị mất!
-                </Typography>
+                {description ? (
+                    typeof description === 'string' ? (
+                        <Typography id="delete-dialog-description" variant="body1" color="text.primary">
+                            {description}
+                        </Typography>
+                    ) : (
+                        description
+                    )
+                ) : (
+                    <Typography
+                        id="delete-dialog-description"
+                        variant="body1"
+                        color="text.primary"
+                    >
+                        Bạn đang xóa {itemType} <strong>{itemName}</strong>. Dữ liệu liên quan đến {itemType} này sẽ bị mất!
+                    </Typography>
+                )}
             </DialogContent>
 
             <DialogActions sx={{ px: 4, pb: 4, gap: 2 }}>
@@ -99,12 +121,12 @@ const DeleteConfirmationDialog = ({
                 </Button>
                 <Button
                     onClick={onConfirm}
-                    variant="outlined"
-                    color="error"
+                    variant={confirmVariant}
+                    color={confirmColor}
                     disabled={isLoading}
                     className='m-0'
                 >
-                    {isLoading ? 'Đang xóa...' : 'XÁC NHẬN'}
+                    {isLoading ? loadingText : confirmText}
                 </Button>
             </DialogActions>
         </Dialog>
