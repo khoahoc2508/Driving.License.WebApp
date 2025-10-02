@@ -15,6 +15,9 @@
   --drawer-z-index: var(--mui-zIndex-drawer);
   --backdrop-color: rgb(var(--mui-mainColorChannels-light) / 0.5);
   --mui-mainColorChannels-shadow: var(--mui-mainColorChannels-lightShadow);
+
+  /* Mobile font size optimization */
+  --mobile-font-scale: 0.98; /* Giảm 15% font size cho mobile */
 }
 
 [data-dark] {
@@ -225,4 +228,187 @@ code {
 .ts-breakpoint-reached,
 .ts-collapsed {
   z-index: 1111 !important;
+}
+
+/* Mobile font size optimization - áp dụng cho tất cả elements */
+@media (max-width: 768px) {
+  /* Giảm font size cho tất cả text elements */
+  * {
+    font-size: calc(1em * var(--mobile-font-scale)) !important;
+  }
+
+  /* Điều chỉnh lại các element có font size cố định */
+  h1 {
+    font-size: calc(2.5rem * var(--mobile-font-scale)) !important;
+  }
+
+  h2 {
+    font-size: calc(2rem * var(--mobile-font-scale)) !important;
+  }
+
+  h3 {
+    font-size: calc(1.75rem * var(--mobile-font-scale)) !important;
+  }
+
+  h4 {
+    font-size: calc(1.5rem * var(--mobile-font-scale)) !important;
+  }
+
+  h5 {
+    font-size: calc(1.25rem * var(--mobile-font-scale)) !important;
+  }
+
+  h6 {
+    font-size: calc(1rem * var(--mobile-font-scale)) !important;
+  }
+
+  /* Điều chỉnh icon size */
+  :where([class^='ri-']) {
+    font-size: calc(1.5rem * var(--mobile-font-scale)) !important;
+  }
+
+  /* Điều chỉnh button text */
+  button,
+  .MuiButton-root {
+    font-size: calc(0.875rem * var(--mobile-font-scale)) !important;
+  }
+
+  /* Điều chỉnh input text */
+  input,
+  textarea,
+  select {
+    font-size: calc(1rem * var(--mobile-font-scale)) !important;
+  }
+
+  /* Điều chỉnh table text - override CSS modules */
+  .MuiTableCell-root,
+  table.table th,
+  table.table td,
+  .table th,
+  .table td,
+  [class*='table'] th,
+  [class*='table'] td,
+  .cellWithInput input {
+    font-size: calc(0.875rem * var(--mobile-font-scale)) !important;
+  }
+
+  /* Điều chỉnh table header text */
+  table.table thead th,
+  .table thead th,
+  [class*='table'] thead th {
+    font-size: calc(0.8125rem * var(--mobile-font-scale)) !important;
+  }
+
+  /* Điều chỉnh table body text */
+  table.table tbody th,
+  table.table tbody td,
+  .table tbody th,
+  .table tbody td,
+  [class*='table'] tbody th,
+  [class*='table'] tbody td {
+    font-size: calc(0.9375rem * var(--mobile-font-scale)) !important;
+  }
+
+  /* TanStack React Table specific overrides */
+  [data-table] th,
+  [data-table] td,
+  .rt-table th,
+  .rt-table td,
+  .table-container th,
+  .table-container td {
+    font-size: calc(0.875rem * var(--mobile-font-scale)) !important;
+  }
+
+  /* Override CSS module specificity */
+  .table[class*='table'] th,
+  .table[class*='table'] td {
+    font-size: calc(0.875rem * var(--mobile-font-scale)) !important;
+  }
+
+  /* Force override for all table cells */
+  *[class*='table'] th,
+  *[class*='table'] td {
+    font-size: calc(0.875rem * var(--mobile-font-scale)) !important;
+  }
+
+  /* Override elements inside table cells */
+  *[class*='table'] th *,
+  *[class*='table'] td *,
+  .table th *,
+  .table td * {
+    font-size: inherit !important;
+  }
+
+  /* Specific overrides for common table elements */
+  *[class*='table'] .MuiChip-root,
+  *[class*='table'] .MuiTypography-root,
+  *[class*='table'] .MuiButton-root,
+  *[class*='table'] .MuiIconButton-root,
+  .table .MuiChip-root,
+  .table .MuiTypography-root,
+  .table .MuiButton-root,
+  .table .MuiIconButton-root {
+    font-size: calc(0.875rem * var(--mobile-font-scale)) !important;
+  }
+
+  /* Điều chỉnh menu text */
+  .MuiMenuItem-root {
+    font-size: calc(0.875rem * var(--mobile-font-scale)) !important;
+  }
+
+  /* Điều chỉnh typography */
+  .MuiTypography-root {
+    font-size: calc(1rem * var(--mobile-font-scale)) !important;
+  }
+}
+
+/* Điều chỉnh cho tablet (768px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  :root {
+    --mobile-font-scale: 0.92; /* Giảm 8% cho tablet */
+  }
+}
+
+/* Utility classes cho mobile font optimization */
+.mobile-font-sm {
+  font-size: calc(0.875rem * var(--mobile-font-scale)) !important;
+}
+
+.mobile-font-base {
+  font-size: calc(1rem * var(--mobile-font-scale)) !important;
+}
+
+.mobile-font-lg {
+  font-size: calc(1.125rem * var(--mobile-font-scale)) !important;
+}
+
+.mobile-font-xl {
+  font-size: calc(1.25rem * var(--mobile-font-scale)) !important;
+}
+
+.mobile-font-2xl {
+  font-size: calc(1.5rem * var(--mobile-font-scale)) !important;
+}
+
+/* Responsive utility classes */
+@media (max-width: 768px) {
+  .mobile-font-sm {
+    font-size: 0.8rem !important;
+  }
+
+  .mobile-font-base {
+    font-size: 0.9rem !important;
+  }
+
+  .mobile-font-lg {
+    font-size: 1rem !important;
+  }
+
+  .mobile-font-xl {
+    font-size: 1.125rem !important;
+  }
+
+  .mobile-font-2xl {
+    font-size: 1.25rem !important;
+  }
 }
