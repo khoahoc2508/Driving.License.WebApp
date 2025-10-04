@@ -242,11 +242,11 @@ const ToolAddressMerge = () => {
         {/* Left Column - Old Address */}
         <Card sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
           <CardHeader
-            title="Địa chỉ cũ"
-            titleTypographyProps={{
-              variant: 'h5',
-              sx: { fontWeight: 600 },
-            }}
+            title={
+              <Typography variant="h5">
+                Địa chỉ cũ
+              </Typography>
+            }
             className='text-left py-3 mb-4'
             style={{
               borderBottom: '1px solid #e0e0e0',
@@ -297,11 +297,11 @@ const ToolAddressMerge = () => {
         {/* Right Column - New Address */}
         <Card sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
           <CardHeader
-            title="Địa chỉ mới"
-            titleTypographyProps={{
-              variant: 'h5',
-              sx: { fontWeight: 600 },
-            }}
+            title={
+              <Typography variant="h5">
+                Địa chỉ mới
+              </Typography>
+            }
             className='text-left py-3 mb-4'
             style={{
               borderBottom: '1px solid #e0e0e0',
