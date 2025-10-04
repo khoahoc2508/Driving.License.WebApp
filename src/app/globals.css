@@ -17,7 +17,8 @@
   --mui-mainColorChannels-shadow: var(--mui-mainColorChannels-lightShadow);
 
   /* Mobile font size optimization */
-  --mobile-font-scale: 0.98; /* Giảm 15% font size cho mobile */
+  --mobile-font-scale-lg: 0.98; /* Giảm 15% font size cho mobile */
+  --mobile-font-scale-md: 0.8; /* Giảm 15% font size cho mobile */
 }
 
 [data-dark] {
@@ -234,51 +235,26 @@ code {
 @media (max-width: 768px) {
   /* Giảm font size cho tất cả text elements */
   * {
-    font-size: calc(1em * var(--mobile-font-scale)) !important;
-  }
-
-  /* Điều chỉnh lại các element có font size cố định */
-  h1 {
-    font-size: calc(2.5rem * var(--mobile-font-scale)) !important;
-  }
-
-  h2 {
-    font-size: calc(2rem * var(--mobile-font-scale)) !important;
-  }
-
-  h3 {
-    font-size: calc(1.75rem * var(--mobile-font-scale)) !important;
-  }
-
-  h4 {
-    font-size: calc(1.5rem * var(--mobile-font-scale)) !important;
-  }
-
-  h5 {
-    font-size: calc(1.25rem * var(--mobile-font-scale)) !important;
-  }
-
-  h6 {
-    font-size: calc(1rem * var(--mobile-font-scale)) !important;
+    font-size: calc(0.875rem * var(--mobile-font-scale-lg)) !important;
   }
 
   /* Điều chỉnh icon size */
   :where([class^='ri-']) {
-    font-size: calc(1.5rem * var(--mobile-font-scale)) !important;
+    font-size: calc(1.5rem * var(--mobile-font-scale-lg)) !important;
   }
 
   /* Điều chỉnh button text */
   button,
   .MuiButton-root {
-    font-size: calc(0.875rem * var(--mobile-font-scale)) !important;
+    font-size: calc(0.875rem * var(--mobile-font-scale-lg)) !important;
   }
 
   /* Điều chỉnh input text */
-  input,
+  /* input,
   textarea,
   select {
-    font-size: calc(1rem * var(--mobile-font-scale)) !important;
-  }
+    font-size: calc(1rem * var(--mobile-font-scale-lg)) !important;
+  } */
 
   /* Điều chỉnh table text - override CSS modules */
   .MuiTableCell-root,
@@ -289,14 +265,14 @@ code {
   [class*='table'] th,
   [class*='table'] td,
   .cellWithInput input {
-    font-size: calc(0.875rem * var(--mobile-font-scale)) !important;
+    font-size: calc(0.875rem * var(--mobile-font-scale-lg)) !important;
   }
 
   /* Điều chỉnh table header text */
   table.table thead th,
   .table thead th,
   [class*='table'] thead th {
-    font-size: calc(0.8125rem * var(--mobile-font-scale)) !important;
+    font-size: calc(0.8125rem * var(--mobile-font-scale-lg)) !important;
   }
 
   /* Điều chỉnh table body text */
@@ -306,7 +282,7 @@ code {
   .table tbody td,
   [class*='table'] tbody th,
   [class*='table'] tbody td {
-    font-size: calc(0.9375rem * var(--mobile-font-scale)) !important;
+    font-size: calc(0.9375rem * var(--mobile-font-scale-lg)) !important;
   }
 
   /* TanStack React Table specific overrides */
@@ -316,19 +292,19 @@ code {
   .rt-table td,
   .table-container th,
   .table-container td {
-    font-size: calc(0.875rem * var(--mobile-font-scale)) !important;
+    font-size: calc(0.875rem * var(--mobile-font-scale-lg)) !important;
   }
 
   /* Override CSS module specificity */
   .table[class*='table'] th,
   .table[class*='table'] td {
-    font-size: calc(0.875rem * var(--mobile-font-scale)) !important;
+    font-size: calc(0.875rem * var(--mobile-font-scale-lg)) !important;
   }
 
   /* Force override for all table cells */
   *[class*='table'] th,
   *[class*='table'] td {
-    font-size: calc(0.875rem * var(--mobile-font-scale)) !important;
+    font-size: calc(0.875rem * var(--mobile-font-scale-lg)) !important;
   }
 
   /* Override elements inside table cells */
@@ -342,52 +318,92 @@ code {
   /* Specific overrides for common table elements */
   *[class*='table'] .MuiChip-root,
   *[class*='table'] .MuiTypography-root,
-  *[class*='table'] .MuiButton-root,
-  *[class*='table'] .MuiIconButton-root,
   .table .MuiChip-root,
   .table .MuiTypography-root,
   .table .MuiButton-root,
   .table .MuiIconButton-root {
-    font-size: calc(0.875rem * var(--mobile-font-scale)) !important;
+    font-size: calc(0.875rem * var(--mobile-font-scale-lg)) !important;
   }
 
   /* Điều chỉnh menu text */
   .MuiMenuItem-root {
-    font-size: calc(0.875rem * var(--mobile-font-scale)) !important;
+    font-size: calc(0.875rem * var(--mobile-font-scale-lg)) !important;
   }
 
   /* Điều chỉnh typography */
   .MuiTypography-root {
-    font-size: calc(1rem * var(--mobile-font-scale)) !important;
+    font-size: calc(1rem * var(--mobile-font-scale-md)) !important;
+  }
+
+  /* Điều chỉnh MuiTabs */
+  .MuiTabs-root .MuiBox-root {
+    font-size: calc(0.875rem * var(--mobile-font-scale-md)) !important;
+  }
+
+  /* Điều chỉnh lại các element có font size cố định - ưu tiên cao hơn MuiTypography-root */
+  h1,
+  h1.MuiTypography-root {
+    font-size: calc(2.5rem * var(--mobile-font-scale-lg)) !important;
+    line-height: 1.2 !important;
+  }
+
+  h2,
+  h2.MuiTypography-root {
+    font-size: calc(2rem * var(--mobile-font-scale-lg)) !important;
+    line-height: 1.2 !important;
+  }
+
+  h3,
+  h3.MuiTypography-root {
+    font-size: calc(1.75rem * var(--mobile-font-scale-lg)) !important;
+    line-height: 1.2 !important;
+  }
+
+  h4,
+  h4.MuiTypography-root {
+    font-size: calc(1.5rem * var(--mobile-font-scale-lg)) !important;
+    line-height: 1.2 !important;
+  }
+
+  h5,
+  h5.MuiTypography-root {
+    font-size: calc(1.25rem * var(--mobile-font-scale-lg)) !important;
+    line-height: 1.2 !important;
+  }
+
+  h6,
+  h6.MuiTypography-root {
+    font-size: calc(1rem * var(--mobile-font-scale-lg)) !important;
+    line-height: 1.2 !important;
   }
 }
 
 /* Điều chỉnh cho tablet (768px - 1024px) */
 @media (min-width: 769px) and (max-width: 1024px) {
   :root {
-    --mobile-font-scale: 0.92; /* Giảm 8% cho tablet */
+    --mobile-font-scale-lg: 0.92; /* Giảm 8% cho tablet */
   }
 }
 
 /* Utility classes cho mobile font optimization */
 .mobile-font-sm {
-  font-size: calc(0.875rem * var(--mobile-font-scale)) !important;
+  font-size: calc(0.875rem * var(--mobile-font-scale-lg)) !important;
 }
 
 .mobile-font-base {
-  font-size: calc(1rem * var(--mobile-font-scale)) !important;
+  font-size: calc(1rem * var(--mobile-font-scale-lg)) !important;
 }
 
 .mobile-font-lg {
-  font-size: calc(1.125rem * var(--mobile-font-scale)) !important;
+  font-size: calc(1.125rem * var(--mobile-font-scale-lg)) !important;
 }
 
 .mobile-font-xl {
-  font-size: calc(1.25rem * var(--mobile-font-scale)) !important;
+  font-size: calc(1.25rem * var(--mobile-font-scale-lg)) !important;
 }
 
 .mobile-font-2xl {
-  font-size: calc(1.5rem * var(--mobile-font-scale)) !important;
+  font-size: calc(1.5rem * var(--mobile-font-scale-lg)) !important;
 }
 
 /* Responsive utility classes */

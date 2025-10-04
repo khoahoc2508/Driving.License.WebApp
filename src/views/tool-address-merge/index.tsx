@@ -232,11 +232,12 @@ const ToolAddressMerge = () => {
       {/* Main Content */}
       <Box sx={{
         display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
-        gap: 10,
-        mx: 4,
+        gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
+        gap: { xs: 4, md: 10 },
+        mx: { xs: 2, md: 4 },
         flex: 1,
-        minHeight: 0
+        minHeight: 0,
+        paddingX: { xs: '7px', md: 0 }
       }}>
         {/* Left Column - Old Address */}
         <Card sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -336,9 +337,10 @@ const ToolAddressMerge = () => {
       <Box sx={{
         display: 'flex',
         justifyContent: 'center',
-        py: 4,
+        p: 4,
         flexShrink: 0,
-        gap: 2
+        gap: 2,
+        flexDirection: { xs: 'column', md: 'row' }
       }}>
         <Button
           variant="contained"
@@ -349,7 +351,10 @@ const ToolAddressMerge = () => {
             (inputMode === InputMode.MANUAL && !oldAddressInput.trim()) ||
             isConverting
           }
-          className='min-w-[400px] rounded'
+          className=' rounded'
+          sx={{
+            minWidth: { xs: '100%', md: '400px' }
+          }}
         >
           {isConverting ? (
             <>
