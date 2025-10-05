@@ -1204,6 +1204,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/exams/generate-random-exam-by-category": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["Exams_GenerateRandomExamByCategory"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/examsubmissions/{id}": {
         parameters: {
             query?: never;
@@ -2399,6 +2415,31 @@ export interface components {
         GenerateRandomExamsCommand: {
             groupExamId?: string;
             licenseTypeCode?: string;
+        };
+        GenerateRandomExamByCategoryCommand: {
+            groupExamId?: string;
+            licenseTypeCode?: string;
+            examStructure?: components["schemas"]["ExamStructure"];
+        };
+        ExamStructure: {
+
+            /** Format: int32 */
+            totalQuestions?: number;
+
+            /** Format: int32 */
+            durationMinutes?: number;
+
+            /** Format: int32 */
+            passingScore?: number;
+            categories?: components["schemas"]["QuestionCategory"][];
+        };
+        QuestionCategory: {
+            name?: string;
+
+            /** Format: int32 */
+            count?: number;
+            isCritical?: boolean;
+            questionNumbers?: number[];
         };
         BaseResponseOfExamSubmissionResultDto: components["schemas"]["BaseResponse"] & {
             data?: components["schemas"]["ExamSubmissionResultDto"] | null;
@@ -4783,6 +4824,29 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["GenerateRandomExamsCommand"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BaseResponseOfExamDto"];
+                };
+            };
+        };
+    };
+    Exams_GenerateRandomExamByCategory: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GenerateRandomExamByCategoryCommand"];
             };
         };
         responses: {

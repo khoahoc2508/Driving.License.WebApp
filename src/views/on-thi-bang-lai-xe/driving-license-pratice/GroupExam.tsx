@@ -15,7 +15,6 @@ import ExamPractice from './ExamPractice'
 import type { questionTypes as Question } from '@/types/questionTypes'
 import QuestionAPI from '@/libs/api/questionAPI'
 import ExamSubmissionAPI from '@/libs/api/examSubmissionAPI'
-import type { GenerateRandomExamsCommand } from '@/types/exam'
 import CONFIG from '@/configs/config';
 
 interface ArticlesProps {
@@ -222,21 +221,18 @@ const GroupExams = ({ setIsLoading, onGroupsLoaded }: ArticlesProps) => {
         setIsLoading(true)
 
         try {
-          const payload: GenerateRandomExamsCommand = {
-            groupExamId: child.id,
-            licenseTypeCode: selectedClass.licenseTypeCode
-          }
+          const res = await ExamAPI.GetExamsByGroups(child.id)
 
-          const res = await ExamAPI.GenerateRandomExam(payload)
-          const examDto = res.data.data
+          debugger
+          const examDto = res.data.data[0]
 
           if (examDto) {
             handleStartExam(examDto)
           } else {
-            toast.error('Không tìm thấy đề thi ngẫu nhiên.')
+            toast.error('Không tìm thấy đề thi.')
           }
         } catch (err) {
-          toast.error('Không thể tải đề thi ngẫu nhiên.')
+          toast.error('Không thể tải đề thi.')
         } finally {
           setIsLoading(false)
         }
