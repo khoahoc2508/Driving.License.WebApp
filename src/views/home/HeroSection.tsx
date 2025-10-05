@@ -75,10 +75,10 @@ const HeroSection = ({ mode }: { mode: Mode }) => {
       <img src={heroSectionBg} alt='hero-bg' className={styles.heroSectionBg} />
       <div className={classnames('pbs-16 overflow-hidden', frontCommonStyles.layoutSpacing)}>
         <div className='md:max-is-[550px] mlb-0 mli-auto text-center'>
-          <Typography className='font-extrabold text-primary sm:text-[38px] text-3xl mbe-4 leading-[44px]'>
+          <Typography variant='h3' className='font-extrabold text-primary sm:text-[38px] text-3xl mbe-4 leading-[44px]'>
             Quản Lý Hồ Sơ Lái Xe
           </Typography>
-          <Typography className='font-extrabold text-primary sm:text-[38px] text-3xl mbe-4 leading-[44px]'>
+          <Typography variant='h3' className='font-extrabold text-primary sm:text-[38px] text-3xl mbe-4 leading-[44px]'>
             Dễ Dàng
           </Typography>
           <Typography className='font-medium' color='text.primary'>

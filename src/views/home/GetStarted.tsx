@@ -30,7 +30,7 @@ const GetStarted = () => {
       >
         <div className='flex flex-col items-center lg:items-start gap-y-8 pbs-9 lg:plb-9 z-[1]'>
           <div className='flex flex-col gap-1 max-lg:items-center'>
-            <Typography color='primary.main' className='font-bold text-[32px] max-sm:text-center'>
+            <Typography color='primary.main' variant='h3' className='font-bold text-[32px] max-sm:text-center'>
               Sẵn Sàng Trải Nghiệm?
             </Typography>
             <Typography className='font-medium max-sm:text-center'>
