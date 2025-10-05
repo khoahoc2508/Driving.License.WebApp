@@ -65,6 +65,8 @@ const ManageRegistrationRecords = () => {
   const [totalItems, setTotalItems] = useState<number>(0)
   const [reloadDataTable, setReloadDataTable] = useState<boolean>(false)
   const [params, setParams] = useState<GetRegistrationRecordsQueryParams>()
+  const [selectedIds, setSelectedIds] = useState<string[]>([])
+  const [isExporting, setIsExporting] = useState(false)
 
   // License type options from API
   const [licenseTypeOptions, setLicenseTypeOptions] = useState<{ label: string; value: string }[]>([])
@@ -390,6 +392,30 @@ const ManageRegistrationRecords = () => {
       setColumnVisibility(updater);
     }
   };
+
+  const handleExportExcel = async () => {
+    if (selectedIds.length === 0 || isExporting) return
+
+    try {
+      setIsExporting(true)
+      const res = await registrationRecordsAPI.ExportRegistrationRecordsToExcel({
+        registrationRecordIds: selectedIds,
+        baseUrl: process.env.NEXT_PUBLIC_STORAGE_BASE_URL
+      })
+
+      if (res?.data?.success) {
+        const url = process.env.NEXT_PUBLIC_STORAGE_BASE_URL + res?.data?.data?.fileUrl
+        if (url && typeof window !== 'undefined') window.open(url, '_blank')
+        toast.success('Xuất Excel thành công')
+      } else {
+        toast.error(res?.data?.message || 'Xuất Excel thất bại')
+      }
+    } catch (error: any) {
+      toast.error('Xuất Excel thất bại')
+    } finally {
+      setIsExporting(false)
+    }
+  }
 
   return (
     <>
@@ -724,11 +750,28 @@ const ManageRegistrationRecords = () => {
               placeholder='Họ tên, số điện thoại'
             />
           </div>
-          <Link href={`${CONFIG.Routers.ManageRegistrationRecords}/create`} passHref legacyBehavior className='max-sm:is-full'>
-            <Button variant='contained' color='primary' className='w-full sm:w-auto'>
-              THÊM MỚI
+          <div className='flex gap-3 w-full sm:w-auto'>
+            <Button
+              variant='outlined'
+              className='w-full sm:w-auto'
+              onClick={handleExportExcel}
+              disabled={selectedIds.length === 0 || isExporting}
+            >
+              {isExporting ? (
+                <span>ĐANG XUẤT...</span>
+              ) : (
+                <span className='flex items-center gap-2'>
+                  <i className="ri-upload-2-line" style={{ fontSize: '18px' }}></i>
+                  <span>XUẤT EXCEL</span>
+                </span>
+              )}
             </Button>
-          </Link>
+            <Link href={`${CONFIG.Routers.ManageRegistrationRecords}/create`} passHref legacyBehavior className='max-sm:is-full'>
+              <Button variant='contained' color='primary' className='w-full sm:w-auto'>
+                THÊM MỚI
+              </Button>
+            </Link>
+          </div>
         </div>
         <div className='flex-1 overflow-hidden'>
           <Table
@@ -742,6 +785,7 @@ const ManageRegistrationRecords = () => {
             isLoading={isLoading}
             columnVisibility={columnVisibility}
             onColumnVisibilityChange={handleColumnVisibilityChange}
+            onSelectedIdsChange={setSelectedIds}
           />
         </div>
       </Card>

@@ -4,7 +4,8 @@ import type {
   UpdateRegistrationRecordCommand,
   CreatePaymentCommand,
   UpdatePaymentCommand,
-  ApproveRegistrationRecordCommand
+  ApproveRegistrationRecordCommand,
+  ExportRegistrationRecordsToExcelCommand
 } from '@/types/registrationRecords'
 import axiosInstance from '../axios'
 import { customParamsSerializer } from './commonAPI'
@@ -35,6 +36,10 @@ const GetRegistrationRecordBasicInfo = async (id: string) => {
 
 const GetRegistrationRecordOverview = async (id: string) => {
   return await axiosInstance.get(`/api/registration-records/${id}/overview`)
+}
+
+const ExportRegistrationRecordsToExcel = async (data: ExportRegistrationRecordsToExcelCommand) => {
+  return await axiosInstance.post('/api/registration-records/export/excel', data)
 }
 
 // Payments
@@ -106,6 +111,7 @@ const registrationRecordsAPI = {
   GetRegistrationRecordById,
   GetRegistrationRecordBasicInfo,
   GetRegistrationRecordOverview,
+  ExportRegistrationRecordsToExcel,
   GetAllPaymentsByRegistrationRecordId,
   CreatePayment,
   GetPaymentById,

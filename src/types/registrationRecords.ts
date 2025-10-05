@@ -19,6 +19,9 @@ export type GetRegistrationRecordsQueryParams = {
   pageSize?: number
 }
 
+// export excel
+export type ExportRegistrationRecordsToExcelCommand = components['schemas']['ExportRegistrationRecordsToExcelCommand']
+
 // view
 export type RegistrationRecordBasicInfoDto = components['schemas']['RegistrationRecordBasicInfoDto']
 

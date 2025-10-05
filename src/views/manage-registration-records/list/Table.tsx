@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation'
 
 import Chip from '@mui/material/Chip'
 import Avatar from '@mui/material/Avatar'
+import Checkbox from '@mui/material/Checkbox'
 
 
 // Third-party Imports
@@ -82,7 +83,8 @@ const Table = ({
   setReloadDataTable,
   isLoading,
   columnVisibility,
-  onColumnVisibilityChange
+  onColumnVisibilityChange,
+  onSelectedIdsChange
 }: {
   data?: GetRegistrationRecordsListType,
   pageNumber: number,
@@ -93,7 +95,8 @@ const Table = ({
   setReloadDataTable: React.Dispatch<React.SetStateAction<boolean>>,
   isLoading: boolean,
   columnVisibility: VisibilityState,
-  onColumnVisibilityChange: (updater: VisibilityState | ((old: VisibilityState) => VisibilityState)) => void
+  onColumnVisibilityChange: (updater: VisibilityState | ((old: VisibilityState) => VisibilityState)) => void,
+  onSelectedIdsChange?: (ids: string[]) => void
 }) => {
   // States
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -103,6 +106,7 @@ const Table = ({
   const [itemToDelete, setItemToDelete] = useState<GetRegistrationRecordsDto | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
   const [columnPinning, setColumnPinning] = useState({})
+  const [rowSelection, setRowSelection] = useState({})
 
   // Custom scrollbar hook
   const scrollbarRef = useScrollbarHover()
@@ -160,6 +164,34 @@ const Table = ({
   // Hooks
   const columns = useMemo<ColumnDef<GetRegistrationRecordsDto, any>[]>(
     () => [
+      // Select column
+      columnHelper.display({
+        id: 'select',
+        header: ({ table }) => (
+          <div className='flex items-center justify-center'>
+            <Checkbox
+              size='medium'
+              checked={table.getIsAllPageRowsSelected()}
+              indeterminate={table.getIsSomePageRowsSelected()}
+              onChange={table.getToggleAllPageRowsSelectedHandler()}
+              onClick={e => e.stopPropagation()}
+            />
+          </div>
+        ),
+        cell: ({ row }) => (
+          <div className='flex items-center justify-center'>
+            <Checkbox
+              size='medium'
+              checked={row.getIsSelected()}
+              disabled={!row.getCanSelect()}
+              onChange={row.getToggleSelectedHandler()}
+              onClick={e => e.stopPropagation()}
+            />
+          </div>
+        ),
+        enableSorting: false,
+        size: 60
+      }),
       columnHelper.accessor('id', {
         id: CONFIG.RegistrationRecordsTableColumns.STT,
         header: 'STT',
@@ -416,12 +448,14 @@ const Table = ({
       columnFilters,
       globalFilter,
       columnVisibility,
-      columnPinning
+      columnPinning,
+      rowSelection
     },
     onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
     onColumnVisibilityChange: onColumnVisibilityChange,
     onColumnPinningChange: setColumnPinning,
+    onRowSelectionChange: setRowSelection,
     filterFns: {
       fuzzy: fuzzyFilter
     },
@@ -435,7 +469,8 @@ const Table = ({
     getFacetedMinMaxValues: getFacetedMinMaxValues(),
     columnResizeMode: 'onChange',
     enableColumnPinning: true,
-    enableColumnResizing: true
+    enableColumnResizing: true,
+    enableRowSelection: true
   })
 
   useEffect(() => {
@@ -453,6 +488,12 @@ const Table = ({
       }
     }
   }, [table, isMobile])
+
+  // Notify parent when selected IDs change
+  useEffect(() => {
+    const selectedIds = table.getSelectedRowModel().flatRows.map(r => r.original.id).filter(Boolean)
+    onSelectedIdsChange && onSelectedIdsChange(selectedIds as string[])
+  }, [rowSelection, data])
 
   return (
     <>
