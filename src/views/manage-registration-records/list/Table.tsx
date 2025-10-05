@@ -492,6 +492,7 @@ const Table = ({
   // Notify parent when selected IDs change
   useEffect(() => {
     const selectedIds = table.getSelectedRowModel().flatRows.map(r => r.original.id).filter(Boolean)
+
     onSelectedIdsChange && onSelectedIdsChange(selectedIds as string[])
   }, [rowSelection, data])
 

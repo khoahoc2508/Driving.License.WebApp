@@ -398,6 +398,7 @@ const ManageRegistrationRecords = () => {
 
     try {
       setIsExporting(true)
+
       const res = await registrationRecordsAPI.ExportRegistrationRecordsToExcel({
         registrationRecordIds: selectedIds,
         baseUrl: process.env.NEXT_PUBLIC_STORAGE_BASE_URL
@@ -405,6 +406,7 @@ const ManageRegistrationRecords = () => {
 
       if (res?.data?.success) {
         const url = process.env.NEXT_PUBLIC_STORAGE_BASE_URL + res?.data?.data?.fileUrl
+
         if (url && typeof window !== 'undefined') window.open(url, '_blank')
         toast.success('Xuất Excel thành công')
       } else {
