@@ -222,8 +222,6 @@ const GroupExams = ({ setIsLoading, onGroupsLoaded }: ArticlesProps) => {
 
         try {
           const res = await ExamAPI.GetExamsByGroups(child.id)
-
-          debugger
           const examDto = res.data.data[0]
 
           if (examDto) {
