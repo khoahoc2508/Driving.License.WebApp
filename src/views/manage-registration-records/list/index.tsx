@@ -623,7 +623,7 @@ const ManageRegistrationRecords = () => {
           <div className='flex items-center gap-3 w-full sm:w-auto'>
             <Popover
               content={
-                <div style={{ width: 300, maxHeight: '40vh', overflow: 'hidden' }}>
+                <div style={{ width: 300, maxHeight: '40vh', overflow: 'auto' }} className='scrollbar-override'>
                   <Box sx={{ p: 3, pb: 1 }}>
                     <Typography variant='h5'>Cột hiển thị</Typography>
                   </Box>
@@ -636,7 +636,7 @@ const ManageRegistrationRecords = () => {
                       onChange={(e) => setColumnVisibilitySearch(e.target.value)}
                     />
                   </Box>
-                  <Box sx={{ minHeight: '25vh', maxHeight: '35vh', overflow: 'auto', p: 3 }} className='scrollbar-override'>
+                  <Box sx={{ p: 3 }}>
                     <FormControlLabel
                       control={
                         <Checkbox
@@ -660,7 +660,7 @@ const ManageRegistrationRecords = () => {
                       }
                       label="Tất cả"
                     />
-                    <Box sx={{ mt: 2 }}>
+                    <Box sx={{ mt: 2 }} className='scrollbar-override'>
                       {columnConfig
                         .filter(column =>
                           columnVisibilitySearch === '' ||
@@ -735,6 +735,7 @@ const ManageRegistrationRecords = () => {
               }
               trigger="click"
               placement="bottomLeft"
+              overlayInnerStyle={{ paddingRight: 0, paddingLeft: '5px' }}
               open={Boolean(columnVisibilityAnchorEl)}
               onOpenChange={(open: boolean) => {
                 if (!open) {
@@ -774,7 +775,7 @@ const ManageRegistrationRecords = () => {
               </Button>
             </Link>
           </div>
-        </div>
+        </div >
         <div className='flex-1 overflow-hidden'>
           <Table
             data={dataTable}
@@ -790,7 +791,7 @@ const ManageRegistrationRecords = () => {
             onSelectedIdsChange={setSelectedIds}
           />
         </div>
-      </Card>
+      </Card >
 
 
     </>
