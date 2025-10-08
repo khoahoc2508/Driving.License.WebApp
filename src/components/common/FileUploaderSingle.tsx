@@ -346,11 +346,19 @@ const FileUploaderSingle = ({
           }}
         >
           <Typography id="crop-modal-title" variant="h5" component="h2" sx={{ mb: 2 }}>
-            Crop Ảnh
+            Chỉnh sửa ảnh
           </Typography>
 
           {imgSrc && (
-            <Box sx={{ mb: 2 }}>
+            <Box sx={{
+              mb: 2,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '100%',
+              width: '100%',
+              backgroundColor: '#7f7f7f',
+            }}>
               <ReactCrop
                 crop={crop}
                 onChange={(_, percentCrop) => setCrop(percentCrop)}
