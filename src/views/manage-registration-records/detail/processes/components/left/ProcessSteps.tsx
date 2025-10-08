@@ -9,6 +9,7 @@ import stepsAPI from '@/libs/api/stepsAPI'
 import StepperWrapper from '@/@core/styles/stepper'
 import styles from './ProcessSteps.module.css'
 import CONFIG from '@/configs/config'
+import ProcessStepsSkeleton from './ProcessStepsSkeleton'
 
 type ProcessStepsProps = {
   registrationRecordId: string | undefined
@@ -164,13 +165,14 @@ const CustomStepIcon = ({ step }: { step: GetStepsDto; index: number }) => {
 
 const ProcessSteps = forwardRef<ProcessStepsRef, ProcessStepsProps>(({ registrationRecordId, onStepClick, selectedStepIndex, setIsApproved }, ref) => {
   const [steps, setSteps] = useState<GetStepsDto[]>([])
+  const [isLoading, setIsLoading] = useState(false)
   const theme = useTheme()
 
   const fetchSteps = async () => {
     if (!registrationRecordId) return
 
     try {
-
+      setIsLoading(true)
       const response = await stepsAPI.GetStepsByRegistrationRecordId({
         registrationRecordId
       })
@@ -181,6 +183,7 @@ const ProcessSteps = forwardRef<ProcessStepsRef, ProcessStepsProps>(({ registrat
     } catch (error) {
       console.error('Error fetching steps:', error)
     } finally {
+      setIsLoading(false)
     }
   }
 
@@ -250,6 +253,10 @@ const ProcessSteps = forwardRef<ProcessStepsRef, ProcessStepsProps>(({ registrat
     }
   }, [steps, selectedStepIndex, onStepClick])
 
+
+  if (isLoading) {
+    return <ProcessStepsSkeleton />
+  }
 
   return (
     steps.length === 0 ? (

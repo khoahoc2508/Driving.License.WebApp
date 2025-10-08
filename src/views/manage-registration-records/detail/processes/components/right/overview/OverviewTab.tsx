@@ -12,6 +12,7 @@ import { getInputBehavior, getStatusColor } from '@/utils/helpers'
 import CONFIG from '@/configs/config'
 import stepsAPI from '@/libs/api/stepsAPI'
 import DeleteConfirmationDialog from '@/components/common/DeleteConfirmationDialog'
+import OverviewTabSkeleton from './OverviewTabSkeleton'
 
 type OverviewTabProps = {
     selectedStep: GetStepsDto | null
@@ -36,11 +37,28 @@ const OverviewTab = forwardRef<OverviewTabRef, OverviewTabProps>(({ selectedStep
     const [showConfirmDialog, setShowConfirmDialog] = useState(false)
     const [selectedAction, setSelectedAction] = useState<StepActionTemplateDto | null>(null)
     const [showForceConfirm, setShowForceConfirm] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+
+    const fetchAllData = async () => {
+        if (selectedStep?.id) {
+            try {
+                setIsLoading(true)
+                // Gọi cả 2 API song song để đảm bảo skeleton chỉ ẩn khi cả 2 hoàn thành
+                await Promise.all([
+                    fetchStepOverview(selectedStep.id),
+                    fetchStepActions(selectedStep.id)
+                ])
+            } catch (error) {
+                console.error('Error fetching overview data:', error)
+            } finally {
+                setIsLoading(false)
+            }
+        }
+    }
 
     useEffect(() => {
         if (selectedStep?.id) {
-            fetchStepOverview(selectedStep.id)
-            fetchStepActions(selectedStep.id)
+            fetchAllData()
         }
     }, [selectedStep])
 
@@ -48,7 +66,7 @@ const OverviewTab = forwardRef<OverviewTabRef, OverviewTabProps>(({ selectedStep
     useImperativeHandle(ref, () => ({
         refreshStepOverview: () => {
             if (selectedStep?.id) {
-                fetchStepOverview(selectedStep.id)
+                fetchAllData()
             }
         }
     }), [selectedStep])
@@ -65,7 +83,6 @@ const OverviewTab = forwardRef<OverviewTabRef, OverviewTabProps>(({ selectedStep
 
     const fetchStepActions = async (id: string) => {
         const response = await stepsAPI.GetStepActionsByStepId(id)
-
         setStepActions(response?.data?.data || [])
     }
 
@@ -99,7 +116,7 @@ const OverviewTab = forwardRef<OverviewTabRef, OverviewTabProps>(({ selectedStep
                 { stepFieldTemplateConfigId, value: editingValue }
             ]
         })
-        await fetchStepOverview(stepId)
+        await fetchAllData()
 
         onRefreshSteps(0)
 
@@ -114,6 +131,10 @@ const OverviewTab = forwardRef<OverviewTabRef, OverviewTabProps>(({ selectedStep
                 </Typography>
             </Box>
         )
+    }
+
+    if (isLoading) {
+        return <OverviewTabSkeleton />
     }
 
     const getStatusText = (status: number | undefined) => {
@@ -194,7 +215,7 @@ const OverviewTab = forwardRef<OverviewTabRef, OverviewTabProps>(({ selectedStep
 
             await stepsAPI.ForceCompleteStep(selectedStep.id, !isCompleted)
 
-            await fetchStepOverview(selectedStep.id)
+            await fetchAllData()
             onRefreshSteps(0)
 
             toast.success(!isCompleted ? 'Đã buộc hoàn thành bước' : 'Đã hủy buộc hoàn thành bước')
@@ -325,7 +346,7 @@ const OverviewTab = forwardRef<OverviewTabRef, OverviewTabProps>(({ selectedStep
                         </Box>
                     ))}
             </Box>
-            {stepActions.length > 0 && <Divider sx={{ my: 2 }} />}
+            <Divider sx={{ my: 2 }} />
             <Box
                 sx={{
                     display: 'flex',

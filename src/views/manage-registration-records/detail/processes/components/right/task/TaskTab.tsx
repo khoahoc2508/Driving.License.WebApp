@@ -15,6 +15,7 @@ import CONFIG from '@/configs/config'
 import EditTaskDialog from './EditTaskDialog'
 import AddPaymentDialog, { DialogMode } from '../../../../payments/AddPaymentDialog'
 import { getStatusColor } from '@/utils/helpers'
+import TaskTabSkeleton from './TaskTabSkeleton'
 
 type TaskTabProps = {
     selectedStep: GetStepsDto | null,
@@ -50,6 +51,7 @@ const TaskTab = forwardRef<TaskTabRef, TaskTabProps>(({ selectedStep, onRefreshS
     const [isCreateDialog, setIsCreateDialog] = useState(false)
     const [createdTaskId, setCreatedTaskId] = useState<string | null>(null)
     const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
     const theme = useTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down('md'))
@@ -57,28 +59,44 @@ const TaskTab = forwardRef<TaskTabRef, TaskTabProps>(({ selectedStep, onRefreshS
     const fetchTasks = async () => {
         if (selectedStep?.id) {
             const response = await stepsAPI.GetTaskByStepId({ id: selectedStep.id })
-
             setTasks(response.data?.data || [])
         }
     }
 
+    const fetchTaskActions = async () => {
+        if (selectedStep?.id) {
+            const response = await stepsAPI.GetTaskActionsByStepId(selectedStep.id)
+            setTaskActions(response.data?.data || [])
+        }
+    }
+
+    const fetchAllData = async () => {
+        if (selectedStep?.id) {
+            try {
+                setIsLoading(true)
+                // Gọi cả 2 API song song để đảm bảo skeleton chỉ ẩn khi cả 2 hoàn thành
+                await Promise.all([
+                    fetchTasks(),
+                    fetchTaskActions()
+                ])
+            } catch (error) {
+                console.error('Error fetching task data:', error)
+            } finally {
+                setIsLoading(false)
+            }
+        }
+    }
+
     useEffect(() => {
-        fetchTasks()
-        fetchTaskActions()
+        if (selectedStep?.id) {
+            fetchAllData()
+        }
     }, [selectedStep?.id])
 
     // Expose refreshTasks method to parent component
     useImperativeHandle(ref, () => ({
-        refreshTasks: fetchTasks
+        refreshTasks: fetchAllData
     }), [selectedStep])
-
-    const fetchTaskActions = async () => {
-        if (selectedStep?.id) {
-            const response = await stepsAPI.GetTaskActionsByStepId(selectedStep.id)
-
-            setTaskActions(response.data?.data || [])
-        }
-    }
 
     const handleEditTask = (task: GetTaskDto) => {
         setSelectedTask(task)
@@ -110,7 +128,7 @@ const TaskTab = forwardRef<TaskTabRef, TaskTabProps>(({ selectedStep, onRefreshS
     }
 
     const handleEditSuccess = () => {
-        fetchTasks()
+        fetchAllData()
         onRefreshSteps(0)
         handleEditDialogClose()
         setCreatedTaskId(null) // Reset createdTaskId khi lưu thành công
@@ -308,6 +326,10 @@ const TaskTab = forwardRef<TaskTabRef, TaskTabProps>(({ selectedStep, onRefreshS
                 </Typography>
             </Box>
         )
+    }
+
+    if (isLoading) {
+        return <TaskTabSkeleton />
     }
 
     return (
