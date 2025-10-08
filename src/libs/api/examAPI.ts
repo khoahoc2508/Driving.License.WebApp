@@ -1,4 +1,4 @@
-import type { GenerateRandomExamsCommand } from '@/types/exam'
+import type { GenerateRandomExamsCommand, GenerateRandomExamByCategoryCommand } from '@/types/exam'
 import axiosInstance from '../axios'
 
 import { customParamsSerializer } from './commonAPI'
@@ -13,9 +13,14 @@ const GenerateRandomExam = async (data: GenerateRandomExamsCommand) => {
   return await axiosInstance.post('/api/exams/generate-random-exam', data)
 }
 
+const GenerateRandomExamByCategory = async (data: GenerateRandomExamByCategoryCommand) => {
+  return await axiosInstance.post('/api/exams/generate-random-exam-by-category', data)
+}
+
 const ExamAPI = {
   GetExamsByGroups,
-  GenerateRandomExam
+  GenerateRandomExam,
+  GenerateRandomExamByCategory
 }
 
 export default ExamAPI

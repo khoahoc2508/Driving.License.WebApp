@@ -2455,27 +2455,6 @@ export interface components {
         GenerateRandomExamByCategoryCommand: {
             groupExamId?: string;
             licenseTypeCode?: string;
-            examStructure?: components["schemas"]["ExamStructure"];
-        };
-        ExamStructure: {
-
-            /** Format: int32 */
-            totalQuestions?: number;
-
-            /** Format: int32 */
-            durationMinutes?: number;
-
-            /** Format: int32 */
-            passingScore?: number;
-            categories?: components["schemas"]["QuestionCategory"][];
-        };
-        QuestionCategory: {
-            name?: string;
-
-            /** Format: int32 */
-            count?: number;
-            isCritical?: boolean;
-            questionNumbers?: number[];
         };
         BaseResponseOfExamSubmissionResultDto: components["schemas"]["BaseResponse"] & {
             data?: components["schemas"]["ExamSubmissionResultDto"] | null;

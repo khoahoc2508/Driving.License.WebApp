@@ -221,8 +221,12 @@ const GroupExams = ({ setIsLoading, onGroupsLoaded }: ArticlesProps) => {
         setIsLoading(true)
 
         try {
-          const res = await ExamAPI.GetExamsByGroups(child.id)
-          const examDto = res.data.data[0]
+          const genRes = await ExamAPI.GenerateRandomExamByCategory({
+            groupExamId: child.id,
+            licenseTypeCode: child.licenseTypeCode || undefined
+          })
+
+          const examDto = genRes.data?.data
 
           if (examDto) {
             handleStartExam(examDto)
