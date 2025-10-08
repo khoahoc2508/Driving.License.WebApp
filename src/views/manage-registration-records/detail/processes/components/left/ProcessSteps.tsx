@@ -44,6 +44,12 @@ const StepItem = memo(({ step, index, isSelected, onStepClick, getTextColor, isS
       active={step.status === CONFIG.StepStatus.InProgress}
       data-active={isSelected}
       data-status={step.status}
+      data-clickable={isStepClickable}
+      onClick={() => {
+        if (isStepClickable) {
+          onStepClick(step, index)
+        }
+      }}
     >
       <StepLabel
         {...labelProps}
@@ -64,13 +70,7 @@ const StepItem = memo(({ step, index, isSelected, onStepClick, getTextColor, isS
           className='step-label'
           style={{
             color: getTextColor(step.status),
-            cursor: isStepClickable ? 'pointer' : 'default',
             opacity: isStepClickable ? 1 : 0.6
-          }}
-          onClick={() => {
-            if (isStepClickable) {
-              onStepClick(step, index)
-            }
           }}
         >
           {step.name}
