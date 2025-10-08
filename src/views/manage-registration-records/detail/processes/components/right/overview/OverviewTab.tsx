@@ -43,6 +43,7 @@ const OverviewTab = forwardRef<OverviewTabRef, OverviewTabProps>(({ selectedStep
         if (selectedStep?.id) {
             try {
                 setIsLoading(true)
+
                 // Gọi cả 2 API song song để đảm bảo skeleton chỉ ẩn khi cả 2 hoàn thành
                 await Promise.all([
                     fetchStepOverview(selectedStep.id),
@@ -83,6 +84,7 @@ const OverviewTab = forwardRef<OverviewTabRef, OverviewTabProps>(({ selectedStep
 
     const fetchStepActions = async (id: string) => {
         const response = await stepsAPI.GetStepActionsByStepId(id)
+
         setStepActions(response?.data?.data || [])
     }
 

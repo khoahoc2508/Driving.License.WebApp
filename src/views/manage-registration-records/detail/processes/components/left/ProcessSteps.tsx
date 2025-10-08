@@ -173,6 +173,7 @@ const ProcessSteps = forwardRef<ProcessStepsRef, ProcessStepsProps>(({ registrat
 
     try {
       setIsLoading(true)
+
       const response = await stepsAPI.GetStepsByRegistrationRecordId({
         registrationRecordId
       })

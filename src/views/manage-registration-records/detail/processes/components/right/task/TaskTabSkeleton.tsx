@@ -1,12 +1,8 @@
 'use client'
 
 import { Box, Skeleton } from '@mui/material'
-import { useTheme, useMediaQuery } from '@mui/material'
 
 const TaskTabSkeleton = () => {
-    const theme = useTheme()
-    const isMobile = useMediaQuery(theme.breakpoints.down('md'))
-
     return (
         <Box>
             {/* Skeleton cho action buttons */}

@@ -59,6 +59,7 @@ const TaskTab = forwardRef<TaskTabRef, TaskTabProps>(({ selectedStep, onRefreshS
     const fetchTasks = async () => {
         if (selectedStep?.id) {
             const response = await stepsAPI.GetTaskByStepId({ id: selectedStep.id })
+
             setTasks(response.data?.data || [])
         }
     }
@@ -66,6 +67,7 @@ const TaskTab = forwardRef<TaskTabRef, TaskTabProps>(({ selectedStep, onRefreshS
     const fetchTaskActions = async () => {
         if (selectedStep?.id) {
             const response = await stepsAPI.GetTaskActionsByStepId(selectedStep.id)
+
             setTaskActions(response.data?.data || [])
         }
     }
@@ -74,6 +76,7 @@ const TaskTab = forwardRef<TaskTabRef, TaskTabProps>(({ selectedStep, onRefreshS
         if (selectedStep?.id) {
             try {
                 setIsLoading(true)
+
                 // Gọi cả 2 API song song để đảm bảo skeleton chỉ ẩn khi cả 2 hoàn thành
                 await Promise.all([
                     fetchTasks(),

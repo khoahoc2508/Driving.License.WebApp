@@ -1,7 +1,7 @@
 'use client'
 
-import { Box, Skeleton } from '@mui/material'
-import { useTheme, useMediaQuery } from '@mui/material'
+import { Box, Skeleton , useTheme, useMediaQuery } from '@mui/material'
+
 
 const ProcessStepsSkeleton = () => {
     const theme = useTheme()
