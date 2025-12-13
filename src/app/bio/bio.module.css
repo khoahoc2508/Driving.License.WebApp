@@ -1,0 +1,383 @@
+/* app/bio/bio.module.css */
+
+.wrapper {
+  --bg-color: #f0f4f8;
+  --glass-bg: rgba(255, 255, 255, 0.3);
+  --glass-border: rgba(255, 255, 255, 0.6);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --btn-glass-bg: rgba(255, 255, 255, 0.5);
+  --btn-glass-border: #ffffff;
+  --btn-glass-hover: rgba(255, 255, 255, 0.8);
+  --btn-text: #334155;
+  --zalo-gradient: linear-gradient(135deg, #0091ff 0%, #0068ff 100%);
+
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-color);
+  background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
+  color: var(--text-primary);
+
+  /* --- SỬA ĐỔI CHIỀU CAO TẠI ĐÂY --- */
+  /* min-height: 100vh;  <- Bỏ dòng này */
+  height: 100dvh; /* Chiều cao cố định bằng màn hình */
+  width: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Căn giữa dọc để nội dung nằm đẹp giữa màn hình to */
+
+  overflow: hidden; /* Chặn thanh cuộn của cả trang */
+  position: relative;
+}
+
+/* Ambient Liquid Background - GIỮ NGUYÊN */
+.ambientWrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(50px);
+  opacity: 0.8;
+  animation: float 20s infinite ease-in-out alternate;
+}
+
+.blob1 {
+  top: -10%;
+  left: -10%;
+  width: 50vw;
+  height: 50vw;
+  background: radial-gradient(circle, #60a5fa, transparent);
+  animation-delay: 0s;
+}
+
+.blob2 {
+  bottom: -10%;
+  right: -10%;
+  width: 60vw;
+  height: 60vw;
+  background: radial-gradient(circle, #22d3ee, transparent);
+  animation-delay: -5s;
+}
+
+.blob3 {
+  top: 40%;
+  left: 30%;
+  width: 40vw;
+  height: 40vw;
+  background: radial-gradient(circle, #e879f9, transparent);
+  animation-duration: 25s;
+  opacity: 0.6;
+}
+
+@keyframes float {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(20px, 30px) scale(1.1);
+  }
+  100% {
+    transform: translate(-20px, -10px) scale(0.9);
+  }
+}
+
+/* Main Glass Card - GIỮ NGUYÊN */
+.container {
+  width: 100%;
+  max-width: 420px;
+  padding: 40px 24px;
+  margin: 20px;
+  z-index: 10;
+
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  border-top: 1px solid rgba(255, 255, 255, 0.9);
+  border-left: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 32px;
+  box-shadow: var(--glass-shadow);
+
+  text-align: center;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.1s ease;
+}
+
+/* Avatar - GIỮ NGUYÊN */
+.avatarWrapper {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  margin: 0 auto 20px;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid rgba(255, 255, 255, 0.8);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  background: #e2e8f0;
+}
+
+.statusDot {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  width: 16px;
+  height: 16px;
+  background: #22c55e;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Typography - GIỮ NGUYÊN */
+.title {
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+  color: var(--text-primary);
+  text-shadow: 0 2px 10px rgba(255, 255, 255, 0.5);
+}
+
+.tagline {
+  font-size: 15px;
+  color: var(--text-secondary);
+  margin-bottom: 32px;
+  font-weight: 500;
+}
+
+.sectionTitle {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: #64748b;
+  margin-bottom: 16px;
+  font-weight: 700;
+  opacity: 0.8;
+}
+
+/* Button Grid - GIỮ NGUYÊN */
+.linkGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Buttons - GIỮ NGUYÊN */
+.glassBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 20px;
+  text-decoration: none;
+  color: var(--btn-text);
+  font-weight: 600;
+  font-size: 16px;
+  border-radius: 18px;
+
+  background: var(--btn-glass-bg);
+  border: 1px solid var(--btn-glass-border);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s,
+    background-color 0.2s;
+}
+
+.glassBtn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(255, 255, 255, 0.8) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 1;
+  mix-blend-mode: overlay;
+}
+
+.glassBtn span,
+.glassBtn svg,
+.glassBtn .zaloBadge {
+  position: relative;
+  z-index: 2;
+}
+
+.glassBtn svg {
+  width: 24px;
+  height: 24px;
+  margin-right: 12px;
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
+.glassBtn span {
+  flex-grow: 1;
+  text-align: left;
+}
+
+@media (hover: hover) {
+  .glassBtn:hover::before {
+    opacity: 1;
+  }
+  .glassBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    border-color: #ffffff;
+  }
+}
+
+.glassBtn:active {
+  transform: scale(0.96);
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+@keyframes zaloPulse {
+  0% {
+    box-shadow: 0 8px 20px rgba(0, 132, 255, 0.35);
+  }
+  50% {
+    box-shadow: 0 8px 30px rgba(0, 132, 255, 0.65);
+    border-color: rgba(255, 255, 255, 0.7);
+  }
+  100% {
+    box-shadow: 0 8px 20px rgba(0, 132, 255, 0.35);
+  }
+}
+
+.glassBtn.zalo {
+  background: var(--zalo-gradient);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 20px rgba(0, 132, 255, 0.35);
+  color: white;
+  animation: zaloPulse 2.5s infinite ease-in-out;
+}
+
+.glassBtn.zalo::before {
+  background: radial-gradient(circle at var(--x, 255, 255, 0.9) 0%, transparent 70%);
+}
+
+@media (hover: hover) {
+  .glassBtn.zalo:hover {
+    animation: none;
+    box-shadow: 0 12px 35px rgba(0, 132, 255, 0.6);
+    border-color: rgba(255, 255, 255, 0.9);
+    transform: translateY(-2px);
+  }
+}
+
+.glassBtn.zalo:active {
+  animation: none;
+  opacity: 0.9;
+  transform: scale(0.96);
+}
+
+.zaloBadge {
+  background: rgba(255, 255, 255, 0.25);
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-left: 8px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.footer {
+  margin-top: 40px;
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.iconArrow {
+  width: 16px !important;
+  height: 16px !important;
+  margin-right: 0 !important;
+  margin-left: 8px;
+  opacity: 0.4;
+}
+
+/* =========================================================================
+   MOBILE OPTIMIZATION - GIỮ NGUYÊN THIẾT KẾ, CHỈ XỬ LÝ CHIỀU CAO
+   ========================================================================= */
+@media (max-width: 480px) {
+  .wrapper {
+    /* Bỏ padding ở wrapper để container tự căn */
+    padding: 0;
+  }
+
+  .container {
+    /* GIỮ NGUYÊN các thuộc tính border, margin, padding của bạn */
+    padding: 30px 20px;
+    margin: 10px 16px;
+    width: calc(100% - 32px);
+
+    /* THÊM: Giới hạn chiều cao thẻ để không tràn màn hình */
+    /* Trừ đi 20px margin trên dưới để đảm bảo border luôn hiển thị */
+    max-height: calc(100dvh - 20px);
+
+    /* THÊM: Chỉ cho phép cuộn BÊN TRONG thẻ nếu màn hình quá ngắn */
+    overflow-y: auto;
+    /* Ẩn thanh cuộn khi không cần thiết trên một số trình duyệt */
+    scrollbar-width: none;
+  }
+  .container::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* CÁC PHẦN DƯỚI GIỮ NGUYÊN NHƯ CODE GỐC CỦA BẠN */
+  .avatarWrapper {
+    width: 96px;
+    height: 96px;
+    margin-bottom: 16px;
+  }
+
+  .title {
+    font-size: 22px;
+    margin-bottom: 4px;
+  }
+
+  .tagline {
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+
+  .sectionTitle {
+    margin-bottom: 12px;
+  }
+
+  .linkGrid {
+    gap: 10px;
+  }
+
+  .glassBtn {
+    padding: 13px 16px;
+    font-size: 15px;
+  }
+
+  .footer {
+    margin-top: 25px;
+  }
+}
