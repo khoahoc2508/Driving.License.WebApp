@@ -2,6 +2,8 @@
 
 import { useEffect, useRef } from 'react';
 
+import Image from 'next/image'; // <--- 1. THÊM DÒNG NÀY
+
 import styles from './bio.module.css';
 
 export default function BioPage() {
@@ -80,9 +82,18 @@ export default function BioPage() {
       <div className={styles.container} ref={cardRef} id="glassCard">
 
         <div className={styles.avatarWrapper}>
-          <svg className={styles.avatar} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ background: '#f1f5f9' }}>
+          {/* <svg className={styles.avatar} viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ background: '#f1f5f9' }}>
             <path d="M50 0C22.4 0 0 22.4 0 50C0 77.6 22.4 100 50 100C77.6 100 100 77.6 100 50C100 22.4 77.6 0 50 0ZM50 25C60.3 25 68.8 33.3 68.8 43.8C68.8 54.2 60.3 62.5 50 62.5C39.7 62.5 31.2 54.2 31.2 43.8C31.2 33.3 39.7 25 50 25ZM50 91.2C38.3 91.2 28 85.8 21.2 77.5C21.4 67.9 40.4 62.5 50 62.5C59.6 62.5 78.6 67.9 78.8 77.5C72 85.8 61.7 91.2 50 91.2Z" fill="#94a3b8" />
-          </svg>
+          </svg> */}
+
+          <Image
+            src="/logo.jpeg"           // Đường dẫn file ảnh trong thư mục public
+            alt="Avatar Bằng Lái Xanh"
+            fill                        // Tự động phủ kín khung cha (avatarWrapper)
+            className={styles.avatar}   // Giữ nguyên class style cũ để có bo tròn, viền...
+            priority                    // Load ngay lập tức (vì ảnh nằm đầu trang)
+            sizes="(max-width: 480px) 96px, 110px" // Giúp trình duyệt tải ảnh đúng kích thước
+          />
           <div className={styles.statusDot}></div>
         </div>
 
